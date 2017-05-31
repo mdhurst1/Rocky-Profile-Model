@@ -15,7 +15,7 @@ CFLAGS= -g -c -Wall -Werror -Wextra -pedantic -pg $(INCDIR)
 LDFLAGS= -g -Wall -pg
 
 # SOURCE FILES MACROS IN DEPENDENCY ORDER? SHOULDNT MATTER THANKS TO HEADERS
-SOURCES = ./Hiro.cpp ./Hiro_Driver.cpp
+SOURCES = ../Hiro.cpp ./Hiro_Driver.cpp
 
 # LIBRARIES MACRO
 LIBS   = -lm -lstdc++ 
