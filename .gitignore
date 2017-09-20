@@ -1,9 +1,9 @@
 # Ignore
 *.o
 *.out
-./driver_files/*.xn
-./driver_files/*.xz
-./driver_files/*.xzn
+*.xn
+*.xz
+*.xzn
 *.png
 *.avi
 core
