@@ -1,8 +1,9 @@
 /*------------------------------------------------------------------------
 
-	Hiro_v0.cpp
+	RPM.cpp
 
-	C++ implementation of Hiro Matsumoto's Shore Platform Model with Cosmogenic Isotope production.
+	C++ implementation of Hiro Matsumoto's Rocky Platform Model
+	with option to couple Cosmogenic Isotope production using RoBoCoP_CRN.
 
 	Last modified 06-10-2017 by Hiro Matsumoto
 
@@ -47,8 +48,8 @@
 
 ------------------------------------------------------------------------*/
 
-#ifndef Hiro_CPP
-#define Hiro_CPP
+#ifndef RPM_CPP
+#define RPM_CPP
 
 #include <cmath>
 #include <cstdlib>
@@ -60,20 +61,20 @@
 #include <sstream>
 #include <cstdlib>
 #include <omp.h>
-#include "Hiro.hpp"
+#include "RPM.hpp"
 
 using namespace std;
 
-void Hiro::Initialise()
+void RPM::Initialise()
 {
-  /* initialise an empty Hiro object as default */
-  printf("\nHiro.Initialise: Initialised an empty Hiro object\n");
+  /* initialise an empty RPM object as default */
+  printf("\nRPM.Initialise: Initialised an empty RPM object\n");
 }
 
-void Hiro::Initialise(double dZ_in, double dX_in)
+void RPM::Initialise(double dZ_in, double dX_in)
 {
-	/* initialise a verictal cliff Hiro object */
-	printf("\nHiro.Initialise: Initialised a Hiro as a vertical cliff\n");
+	/* initialise a verictal cliff RPM object */
+	printf("\nRPM.Initialise: Initialised a RPM as a vertical cliff\n");
 
 	//PHYSICAL CONSTANTS
 	rho_w = 1025.;
@@ -90,7 +91,7 @@ void Hiro::Initialise(double dZ_in, double dX_in)
 	WeatheringConst = 0.005;
 	RockResistance = 0.5;
 
-	//Wave pressure parameters, check these with Hiro at some point
+	//Wave pressure parameters, check these with RPM at some point
 	//StandingWavePressure_Bw = 0.1;
 	//BreakingWavePressure_Bw = 0.1;
 	//BrokenWavePressure_Bw = 0.1;
@@ -148,10 +149,10 @@ void Hiro::Initialise(double dZ_in, double dX_in)
 }
 
 
-void Hiro::Initialise(double dZ_in, double dX_in, double Gradient, double CliffHeight)
+void RPM::Initialise(double dZ_in, double dX_in, double Gradient, double CliffHeight)
 {
-	/* initialise a sloping cliff Hiro object */
-	printf("\nHiro.Initialise: Initialised a Hiro as a slope\n");
+	/* initialise a sloping cliff RPM object */
+	printf("\nRPM.Initialise: Initialised a RPM as a slope\n");
 
 	//PHYSICAL CONSTANTS
 	rho_w = 1025.;
@@ -254,7 +255,7 @@ void Hiro::Initialise(double dZ_in, double dX_in, double Gradient, double CliffH
 }
 
 
-void Hiro::InitialiseTides(double TideRange)
+void RPM::InitialiseTides(double TideRange)
 {
 	//setup tides
 
@@ -315,7 +316,7 @@ void Hiro::InitialiseTides(double TideRange)
 }
 
 
-void Hiro::InitialiseGeology(double CliffHeightNew, double CliffFailureDepthNew, double RockResistanceNew, double WeatheringConstNew)
+void RPM::InitialiseGeology(double CliffHeightNew, double CliffFailureDepthNew, double RockResistanceNew, double WeatheringConstNew)
 {
 	/* Function to set the cliff height, failure depth, rock resistance and
 		weathering rate constant */
@@ -335,7 +336,7 @@ void Hiro::InitialiseGeology(double CliffHeightNew, double CliffFailureDepthNew,
 	}
 }
 
-void Hiro::InitialiseWeathering()
+void RPM::InitialiseWeathering()
 {
 	/* Weathering Efficacy Function guided by Trenhaile and Kanayay (2005)
 	using a log-normal distribution across the tidal range */
@@ -379,7 +380,7 @@ void Hiro::InitialiseWeathering()
 	for (int i=1; i<NTideValues ;++i) WeatheringEfficacy[i] /= 	MaxEfficacy;
 }
 
-void Hiro::InitialiseWaves(double WaveHeight_Mean, double WaveHeight_StD, double WavePeriod_Mean, double WavePeriod_StD)
+void RPM::InitialiseWaves(double WaveHeight_Mean, double WaveHeight_StD, double WavePeriod_Mean, double WavePeriod_StD)
 {
   /* intialise waves as a single wave */
 
@@ -389,7 +390,7 @@ void Hiro::InitialiseWaves(double WaveHeight_Mean, double WaveHeight_StD, double
   StdWaveHeight = WaveHeight_StD;
 }
 
-void Hiro::InitialiseWavePressure_1(double WaveHeight_Mean)
+void RPM::InitialiseWavePressure_1(double WaveHeight_Mean)
 {
     /* initialise wave pressure */
     int NWPValues;
@@ -400,7 +401,7 @@ void Hiro::InitialiseWavePressure_1(double WaveHeight_Mean)
 
 }
 
-void Hiro::InitialiseWavePressure_25(double WaveHeight_Mean)
+void RPM::InitialiseWavePressure_25(double WaveHeight_Mean)
 {
     /* initialise wave pressure */
     int NWPValues,ccc;
@@ -454,7 +455,7 @@ void Hiro::InitialiseWavePressure_25(double WaveHeight_Mean)
 }
 
 
-void Hiro::GetWave()
+void RPM::GetWave()
 {
 	//declare temp variables
 	//double OffshoreWaveHeight;
@@ -481,13 +482,13 @@ void Hiro::GetWave()
 
 }
 
-void Hiro::InitialiseSeaLevel(double SLR)
+void RPM::InitialiseSeaLevel(double SLR)
 {
 	SeaLevelRise = SLR;
 	SLR_sum = 0.;
 }
 
-void Hiro::UpdateSeaLevel()
+void RPM::UpdateSeaLevel()
 {
 
 	/*Update sea level based on a constant sea level rise rate*/
@@ -511,7 +512,7 @@ void Hiro::UpdateSeaLevel()
 
 // UpdateSeaLevel_v1 written by Hiro
 // Sea level is shifted every 10cm
-void Hiro::UpdateSeaLevel_v1(double InputSeaLevel)
+void RPM::UpdateSeaLevel_v1(double InputSeaLevel)
 {
     if ( InputSeaLevel > 0 ){
 	/*Update sea level based on a constant sea level rise rate*/
@@ -533,7 +534,7 @@ void Hiro::UpdateSeaLevel_v1(double InputSeaLevel)
 }
 
 
-void Hiro::UpdateSeaLevel(double InputSeaLevel)
+void RPM::UpdateSeaLevel(double InputSeaLevel)
 {
 	/*Update sea level based on a constant sea level rise rate*/
 	//First catch large difference in SeaLevel
@@ -564,12 +565,12 @@ void Hiro::UpdateSeaLevel(double InputSeaLevel)
 }
 
 // Only bigger than 10 cm.
-void Hiro::TectonicUplift(double UpliftAmplitude)
+void RPM::TectonicUplift(double UpliftAmplitude)
 {
     SeaLevel -= (round(UpliftAmplitude*10))*0.1;
 }
 
-void Hiro::CalculateBackwearing()
+void RPM::CalculateBackwearing()
 {
 	//Declare temporary variables
 	double WaveForce, SurfZoneBottomZ; //, SurfZoneBottomX;
@@ -689,8 +690,8 @@ void Hiro::CalculateBackwearing()
 }
 
 
-void Hiro::CalculateBackwearing_v1(double WaveAttenuConst)
-//void Hiro::CalculateBackwearing_v1()
+void RPM::CalculateBackwearing_v1(double WaveAttenuConst)
+//void RPM::CalculateBackwearing_v1()
 {
 	//Declare temporary variables
 	double WaveForce, SurfZoneBottomZ; //, SurfZoneBottomX;
@@ -852,7 +853,7 @@ void Hiro::CalculateBackwearing_v1(double WaveAttenuConst)
 }
 
 
-void Hiro::CalculateDownwearing()
+void RPM::CalculateDownwearing()
 {
 	//Declare temporary variables
 	double WaveForce, WaterDepth;
@@ -896,7 +897,7 @@ void Hiro::CalculateDownwearing()
 }
 
 
-void Hiro::CalculateDownwearing_v1(double WaveAttenuConst)
+void RPM::CalculateDownwearing_v1(double WaveAttenuConst)
 {
 	//Declare temporary variables
 	double WaveForce, WaterDepth;
@@ -948,7 +949,7 @@ void Hiro::CalculateDownwearing_v1(double WaveAttenuConst)
 
 }
 
-void Hiro::IntertidalWeathering()
+void RPM::IntertidalWeathering()
 {
 	//Declare temporay variables
 	double RemainingResistance, WeatheringForce;
@@ -1001,7 +1002,7 @@ void Hiro::IntertidalWeathering()
 }
 
 
-void Hiro::ErodeBackwearing()
+void RPM::ErodeBackwearing()
 {
 	//Loop over all wet cells
 	int j=0;
@@ -1054,7 +1055,7 @@ void Hiro::ErodeBackwearing()
 	}
 }
 
-void Hiro::ErodeDownwearing()
+void RPM::ErodeDownwearing()
 {
 	//is there any reason why this needs to be a separate function?
 	//Loop over all cells that get wet
@@ -1079,12 +1080,12 @@ void Hiro::ErodeDownwearing()
 	}
 }
 
-void Hiro::SupratidalWeathering()
+void RPM::SupratidalWeathering()
 {
 	//add this later
 }
 
-void Hiro::UpdateMorphology()
+void RPM::UpdateMorphology()
 {
 	//function to update morphology vectors and indices
 
@@ -1176,7 +1177,7 @@ void Hiro::UpdateMorphology()
 	}
 }
 
-void Hiro::MassFailure()
+void RPM::MassFailure()
 {
 	//simple implementation for now, talk to Hiro about this
 	//Cliff position taken from Highest elevation.
@@ -1236,7 +1237,7 @@ void Hiro::MassFailure()
 	}
 }
 
-void Hiro::EvolveCoast()
+void RPM::EvolveCoast()
 {
 	/*
 		Function to evolve the coastal profile through time following
@@ -1291,9 +1292,9 @@ void Hiro::EvolveCoast()
 	}
 }
 
-void Hiro::WriteProfile(string OutputFileName, double Time)
+void RPM::WriteProfile(string OutputFileName, double Time)
 {
-  /* Writes a Hiro object X coordinates to file, each value spans dZ in elevation
+  /* Writes a RPM object X coordinates to file, each value spans dZ in elevation
 		File format is
 
 		StartZ dZ
@@ -1302,7 +1303,7 @@ void Hiro::WriteProfile(string OutputFileName, double Time)
 
 	//Print to screen
 	cout.flush();
-	cout << "Hiro: Writing output at Time " << setprecision(2) << fixed << Time << " years\r";
+	cout << "RPM: Writing output at Time " << setprecision(2) << fixed << Time << " years\r";
 
 	//test if output file already exists
 	int FileExists = 0;
@@ -1333,15 +1334,15 @@ void Hiro::WriteProfile(string OutputFileName, double Time)
 	else
 	{
 		//report errors
-		cout << "Hiro.WriteCoast: Error, the file " << OutputFileName << " is not open or cannot be read." << endl;
+		cout << "RPM.WriteCoast: Error, the file " << OutputFileName << " is not open or cannot be read." << endl;
 		exit(EXIT_FAILURE);
 	}
 	WriteCoastFile.close();
 }
 
-void  Hiro::WriteResistanceArray(string OutputFileName, double Time)
+void  RPM::WriteResistanceArray(string OutputFileName, double Time)
 {
-  /* Writes a Hiro object Resistance matrix coordinates to file
+  /* Writes a RPM object Resistance matrix coordinates to file
 		File format is
 
 		Time
@@ -1373,14 +1374,14 @@ void  Hiro::WriteResistanceArray(string OutputFileName, double Time)
 	else
 	{
 		//report errors
-		cout << "Hiro.WriteResistance: Error, the file " << OutputFileName << " is not open or cannot be read." << endl;
+		cout << "RPM.WriteResistance: Error, the file " << OutputFileName << " is not open or cannot be read." << endl;
 		exit(EXIT_FAILURE);
 	}
 }
 
-void  Hiro::WriteMorphologyArray(string OutputFileName, double Time)
+void  RPM::WriteMorphologyArray(string OutputFileName, double Time)
 {
-  /* Writes a Hiro object Resistance matrix coordinates to file
+  /* Writes a RPM object Resistance matrix coordinates to file
 		File format is
 
 		Time
@@ -1412,15 +1413,15 @@ void  Hiro::WriteMorphologyArray(string OutputFileName, double Time)
 	else
 	{
 		//report errors
-		cout << "Hiro.WriteMorphology: Error, the file " << OutputFileName << " is not open or cannot be read." << endl;
+		cout << "RPM.WriteMorphology: Error, the file " << OutputFileName << " is not open or cannot be read." << endl;
 		exit(EXIT_FAILURE);
 	}
 }
 
 
-void  Hiro::WriteLocalangleArray(string OutputFileName, double Time)
+void  RPM::WriteLocalangleArray(string OutputFileName, double Time)
 {
-  /* Writes a Hiro object Resistance matrix coordinates to file
+  /* Writes a RPM object Resistance matrix coordinates to file
 		File format is
 
 		Time
@@ -1452,7 +1453,7 @@ void  Hiro::WriteLocalangleArray(string OutputFileName, double Time)
 	else
 	{
 		//report errors
-		cout << "Hiro.LocalAngle: Error, the file " << OutputFileName << " is not open or cannot be read." << endl;
+		cout << "RPM.LocalAngle: Error, the file " << OutputFileName << " is not open or cannot be read." << endl;
 		exit(EXIT_FAILURE);
 	}
 }

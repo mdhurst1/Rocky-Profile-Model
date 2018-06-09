@@ -1,8 +1,9 @@
 /*------------------------------------------------------------------------
 
-	Hiro.hpp
+	RPM.hpp
 
-	C++ implementation of Hiro Matsumoto's Shore Platform Model with Cosmogenic Isotope production.
+	C++ implementation of Hiro Matsumoto's Rocky Platform Model with the option to
+	couple Cosmogenic Isotope production using RoBoCoP_CRN.
 
 	Last modified by Hiro Matsumoto on 03-10-2017
 
@@ -79,7 +80,7 @@ using namespace std;
 class RockyCoastCRN;
 
 ///@brief Main coastal platform object.
-class Hiro
+class RPM
 {
   friend class RockyCoastCRN;
 
@@ -225,17 +226,17 @@ class Hiro
 		/// @brief Empty initialisation function for Hiro
 		/// @author Martin D. Hurst
 		/// @date 27/02/2017
-		Hiro()
+		RPM()
 		{
 			Initialise();
 		}
 
-		Hiro(double dZ, double dX)
+		RPM(double dZ, double dX)
 		{
 			Initialise(dZ, dX);
 		}
 
-		Hiro(double dZ, double dX, double Gradient, double CliffHeight)
+		RPM(double dZ, double dX, double Gradient, double CliffHeight)
 		{
 			Initialise(dZ, dX, Gradient, CliffHeight);
 		}
@@ -273,7 +274,7 @@ class Hiro
         void InitialiseWavePressure_1(double WaveHeight_Mean);
         void InitialiseWavePressure_25(double WaveHeight_Mean);
 
-		/// @brief Launch the main program loop to evolve Hiro coast
+		/// @brief Launch the main program loop to evolve RPM coast
 		/// @details This function evolves a rocky coastal platform through time.
 		///	@author Martin D. Hurst
 		/// @date 27/02/2017
