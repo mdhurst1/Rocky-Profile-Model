@@ -697,7 +697,7 @@ void RPM::CalculateBackwearing_v1(double WaveAttenuConst)
 	double WaveForce, SurfZoneBottomZ; //, SurfZoneBottomX;
 	int WaveType,iii,cc=0;
 	double a,b,c;
-	BreakingPointZInd;
+	BreakingPointZInd = 0;
 
 	//Reset backwear vector
 	vector<double> ZZeros(NZNodes,0);

@@ -10,11 +10,14 @@ March 7th 2016
 @author: mhurst
 """
 
+# import plotting tools and set the back end for running on server
+import matplotlib
+matplotlib.use('Agg')
+
 #import modules
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib import cm
-from matplotlib import rc
+from matplotlib import cm, rc
 
 # Customise figure style #
 rc('font',**{'family':'sans-serif','sans-serif':['Arial']})
@@ -44,7 +47,7 @@ def make_plot(FileName,ColourMap):
     
     # Only plot every 1 000 years
     PlotTime = StartTime
-    PlotInterval = 100000
+    PlotInterval = 1000
     
     ax1 = plt.subplot(111)
 
@@ -60,24 +63,24 @@ def make_plot(FileName,ColourMap):
         Z = np.linspace(CliffHeight,-CliffHeight, NValues)
         
         if (Time >= PlotTime):
-            colour = Time/StartTime
+            print(Time)
+            colour = Time/EndTime
             ax1.plot(X,Z,'-',lw=1.5,color=cm.RdBu(colour))
             PlotTime += PlotInterval
     
     ax1.plot(X,Z,'k-',lw=1.5)
             
         
-    print Z[0], Z[-1]           
     # tweak the plot
     #ax1.set_xticklabels([])
     plt.xlabel("Distance (m)")
     plt.ylabel("Elevation (m)")
-    xmin, xmax = ax1.get_xlim()
+    #xmin, xmax = ax1.get_xlim()
     #plt.xlim(xmin-10,xmax+10)
     #plt.ylim(-CliffHeight,CliffHeight)
     #plt.ylim(-30,30)
     plt.tight_layout()
-    plt.show()
+    plt.savefig('RPM_evolution.png',dpi=300)
 
 if __name__ == "__main__":
     FileName = "../driver_files/"

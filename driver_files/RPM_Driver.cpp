@@ -1,6 +1,6 @@
 /*------------------------------------------------------------------------
 
-	Hiro_Driver.cpp
+	RPM_Driver.cpp
 	
 	Driver file for running the shore platform model of Matsumoto et al. (2016)
 	
@@ -58,7 +58,7 @@
 #include <cstdlib>
 #include <omp.h>
 #include <unistd.h>
-#include "./Hiro.hpp"
+#include "../RPM.hpp"
 
 using namespace std;
 
@@ -80,8 +80,8 @@ int main()
 	double PrintTime = Time;
 	string OutputFileName = "ShoreProfile.xz";
 	
-	//initialise Hiro Model
-	Hiro PlatformModel = Hiro(dZ, dX, Gradient, CliffHeight);
+	//initialise RPM Model
+	RPM PlatformModel = RPM(dZ, dX, Gradient, CliffHeight);
 	
 	//Initialise Tides
 	double TidalRange = 8.;
