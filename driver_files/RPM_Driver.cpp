@@ -101,7 +101,7 @@ int main()
 
 	// Wave coefficient constant
 	double StandingCoefficient = 0.01;
-	double BreakingCoefficient = 1.;
+	double BreakingCoefficient = 10.;
 	double BrokenCoefficient = 1.;
 	PlatformModel.Set_WaveCoefficients(StandingCoefficient, BreakingCoefficient, BrokenCoefficient);
 
@@ -122,8 +122,8 @@ int main()
 		PlatformModel.GetWave();
 
 		//Calculate forces acting on the platform
-		PlatformModel.CalculateBackwearing();
-		PlatformModel.CalculateDownwearing();
+		PlatformModel.CalculateBackwearing_v1();
+		PlatformModel.CalculateDownwearing_v1();
 
 		//Do erosion
 		PlatformModel.ErodeBackwearing();

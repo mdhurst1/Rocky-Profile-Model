@@ -284,8 +284,9 @@ class RPM
 		void CalculateDownwearing();
 
 		//New CalculateBackwearing & CalculateDownwearing
-		void CalculateBackwearing_v1(double WaveAttenuConst);
-		void CalculateDownwearing_v1(double WaveAttenuConst);
+		// update by Hiro Matsumoto implemented 11/6/18
+		void CalculateBackwearing_v1();
+		void CalculateDownwearing_v1();
 
 		void ErodeBackwearing();
 		void ErodeDownwearing();
@@ -346,6 +347,7 @@ class RPM
 			StandingWaveConst = StandingWaveCoef;
 			BreakingWaveConst = BreakingWaveCoef;
 			BrokenWaveConst= BrokenWaveCoef;
+			WaveAttenuConst = 0.1;
 		}
 };
 

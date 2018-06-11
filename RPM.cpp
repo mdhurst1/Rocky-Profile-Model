@@ -690,13 +690,15 @@ void RPM::CalculateBackwearing()
 }
 
 
-void RPM::CalculateBackwearing_v1(double WaveAttenuConst)
-//void RPM::CalculateBackwearing_v1()
+
+void RPM::CalculateBackwearing_v1()
 {
 	//Declare temporary variables
 	double WaveForce, SurfZoneBottomZ; //, SurfZoneBottomX;
 	int WaveType,iii,cc=0;
-	double a,b,c;
+	double a=0;
+	double b=0;
+	double c=0;
 	BreakingPointZInd = 0;
 
 	//Reset backwear vector
@@ -740,8 +742,8 @@ void RPM::CalculateBackwearing_v1(double WaveAttenuConst)
         }
 
         //Set BreakingWaveDistance & BreakingWaveConst
-		BreakingWaveDist_new[cc] = 10*WaveHeight*(b/a);
-		BreakingWaveConst_new[cc] = BreakingWaveConst*(c/a);
+		BreakingWaveDist_new.push_back(10*WaveHeight*(b/a));
+		BreakingWaveConst_new.push_back(BreakingWaveConst*(c/a));
         if(BreakingWaveConst_new[cc]<BrokenWaveConst) BreakingWaveConst_new[cc]=BrokenWaveConst;
 
         //
@@ -848,7 +850,7 @@ void RPM::CalculateBackwearing_v1(double WaveAttenuConst)
 				Bw_Erosion[ii] += WaveForce;
 			}
 		}
-		cc=cc+1;
+		cc+=1;
 	}
 }
 
@@ -897,7 +899,7 @@ void RPM::CalculateDownwearing()
 }
 
 
-void RPM::CalculateDownwearing_v1(double WaveAttenuConst)
+void RPM::CalculateDownwearing_v1()
 {
 	//Declare temporary variables
 	double WaveForce, WaterDepth;
@@ -911,11 +913,9 @@ void RPM::CalculateDownwearing_v1(double WaveAttenuConst)
 	BreakingWaveAttenuation = WaveAttenuConst;
 	BrokenWaveAttenuation = WaveAttenuConst;
 
-
 	//Loop across the tidal range water levels
 	for (int i=MaxTideZInd+1; i<=MinTideZInd; ++i)
 	{
-
 		//Get wave function needs to calculate a bunch of stuff?
 		GetWave();
 
@@ -944,7 +944,7 @@ void RPM::CalculateDownwearing_v1(double WaveAttenuConst)
 			WaterDepth = Z[i]-Z[ii];
 			Dw_Erosion[ii] += WaveForce*exp(-DepthDecay*WaterDepth);
 		}
-        cc=cc+1;
+        cc+=1;
 	}
 
 }
