@@ -279,9 +279,9 @@ void RPM::InitialiseTides(double TideRange)
 		for (int i=0; i<NTideValues; ++i)
 		{
 			ErosionShapeFunction[i] = sin(i*dZ*M_PI/(0.5*TidalRange));
-			if (i == (NTideValues-1)/2) ErosionShapeFunction[i] += ErosionShapeFunction[i-1];
-			//else
+			if (i == (NTideValues-1)/2.) ErosionShapeFunction[i] += ErosionShapeFunction[i-1];
 			if (i*dZ>0.5*TidalRange) ErosionShapeFunction[i] *= -1;
+
 			Total += ErosionShapeFunction[i];
 			if (ErosionShapeFunction[i] > Max) Max = ErosionShapeFunction[i];
 		}
@@ -433,17 +433,22 @@ void RPM::InitialiseWavePressure_Triangle(double WaveHeight)
     }
     else
     {
-        for (int i=0; i<NWPValues/2; ++i){
-            BreakingWavePressure[i] = 2.*i/NWPValues;
-            BrokenWavePressure[i] = 2.*i/NWPValues;
-            sum = sum + BreakingWavePressure[i];
-        }
         ccc=0;
-        for (int i=NWPValues/2; i<NWPValues; ++i){
-            BreakingWavePressure[i] = BreakingWavePressure[NWPValues/2-ccc];
-            BrokenWavePressure[i] = BrokenWavePressure[NWPValues/2-ccc];
-            sum = sum + BreakingWavePressure[i];
-            ccc=ccc+1;
+		for (int i=0; i<NWPValues; ++i)
+		{
+            if (i<NWPValues/2)
+			{
+				BreakingWavePressure[i] = 2.*i/NWPValues;
+				BrokenWavePressure[i] = 2.*i/NWPValues;
+				sum = sum + BreakingWavePressure[i];
+			}
+			else
+			{
+				BreakingWavePressure[i] = BreakingWavePressure[NWPValues/2-ccc];
+				BrokenWavePressure[i] = BrokenWavePressure[NWPValues/2-ccc];
+				sum = sum + BreakingWavePressure[i];
+				ccc=ccc+1;
+			}
         }
     }
     for (int i=0; i<NWPValues; ++i){
@@ -826,10 +831,8 @@ void RPM::CalculateBackwearing_v1()
 		{
 			//Loop across pressure distribution function
 			//This may have some problems!
-			iii = 0;
-			for (int ii=i+PressureDistMinInd; ii<=i+PressureDistMaxInd; ++ii)
-			{
-			    iii=iii+1;
+			for (int ii=i+PressureDistMinInd, iii=0; ii<=i+PressureDistMaxInd; ++ii, ++iii)
+			{ 
 			    //cout << WavePressure[iii] << endl;
 				//need to add for condition where changes to broken wave above water level in pressure distribution function
 				if (Xz[ii] < Xz[BreakingPointZInd])
@@ -858,6 +861,9 @@ void RPM::CalculateBackwearing_v1()
 		}
 		//cc+=1;
 	}
+	// some useless commands here as a good place to break
+	double asdf = 9876;
+	asdf*=2.;	
 }
 
 

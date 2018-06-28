@@ -71,12 +71,12 @@ int main()
 	double CliffHeight = 10.;
 
 	//Time control parameters
-	double EndTime = 10000;
+	double EndTime = 4000;
 	double Time = 0.;
 	double TimeInterval = 1;
 
 	//Print Control
-	double PrintInterval = 100;
+	double PrintInterval = 10;
 	double PrintTime = Time;
 	string OutputFileName = "ShoreProfile.xz";
 	
@@ -100,21 +100,21 @@ int main()
 	PlatformModel.InitialiseSeaLevel(SLR);
 	
 	//Tectonic Events
-	double UpliftFrequency = 100000.;
+	double UpliftFrequency = 2000.;
 	double UpliftTime = UpliftFrequency;
 	double UpliftMagnitude = 1.;
 
 	// Wave coefficient constant
 	double StandingCoefficient = 0.1;
 	double BreakingCoefficient = 10.;
-	double BrokenCoefficient = 0.01;
+	double BrokenCoefficient = 1.;
 	double WaveAttenuationConst = 0.01;
 	PlatformModel.Set_WaveCoefficients(StandingCoefficient, BreakingCoefficient, BrokenCoefficient, WaveAttenuationConst);
 
 	//reset the geology
 	double CliffFailureDepth = 0.1;
-	double Resistance = 1.; //kg m^2 yr^-1 ? NOT CURRENTLY
-	double WeatheringRate = 0.001; //kg m^2 yr-1 ? NOT CURRENTLY
+	double Resistance = 0.5; //kg m^2 yr^-1 ? NOT CURRENTLY
+	double WeatheringRate = 0.00001; //kg m^2 yr-1 ? NOT CURRENTLY
 	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate);
 				
 

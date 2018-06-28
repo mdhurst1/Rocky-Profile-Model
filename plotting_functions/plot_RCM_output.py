@@ -48,8 +48,8 @@ def make_plot(FileName,ColourMap):
     # Only plot every so many years
     StartTime = 0
     PlotTime = StartTime
-    PlotInterval = 100
-    EndTime = 10000
+    PlotInterval = 10
+    EndTime = 3000
     
     ax1 = plt.subplot(111)
     plt.axis('equal')
