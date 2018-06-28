@@ -45,12 +45,18 @@ def make_plot(FileName,ColourMap):
     CliffHeight = Header[0]
     dz = Header[1]
     
-    # Only plot every 1 000 years
+    # Only plot every so many years
+    StartTime = 0
     PlotTime = StartTime
-    PlotInterval = 1000
+    PlotInterval = 100
+    EndTime = 10000
     
     ax1 = plt.subplot(111)
-
+    plt.axis('equal')
+    
+    #Colourmap
+    ColourMap = cm.bone_r
+    
     #Get header info and setup X coord
     for j in range(1,NoLines-1):
         
@@ -62,11 +68,20 @@ def make_plot(FileName,ColourMap):
         NValues = len(X)
         Z = np.linspace(CliffHeight,-CliffHeight, NValues)
         
-        if (Time >= PlotTime):
-            print(Time)
-            colour = Time/EndTime
-            ax1.plot(X,Z,'-',lw=1.5,color=cm.RdBu(colour))
+        if Time >= EndTime:
+            ax1.plot(X,Z,'k-',lw=1.,zorder=10,label="Final Profile")
             PlotTime += PlotInterval
+            break
+        elif Time == StartTime:
+            print(Time)
+            ax1.plot(X,Z,'k--',lw=1.,zorder=10,label="Initial Profile")
+            PlotTime += PlotInterval
+        elif (Time >= PlotTime):
+            print(Time)
+            colour =(Time-StartTime)/(EndTime-StartTime)
+            ax1.plot(X,Z,'-',lw=1.,color=ColourMap(colour))
+            PlotTime += PlotInterval
+
     
     ax1.plot(X,Z,'k-',lw=1.5)
             
@@ -75,12 +90,11 @@ def make_plot(FileName,ColourMap):
     #ax1.set_xticklabels([])
     plt.xlabel("Distance (m)")
     plt.ylabel("Elevation (m)")
-    #xmin, xmax = ax1.get_xlim()
-    #plt.xlim(xmin-10,xmax+10)
-    #plt.ylim(-CliffHeight,CliffHeight)
+    #plt.xlim(np.min(X),np.max(X))
+    plt.ylim(-CliffHeight/2,CliffHeight/2)
     #plt.ylim(-30,30)
     plt.tight_layout()
-    plt.savefig('RPM_evolution.png',dpi=300)
+    plt.savefig('RPM_Waves_Only.png',dpi=300)
 
 if __name__ == "__main__":
     FileName = "../driver_files/"

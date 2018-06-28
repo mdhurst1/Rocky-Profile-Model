@@ -219,7 +219,7 @@ void RPM::Initialise(double dZ_in, double dX_in, double Gradient, double CliffHe
 	{
 		for (int i=0; i<NZNodes; ++i)
 		{
-			Xz[i] = (Z[i]-Z[NZNodes-1])*InitialGradient;
+			Xz[i] = (Z[i]-Z[NZNodes-1])/InitialGradient;
 			for (int j=0;j<NXNodes;++j)
 			{
 
@@ -480,14 +480,14 @@ void RPM::GetWave()
 	
 	// test the initialise wave pressure functions
 	InitialiseWavePressure_Rectangle(WaveHeight);
-	printf("break here\n");
-    InitialiseWavePressure_Triangle(WaveHeight);
-	printf("then break here\n");
+	InitialiseWavePressure_Triangle(WaveHeight);
 }
 
 void RPM::InitialiseSeaLevel(double SLR)
 {
 	SeaLevelRise = SLR;
+	// dont let sea level rise be zero, just make it tinee!
+	if (SeaLevelRise == 0) SeaLevelRise = 0.0000000001;
 	SLR_sum = 0.;
 }
 
@@ -570,7 +570,10 @@ void RPM::UpdateSeaLevel(double InputSeaLevel)
 // Only bigger than 10 cm.
 void RPM::TectonicUplift(double UpliftAmplitude)
 {
-    SeaLevel -= (round(UpliftAmplitude*10))*0.1;
+    printf("\nUplift Event\n");
+	printf("Old Sea Level was %1.1f\n",SeaLevel);
+	SeaLevel -= (round(UpliftAmplitude*10))*0.1;
+	printf("New Sea Level is %1.1f\n",SeaLevel);
 }
 
 void RPM::CalculateBackwearing()
@@ -698,7 +701,7 @@ void RPM::CalculateBackwearing_v1()
 {
 	//Declare temporary variables
 	double WaveForce, SurfZoneBottomZ; //, SurfZoneBottomX;
-	int WaveType,iii,cc=0;
+	int WaveType,iii; //,cc=0;
 	double a=0;
 	double b=0;
 	double c=0;
@@ -710,7 +713,7 @@ void RPM::CalculateBackwearing_v1()
 
 
 	//Loop across all intertidal elevations
-	for (int i=MaxTideZInd+1; i<MinTideZInd; ++i)
+	for (int i=MaxTideZInd+1, cc=0; i<MinTideZInd; ++i, ++cc)
 	{
 
         //Estimate horizontal breaking point
@@ -737,16 +740,16 @@ void RPM::CalculateBackwearing_v1()
         {
             if ( Xz[BreakingPointZInd]-Xz[ii] > WaveHeight )
             {
-                a = sqrt(pow((Z[ii]-Z[BreakingPointZInd]),2)+pow((Xz[BreakingPointZInd]-Xz[ii]),2));
                 b = Xz[BreakingPointZInd]-Xz[ii];
                 c = Z[BreakingPointZInd]-Z[ii];
+				a = sqrt(pow(b,2)+pow(c,2));
                 break;
             }
         }
 
         //Set BreakingWaveDistance & BreakingWaveConst
-		BreakingWaveDist_new.push_back(10*WaveHeight*(b/a));
-		BreakingWaveConst_new.push_back(BreakingWaveConst*(c/a));
+		BreakingWaveDist_new[cc] = 10.*WaveHeight*(b/a);
+		BreakingWaveConst_new[cc] = BreakingWaveConst*(c/a);
         if(BreakingWaveConst_new[cc]<BrokenWaveConst) BreakingWaveConst_new[cc]=BrokenWaveConst;
 
         //
@@ -853,7 +856,7 @@ void RPM::CalculateBackwearing_v1()
 				Bw_Erosion[ii] += WaveForce;
 			}
 		}
-		cc+=1;
+		//cc+=1;
 	}
 }
 
@@ -876,13 +879,13 @@ void RPM::CalculateDownwearing()
 		//Standing Waves
 		if (Xz[i] < Xz[BreakingPointZInd])
 		{
-			WaveForce = StandingWaveConst*WaveHeight*ErosionShapeFunction[i-MaxTideZInd]*StandingWavePressure_Dw;
+			WaveForce = StandingWaveConst*WaveHeight*WaveHeight*ErosionShapeFunction[i-MaxTideZInd]*StandingWavePressure_Dw;
 			DepthDecay = -log(SubmarineDecayConst)/WaveHeight;
 		}
 		//Breaking Waves
 		else if (Xz[i]<(Xz[BreakingPointZInd]+BreakingWaveDist))
 		{
-			WaveForce = BreakingWaveConst*WaveHeight*ErosionShapeFunction[i-MaxTideZInd]*BreakingWavePressure_Dw*exp(-BreakingWaveDecay*(Xz[i]-BreakingPointX));
+			WaveForce = BreakingWaveConst*WaveHeight*WaveHeight*ErosionShapeFunction[i-MaxTideZInd]*BreakingWavePressure_Dw*exp(-BreakingWaveDecay*(Xz[i]-BreakingPointX));
 			DepthDecay = -log(SubmarineDecayConst)/(WaveHeight*exp(-BreakingWaveDecay*(Xz[i]-BreakingPointX)));
 		}
 		//Broken Waves
@@ -1094,6 +1097,7 @@ void RPM::UpdateMorphology()
 
 	// Find Sea Level in vertical
 	// Only need to do this once if sea level isnt changing
+	// But need to do it if tectonics are in play
 	if ((SeaLevelInd == 0) || (SeaLevelRise != 0))
 	{
 		for (int i=0; i<NZNodes; ++i)

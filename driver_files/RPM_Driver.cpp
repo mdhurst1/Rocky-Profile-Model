@@ -84,7 +84,7 @@ int main()
 	RPM PlatformModel = RPM(dZ, dX, Gradient, CliffHeight);
 	
 	//Initialise Tides
-	double TidalRange = 8.;
+	double TidalRange = 1.5;
 	PlatformModel.InitialiseTides(TidalRange);
 		
 	//Initialise Waves
@@ -98,23 +98,39 @@ int main()
 	//Sea level rise?
 	double SLR = 0;
 	PlatformModel.InitialiseSeaLevel(SLR);
+	
+	//Tectonic Events
+	double UpliftFrequency = 100000.;
+	double UpliftTime = UpliftFrequency;
+	double UpliftMagnitude = 1.;
 
 	// Wave coefficient constant
-	double StandingCoefficient = 0.01;
+	double StandingCoefficient = 0.1;
 	double BreakingCoefficient = 10.;
-	double BrokenCoefficient = 1.;
-	PlatformModel.Set_WaveCoefficients(StandingCoefficient, BreakingCoefficient, BrokenCoefficient);
+	double BrokenCoefficient = 0.01;
+	double WaveAttenuationConst = 0.01;
+	PlatformModel.Set_WaveCoefficients(StandingCoefficient, BreakingCoefficient, BrokenCoefficient, WaveAttenuationConst);
 
 	//reset the geology
-	double CliffFailureDepth = 1.;
-	double Resistance = 0.01;
-	double WeatheringRate = 0.001;
+	double CliffFailureDepth = 0.1;
+	double Resistance = 1.; //kg m^2 yr^-1 ? NOT CURRENTLY
+	double WeatheringRate = 0.001; //kg m^2 yr-1 ? NOT CURRENTLY
 	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate);
 				
 
 	//Loop through time
 	while (Time <= EndTime)
 	{
+		// Do an earthquake?
+		if (Time > UpliftTime)
+		{
+			PlatformModel.TectonicUplift(UpliftMagnitude);
+			UpliftTime += UpliftFrequency;
+			
+			//Update the Morphology 
+			PlatformModel.UpdateMorphology();
+		}
+		
 		//Update Sea Level
 		PlatformModel.UpdateSeaLevel();
 

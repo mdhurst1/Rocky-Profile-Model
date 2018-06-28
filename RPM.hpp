@@ -342,12 +342,12 @@ class RPM
 			InitialGradient = Gradient;
 		}
 
-		void Set_WaveCoefficients(double StandingWaveCoef, double BreakingWaveCoef, double BrokenWaveCoef)
+		void Set_WaveCoefficients(double StandingWaveCoef, double BreakingWaveCoef, double BrokenWaveCoef, double WaveAttenuCoef)
 		{
 			StandingWaveConst = StandingWaveCoef;
 			BreakingWaveConst = BreakingWaveCoef;
 			BrokenWaveConst= BrokenWaveCoef;
-			WaveAttenuConst = 0.1;
+			WaveAttenuConst = WaveAttenuCoef;
 		}
 };
 
