@@ -390,25 +390,25 @@ void RPM::InitialiseWaves(double WaveHeight_Mean, double WaveHeight_StD, double 
   StdWaveHeight = WaveHeight_StD;
 }
 
-void RPM::InitialiseWavePressure_1(double WaveHeight_Mean)
+void RPM::InitialiseWavePressure_Rectangle(double WaveHeight)
 {
     /* initialise wave pressure */
     int NWPValues;
-    NWPValues = (int)(WaveHeight_Mean/dZ)+1.0;
-    vector<double> EmptyTideVec(NWPValues,dZ/WaveHeight_Mean);
+    NWPValues = (int)(WaveHeight/dZ)+1.0;
+    vector<double> EmptyTideVec(NWPValues,dZ/WaveHeight);
 	//vector<double> EmptyTideVec(NWPValues,0.1);
 	WavePressure = EmptyTideVec;
 
 }
 
-void RPM::InitialiseWavePressure_25(double WaveHeight_Mean)
+void RPM::InitialiseWavePressure_Triangle(double WaveHeight)
 {
     /* initialise wave pressure */
     int NWPValues,ccc;
     double sum=0.;
     //double sum1=0.;
-    NWPValues = (int)(WaveHeight_Mean/dZ)+1.0;
-    vector<double> EmptyTideVec1(NWPValues,dZ/WaveHeight_Mean);
+    NWPValues = (int)(WaveHeight/dZ)+1.0;
+    vector<double> EmptyTideVec1(NWPValues,dZ/WaveHeight);
 	StandingWavePressure = EmptyTideVec1;
 
     vector<double> EmptyTideVec2(NWPValues,0.);
@@ -419,8 +419,8 @@ void RPM::InitialiseWavePressure_25(double WaveHeight_Mean)
 	if ( NWPValues%2 == 0)
     {
         for (int i=0; i<NWPValues/2; ++i){
-            BreakingWavePressure[i] = (double)i/(NWPValues/2);
-            BrokenWavePressure[i] = (double)i/(NWPValues/2);
+            BreakingWavePressure[i] = 2.*i/NWPValues;
+            BrokenWavePressure[i] = 2.*i/NWPValues;
             sum = sum + BreakingWavePressure[i];
         }
         ccc=0;
@@ -434,8 +434,8 @@ void RPM::InitialiseWavePressure_25(double WaveHeight_Mean)
     else
     {
         for (int i=0; i<NWPValues/2; ++i){
-            BreakingWavePressure[i] = i/(NWPValues/2);
-            BrokenWavePressure[i] = i/(NWPValues/2);
+            BreakingWavePressure[i] = 2.*i/NWPValues;
+            BrokenWavePressure[i] = 2.*i/NWPValues;
             sum = sum + BreakingWavePressure[i];
         }
         ccc=0;
@@ -450,8 +450,6 @@ void RPM::InitialiseWavePressure_25(double WaveHeight_Mean)
         BreakingWavePressure[i] = BreakingWavePressure[i]/sum;
         BrokenWavePressure[i] = BrokenWavePressure[i]/sum;
     }
-
-
 }
 
 
@@ -479,7 +477,12 @@ void RPM::GetWave()
 	//Get Wave Pressure Distribution as Uniform
 	PressureDistMaxInd = 0.5*BreakingWaveHeight/dZ;
 	PressureDistMinInd = -0.5*BreakingWaveHeight/dZ;
-
+	
+	// test the initialise wave pressure functions
+	InitialiseWavePressure_Rectangle(WaveHeight);
+	printf("break here\n");
+    InitialiseWavePressure_Triangle(WaveHeight);
+	printf("then break here\n");
 }
 
 void RPM::InitialiseSeaLevel(double SLR)

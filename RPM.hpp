@@ -270,9 +270,9 @@ class RPM
 		// Function to initialise weathering shape function
 		void InitialiseWeathering();
 
-		// NEW
-        void InitialiseWavePressure_1(double WaveHeight_Mean);
-        void InitialiseWavePressure_25(double WaveHeight_Mean);
+		// Functions to initialise the shape of the wave pressure distribution
+        void InitialiseWavePressure_Rectangle(double WaveHeight);
+        void InitialiseWavePressure_Triangle(double WaveHeight);
 
 		/// @brief Launch the main program loop to evolve RPM coast
 		/// @details This function evolves a rocky coastal platform through time.
