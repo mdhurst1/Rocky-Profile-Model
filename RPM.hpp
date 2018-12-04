@@ -283,13 +283,18 @@ class RPM
 		/// @date 27/02/2017
 		void EvolveCoast();
 
+		/// @brief Calculate the amount of backwearing in a timestep
+		/// @details Calculates the amount of backwearing based on transformation
+		/// of wave conditions. Updated following Matsumoto et al. 2018
+		///	@author Martin D. Hurst
+		/// @date 04/12/2018
 		void CalculateBackwearing();
+		/// @brief Calculate the amount of downwear in a timestep
+		/// @details Calculates the amount of downwearing based on transformation
+		/// of wave conditions. Updated following Matsumoto et al. 2018
+		///	@author Martin D. Hurst
+		/// @date 04/12/2018
 		void CalculateDownwearing();
-
-		//New CalculateBackwearing & CalculateDownwearing
-		// update by Hiro Matsumoto implemented 11/6/18
-		void CalculateBackwearing_v1();
-		void CalculateDownwearing_v1();
 
 		void ErodeBackwearing();
 		void ErodeDownwearing();
