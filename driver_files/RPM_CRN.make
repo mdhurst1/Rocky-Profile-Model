@@ -14,11 +14,8 @@ LD=g++
 CFLAGS= -g -c -Wall -Werror -Wextra -pedantic -pg -O3 $(INCDIR)
 LDFLAGS= -g -Wall -pg -O3
 
-# INCLUDE PATH FOR RoBoCoP_CRN
-INCLUDE = -I../
-
 # SOURCE FILES MACROS IN DEPENDENCY ORDER? SHOULDNT MATTER THANKS TO HEADERS
-SOURCES = ../Hiro.cpp ../RockyCoastCRN.cpp ./Hiro_CRN_Driver.cpp
+SOURCES = ../RoBoCoP_CRN/RockyCoastCRN.cpp ../SeaLevel.cpp ../RPM.cpp ./RPM_CRN_Driver.cpp
 
 # LIBRARIES MACRO
 LIBS   = -lm -lstdc++ 
@@ -27,7 +24,7 @@ LIBS   = -lm -lstdc++
 OBJECTS=$(SOURCES:.cpp=.o)
 
 # EXECUTABLE MACRO
-EXECUTABLE=Hiro_CRN.out
+EXECUTABLE=RPM.out
 
 all: $(SOURCES) $(EXECUTABLE)
 
@@ -35,8 +32,7 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(LDFLAGS) $(OBJECTS) $(LIBS) -o $@
 
 .cpp.o:
-	$(CC) $(CFLAGS) $(INCLUDE) $< -o $@
+	$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm -f ../*.o *.o *.out *.xz *.xn *.txt
-	
+	rm -f ../*.o *.o *.out *.xz *.xn

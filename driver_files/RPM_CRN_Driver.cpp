@@ -1,24 +1,25 @@
 /*------------------------------------------------------------------------
 
-	Hiro_CRN_v2_Driver.cpp
-
-	Last mofified 06-10-2017 by Hiro Matsumoto
-
-	Driver file for running the shore platform model of Matsumoto et al. (2016) with Cosmogenic Isotope accumulation (Hurst et al. 2017).
-
-	C++ implementation of Hiro Matsumoto's Shore Platform Model with Cosmogenic Isotope production.
+	RPM_CRN_Driver.cpp
+	
+	Driver file for running the shore platform model of Matsumoto et al. (2016)
+	Updated following improvements by Matsumoto et al. (2018)
+	
+	C++ implementation of Hiro Matsumoto's Shore Platform Model with coupling to Cosmogenic Isotope production by RockCoastCRN/RoBoCoP.
 
 	Matsumoto, H., Dickson, M. E., & Kench, P. S. (2016a)
-	An exploratory numerical model of rocky shore profile evolution.
+	An exploratory numerical model of rocky shore profile evolution. 
 	Geomorphology http://doi.org/10.1016/j.geomorph.2016.05.017
-
+	
 	Matsumoto, H., Dickson, M.E., and Kench, P.S. (2016b)
 	Modelling the Development of Varied Shore Profile Geometry on Rocky Coasts.
 	Journal of Coastal Research http://dx.doi.org/10.2112/SI75-120.1
 
-	Hurst, M.D., Rood, D.H., Ellis, M.A., Anderson, R.S., and Dornbusch, U. (2016)
-	Recent acceleration in coastal cliff retreat rates on the south coast of Great Britain.
-	Proceedings of the National Academy of Sciences, http://dx.doi.org/10.1073/PNAS.1613044113
+	Matsumoto, H., Dickson, M. E., Kench, P. S., (2018)
+	Modelling the relative dominance of wave erosion and weathering processes in shore platform development in micro- to mega-tidal settings
+	Earth Surface Processes and Landforms  http://dx.doi.org/10.1002/esp.4422
+	
+    Hurst, M.D., Rood, D.H., Ellis, M.A., Anderson, R.S., and Dornbusch, U. (2016) Recent acceleration in coastal cliff retreat rates on the south coast of Great Britain. Proceedings of the National Academy of Sciences, http://dx.doi.org/10.1073/PNAS.1613044113
 
 	Hurst, M.D., Rood, D.H., and Ellis, M.A. (2017)
 	Controls on the distribution of cosmogenic 10 Be across shore platforms
@@ -26,21 +27,22 @@
 
 	Martin D. Hurst, University of Glasgow
 	Hironori Matsumoto, University of Auckland
-
+	Mark Dickson, University of Auckland
+	
 	March 2017
-
-	Copyright (C) 2017, Martin Hurst
-
+	
+	Copyright (C) 2017, Hiro Matsumoto, Martin Hurst
+	
 	Developer can be contacted
 	martin.hurst@glasgow.ac.uk
-
+  
 	Martin D. Hurst
 	School of Geographical and Earth Sciences
 	University of Glasgow
 	Glasgow
 	Scotland
 	G12 8QQ
-
+  
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
@@ -56,8 +58,6 @@
 
 ------------------------------------------------------------------------*/
 
-#include <fenv.h>
-#include <signal.h>
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
@@ -69,186 +69,180 @@
 #include <cstdlib>
 #include <omp.h>
 #include <unistd.h>
-#include "RockyCoastCRN.hpp"
-#include "Hiro.hpp"
+#include "../RPM.hpp"
+#include "../RoBoCoP_CRN/RockyCoastCRN.hpp"
+#include "../SeaLevel.hpp"
 
 using namespace std;
 
-void handler(int sig)
+int main(int nNumberofArgs,char *argv[])
 {
-    printf("Floating Point Exception\n");
-    sig += 0;
-    exit(0);
-}
+	cout << endl;
+	cout << "--------------------------------------------------------------" << endl;
+	cout << "|  Rocky Profile Model (RPM)                                 |" << endl;
+	cout << "|  This program models the development of shore platforms    |" << endl;
+	cout << "|  following model developed by Matsumoto et al. (2016)      |" << endl;
+	cout << "|                                                            |" << endl;
+	cout << "|  Implemented in C++ by Martin Hurst, University of Glasgow |" << endl;
+	cout << "|  for coupling to RockyCoastCRN; model for predicting       |" << endl;
+	cout << "|  cosmogenic radionuclide concentrations in shore platforms |" << endl;
+	cout << "--------------------------------------------------------------" << endl;
+	cout << endl;
 
-int main()
-{
-	//feenableexcept(FE_INVALID | FE_DIVBYZERO | FE_OVERFLOW | FE_UNDERFLOW);
-    signal(SIGFPE, handler);
+	//Test for correct input arguments
+	if (nNumberofArgs!=3)
+	{
+		cout << "Error: This program requires two inputs: " << endl;
+		cout << "* First a path to the folder where the model will be run" << endl;
+		cout << "* The name of the project/model run" << endl;
+		cout << "------------------------------------------------------" << endl;
+		cout << "Then the command line argument will be: " << endl;
+		cout << "In linux:" << endl;
+		cout << "  ./RPM_Driver.out /ProjectFolder/ Waipapa" << endl;
+		cout << "------------------------------------------------------" << endl;
+		exit(EXIT_SUCCESS);
+	}
 
+	string Folder = argv[1];
+	string Project = argv[2];
+	
 	//initialisation parameters
 	double dZ = 0.1;
 	double dX = 0.1;
-    //double PlatformGradient = 1./10.;
-    double Gradient = 1.;
-    //double CliffPositionX = 0.;
-	double CliffHeight = 20.;
+	double Gradient = 1.;
+	double CliffHeight = 5.;
 
 	//Time control parameters
-	double EndTime = 100.;
-	double Time = 0.;
-	double TimeInterval = 1.;
+	//Time runs in yrs bp
+	double EndTime = 0;
+	double Time = 9000.;
+	double TimeInterval = 1;
 
 	//Print Control
-	double PrintInterval = 10.;
-	double PrintTime = Time;
-	string OutputMorphologyFileName = "ShoreProfile.xz";
-	string OutputConcentrationFileName = "Concentrations.xn";
+	double PrintInterval = 100;
+	double PrintTime = Time-PrintInterval;
+	string OutputFileName = Folder+Project+"_ShoreProfile.xz";
+	string OutputConcentrationFileName = Folder+Project+"Concentrations.xn";
 
-	//initialise Hiro Model
-	Hiro PlatformModel = Hiro(dZ, dX, Gradient, CliffHeight);
-
-	//Which Nuclides to track 10Be, 14C, 26Al, 36Cl?
+	//initialise RPM Model
+	RPM PlatformModel = RPM(dZ, dX, Gradient, CliffHeight);
+	
+    //Which Nuclides to track 10Be, 14C, 26Al, 36Cl?
 	vector<int> Nuclides;
 	Nuclides.push_back(10);
-	//Nuclides.push_back(14);
-
+	
 	//initialise RockyCoastCRN friend object
 	RockyCoastCRN PlatformCRN = RockyCoastCRN(PlatformModel, Nuclides);
 
 	//Initialise Tides
-	double TidalRange = 1.;                                             // [m]
-	double TidalPeriod = 12.42;
+	double TidalRange = 1.5;
+    double TidalPeriod = 12.42;
 	PlatformModel.InitialiseTides(TidalRange);
-	PlatformCRN.InitialiseTides(TidalRange/2.,TidalPeriod);
-
-	//Set sea level rise rate
-	//double SLR = 0.0000000001;
-	//PlatformModel.InitialiseSeaLevel(SLR);
-	int num_SLR = 3;
-	int SLRT[num_SLR] = {50, 100, 300};                              	// [year]
-	double SLR[num_SLR] = {0.00000000001, 0.0000000001, 0.000000001};   // [m/year]
-	int SLRT_tic = 0;
-	PlatformModel.InitialiseSeaLevel(SLR[SLRT_tic]);
-
-	//Tectonic uplift events
-	int num_TT = 1;
-	int TT[num_TT] = {150};                                    // [year]
-	double UpliftAmplitude[num_TT] = {2.0};                    // [m]
-	int TT_tic = 0;
-
-	//Setup Morphology
-	//Populate geometric metrics
-	PlatformModel.UpdateMorphology();
-
+    PlatformCRN.InitialiseTides(TidalRange/2.,TidalPeriod);
+		
 	//Initialise Waves
 	//Single Wave for now but could use the waveclimate object from COVE!?
-	double WaveHeight_Mean = 2.;                            // [m]
-	double WaveHeight_StD = 0;
+	double WaveHeight_Mean = 3.;
+	double WaveHeight_StD = 0.;
 	double WavePeriod_Mean = 6.;
 	double WavePeriod_StD = 0;
 	PlatformModel.InitialiseWaves(WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD);
 
-	// Pressure shape function 25
-	// Rectangular standing wave pressure
-	// Triangular breaking and brokan wave pressure
-	PlatformModel.InitialiseWavePressure_25(WaveHeight_Mean);
+	//Sea level rise?
+	//double SLR = 0;
+	//PlatformModel.InitialiseSeaLevel(SLR);
+	//Sea level rise?
+	string RelativeSeaLevelFile = Folder + Project + "_RSL.tz";
+	SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
+	double InstantSeaLevel = 0;
+	
+	//Tectonic Events
+	//double UpliftFrequency = 2000.;
+	//double UpliftTime = UpliftFrequency;
+	//double UpliftMagnitude = 1.;
 
-    // Wave coefficient constant
-	double StandingCoefficient = 0.01;
+	// Wave coefficient constant
+	double StandingCoefficient = 0.1;
 	double BreakingCoefficient = 10.;
 	double BrokenCoefficient = 1.;
-	PlatformModel.Set_WaveCoefficients(StandingCoefficient, BreakingCoefficient, BrokenCoefficient);
+	double WaveAttenuationConst = 0.01;
+	PlatformModel.Set_WaveCoefficients(StandingCoefficient, BreakingCoefficient, BrokenCoefficient, WaveAttenuationConst);
 
 	//reset the geology
-	double CliffFailureDepth = 1.;
-	double Resistance = 0.01;                               // NOTES ... 0.001 >> soft-rock, 0.1 >> hard-rock
-	double WeatheringRate = 0.001;                          // NOTES ... CONVERSION TO REALISTIC VALUES >> WeatheringRate x 1e^4 [mm/year] (maximum)
+	double CliffFailureDepth = 0.1;
+	double Resistance = 0.01; //kg m^2 yr^-1 ? NOT CURRENTLY
+	double WeatheringRate = 0.001; //kg m^2 yr-1 ? NOT CURRENTLY
 	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate);
 
-    //wave erodibility
-    double WaveAttenuConst = 0.1;                           // NOTES ... 0.01 >> Large wave erosion efficacy, 1 >> Small wave erosion efficacy
+	// print initial condition to file
+	double TempTime = -9999;
+	PlatformModel.WriteProfile(OutputFileName, TempTime);			
 
 	//Loop through time
-	while (Time <= EndTime)
+	while (Time >= EndTime)
 	{
-
-        //cout << SeaLevel << endl;
-
+		// Do an earthquake?
+		//if (Time > UpliftTime)
+		//{
+		//	PlatformModel.TectonicUplift(UpliftMagnitude);
+		//	UpliftTime += UpliftFrequency;
+		//	
+		//	//Update the Morphology 
+		//	PlatformModel.UpdateMorphology();
+		//}
+		
 		//Update Sea Level
-		//PlatformModel.UpdateSeaLevel();
-		if( Time > SLRT[SLRT_tic] ) {
-                ++SLRT_tic;
-		}
-        PlatformModel.UpdateSeaLevel_v1(SLR[SLRT_tic]);
-        //PlatformModel.UpdateSeaLevel(SLR[SLR_tic]);
-
-		//Tectonic uplift
-		if( Time == TT[TT_tic] ){
-            PlatformModel.TectonicUplift(UpliftAmplitude[TT_tic]);
-            ++TT_tic;
-		}
+		InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
+		PlatformModel.UpdateSeaLevel(InstantSeaLevel);
 
 		//Get the wave conditions
 		PlatformModel.GetWave();
 
 		//Calculate forces acting on the platform
-		PlatformModel.CalculateBackwearing_v1(WaveAttenuConst);
-		PlatformModel.CalculateDownwearing_v1(WaveAttenuConst);
+		PlatformModel.CalculateBackwearing();
+		PlatformModel.CalculateDownwearing();
 
 		//Do erosion
 		PlatformModel.ErodeBackwearing();
 		PlatformModel.ErodeDownwearing();
 
+		//Update the Morphology 
+		PlatformModel.UpdateMorphology();	  
+		
 		//Implement Weathering
 		PlatformModel.IntertidalWeathering();
-
-		//Update the Morphology
+		
+		//Update the Morphology 
 		PlatformModel.UpdateMorphology();
 
 		//Check for Mass Failure
 		PlatformModel.MassFailure();
-
-		//Update the Morphology
+		
+		//Update the Morphology 
 		PlatformModel.UpdateMorphology();
 
-		//Update the morphology inside RockyCoastCRN
+        //Update the morphology inside RockyCoastCRN
 		PlatformCRN.UpdateMorphology(PlatformModel);
 
 		//Update the CRN concentrations
 		PlatformCRN.UpdateCRNs();
-
+        	
 		//print?
-		if (Time >= PrintTime)
+		if (Time <= PrintTime)
 		{
-			//Create string stream for puting time into filename
-//			stringstream ss;
-//			ss << PrintTime;
-//			string PrintTimeString = ss.str();
-//			ss.clear();
-//			string ConcentrationsFileName ="Concentrations_"+PrintTimeString+".xzn";
-			//PlatformCRN.WriteNuclideArray(ConcentrationsFileName, Time, Nuclides[0]);
-			PlatformModel.WriteProfile(OutputMorphologyFileName, Time);
-			PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
-			PrintTime += PrintInterval;
+			PlatformModel.WriteProfile(OutputFileName, Time);
+			PrintTime -= PrintInterval;
+			//cout << endl;
 		}
-
+		
 		//update time
-		Time += TimeInterval;
+		Time -= TimeInterval;
+		
 	}
-
-	string ResistanceFileName = "ResistanceArray.xz";
-	string MorphologyFileName = "MorphologyArray.xz";
-    string LocalangleFileName = "LocalangleArray.xz";
-
-	PlatformModel.WriteResistanceArray(ResistanceFileName, Time);
-	PlatformModel.WriteMorphologyArray(MorphologyFileName, Time);
-	PlatformModel.WriteLocalangleArray(LocalangleFileName, Time);
-
-
+	
 	//a few blank lines to finish
 	cout << endl << endl;
-
+	
 }
 
 
