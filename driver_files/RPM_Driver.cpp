@@ -64,6 +64,7 @@
 #include <omp.h>
 #include <unistd.h>
 #include "../RPM.hpp"
+#include "../SeaLevel.hpp"
 
 using namespace std;
 
@@ -71,10 +72,10 @@ int main(int nNumberofArgs,char *argv[])
 {
 	cout << endl;
 	cout << "--------------------------------------------------------------" << endl;
-	cout << "|  Rocky Profile Model (RPM)					      		  |" << endl;
+	cout << "|  Rocky Profile Model (RPM)                                 |" << endl;
 	cout << "|  This program models the development of shore platforms    |" << endl;
-	cout << "|  following model developed by Matsumoto et al. (2016)	  |" << endl;
-	cout << "|  														  |" << endl;
+	cout << "|  following model developed by Matsumoto et al. (2016)      |" << endl;
+	cout << "|                                                            |" << endl;
 	cout << "|  Implemented in C++ by Martin Hurst, University of Glasgow |" << endl;
 	cout << "|  for coupling to RockyCoastCRN; model for predicting       |" << endl;
 	cout << "|  cosmogenic radionuclide concentrations in shore platforms |" << endl;
@@ -96,7 +97,7 @@ int main(int nNumberofArgs,char *argv[])
 	}
 
 	string Folder = argv[1];
-	string Filename = argv[2];
+	string Project = argv[2];
 	
 	//initialisation parameters
 	double dZ = 0.1;
@@ -105,14 +106,15 @@ int main(int nNumberofArgs,char *argv[])
 	double CliffHeight = 10.;
 
 	//Time control parameters
-	double EndTime = 4000;
-	double Time = 0.;
+	//Time runs in yrs bp
+	double EndTime = 0;
+	double Time = 9000.;
 	double TimeInterval = 1;
 
 	//Print Control
-	double PrintInterval = 10;
-	double PrintTime = Time;
-	string OutputFileName = "ShoreProfile.xz";
+	double PrintInterval = 100;
+	double PrintTime = Time-PrintInterval;
+	string OutputFileName = Folder+Project+"_ShoreProfile.xz";
 	
 	//initialise RPM Model
 	RPM PlatformModel = RPM(dZ, dX, Gradient, CliffHeight);
@@ -123,7 +125,7 @@ int main(int nNumberofArgs,char *argv[])
 		
 	//Initialise Waves
 	//Single Wave for now but could use the waveclimate object from COVE!?
-	double WaveHeight_Mean = 3.;
+	double WaveHeight_Mean = 2.;
 	double WaveHeight_StD = 0.;
 	double WavePeriod_Mean = 6.;
 	double WavePeriod_StD = 0;
@@ -133,14 +135,14 @@ int main(int nNumberofArgs,char *argv[])
 	//double SLR = 0;
 	//PlatformModel.InitialiseSeaLevel(SLR);
 	//Sea level rise?
-	string RelativeSeaLevelFile = "";
+	string RelativeSeaLevelFile = Folder + Project + "_RSL.tz";
 	SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
 	double InstantSeaLevel = 0;
 	
 	//Tectonic Events
-	double UpliftFrequency = 2000.;
-	double UpliftTime = UpliftFrequency;
-	double UpliftMagnitude = 1.;
+	//double UpliftFrequency = 2000.;
+	//double UpliftTime = UpliftFrequency;
+	//double UpliftMagnitude = 1.;
 
 	// Wave coefficient constant
 	double StandingCoefficient = 0.1;
@@ -152,22 +154,24 @@ int main(int nNumberofArgs,char *argv[])
 	//reset the geology
 	double CliffFailureDepth = 0.1;
 	double Resistance = 0.5; //kg m^2 yr^-1 ? NOT CURRENTLY
-	double WeatheringRate = 0.00001; //kg m^2 yr-1 ? NOT CURRENTLY
+	double WeatheringRate = 0.0001; //kg m^2 yr-1 ? NOT CURRENTLY
 	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate);
-				
+
+	// print initial condition to file
+	PlatformModel.WriteProfile(OutputFileName, Time);			
 
 	//Loop through time
-	while (Time <= EndTime)
+	while (Time >= EndTime)
 	{
 		// Do an earthquake?
-		if (Time > UpliftTime)
-		{
-			PlatformModel.TectonicUplift(UpliftMagnitude);
-			UpliftTime += UpliftFrequency;
-			
-			//Update the Morphology 
-			PlatformModel.UpdateMorphology();
-		}
+		//if (Time > UpliftTime)
+		//{
+		//	PlatformModel.TectonicUplift(UpliftMagnitude);
+		//	UpliftTime += UpliftFrequency;
+		//	
+		//	//Update the Morphology 
+		//	PlatformModel.UpdateMorphology();
+		//}
 		
 		//Update Sea Level
 		InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
@@ -177,8 +181,8 @@ int main(int nNumberofArgs,char *argv[])
 		PlatformModel.GetWave();
 
 		//Calculate forces acting on the platform
-		PlatformModel.CalculateBackwearing_v1();
-		PlatformModel.CalculateDownwearing_v1();
+		PlatformModel.CalculateBackwearing();
+		PlatformModel.CalculateDownwearing();
 
 		//Do erosion
 		PlatformModel.ErodeBackwearing();
@@ -203,12 +207,12 @@ int main(int nNumberofArgs,char *argv[])
 		if (Time >= PrintTime)
 		{
 			PlatformModel.WriteProfile(OutputFileName, Time);
-			PrintTime += PrintInterval;
+			PrintTime -= PrintInterval;
 			//cout << endl;
 		}
 		
 		//update time
-		Time += TimeInterval;
+		Time -= TimeInterval;
 		
 	}
 	

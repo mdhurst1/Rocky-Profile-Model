@@ -11,8 +11,8 @@ March 7th 2016
 """
 
 # import plotting tools and set the back end for running on server
-import matplotlib
-matplotlib.use('Agg')
+#import matplotlib
+#matplotlib.use('Agg')
 
 #import modules
 import numpy as np
@@ -46,10 +46,10 @@ def make_plot(FileName,ColourMap):
     dz = Header[1]
     
     # Only plot every so many years
-    StartTime = 0
+    StartTime = 9000
     PlotTime = StartTime
-    PlotInterval = 10
-    EndTime = 3000
+    PlotInterval = -1000
+    EndTime = 0
     
     ax1 = plt.subplot(111)
     plt.axis('equal')
@@ -76,7 +76,7 @@ def make_plot(FileName,ColourMap):
             print(Time)
             ax1.plot(X,Z,'k--',lw=1.,zorder=10,label="Initial Profile")
             PlotTime += PlotInterval
-        elif (Time >= PlotTime):
+        elif (Time <= PlotTime):
             print(Time)
             colour =(Time-StartTime)/(EndTime-StartTime)
             ax1.plot(X,Z,'-',lw=1.,color=ColourMap(colour))
@@ -94,7 +94,7 @@ def make_plot(FileName,ColourMap):
     plt.ylim(-CliffHeight/2,CliffHeight/2)
     #plt.ylim(-30,30)
     plt.tight_layout()
-    plt.savefig('RPM_Waves_Only.png',dpi=300)
+    plt.savefig('RPM_test.png',dpi=300)
 
 if __name__ == "__main__":
     FileName = "../driver_files/"
