@@ -159,7 +159,7 @@ class RPM
   		double WavePeriod;
 		double WaveHeight;
 		double BreakingWaveHeight, BrokenWaveHeight;
-		double BreakingWaveDist, BrokenWaveDist;
+		double BreakingWaveDist;
 		double BreakingWaveWaterDepth;
 		double BreakingWaveAttenuation, BrokenWaveAttenuation;
 		double BreakingPointX, BreakingPointZ;
@@ -177,7 +177,7 @@ class RPM
 		//Constants and controlling parameters
 		//These should be read from an input file?
 		double SubmarineDecayConst, StandingWaveConst;
-		double BreakingWaveConst, BrokenWaveConst;
+		double BreakingWaveConst, BreakingWaveConst_New, BrokenWaveConst;
 		double BreakingWaveDecay, BrokenWaveDecay;
 		double WeatheringConst;
 		double RockResistance;
