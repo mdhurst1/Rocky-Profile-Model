@@ -121,12 +121,12 @@ double SeaLevel::get_SeaLevel(double Time)
 	int ind = 0;
 	while (TimeCondition == 0)
 	{
-		if (Time >= Times[Times.size()-1])
+		if (Time == Times[ind])
 		{
 			TimeCondition = 1;
-			ind = Times.size()-1;
+			++ind;
 		}
-		else if (Time >= Times[ind]) ++ind;
+		else if (Time < Times[ind]) ++ind;
 		else TimeCondition = 1;
 	}
 	Factor = (Time-Times[ind-1])/(Times[ind]-Times[ind-1]);

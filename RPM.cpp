@@ -252,7 +252,6 @@ void RPM::Initialise(double dZ_in, double dX_in, double Gradient, double CliffHe
 	SeaLevel = 0;
 	SeaLevelInd = 0;
 
-
 }
 
 
@@ -586,6 +585,10 @@ void RPM::CalculateBackwearing()
 {
 	//Declare temporary variables
 	double WaveForce, SurfZoneBottomZ; //, SurfZoneBottomX;
+	double BreakingWaveConst_New, BreakingWaveDist_New;
+	double dZ = 1.; 
+	double dX = 1.;
+	double H = sqrt(2.);
 	int WaveType;
 	BreakingPointZInd = 0;
 
@@ -615,49 +618,47 @@ void RPM::CalculateBackwearing()
 			else break;
 		}
 
+		//Find the location where the broken wave starts
+		
+		//Determine Surfzone Gradient
+		//Get surf zone mean platform gradient
+		//This is critical!
+		if ((Xz[MaxXZInd] != Xz[BreakingPointZInd]))
+		{
+			//Find gradient of local slope
+        	for (int ii=BreakingPointZInd+1; ii<NZNodes; ++ii)
+        	{
+				if ( Xz[BreakingPointZInd]-Xz[ii] > WaveHeight )
+            	{
+					dX = Xz[BreakingPointZInd]-Xz[ii];
+					dZ = Z[BreakingPointZInd]-Z[ii];
+					H = sqrt(dX*dX+dZ*dZ);
+					SurfZoneGradient = abs(dZ/dX);
+					break;
+				}
+			}
+		}
+		else 
+		{
+			SurfZoneGradient = 1.;
+			dZ = 1.; 
+			dX = 1.;
+			H = sqrt(2.);
+		}
+
+		//Limit SurfZoneGradient to 45 degrees!
+		//if (SurfZoneGradient > 1.) SurfZoneGradient = 1.;
+
+		// Get breaking wave conditions and constants
+		BreakingWaveDist_New = 10.*WaveHeight*(dX/H);
+		BreakingWaveConst_New = BreakingWaveConst*(dZ/H);
+		if (BreakingWaveConst_New < BrokenWaveConst) BreakingWaveConst_New = BrokenWaveConst;
+
 		//Set Wave Type
 		if (Xz[i] == 0) WaveType = 1;
 		else if (Xz[i]-Xz[BreakingPointZInd]<=0) WaveType = 1;
-		else if ((Xz[i]-Xz[BreakingPointZInd])<BreakingWaveDist) WaveType = 2;
+		else if ((Xz[i]-Xz[BreakingPointZInd])<BreakingWaveDist_New) WaveType = 2;
 		else WaveType = 3;
-
-		//Find the location where the broken wave starts
-		//int BrokenWaveXInd = BreakingPointXInd + round(BreakingWaveDist/dX);
-
-		//Determine Surfzone Width
-		//Get surf zone mean platform gradient
-		//This is critical!
-//		double Slope;
-//		double SumSlopes = 0;
-//		int NSlopes = 0;
-		if ((Xz[MaxXZInd] != Xz[BreakingPointZInd]))
-		{
-			SurfZoneGradient = abs((Z[MaxXZInd]-Z[BreakingPointZInd])/(Xz[MaxXZInd]-Xz[BreakingPointZInd]));
-//			for (int jj=BrokenWaveXInd-1; X[jj]>Xz[i]; --jj)
-//			{
-//				if ((X[jj] != X[jj+1]) && (Zx[jj+1] < 0.5*CliffHeight))
-//				{
-//					Slope = fabs((Zx[jj+1]-Zx[jj])/(X[jj+1]-X[jj]));
-//					SumSlopes += Slope;
-//					NSlopes++;
-//				}
-//			}
-//			SurfZoneGradient = SumSlopes/NSlopes;
-		}
-		else
-		{
-			SurfZoneGradient = 1.;
-			//cout << endl << "setting SurfZoneGradient = 1" << endl;
-		}
-
-		//Limt SurfZoneGradient to 45 degrees!
-		if (SurfZoneGradient > 1.) SurfZoneGradient = 1.;
-
-		SurfZoneWidth = 2.*WaveHeight/SurfZoneGradient;
-
-		//Set the wave attenuation constant #2
-		BreakingWaveAttenuation = -log(BreakingWaveDecay)/BreakingWaveDist;
-		BrokenWaveAttenuation = -log(BrokenWaveDecay)/SurfZoneWidth;
 
 		//Determine Backwear erosion
 		//Standing wave
@@ -687,12 +688,12 @@ void RPM::CalculateBackwearing()
 				}
 				else if (Xz[ii] <= (Xz[BreakingPointZInd]+BreakingWaveDist))
 				{
-					BreakingWaveHeight = WaveHeight*exp(-BreakingWaveAttenuation*(Xz[ii]-Xz[BreakingPointZInd]));
-					WaveForce = BreakingWaveConst*BreakingWaveHeight*ErosionShapeFunction[i-MaxTideZInd]*BreakingWavePressure_Bw;
+					BreakingWaveHeight = WaveHeight*exp(-WaveAttenuConst*(Xz[ii]-Xz[BreakingPointZInd]));
+					WaveForce = BreakingWaveConst_New*BreakingWaveHeight*ErosionShapeFunction[i-MaxTideZInd]*BreakingWavePressure_Bw;
 				}
 				else
 				{
-					BrokenWaveHeight = BreakingWaveDecay*WaveHeight*exp(-BrokenWaveAttenuation*(Xz[ii]-(Xz[BreakingPointZInd]+BreakingWaveDist)));
+					BrokenWaveHeight = WaveHeight*exp(-WaveAttenuConst*BreakingWaveDist_New)*exp(-WaveAttenuConst*(Xz[ii]-(Xz[BreakingPointZInd]+BreakingWaveDist_New)));
 					WaveForce = BrokenWaveConst*BrokenWaveHeight*ErosionShapeFunction[i-MaxTideZInd]*BrokenWavePressure_Bw;
 				}
 				Bw_Erosion[ii] += WaveForce;
@@ -700,173 +701,6 @@ void RPM::CalculateBackwearing()
 		}
 	}
 }
-
-
-
-void RPM::CalculateBackwearing_v1()
-{
-	//Declare temporary variables
-	double WaveForce, SurfZoneBottomZ; //, SurfZoneBottomX;
-	int WaveType,iii; //,cc=0;
-	double a=0;
-	double b=0;
-	double c=0;
-	BreakingPointZInd = 0;
-
-	//Reset backwear vector
-	vector<double> ZZeros(NZNodes,0);
-	Bw_Erosion = ZZeros;
-
-
-	//Loop across all intertidal elevations
-	for (int i=MaxTideZInd+1, cc=0; i<MinTideZInd; ++i, ++cc)
-	{
-
-        //Estimate horizontal breaking point
-		//Elevation of breaker point
-		SurfZoneBottomZ = Z[i]-BreakingWaveWaterDepth;
-		for (int ii=i; ii<NZNodes; ++ii)
-		{
-			if (Z[ii] < SurfZoneBottomZ)
-			{
-				BreakingPointZInd = ii;
-				break;
-			}
-		}
-
-		//If waves are breaking at the seaward edge, find the top of the seaward edge
-		for (int ii=BreakingPointZInd; ii>i; --ii)
-		{
-			if (Xz[ii] == Xz[BreakingPointZInd]) BreakingPointZInd = ii;
-			else break;
-		}
-
-		//Find gradient of local slope
-        for (int ii=BreakingPointZInd+1; ii<NZNodes; ++ii)
-        {
-            if ( Xz[BreakingPointZInd]-Xz[ii] > WaveHeight )
-            {
-                b = Xz[BreakingPointZInd]-Xz[ii];
-                c = Z[BreakingPointZInd]-Z[ii];
-				a = sqrt(pow(b,2)+pow(c,2));
-                break;
-            }
-        }
-
-        //Set BreakingWaveDistance & BreakingWaveConst
-		BreakingWaveDist_new[cc] = 10.*WaveHeight*(b/a);
-		BreakingWaveConst_new[cc] = BreakingWaveConst*(c/a);
-        if(BreakingWaveConst_new[cc]<BrokenWaveConst) BreakingWaveConst_new[cc]=BrokenWaveConst;
-
-        //
-        LocalangleArray[i][Time]=(atan(c/b))*(180.0/3.14);
-        //LocalangleArray[i][Time]=;
-
-		//Set Wave Type
-		if (Xz[i] == 0) WaveType = 1;
-		else if (Xz[i]-Xz[BreakingPointZInd]<=0) WaveType = 1;
-		else if ((Xz[i]-Xz[BreakingPointZInd])<BreakingWaveDist_new[cc]) WaveType = 2;
-		else WaveType = 3;
-
-		//Find the location where the broken wave starts
-		//int BrokenWaveXInd = BreakingPointXInd + round(BreakingWaveDist/dX);
-
-		//Determine Surfzone Width
-		//Get surf zone mean platform gradient
-		//This is critical!
-//		double Slope;
-//		double SumSlopes = 0;
-//		int NSlopes = 0;
-		if ((Xz[MaxXZInd] != Xz[BreakingPointZInd]))
-		{
-			SurfZoneGradient = abs((Z[MaxXZInd]-Z[BreakingPointZInd])/(Xz[MaxXZInd]-Xz[BreakingPointZInd]));
-//			for (int jj=BrokenWaveXInd-1; X[jj]>Xz[i]; --jj)
-//			{
-//				if ((X[jj] != X[jj+1]) && (Zx[jj+1] < 0.5*CliffHeight))
-//				{
-//					Slope = fabs((Zx[jj+1]-Zx[jj])/(X[jj+1]-X[jj]));
-//					SumSlopes += Slope;
-//					NSlopes++;
-//				}
-//			}
-//			SurfZoneGradient = SumSlopes/NSlopes;
-		}
-		else
-		{
-			SurfZoneGradient = 1.;
-			//cout << endl << "setting SurfZoneGradient = 1" << endl;
-		}
-
-		//Limt SurfZoneGradient to 45 degrees!
-		if (SurfZoneGradient > 1.) SurfZoneGradient = 1.;
-
-		SurfZoneWidth = 2.*WaveHeight/SurfZoneGradient;
-
-		//Set the wave attenuation constant #2
-		//BreakingWaveAttenuation = -log(BreakingWaveDecay)/BreakingWaveDist;
-		//BrokenWaveAttenuation = -log(BrokenWaveDecay)/SurfZoneWidth;
-
-		//Set the wave attenuation constant #2
-		BreakingWaveAttenuation = WaveAttenuConst;
-		BrokenWaveAttenuation = WaveAttenuConst;
-
-		//Determine Backwear erosion
-		//Standing wave
-		if (WaveType == 1)
-		{
-			//Loop across pressure distribution function, currently a const
-			iii = 0;
-			for (int ii=i+PressureDistMinInd; ii<=i+PressureDistMaxInd; ++ii)
-			{
-			    iii=iii+1;
-				// Calculate wave force and update backwear at each elevation
-				WaveForce = StandingWaveConst*WaveHeight*ErosionShapeFunction[i-MaxTideZInd]*StandingWavePressure[iii];
-				//WaveForce = StandingWaveConst*WaveHeight*ErosionShapeFunction[i-MaxTideZInd]*StandingWavePressure_Bw;
-				Bw_Erosion[ii] += WaveForce;
-			}
-		}
-		//Breaking wave
-		//For a breaking wave, first deal with backwear for the standing wave part,
-		// then the breaking part
-		else if (WaveType == 2 || WaveType == 3)
-		{
-			//Loop across pressure distribution function
-			//This may have some problems!
-			for (int ii=i+PressureDistMinInd, iii=0; ii<=i+PressureDistMaxInd; ++ii, ++iii)
-			{ 
-			    //cout << WavePressure[iii] << endl;
-				//need to add for condition where changes to broken wave above water level in pressure distribution function
-				if (Xz[ii] < Xz[BreakingPointZInd])
-				{
-					WaveForce = StandingWaveConst*WaveHeight*ErosionShapeFunction[i-MaxTideZInd]*StandingWavePressure[iii];
-					//WaveForce = StandingWaveConst*WaveHeight*ErosionShapeFunction[i-MaxTideZInd]*StandingWavePressure_Bw;
-                    //cout << StandingWavePressure_Bw << endl;
-				}
-				else if (Xz[ii] <= (Xz[BreakingPointZInd]+BreakingWaveDist))
-				{
-					BreakingWaveHeight = WaveHeight*exp(-BreakingWaveAttenuation*(Xz[ii]-Xz[BreakingPointZInd]));
-					WaveForce = BreakingWaveConst_new[cc]*BreakingWaveHeight*ErosionShapeFunction[i-MaxTideZInd]*BreakingWavePressure[iii];
-                    //WaveForce = BreakingWaveConst_new[cc]*BreakingWaveHeight*ErosionShapeFunction[i-MaxTideZInd]*BreakingWavePressure_Bw;
-                    //cout << BreakingWavePressure_Bw << endl;
-				}
-				else
-				{
-					BrokenWaveHeight = WaveHeight*exp(-BrokenWaveAttenuation*BreakingWaveDist_new[cc])*exp(-BrokenWaveAttenuation*(Xz[ii]-(Xz[BreakingPointZInd]+BreakingWaveDist_new[cc])));
-					WaveForce = BrokenWaveConst*BrokenWaveHeight*ErosionShapeFunction[i-MaxTideZInd]*BrokenWavePressure[iii];
-                    //WaveForce = BrokenWaveConst*BrokenWaveHeight*ErosionShapeFunction[i-MaxTideZInd]*BrokenWavePressure_Bw;
-                    //cout << BrokenWavePressure_Bw << endl;
-
-				}
-				Bw_Erosion[ii] += WaveForce;
-			}
-		}
-		//cc+=1;
-	}
-	// some useless commands here as a good place to break
-	double asdf = 9876;
-	asdf*=2.;	
-}
-
 
 void RPM::CalculateDownwearing()
 {
@@ -1312,7 +1146,7 @@ void RPM::WriteProfile(string OutputFileName, double Time)
 		File format is
 
 		StartZ dZ
-		Time | X[0] | X[1] | X[2] =====> X[NoNodes] */
+		Time | SeaLevel | X[0] | X[1] | X[2] =====> X[NoNodes] */
 
 
 	//Print to screen
@@ -1327,7 +1161,7 @@ void RPM::WriteProfile(string OutputFileName, double Time)
 
 	//open the output filestream and write headers
 	ofstream WriteCoastFile;
-	if (FileExists == 0)
+	if (FileExists == 0 || Time < 0)
 	{
 		WriteCoastFile.open(OutputFileName.c_str());
 		if (WriteCoastFile.is_open()) WriteCoastFile << Z[0] << " " << dZ << endl;
@@ -1341,7 +1175,7 @@ void RPM::WriteProfile(string OutputFileName, double Time)
 	if (WriteCoastFile.is_open())
 	{
 		//write X
-		WriteCoastFile << setprecision(4) << Time;
+		WriteCoastFile << setprecision(4) << Time << " " << setprecision(4) << SeaLevel;
 		for (int i=0; i<NZNodes; ++i) WriteCoastFile << setprecision(10) << " " << Xz[i];
 		WriteCoastFile << endl;
 	}

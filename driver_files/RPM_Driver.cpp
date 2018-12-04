@@ -125,7 +125,7 @@ int main(int nNumberofArgs,char *argv[])
 		
 	//Initialise Waves
 	//Single Wave for now but could use the waveclimate object from COVE!?
-	double WaveHeight_Mean = 2.;
+	double WaveHeight_Mean = 3.;
 	double WaveHeight_StD = 0.;
 	double WavePeriod_Mean = 6.;
 	double WavePeriod_StD = 0;
@@ -153,12 +153,13 @@ int main(int nNumberofArgs,char *argv[])
 
 	//reset the geology
 	double CliffFailureDepth = 0.1;
-	double Resistance = 0.5; //kg m^2 yr^-1 ? NOT CURRENTLY
-	double WeatheringRate = 0.0001; //kg m^2 yr-1 ? NOT CURRENTLY
+	double Resistance = 0.1; //kg m^2 yr^-1 ? NOT CURRENTLY
+	double WeatheringRate = 0.01; //kg m^2 yr-1 ? NOT CURRENTLY
 	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate);
 
 	// print initial condition to file
-	PlatformModel.WriteProfile(OutputFileName, Time);			
+	double TempTime = -9999;
+	PlatformModel.WriteProfile(OutputFileName, TempTime);			
 
 	//Loop through time
 	while (Time >= EndTime)
@@ -204,7 +205,7 @@ int main(int nNumberofArgs,char *argv[])
 		PlatformModel.UpdateMorphology();
 				
 		//print?
-		if (Time >= PrintTime)
+		if (Time <= PrintTime)
 		{
 			PlatformModel.WriteProfile(OutputFileName, Time);
 			PrintTime -= PrintInterval;
