@@ -150,7 +150,7 @@ void RPM::Initialise(double dZ_in, double dX_in)
 }
 
 
-void RPM::Initialise(double dZ_in, double dX_in, double Gradient, double CliffHeight)
+void RPM::Initialise(double dZ_in, double dX_in, double Gradient, double CliffHeight, double MinElevation)
 {
 	/* initialise a sloping cliff RPM object */
 	printf("\nRPM.Initialise: Initialised a RPM as a slope\n");
@@ -180,17 +180,19 @@ void RPM::Initialise(double dZ_in, double dX_in, double Gradient, double CliffHe
 
 	//Cliff control params
 	CliffFailureDepth = 1.;
+	MinimumElevation = MinElevation;
 
 	//Declare spatial stuff
 	dZ = dZ_in;
 	dX = dX_in;
 	InitialGradient = Gradient;
 	NXNodes = 1000;
-	NZNodes = round(2.*CliffHeight/dZ)+1;
+	NZNodes = round((CliffHeight-MinElevation)/dZ)+1;
 
 	//declare an array of zeros for assignment of Z vector
-	Z = vector<double>(NZNodes,0.0);
-	for (int i=0; i<NZNodes; ++i)   Z[i] = dZ*(0.5*(NZNodes-1)-i);
+	vector<double> TempZ(NZNodes,0);
+	Z = TempZ;
+	for (int i=0; i<NZNodes; ++i)   Z[i] = CliffHeight-i*dZ;
 
 	//declare arrays of zeros to initalise various other vectors
 	vector<double> ZZeros(NZNodes,0);
@@ -214,7 +216,7 @@ void RPM::Initialise(double dZ_in, double dX_in, double Gradient, double CliffHe
 	ResistanceArray = vector< vector<double> >(NZNodes,vector<double>(NXNodes,RockResistance));
 
     // teset
-	LocalangleArray = vector< vector<double> >(NZNodes,vector<double>(NXNodes,0.));
+	// LocalangleArray = vector< vector<double> >(NZNodes,vector<double>(NXNodes,0.));
 
 	if (InitialGradient != 0)
 	{
@@ -248,8 +250,8 @@ void RPM::Initialise(double dZ_in, double dX_in, double Gradient, double CliffHe
 	PrintInterval = TimeInterval;
 
 	//Set sea level to zero to begin with, and the ind, this will get updated later
-	//SeaLevelRise = 0;
-	SeaLevel = 0;
+	SeaLevelRise = 0;
+	SeaLevel = -99;
 	SeaLevelInd = 0;
 
 }
@@ -311,8 +313,8 @@ void RPM::InitialiseTides(double TideRange)
 	InitialiseWeathering();
 
 	//Initialize BreakingWaveDist and BreakingWaveConst_new
-	BreakingWaveDist_new = vector<double>(NTideValues,0.0);
-    BreakingWaveConst_new = vector<double>(NTideValues,0.0);
+	BreakingWaveDist_New = vector<double>(NTideValues,0.0);
+    BreakingWaveConst_New = vector<double>(NTideValues,0.0);
 }
 
 
@@ -617,6 +619,7 @@ void RPM::CalculateBackwearing()
 		}
 
 		//Find the location where the broken wave starts
+		//BreakingPointX = Xz[BreakingPointZInd];
 		
 		//Determine Surfzone Gradient
 		//Get surf zone mean platform gradient
@@ -649,8 +652,8 @@ void RPM::CalculateBackwearing()
 
 		// Get breaking wave conditions and constants
 		BreakingWaveDist = 10.*WaveHeight*(dX/H);
-		BreakingWaveConst_New = BreakingWaveConst*(dZ/H);
-		if (BreakingWaveConst_New < BrokenWaveConst) BreakingWaveConst_New = BrokenWaveConst;
+		BreakingWaveConst_New[i-MaxTideZInd] = BreakingWaveConst*(dZ/H);
+		if (BreakingWaveConst_New[i-MaxTideZInd] < BrokenWaveConst) BreakingWaveConst_New[i-MaxTideZInd] = BrokenWaveConst;
 
 		//Set Wave Type
 		if (Xz[i] == 0) WaveType = 1;
@@ -683,11 +686,12 @@ void RPM::CalculateBackwearing()
 				if (Xz[ii] < Xz[BreakingPointZInd])
 				{
 					WaveForce = StandingWaveConst*WaveHeight*ErosionShapeFunction[i-MaxTideZInd]*StandingWavePressure_Bw;
+
 				}
 				else if (Xz[ii] <= (Xz[BreakingPointZInd]+BreakingWaveDist))
 				{
 					BreakingWaveHeight = WaveHeight*exp(-WaveAttenuConst*(Xz[ii]-Xz[BreakingPointZInd]));
-					WaveForce = BreakingWaveConst_New*BreakingWaveHeight*ErosionShapeFunction[i-MaxTideZInd]*BreakingWavePressure_Bw;
+					WaveForce = BreakingWaveConst_New[i-MaxTideZInd]*BreakingWaveHeight*ErosionShapeFunction[i-MaxTideZInd]*BreakingWavePressure_Bw;
 				}
 				else
 				{
@@ -703,7 +707,8 @@ void RPM::CalculateBackwearing()
 void RPM::CalculateDownwearing()
 {
 	//Declare temporary variables
-	double WaveForce, WaterDepth;
+	double WaveForce = 0;
+	double WaterDepth = 0;
 
 	//Reset downwear vector
 	vector<double> ZZeros(NZNodes,0);
@@ -724,19 +729,19 @@ void RPM::CalculateDownwearing()
 		//Breaking Waves
 		else if (Xz[i]<(Xz[BreakingPointZInd]+BreakingWaveDist))
 		{
-			WaveForce = BreakingWaveConst_New*WaveHeight*ErosionShapeFunction[i-MaxTideZInd]*BreakingWavePressure_Dw*exp(-WaveAttenuConst*(Xz[i]-BreakingPointX));
-			DepthDecay = -log(SubmarineDecayConst)/(WaveHeight*exp(-BreakingWaveDecay*(Xz[i]-BreakingPointX)));
+			WaveForce = BreakingWaveConst_New[i-MaxTideZInd]*WaveHeight*ErosionShapeFunction[i-MaxTideZInd]*BreakingWavePressure_Dw*exp(-WaveAttenuConst*(Xz[i]-Xz[BreakingPointZInd]));
+			DepthDecay = -log(SubmarineDecayConst)/(WaveHeight*exp(-BreakingWaveDecay*(Xz[i]-Xz[BreakingPointZInd])));
 		}
 		//Broken Waves
 		else
 		{
-			WaveForce = BrokenWaveConst*WaveHeight*exp(-WaveAttenuConst*BreakingWaveDist)*ErosionShapeFunction[i-MaxTideZInd]*BrokenWavePressure_Dw*exp(-WaveAttenuConst*(Xz[i]-(BreakingPointX+BreakingWaveDist)));
-			DepthDecay = -log(SubmarineDecayConst)/(WaveHeight*exp(-BrokenWaveDecay*(Xz[i]-(BreakingPointX+BreakingWaveDist))));
+			WaveForce = BrokenWaveConst*WaveHeight*exp(-WaveAttenuConst*BreakingWaveDist)*ErosionShapeFunction[i-MaxTideZInd]*BrokenWavePressure_Dw*exp(-WaveAttenuConst*(Xz[i]-(Xz[BreakingPointZInd]+BreakingWaveDist)));
+			DepthDecay = -log(SubmarineDecayConst)/(WaveHeight*exp(-BrokenWaveDecay*(Xz[i]-(Xz[BreakingPointZInd]+BreakingWaveDist))));
 		}
 		//Loop from water level down and determine force
 		for (int ii=i; ii<i+(3./dZ); ++ii)
 		{
-
+			if (ii > NZNodes-1) break; 
 			WaterDepth = Z[i]-Z[ii];
 			Dw_Erosion[ii] += WaveForce*exp(-DepthDecay*WaterDepth);
 		}
@@ -1111,7 +1116,7 @@ void RPM::WriteProfile(string OutputFileName, double Time)
 	if (FileExists == 0 || Time < 0)
 	{
 		WriteCoastFile.open(OutputFileName.c_str());
-		if (WriteCoastFile.is_open()) WriteCoastFile << Z[0] << " " << dZ << endl;
+		if (WriteCoastFile.is_open()) WriteCoastFile << CliffHeight << " " << MinimumElevation << " " << dZ << endl;
 	}
 	WriteCoastFile.close();
 
@@ -1214,44 +1219,44 @@ void  RPM::WriteMorphologyArray(string OutputFileName, double Time)
 }
 
 
-void  RPM::WriteLocalangleArray(string OutputFileName, double Time)
-{
-  /* Writes a RPM object Resistance matrix coordinates to file
-		File format is
+// void  RPM::WriteLocalangleArray(string OutputFileName, double Time)
+// {
+//   /* Writes a RPM object Resistance matrix coordinates to file
+// 		File format is
 
-		Time
-			X[0][0]     |    X[0][1]    |   X[0][2]     =====>    X[0][NXNodes]
-			X[1][0]     |    X[1][1]    |   X[1][2]     =====>    X[0][NXNodes]
-			X[2][0]     |    X[2][1]    |   X[2][2]     =====>    X[0][NXNodes]
-		      ||               ||             ||                      ||
-		      \/               \/             \/                      \/
-		X[NZNodes][0]  | X[NZNodes][1] | X[NZNodes][2] =====> X[NZNodes][NXNodes] */
+// 		Time
+// 			X[0][0]     |    X[0][1]    |   X[0][2]     =====>    X[0][NXNodes]
+// 			X[1][0]     |    X[1][1]    |   X[1][2]     =====>    X[0][NXNodes]
+// 			X[2][0]     |    X[2][1]    |   X[2][2]     =====>    X[0][NXNodes]
+// 		      ||               ||             ||                      ||
+// 		      \/               \/             \/                      \/
+// 		X[NZNodes][0]  | X[NZNodes][1] | X[NZNodes][2] =====> X[NZNodes][NXNodes] */
 
-  	//open the output filestream and write headers
-	ofstream WriteFile;
-	WriteFile.open(OutputFileName.c_str());
-	WriteFile << Time << " " << dZ << " " << dX << endl;
+//   	//open the output filestream and write headers
+// 	ofstream WriteFile;
+// 	WriteFile.open(OutputFileName.c_str());
+// 	WriteFile << Time << " " << dZ << " " << dX << endl;
 
-	//Check if file exists if not open a new one and write headers
-	if (WriteFile.is_open())
-	{
-		//write Resistance
-		for (int i=0; i<NZNodes; ++i)
-		{
-			for (int j=0;j<NXNodes; ++j)
-			{
-				WriteFile << setprecision(5) << LocalangleArray[i][j] << " ";
-			}
-			WriteFile << endl;
-		}
-	}
-	else
-	{
-		//report errors
-		cout << "RPM.LocalAngle: Error, the file " << OutputFileName << " is not open or cannot be read." << endl;
-		exit(EXIT_FAILURE);
-	}
-}
+// 	//Check if file exists if not open a new one and write headers
+// 	if (WriteFile.is_open())
+// 	{
+// 		//write Resistance
+// 		for (int i=0; i<NZNodes; ++i)
+// 		{
+// 			for (int j=0;j<NXNodes; ++j)
+// 			{
+// 				WriteFile << setprecision(5) << LocalangleArray[i][j] << " ";
+// 			}
+// 			WriteFile << endl;
+// 		}
+// 	}
+// 	else
+// 	{
+// 		//report errors
+// 		cout << "RPM.LocalAngle: Error, the file " << OutputFileName << " is not open or cannot be read." << endl;
+// 		exit(EXIT_FAILURE);
+// 	}
+// }
 
 
 

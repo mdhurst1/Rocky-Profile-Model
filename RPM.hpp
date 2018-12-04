@@ -109,7 +109,7 @@ class RPM
 		vector< vector<double> > ResistanceArray;	// array to store resistance
 
 		// Local Angle Array
-		vector< vector<double> > LocalangleArray;	    // array to store localangle
+		//vector< vector<double> > LocalangleArray;	    // array to store localangle
 
 
 		//Positions of min and max tide in X and Z
@@ -177,7 +177,8 @@ class RPM
 		//Constants and controlling parameters
 		//These should be read from an input file?
 		double SubmarineDecayConst, StandingWaveConst;
-		double BreakingWaveConst, BreakingWaveConst_New, BrokenWaveConst;
+		double BreakingWaveConst, BrokenWaveConst;
+		vector<double> BreakingWaveConst_New, BreakingWaveDist_New;
 		double BreakingWaveDecay, BrokenWaveDecay;
 		double WeatheringConst;
 		double RockResistance;
@@ -195,6 +196,7 @@ class RPM
 		double CliffWeatheringRate;
 		double CliffFailureDepth;
 		double CliffHeight;
+		double MinimumElevation;
 
 		//This will need to be populated in the initialise tides function
 		vector<double> WeatheringEfficacy;
@@ -203,10 +205,6 @@ class RPM
 		vector<double> StandingWavePressure;
 		vector<double> BreakingWavePressure;
 		vector<double> BrokenWavePressure;
-
-		//New
-		vector<double> BreakingWaveDist_new;
-		vector<double> BreakingWaveConst_new;
 
 		int PressureDistMinInd, PressureDistMaxInd;
 
@@ -218,7 +216,7 @@ class RPM
 		//Initialise Functions
 		void Initialise();
 		void Initialise(double dZ, double dX);
-		void Initialise(double dZ_in, double dX_in, double Gradient, double CliffHeight);
+		void Initialise(double dZ_in, double dX_in, double Gradient, double CliffHeight, double MinElevation);
 
 	protected:
 
@@ -239,14 +237,14 @@ class RPM
 			Initialise(dZ, dX);
 		}
 
-		RPM(double dZ, double dX, double Gradient, double CliffHeight)
+		RPM(double dZ, double dX, double Gradient, double CliffHeight, double MinElevation)
 		{
-			Initialise(dZ, dX, Gradient, CliffHeight);
+			Initialise(dZ, dX, Gradient, CliffHeight, MinElevation);
 		}
 
 		void ResetModel()
 		{
-			Initialise(dZ,dX, InitialGradient, CliffHeight);
+			Initialise(dZ,dX, InitialGradient, CliffHeight, MinimumElevation);
 		}
 
 		//Initialise Tides

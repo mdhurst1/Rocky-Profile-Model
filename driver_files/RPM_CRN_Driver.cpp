@@ -90,11 +90,12 @@ int main(int nNumberofArgs,char *argv[])
 	cout << endl;
 
 	//Test for correct input arguments
-	if (nNumberofArgs!=3)
+	if (nNumberofArgs!=4)
 	{
 		cout << "Error: This program requires two inputs: " << endl;
 		cout << "* First a path to the folder where the model will be run" << endl;
 		cout << "* The name of the project/model run" << endl;
+		cout << " * A Flag to run with CRNs (1 = True)" << endl;
 		cout << "------------------------------------------------------" << endl;
 		cout << "Then the command line argument will be: " << endl;
 		cout << "In linux:" << endl;
@@ -105,17 +106,19 @@ int main(int nNumberofArgs,char *argv[])
 
 	string Folder = argv[1];
 	string Project = argv[2];
+	int CRNFlag = atoi(argv[3]);
 	
 	//initialisation parameters
 	double dZ = 0.1;
 	double dX = 0.1;
 	double Gradient = 1.;
 	double CliffHeight = 5.;
+	double MinElevation = -15.;
 
 	//Time control parameters
 	//Time runs in yrs bp
 	double EndTime = 0;
-	double Time = 9000.;
+	double Time = 8000.;
 	double TimeInterval = 1;
 
 	//Print Control
@@ -125,20 +128,32 @@ int main(int nNumberofArgs,char *argv[])
 	string OutputConcentrationFileName = Folder+Project+"Concentrations.xn";
 
 	//initialise RPM Model
-	RPM PlatformModel = RPM(dZ, dX, Gradient, CliffHeight);
-	
-    //Which Nuclides to track 10Be, 14C, 26Al, 36Cl?
-	vector<int> Nuclides;
-	Nuclides.push_back(10);
+	RPM PlatformModel = RPM(dZ, dX, Gradient, CliffHeight, MinElevation);
 	
 	//initialise RockyCoastCRN friend object
-	RockyCoastCRN PlatformCRN = RockyCoastCRN(PlatformModel, Nuclides);
+	RockyCoastCRN PlatformCRN = RockyCoastCRN();
+
+	if (CRNFlag)
+	{
+		//Which Nuclides to track 10Be, 14C, 26Al, 36Cl?
+		vector<int> Nuclides;
+		Nuclides.push_back(10);
+		
+		//initialise RockyCoastCRN friend object
+		PlatformCRN = RockyCoastCRN(PlatformModel, Nuclides);
+	}
+	
+	//Sea level
+	string RelativeSeaLevelFile = Folder + Project + "_RSL.tz";
+	SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
+	double InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
+	PlatformModel.UpdateSeaLevel(InstantSeaLevel);
 
 	//Initialise Tides
 	double TidalRange = 1.5;
     double TidalPeriod = 12.42;
 	PlatformModel.InitialiseTides(TidalRange);
-    PlatformCRN.InitialiseTides(TidalRange/2.,TidalPeriod);
+    if (CRNFlag) PlatformCRN.InitialiseTides(TidalRange/2.,TidalPeriod);
 		
 	//Initialise Waves
 	//Single Wave for now but could use the waveclimate object from COVE!?
@@ -151,10 +166,7 @@ int main(int nNumberofArgs,char *argv[])
 	//Sea level rise?
 	//double SLR = 0;
 	//PlatformModel.InitialiseSeaLevel(SLR);
-	//Sea level rise?
-	string RelativeSeaLevelFile = Folder + Project + "_RSL.tz";
-	SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
-	double InstantSeaLevel = 0;
+	
 	
 	//Tectonic Events
 	//double UpliftFrequency = 2000.;
@@ -170,13 +182,14 @@ int main(int nNumberofArgs,char *argv[])
 
 	//reset the geology
 	double CliffFailureDepth = 0.1;
-	double Resistance = 0.01; //kg m^2 yr^-1 ? NOT CURRENTLY
-	double WeatheringRate = 0.001; //kg m^2 yr-1 ? NOT CURRENTLY
+	double Resistance = 0.5; //kg m^2 yr^-1 ? NOT CURRENTLY
+	double WeatheringRate = 0.02; //kg m^2 yr-1 ? NOT CURRENTLY
 	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate);
 
 	// print initial condition to file
 	double TempTime = -9999;
 	PlatformModel.WriteProfile(OutputFileName, TempTime);			
+	if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
 
 	//Loop through time
 	while (Time >= EndTime)
@@ -190,6 +203,7 @@ int main(int nNumberofArgs,char *argv[])
 		//	//Update the Morphology 
 		//	PlatformModel.UpdateMorphology();
 		//}
+		//
 		
 		//Update Sea Level
 		InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
@@ -222,15 +236,16 @@ int main(int nNumberofArgs,char *argv[])
 		PlatformModel.UpdateMorphology();
 
         //Update the morphology inside RockyCoastCRN
-		PlatformCRN.UpdateMorphology(PlatformModel);
+		if (CRNFlag) PlatformCRN.UpdateMorphology(PlatformModel);
 
 		//Update the CRN concentrations
-		PlatformCRN.UpdateCRNs();
+		if (CRNFlag) PlatformCRN.UpdateCRNs();
         	
 		//print?
 		if (Time <= PrintTime)
 		{
 			PlatformModel.WriteProfile(OutputFileName, Time);
+			if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
 			PrintTime -= PrintInterval;
 			//cout << endl;
 		}

@@ -1,0 +1,28 @@
+==2083== Memcheck, a memory error detector
+==2083== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
+==2083== Using Valgrind-3.11.0 and LibVEX; rerun with -h for copyright info
+==2083== Command: ./RPM.out ../../Modelling/ Waipapa 0
+==2083== Parent PID: 1796
+==2083== 
+==2083== error calling PR_SET_PTRACER, vgdb might block
+==2083== 
+==2083== Process terminating with default action of signal 2 (SIGINT)
+==2083==    at 0x57E5384: mcount (_mcount.S:53)
+==2083==    by 0x4179F0: RPM::UpdateMorphology() (RPM.cpp:916)
+==2083==    by 0x41B012: main (RPM_CRN_Driver.cpp:236)
+==2083== 
+==2083== HEAP SUMMARY:
+==2083==     in use at exit: 4,364,106 bytes in 647 blocks
+==2083==   total heap usage: 4,920 allocs, 4,273 frees, 9,232,640 bytes allocated
+==2083== 
+==2083== LEAK SUMMARY:
+==2083==    definitely lost: 0 bytes in 0 blocks
+==2083==    indirectly lost: 0 bytes in 0 blocks
+==2083==      possibly lost: 0 bytes in 0 blocks
+==2083==    still reachable: 4,364,106 bytes in 647 blocks
+==2083==         suppressed: 0 bytes in 0 blocks
+==2083== Reachable blocks (those to which a pointer was found) are not shown.
+==2083== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==2083== 
+==2083== For counts of detected and suppressed errors, rerun with: -v
+==2083== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
