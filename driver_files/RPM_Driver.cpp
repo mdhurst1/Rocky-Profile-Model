@@ -3,8 +3,9 @@
 	RPM_Driver.cpp
 	
 	Driver file for running the shore platform model of Matsumoto et al. (2016)
+	Updated following improvements by Matsumoto et al. (2018)
 	
-	C++ implementation of Hiro Matsumoto's Shore Platform Model with Cosmogenic Isotope production.
+	C++ implementation of Hiro Matsumoto's Shore Platform Model with coupling to Cosmogenic Isotope production by RockCoastCRN/RoBoCoP.
 
 	Matsumoto, H., Dickson, M. E., & Kench, P. S. (2016a)
 	An exploratory numerical model of rocky shore profile evolution. 
@@ -14,6 +15,10 @@
 	Modelling the Development of Varied Shore Profile Geometry on Rocky Coasts.
 	Journal of Coastal Research http://dx.doi.org/10.2112/SI75-120.1
 
+	Matsumoto, H., Dickson, M. E., Kench, P. S., (2018)
+	Modelling the relative dominance of wave erosion and weathering processes in shore platform development in micro- to mega-tidal settings
+	Earth Surface Processes and Landforms  http://dx.doi.org/10.1002/esp.4422
+	
 	Martin D. Hurst, University of Glasgow
 	Hironori Matsumoto, University of Auckland
 	Mark Dickson, University of Auckland
@@ -62,8 +67,37 @@
 
 using namespace std;
 
-int main()
+int main(int nNumberofArgs,char *argv[])
 {
+	cout << endl;
+	cout << "--------------------------------------------------------------" << endl;
+	cout << "|  Rocky Profile Model (RPM)					      		  |" << endl;
+	cout << "|  This program models the development of shore platforms    |" << endl;
+	cout << "|  following model developed by Matsumoto et al. (2016)	  |" << endl;
+	cout << "|  														  |" << endl;
+	cout << "|  Implemented in C++ by Martin Hurst, University of Glasgow |" << endl;
+	cout << "|  for coupling to RockyCoastCRN; model for predicting       |" << endl;
+	cout << "|  cosmogenic radionuclide concentrations in shore platforms |" << endl;
+	cout << "--------------------------------------------------------------" << endl;
+	cout << endl;
+
+	//Test for correct input arguments
+	if (nNumberofArgs!=3)
+	{
+		cout << "Error: This program requires two inputs: " << endl;
+		cout << "* First a path to the folder where the model will be run" << endl;
+		cout << "* The name of the project/model run" << endl;
+		cout << "------------------------------------------------------" << endl;
+		cout << "Then the command line argument will be: " << endl;
+		cout << "In linux:" << endl;
+		cout << "  ./RPM_Driver.out /ProjectFolder/ Waipapa" << endl;
+		cout << "------------------------------------------------------" << endl;
+		exit(EXIT_SUCCESS);
+	}
+
+	string Folder = argv[1];
+	string Filename = argv[2];
+	
 	//initialisation parameters
 	double dZ = 0.1;
 	double dX = 0.1;
@@ -96,8 +130,12 @@ int main()
 	PlatformModel.InitialiseWaves(WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD);
 
 	//Sea level rise?
-	double SLR = 0;
-	PlatformModel.InitialiseSeaLevel(SLR);
+	//double SLR = 0;
+	//PlatformModel.InitialiseSeaLevel(SLR);
+	//Sea level rise?
+	string RelativeSeaLevelFile = "";
+	SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
+	double InstantSeaLevel = 0;
 	
 	//Tectonic Events
 	double UpliftFrequency = 2000.;
@@ -132,7 +170,8 @@ int main()
 		}
 		
 		//Update Sea Level
-		PlatformModel.UpdateSeaLevel();
+		InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
+		PlatformModel.UpdateSeaLevel(InstantSeaLevel);
 
 		//Get the wave conditions
 		PlatformModel.GetWave();

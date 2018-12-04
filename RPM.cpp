@@ -62,6 +62,7 @@
 #include <cstdlib>
 #include <omp.h>
 #include "RPM.hpp"
+#include "SeaLevel.hpp"
 
 using namespace std;
 
@@ -544,7 +545,7 @@ void RPM::UpdateSeaLevel_v1(double InputSeaLevel)
 
 void RPM::UpdateSeaLevel(double InputSeaLevel)
 {
-	/*Update sea level based on a constant sea level rise rate*/
+	/*Update sea level based on a new mean sea level InputSeaLevel*/
 	//First catch large difference in SeaLevel
 	if (fabs(InputSeaLevel-SeaLevel) > 1)
 	{
