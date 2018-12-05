@@ -113,12 +113,12 @@ int main(int nNumberofArgs,char *argv[])
 	double dX = 0.1;
 	double Gradient = 1.;
 	double CliffHeight = 5.;
-	double MinElevation = -15.;
+	double MinElevation = -25.;
 
 	//Time control parameters
 	//Time runs in yrs bp
 	double EndTime = 0;
-	double Time = 8000.;
+	double Time = 2000.;
 	double TimeInterval = 1;
 
 	//Print Control
@@ -169,9 +169,9 @@ int main(int nNumberofArgs,char *argv[])
 	
 	
 	//Tectonic Events
-	//double UpliftFrequency = 2000.;
-	//double UpliftTime = UpliftFrequency;
-	//double UpliftMagnitude = 1.;
+	double UpliftFrequency = 1000.;
+	double UpliftTime = UpliftFrequency;
+	double UpliftMagnitude = 6.5;
 
 	// Wave coefficient constant
 	double StandingCoefficient = 0.1;
@@ -182,9 +182,11 @@ int main(int nNumberofArgs,char *argv[])
 
 	//reset the geology
 	double CliffFailureDepth = 0.1;
-	double Resistance = 0.5; //kg m^2 yr^-1 ? NOT CURRENTLY
-	double WeatheringRate = 0.02; //kg m^2 yr-1 ? NOT CURRENTLY
-	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate);
+	double Resistance = 0.2; //kg m^2 yr^-1 ? NOT CURRENTLY
+	double WeatheringRate = 0.01; //kg m^2 yr-1 ? NOT CURRENTLY
+	double SubtidalEfficacy=0.02; //sets relative efficacy of subtidal weathering
+
+	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate,SubtidalEfficacy);	
 
 	// print initial condition to file
 	double TempTime = -9999;
@@ -194,16 +196,20 @@ int main(int nNumberofArgs,char *argv[])
 	//Loop through time
 	while (Time >= EndTime)
 	{
-		// Do an earthquake?
-		//if (Time > UpliftTime)
-		//{
-		//	PlatformModel.TectonicUplift(UpliftMagnitude);
-		//	UpliftTime += UpliftFrequency;
-		//	
-		//	//Update the Morphology 
-		//	PlatformModel.UpdateMorphology();
-		//}
-		//
+		//Do an earthquake?
+		if (Time < UpliftTime)
+		{
+			string ArrayFile1 = "MorphArray1.data";
+			string ArrayFile2 = "MorphArray2.data";
+
+			PlatformModel.WriteMorphologyArray(ArrayFile1, Time);
+			PlatformModel.TectonicUplift(UpliftMagnitude);
+			UpliftTime -= UpliftFrequency;
+			PlatformModel.WriteMorphologyArray(ArrayFile2, Time);
+
+			//Update the Morphology 
+			PlatformModel.UpdateMorphology();
+		}		
 		
 		//Update Sea Level
 		InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
@@ -221,10 +227,11 @@ int main(int nNumberofArgs,char *argv[])
 		PlatformModel.ErodeDownwearing();
 
 		//Update the Morphology 
-		PlatformModel.UpdateMorphology();	  
+		PlatformModel.UpdateMorphology();	
 		
 		//Implement Weathering
 		PlatformModel.IntertidalWeathering();
+		PlatformModel.SubtidalWeathering();
 		
 		//Update the Morphology 
 		PlatformModel.UpdateMorphology();
@@ -255,8 +262,9 @@ int main(int nNumberofArgs,char *argv[])
 		
 	}
 	
+
 	//a few blank lines to finish
-	cout << endl << endl;
+	cout << UpliftMagnitude << endl << endl;
 	
 }
 

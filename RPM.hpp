@@ -181,6 +181,8 @@ class RPM
 		vector<double> BreakingWaveConst_New, BreakingWaveDist_New;
 		double BreakingWaveDecay, BrokenWaveDecay;
 		double WeatheringConst;
+		double MaxWeatheringEfficacy;
+		double MinWeatheringEfficacy;
 		double RockResistance;
 
 		//Wave pressure parameters, check these with Hiro at some point
@@ -266,7 +268,7 @@ class RPM
 		void GetWave();
 
 		// Function to modify the geological parameters
-		void InitialiseGeology(double CliffHeightNew, double CliffFailureDepthNew, double RockResistanceNew, double WeatheringConstNew);
+		void InitialiseGeology(double CliffHeightNew, double CliffFailureDepthNew, double RockResistanceNew, double WeatheringConstNew, double SubtidalEfficacy);
 
 		// Function to initialise weathering shape function
 		void InitialiseWeathering();
@@ -300,6 +302,7 @@ class RPM
 
 		void IntertidalWeathering();
 		void SupratidalWeathering();
+		void SubtidalWeathering();
 
 		void UpdateMorphology();
 

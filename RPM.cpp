@@ -123,7 +123,7 @@ void RPM::Initialise(double dZ_in, double dX_in)
 	Xz = ZZeros;
 
 	Bw_Erosion = ZZeros;
-	Dw_Erosion = XZeros;
+	Dw_Erosion = ZZeros;
 	Weathering = ZZeros;
 
 	//Indices trackers
@@ -204,7 +204,7 @@ void RPM::Initialise(double dZ_in, double dX_in, double Gradient, double CliffHe
 	Xz = ZZeros;
 
 	Bw_Erosion = ZZeros;
-	Dw_Erosion = XZeros;
+	Dw_Erosion = ZZeros;
 	Weathering = ZZeros;
 
 	//Indices trackers
@@ -225,15 +225,15 @@ void RPM::Initialise(double dZ_in, double dX_in, double Gradient, double CliffHe
 			Xz[i] = (Z[i]-Z[NZNodes-1])/InitialGradient;
 			for (int j=0;j<NXNodes;++j)
 			{
-
-				if (X[j] < Xz[i])
+				// need an Epsilon on this check?
+				if (X[j] < Xz[i]+0.00001)
 				{
 					MorphologyArray[i][j]=0;
 					ResistanceArray[i][j]=0;
 				}
 				else
 				{
-					Zx[j] = Z[i];
+					Zx[j-1] = Z[i];
 					break;
 				}
 			}
@@ -318,7 +318,7 @@ void RPM::InitialiseTides(double TideRange)
 }
 
 
-void RPM::InitialiseGeology(double CliffHeightNew, double CliffFailureDepthNew, double RockResistanceNew, double WeatheringConstNew)
+void RPM::InitialiseGeology(double CliffHeightNew, double CliffFailureDepthNew, double RockResistanceNew, double WeatheringConstNew, double SubtidalEfficacy)
 {
 	/* Function to set the cliff height, failure depth, rock resistance and
 		weathering rate constant */
@@ -327,6 +327,7 @@ void RPM::InitialiseGeology(double CliffHeightNew, double CliffFailureDepthNew, 
 	CliffFailureDepth = CliffFailureDepthNew;
 	RockResistance = RockResistanceNew;
 	WeatheringConst = WeatheringConstNew;
+	MinWeatheringEfficacy = SubtidalEfficacy;
 
 	//Loop across the resistance array and reset all values
 	for (int i=0;i<NZNodes; ++i)
@@ -346,7 +347,8 @@ void RPM::InitialiseWeathering()
 	// declare control parameters for distribution
 	//double sigma = 0.5;
 	//double Theta = 0;
-	double MaxEfficacy = 0;
+	MaxWeatheringEfficacy = 1;
+	MinWeatheringEfficacy = 0.1;
 
 	// This m value is tailored to cause a distribution peak at 3/4 of the tidal range
 	// as in Matsumoto et al. (2016)
@@ -361,25 +363,12 @@ void RPM::InitialiseWeathering()
 	vector<double> LogNormalDistX(NTideValues,0);
 	for (int i=0; i<NTideValues; ++i) LogNormalDistX[i] = 10.*i/(NTideValues-1);
 
-	//Normalise so that Max value is 1
-	//MaxEfficacy = exp(-(pow(log(2.5-Theta)-m,2.)/(2.*pow(sigma,2.)))) / ((2.5-Theta)*sigma*sqrt(2.*M_PI));
-
-	//Create log normal weathering efficacy shape function
-	//for (int i=1; i<NTideValues ;++i)
-	//{
-	//	WeatheringEfficacy[i] = (exp(-((pow(log(LogNormalDistX[i]-Theta)-m,2.))/(2*pow(sigma,2.)))) / ((LogNormalDistX[i]-Theta)*sigma*sqrt(2.*M_PI)));
-	//	if (WeatheringEfficacy[i] > MaxEfficacy) MaxEfficacy = WeatheringEfficacy[i];
-	//}
-
-	//Create log normal weathering efficacy shape function
+	//Create weathering efficacy shape function
 	for (int i=1; i<NTideValues ;++i)
 	{
 		if (i<((NTideValues-1)/4)) WeatheringEfficacy[i] = exp(-(pow(i-(NTideValues/4.),2.)/(NTideValues/2.)));
-        else WeatheringEfficacy[i] = exp(-(pow(i-(NTideValues/4.),2.))/(NTideValues*NTideValues/10.));
-		if (WeatheringEfficacy[i] > MaxEfficacy) MaxEfficacy = WeatheringEfficacy[i];
+        else WeatheringEfficacy[i] = (MaxWeatheringEfficacy-MinWeatheringEfficacy)*exp(-(pow(i-(NTideValues/4.),2.))/(NTideValues*NTideValues/10.))+MinWeatheringEfficacy;
 	}
-
-	for (int i=1; i<NTideValues ;++i) WeatheringEfficacy[i] /= 	MaxEfficacy;
 }
 
 void RPM::InitialiseWaves(double WaveHeight_Mean, double WaveHeight_StD, double WavePeriod_Mean, double WavePeriod_StD)
@@ -512,7 +501,8 @@ void RPM::UpdateSeaLevel()
 		}
 	}
 	//In case sea level rate is less than cm/year
-	else{
+	else
+	{
 		//SeaLevel += SeaLevelRise*TimeInterval;
 		SeaLevel = SeaLevel + (round(SeaLevelRise*10))*0.1;
 	}
@@ -577,9 +567,18 @@ void RPM::UpdateSeaLevel(double InputSeaLevel)
 void RPM::TectonicUplift(double UpliftAmplitude)
 {
     printf("\nUplift Event\n");
-	printf("Old Sea Level was %1.1f\n",SeaLevel);
-	SeaLevel -= (round(UpliftAmplitude*10))*0.1;
-	printf("New Sea Level is %1.1f\n",SeaLevel);
+	printf("Elevations changed by %1.1f\n",UpliftAmplitude);
+
+	double Uplifted=0; 
+
+	Uplifted=0;
+	while (Uplifted < UpliftAmplitude+0.00001)
+	{
+		MorphologyArray.push_back(MorphologyArray[NZNodes-1]);
+		MorphologyArray.erase(MorphologyArray.begin());
+		Uplifted += dZ;
+	}
+	UpdateMorphology();
 }
 
 void RPM::CalculateBackwearing()
@@ -748,6 +747,12 @@ void RPM::CalculateDownwearing()
 	}
 }
 
+
+void RPM::SupratidalWeathering()
+{
+	//add this later
+}
+
 void RPM::IntertidalWeathering()
 {
 	//Declare temporay variables
@@ -800,6 +805,57 @@ void RPM::IntertidalWeathering()
 	}
 }
 
+void RPM::SubtidalWeathering()
+{
+	//Declare temporay variables
+	double RemainingResistance, WeatheringForce;
+
+	//Reset weathering vector
+	vector<double> ZZeros(NZNodes,0);
+	Weathering = ZZeros;
+
+	//Loop across the subtidal
+	for (int i=MinTideZInd; i<NZNodes; ++i)
+	{
+		//Calculate Weathering
+		WeatheringForce = WeatheringConst*MinWeatheringEfficacy;
+
+		//How are we going to get j? i.e. x-position in the array?
+		//Need a loop in here moving from bottom to top of tidal range in x-position
+		for (int j=0; j<=MaxXXInd; ++j)
+		{
+			//Check we're at a a surface cell
+			if ((MorphologyArray[i][j] == 1) && (j == 0))
+			{
+				RemainingResistance = ResistanceArray[i][j];
+				ResistanceArray[i][j] -= WeatheringForce;
+
+				//If resistance is less than zero then cell is lost to weathering erosion
+				//excess weathering force is applied to the block behind
+				if (ResistanceArray[i][j] < 0)
+				{
+					MorphologyArray[i][j] = 0;
+					ResistanceArray[i][j] = 0;
+					WeatheringForce -= RemainingResistance;
+				}
+			}
+			else if ((MorphologyArray[i][j] == 1) && ((MorphologyArray[i-1][j] == 0) || (MorphologyArray[i][j-1] == 0)))
+			{
+				RemainingResistance = ResistanceArray[i][j];
+				ResistanceArray[i][j] -= WeatheringForce;
+
+				//If resistance is less than zero then cell is lost to weathering erosion
+				//excess weathering force is applied to the block behind
+				if (ResistanceArray[i][j] < 0)
+				{
+					MorphologyArray[i][j] = 0;
+					ResistanceArray[i][j] = 0;
+					WeatheringForce -= RemainingResistance;
+				}
+			}
+		}
+	}
+}
 
 void RPM::ErodeBackwearing()
 {
@@ -828,6 +884,7 @@ void RPM::ErodeBackwearing()
 
 			//For now assume that only one block can be removed at a time
 			//Hiro has code that allows multiple blocks to be removed
+			//This will be critical for wave dominated conditions?
 			MorphologyArray[i][j] = 0;
 			ResistanceArray[i][j] = 0;
 
@@ -864,7 +921,7 @@ void RPM::ErodeDownwearing()
 		for (int i=MaxTideZInd; i<=MinTideZInd; ++i)
 		{
 			// Check Downwear Force vs Resistance
-			if (Dw_Erosion[j] >= ResistanceArray[i][j])
+			if (Dw_Erosion[j] > ResistanceArray[i][j])
 			{
 				//For now assume that only one block can be removed at a time
 				//Hiro has code that allows multiple blocks to be removed
@@ -877,11 +934,6 @@ void RPM::ErodeDownwearing()
 			}
 		}
 	}
-}
-
-void RPM::SupratidalWeathering()
-{
-	//add this later
 }
 
 void RPM::UpdateMorphology()
