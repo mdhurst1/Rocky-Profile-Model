@@ -116,8 +116,23 @@ void SeaLevel::Initialise(string SeaLevelDataFile)
 void SeaLevel::Initialise(double SLR)
 {
 	// Initialising Sea Level at zero and set sea level rise rate
-	SeaLevel = 0;
+	MeanSeaLevel = 0;
 	SeaLevelRise = SLR;
+
+	// initialise an empty vector
+	int MaxTime = 10000;
+	vector<double> Empty(MaxTime,0);
+	Times = Empty;
+	MeanSeaLevels = Empty;
+	
+	for (int t=0, T=Times.size(); t<T; ++t)
+	{
+		// Calculate the time 
+		Times[t] = MaxTime-t;
+
+		// sea level as a function of sea level rise rate
+		MeanSeaLevels[t] = MeanSeaLevel + SeaLevelRise*(MaxTime-Times[t]);
+	}
 }
 
 double SeaLevel::get_SeaLevel(double Time)

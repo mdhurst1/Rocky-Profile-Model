@@ -132,12 +132,13 @@ int main(int nNumberofArgs,char *argv[])
 	PlatformModel.InitialiseWaves(WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD);
 
 	//Sea level rise?
-	//double SLR = 0;
-	//PlatformModel.InitialiseSeaLevel(SLR);
+	double SLR = 0;
+	PlatformModel.InitialiseSeaLevel(SLR);
+	
 	//Sea level rise?
-	string RelativeSeaLevelFile = Folder + Project + "_RSL.tz";
-	SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
-	double InstantSeaLevel = 0;
+	//string RelativeSeaLevelFile = Folder + Project + "_RSL.tz";
+	//SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
+	//double InstantSeaLevel = 0;
 	
 	//Tectonic Events
 	//double UpliftFrequency = 2000.;

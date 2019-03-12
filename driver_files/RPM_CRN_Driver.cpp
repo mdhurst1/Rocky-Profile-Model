@@ -143,9 +143,15 @@ int main(int nNumberofArgs,char *argv[])
 		PlatformCRN = RockyCoastCRN(PlatformModel, Nuclides);
 	}
 	
-	//Sea level
-	string RelativeSeaLevelFile = Folder + Project + "_RSL.tz";
-	SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
+	// Initialise Sea level from datafile
+	//string RelativeSeaLevelFile = Folder + Project + "_RSL.tz";
+	//SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
+	
+	// initialise sea level using rate of change
+	double SLR = 0.001; //(m/yr)
+	SeaLevel RelativeSeaLevel = SeaLevel(SLR);
+	
+	// Get initial sea level
 	double InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
 	PlatformModel.UpdateSeaLevel(InstantSeaLevel);
 
@@ -162,11 +168,6 @@ int main(int nNumberofArgs,char *argv[])
 	double WavePeriod_Mean = 6.;
 	double WavePeriod_StD = 0;
 	PlatformModel.InitialiseWaves(WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD);
-
-	//Sea level rise?
-	double SLR = 0;
-	PlatformModel.InitialiseSeaLevel(SLR);
-	
 	
 	//Tectonic Events
 	double UpliftFrequency = 1000.;
@@ -186,7 +187,7 @@ int main(int nNumberofArgs,char *argv[])
 	double WeatheringRate = 0.01; //kg m^2 yr-1 ? NOT CURRENTLY
 	double SubtidalEfficacy=0.02; //sets relative efficacy of subtidal weathering
 
-	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate,SubtidalEfficacy);	
+	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);	
 
 	// print initial condition to file
 	double TempTime = -9999;
@@ -262,7 +263,6 @@ int main(int nNumberofArgs,char *argv[])
 		
 	}
 	
-
 	//a few blank lines to finish
 	cout << UpliftMagnitude << endl << endl;
 	
