@@ -112,7 +112,7 @@ int main(int nNumberofArgs,char *argv[])
 	double dZ = 0.1;
 	double dX = 0.1;
 	double Gradient = 1.;
-	double CliffHeight = 5.;
+	double CliffHeight = 15.;
 	double MinElevation = -15.;
 
 	//Time control parameters
