@@ -112,7 +112,14 @@ void SeaLevel::Initialise(string SeaLevelDataFile)
 		SeaLevelIn.close();
 	}
 }
-  		
+
+void SeaLevel::Initialise(double SLR)
+{
+	// Initialising Sea Level at zero and set sea level rise rate
+	SeaLevel = 0;
+	SeaLevelRise = SLR;
+}
+
 double SeaLevel::get_SeaLevel(double Time)
 {
 	//interpolate to get value

@@ -48,12 +48,13 @@ class SeaLevel
   	
   		double Time;
   		double MeanSeaLevel;
+		double SeaLevelRise;
   		
   		vector<double> Times;
   		vector<double> MeanSeaLevels;
   		
   		void Initialise();
-  		//void Initialise(double SLR);
+  		void Initialise(double SLR);
   		void Initialise(string SeaLevelDataFile);
   	
   	protected:
@@ -65,10 +66,10 @@ class SeaLevel
 			Initialise();
 		}
 		
-//		SeaLevel(double SLR)
-//		{
-//			Initialise(SLR);
-//		}
+		SeaLevel(double SLR)
+		{
+			Initialise(SLR);
+		}
 		
 		SeaLevel(string SeaLevelDataFileIn)
 		{
