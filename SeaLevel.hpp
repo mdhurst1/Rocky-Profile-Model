@@ -46,7 +46,7 @@ class SeaLevel
 {
   	private:
   	
-  		double Time;
+  		//double Time;
   		double MeanSeaLevel;
 		double SeaLevelRise;
   		
