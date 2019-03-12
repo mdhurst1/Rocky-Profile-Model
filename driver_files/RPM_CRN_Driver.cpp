@@ -113,16 +113,16 @@ int main(int nNumberofArgs,char *argv[])
 	double dX = 0.1;
 	double Gradient = 1.;
 	double CliffHeight = 5.;
-	double MinElevation = -25.;
+	double MinElevation = -15.;
 
 	//Time control parameters
 	//Time runs in yrs bp
 	double EndTime = 0;
-	double Time = 2000.;
+	double Time = 10000.;
 	double TimeInterval = 1;
 
 	//Print Control
-	double PrintInterval = 100;
+	double PrintInterval = 10;
 	double PrintTime = Time-PrintInterval;
 	string OutputFileName = Folder+Project+"_ShoreProfile.xz";
 	string OutputConcentrationFileName = Folder+Project+"Concentrations.xn";
