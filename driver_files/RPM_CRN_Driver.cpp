@@ -164,8 +164,8 @@ int main(int nNumberofArgs,char *argv[])
 	PlatformModel.InitialiseWaves(WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD);
 
 	//Sea level rise?
-	//double SLR = 0;
-	//PlatformModel.InitialiseSeaLevel(SLR);
+	double SLR = 0;
+	PlatformModel.InitialiseSeaLevel(SLR);
 	
 	
 	//Tectonic Events
