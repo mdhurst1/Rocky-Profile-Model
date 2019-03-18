@@ -129,6 +129,25 @@ int main(int nNumberofArgs,char *argv[])
 
 	// initialise sea level here and calculate MinElevation based on lowest sea level
 
+	// Initialise Sea level from datafile
+	string RelativeSeaLevelFile = "CB_RSL.data";
+	SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
+	
+	// initialise sea level using rate of change
+	//double SLR = -0.0005; //(m/yr)
+	//SeaLevel RelativeSeaLevel = SeaLevel(SLR);
+	
+	// Get initial sea level
+	double InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
+	//PlatformModel.UpdateSeaLevel(InstantSeaLevel);
+
+	//MinElevation calculated from InitialRSL
+	 if (MinElevation >= InstantSeaLevel)
+	 { 
+		MinElevation = (InstantSeaLevel-10.);
+	 }
+
+
 	//initialise RPM Model
 	RPM PlatformModel = RPM(dZ, dX, Gradient, CliffHeight, MinElevation);
 	
@@ -145,17 +164,7 @@ int main(int nNumberofArgs,char *argv[])
 		PlatformCRN = RockyCoastCRN(PlatformModel, Nuclides);
 	}
 	
-	// Initialise Sea level from datafile
-	string RelativeSeaLevelFile = "CB_RSL.data";
-	SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
 	
-	// initialise sea level using rate of change
-	//double SLR = -0.0005; //(m/yr)
-	//SeaLevel RelativeSeaLevel = SeaLevel(SLR);
-	
-	// Get initial sea level
-	double InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
-	PlatformModel.UpdateSeaLevel(InstantSeaLevel);
 
 	//Initialise Tides
 	double TidalRange = 8.;
