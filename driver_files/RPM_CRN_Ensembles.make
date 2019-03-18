@@ -15,7 +15,7 @@ CFLAGS= -g -c -Wall -Werror -Wextra -pedantic -O3 $(INCDIR)
 LDFLAGS= -g -Wall -O3
 
 # SOURCE FILES MACROS IN DEPENDENCY ORDER? SHOULDNT MATTER THANKS TO HEADERS
-SOURCES = ../RoBoCoP_CRN/RockyCoastCRN.cpp ../SeaLevel.cpp ../RPM.cpp ./RPM_CRN_Driver.cpp
+SOURCES = ../RoBoCoP_CRN/RockyCoastCRN.cpp ../SeaLevel.cpp ../RPM.cpp ./RPM_CRN_Driver_Ensembles.cpp
 
 # LIBRARIES MACRO
 LIBS   = -lm -lstdc++ 

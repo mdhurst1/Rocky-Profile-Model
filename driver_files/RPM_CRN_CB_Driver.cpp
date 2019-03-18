@@ -144,19 +144,19 @@ int main(int nNumberofArgs,char *argv[])
 	}
 	
 	// Initialise Sea level from datafile
-	//string RelativeSeaLevelFile = Folder + Project + "_RSL.tz";
-	//SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
+	string RelativeSeaLevelFile = "CB_RSL.data";
+	SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
 	
 	// initialise sea level using rate of change
-	double SLR = -0.0005; //(m/yr)
-	SeaLevel RelativeSeaLevel = SeaLevel(SLR);
+	//double SLR = -0.0005; //(m/yr)
+	//SeaLevel RelativeSeaLevel = SeaLevel(SLR);
 	
 	// Get initial sea level
 	double InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
 	PlatformModel.UpdateSeaLevel(InstantSeaLevel);
 
 	//Initialise Tides
-	double TidalRange = 1.5;
+	double TidalRange = 8.;
     double TidalPeriod = 12.42;
 	PlatformModel.InitialiseTides(TidalRange);
     if (CRNFlag) PlatformCRN.InitialiseTides(TidalRange/2.,TidalPeriod);
@@ -168,11 +168,6 @@ int main(int nNumberofArgs,char *argv[])
 	double WavePeriod_Mean = 6.;
 	double WavePeriod_StD = 0;
 	PlatformModel.InitialiseWaves(WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD);
-	
-	//Tectonic Events
-	//double UpliftFrequency = 1000.;
-	//double UpliftTime = UpliftFrequency;
-	//double UpliftMagnitude = 6.5;
 
 	// Wave coefficient constant
 	double StandingCoefficient = 0.1;
@@ -196,25 +191,12 @@ int main(int nNumberofArgs,char *argv[])
 
 	//Loop through time
 	while (Time >= EndTime)
-	{
-		//Do an earthquake?
-		//if (Time < UpliftTime)
-		{
-			string ArrayFile1 = "MorphArray1.data";
-			string ArrayFile2 = "MorphArray2.data";
-
-			//PlatformModel.WriteMorphologyArray(ArrayFile1, Time);
-			//PlatformModel.TectonicUplift(UpliftMagnitude);
-			//UpliftTime -= UpliftFrequency;
-			//PlatformModel.WriteMorphologyArray(ArrayFile2, Time);
-
-			//Update the Morphology 
-			//PlatformModel.UpdateMorphology();
-		}		
+	{		
 		
 		//Update Sea Level
 		InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
-		PlatformModel.UpdateSeaLevel(InstantSeaLevel);
+		//cout << "Time: " << Time << "; Sea Level: " << InstantSeaLevel << endl;
+        PlatformModel.UpdateSeaLevel(InstantSeaLevel);
 
 		//Get the wave conditions
 		PlatformModel.GetWave();

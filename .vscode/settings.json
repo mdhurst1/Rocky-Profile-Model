@@ -3,5 +3,6 @@
         "vector": "cpp",
         "string": "cpp",
         "xstring": "cpp"
-    }
+    },
+    "python.pythonPath": "/usr/local/opt/python/bin/python3.7"
 }

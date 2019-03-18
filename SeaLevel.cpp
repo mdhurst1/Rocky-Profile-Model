@@ -116,6 +116,13 @@ void SeaLevel::Initialise(string SeaLevelDataFile)
 		}
 		SeaLevelIn.close();
 	}
+
+	cout << "Sea level read in: " << endl;
+	
+	for (int i=0, N=MeanSeaLevels.size(); i<N; ++i)
+	{
+		cout << Times[i] << ", " << MeanSeaLevels[i] << endl;
+	}
 }
 
 void SeaLevel::Initialise(double SLR)
