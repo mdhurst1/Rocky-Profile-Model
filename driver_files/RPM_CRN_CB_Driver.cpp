@@ -147,10 +147,12 @@ int main(int nNumberofArgs,char *argv[])
 		MinElevation = (InstantSeaLevel-10.);
 	 }
 
-
 	//initialise RPM Model
 	RPM PlatformModel = RPM(dZ, dX, Gradient, CliffHeight, MinElevation);
-	
+
+	// Initialise sea level
+	PlatformModel.UpdateSeaLevel(InstantSeaLevel);
+		
 	//initialise RockyCoastCRN friend object
 	RockyCoastCRN PlatformCRN = RockyCoastCRN();
 
