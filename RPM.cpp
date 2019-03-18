@@ -361,6 +361,7 @@ void RPM::InitialiseWeathering()
 
 	//Create a vector ranging from 0 to 10 with NTideValues
 	vector<double> LogNormalDistX(NTideValues,0);
+	
 	for (int i=0; i<NTideValues; ++i) LogNormalDistX[i] = 10.*i/(NTideValues-1);
 
 	//Create weathering efficacy shape function

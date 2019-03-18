@@ -112,8 +112,8 @@ int main(int nNumberofArgs,char *argv[])
 	double dZ = 0.1;
 	double dX = 0.1;
 	double Gradient = 1.;
-	double CliffHeight = 15.;
-	double MinElevation = -15.;
+	double CliffHeight = 35.;
+	double MinElevation = -40.;
 
 	//Time control parameters
 	//Time runs in yrs bp
@@ -126,6 +126,8 @@ int main(int nNumberofArgs,char *argv[])
 	double PrintTime = Time-PrintInterval;
 	string OutputFileName = Folder+Project+"_ShoreProfile.xz";
 	string OutputConcentrationFileName = Folder+Project+"Concentrations.xn";
+
+	// initialise sea level here and calculate MinElevation based on lowest sea level
 
 	//initialise RPM Model
 	RPM PlatformModel = RPM(dZ, dX, Gradient, CliffHeight, MinElevation);
