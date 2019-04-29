@@ -18,6 +18,7 @@ March 7th 2016
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm, rc
+from pathlib import Path
 
 # Customise figure style #
 rc('font',**{'family':'sans-serif','sans-serif':['Arial']})
@@ -33,8 +34,7 @@ def make_plot(FileName,ColourMap):
 
     #First plot the morphology through time
     # declare the file and the axis
-    ProfileName = FileName+"ShoreProfile.xz"
-    f = open(ProfileName,'r')
+    f = open(FileName,'r')
     Lines = f.readlines()
     NoLines = len(Lines)
     StartTime = float(Lines[1].strip().split(" ")[0])
@@ -46,16 +46,16 @@ def make_plot(FileName,ColourMap):
     dz = Header[1]
     
     # Only plot every so many years
-    StartTime = 9000
+    StartTime = 10000
     PlotTime = StartTime
-    PlotInterval = -1000
+    PlotInterval = -100
     EndTime = 0
     
     ax1 = plt.subplot(111)
-    plt.axis('equal')
+    #plt.axis('equal')
     
     #Colourmap
-    ColourMap = cm.bone_r
+    #ColourMap = cm.bone_r
     
     #Get header info and setup X coord
     for j in range(1,NoLines-1):
@@ -64,22 +64,24 @@ def make_plot(FileName,ColourMap):
         Time = float(Line[0])
         
         #Read morphology
-        X = np.array(Line[1:],dtype="float64")
+        X = np.array(Line[2:],dtype="float64")
         NValues = len(X)
         Z = np.linspace(CliffHeight,-CliffHeight, NValues)
         
-        if Time >= EndTime:
-            ax1.plot(X,Z,'k-',lw=1.,zorder=10,label="Final Profile")
-            PlotTime += PlotInterval
-            break
-        elif Time == StartTime:
+        if Time == -9999:
             print(Time)
             ax1.plot(X,Z,'k--',lw=1.,zorder=10,label="Initial Profile")
             PlotTime += PlotInterval
+            
+        elif Time <= EndTime:
+            ax1.plot(X,Z,'k-',lw=1.,zorder=10,label="Final Profile")
+            PlotTime += PlotInterval
+            break
+        
         elif (Time <= PlotTime):
             print(Time)
             colour =(Time-StartTime)/(EndTime-StartTime)
-            ax1.plot(X,Z,'-',lw=1.,color=ColourMap(colour))
+            ax1.plot(X,Z,'-',lw=0.5,color=ColourMap(colour))
             PlotTime += PlotInterval
 
     
@@ -91,13 +93,14 @@ def make_plot(FileName,ColourMap):
     plt.xlabel("Distance (m)")
     plt.ylabel("Elevation (m)")
     #plt.xlim(np.min(X),np.max(X))
-    plt.ylim(-CliffHeight/2,CliffHeight/2)
-    #plt.ylim(-30,30)
+    #plt.ylim(-CliffHeight/2,CliffHeight/2)
+    #plt.ylim(0,5)
     plt.tight_layout()
     plt.savefig('RPM_test.png',dpi=300)
 
 if __name__ == "__main__":
-    FileName = "../driver_files/"
+    Folder = Path(os.getcwd()).parents[1]
+    Filename = Folder / "DB_ShoreProfile.xz"
     ColourMap = cm.RdBu
-    make_plot(FileName,ColourMap)
+    make_plot(Filename,ColourMap)
         
