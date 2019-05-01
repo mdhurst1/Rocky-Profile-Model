@@ -1,4 +1,5 @@
 # Ignore
+.vscode
 *.o
 *.out
 *.xn
