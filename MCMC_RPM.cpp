@@ -100,7 +100,7 @@ long double MCMC_RPM::CalculateLikelihood()
    for (int i=0; i<ProfileData; ++i)
    {
        Residuals[i] = (ProfileZData[i]-TopoData[i])*(ProfileZData[i]-TopoData[i]);
-       Likelihood *= exp(-(fabs(Residuals[i]))/(//find std of topodata to use for error)
+       Likelihood *= exp(-(fabs(Residuals[i]))/(ZStd[i]*ZStd[i]));    //ZStd read in from parameter file?
    }
    return Likelihood;
 }
@@ -140,8 +140,7 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 	long double LikelihoodRatio = 0.L;			//Ratio between last and new likelihoods
 	double AcceptanceProbability; //New iteration is accepted if likelihood ratio exceeds
 
-    //int RetreatType;        //Style of cliff retreat 0 = single rate, 1 = step change in rates, 2 = linear change in rates
-	//int BeachType = 0;      // Beach type is fixed width
+
 
 	int NAccepted = 0;      //count accepted parameters
 	int NRejected = 0;      //count rejected parameters
@@ -158,7 +157,7 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
     double MeanChange = 0.; //Change in parameter values centred on zero allow changes in both directions(pos and neg)
   
     // morphology parameters
-    double dX, dY, Gradient, CliffHeight, MinElevation;
+    double dZ, dX, Gradient, CliffHeight, MinElevation;
     
     char Dummy[32];
     string RSLFilename, ScalingFilename;
@@ -182,12 +181,9 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 	  exit(EXIT_SUCCESS);
 	}
 
-    ParamFileIn //>> Dummy >> RetreatType
-	            >> Dummy >> Resistance_Min >> Dummy >> Resistance_Max >> Dummy >> Resistance_Std >> Dummy >> Resistance_Init
+    ParamFileIn >> Dummy >> Resistance_Min >> Dummy >> Resistance_Max >> Dummy >> Resistance_Std >> Dummy >> Resistance_Init
 	            >> Dummy >> WeatheringRate_Min >> Dummy >> WeatheringRate_Max >> Dummy >> WeatheringRate_Std >> Dummy >> WeatheringRate_Init
-	            //>> Dummy >> BermHeight >> Dummy >> BeachSteepness >> Dummy >> JunctionElevation >> Dummy >> PlatformGradient 
-                //>> Dummy >> CliffHeight >> Dummy >> CliffGradient >> Dummy >> TidalAmplitude
-                //>> Dummy >> RSLFilename >> Dummy >> ScalingFilename >> Dummy >> WhichNuclideTemp;
+	            >> Dummy >> dZ >> Dummy >> dX >> Dummy >> Gradient >> Dummy >> CliffHeight >> Dummy >> MinElevation;
 
     ParamFileIn.close();
 
@@ -228,8 +224,8 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 		while (Accept == 0)
 		{	
 			Rand1 = (double)rand()/RAND_MAX; Rand2 = (double)rand()/RAND_MAX;
-			dFR = MeanChange + RetreatRate1_Std*sqrt(-2.*log(Rand1))*cos(2.*M_PI*(Rand2));
-			RetreatRate1_New = RetreatRate1_Old + dFR;
+			dFR = MeanChange + Resistance_Std*sqrt(-2.*log(Rand1))*cos(2.*M_PI*(Rand2));
+			Resistance_New = Resistance_Old + dFR;
 			if ((Resistance_New < Resistance_Min) || (Resistance_New > Resistance_Max)) continue;
 	  		else Accept = 1;
 		}
