@@ -111,7 +111,7 @@ int main(int nNumberofArgs,char *argv[])
 	//initialisation parameters
 	double dZ = 0.1;
 	double dX = 0.1;
-	double Gradient = 0.5;
+	double Gradient = 1.;
 	double CliffHeight = 35.;
 	double MinElevation = -40.;
 
@@ -130,7 +130,7 @@ int main(int nNumberofArgs,char *argv[])
 	// initialise sea level here and calculate MinElevation based on lowest sea level
 
 	// Initialise Sea level from datafile
-	string RelativeSeaLevelFile = "CB_RSL.data";
+	string RelativeSeaLevelFile = "SY_RSL.data";
 	SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
 	
 	// initialise sea level using rate of change
@@ -169,7 +169,7 @@ int main(int nNumberofArgs,char *argv[])
 	
 
 	//Initialise Tides
-	double TidalRange = 8.;
+	double TidalRange = 4.;
     double TidalPeriod = 12.42;
 	PlatformModel.InitialiseTides(TidalRange);
     if (CRNFlag) PlatformCRN.InitialiseTides(TidalRange/2.,TidalPeriod);
@@ -191,7 +191,7 @@ int main(int nNumberofArgs,char *argv[])
 
 	//reset the geology
 	double CliffFailureDepth = 0.1;
-	double Resistance = 0.02; //kg m^2 yr^-1 ? NOT CURRENTLY
+	double Resistance = 0.07; //kg m^2 yr^-1 ? NOT CURRENTLY
 	double WeatheringRate = 0.; //kg m^2 yr-1 ? NOT CURRENTLY
 	double SubtidalEfficacy = 0.; //sets relative efficacy of subtidal weathering
 

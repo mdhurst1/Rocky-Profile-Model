@@ -11,8 +11,8 @@ LD=g++
 # -pg is some sort of debugging option
 # -O3 is an optimisation flag, not good for debugging
 # -fopenmp is a flag for openmp directives
-CFLAGS= -g -c -Wall -Werror -Wextra -pedantic $(INCDIR)
-LDFLAGS= -g -Wall
+CFLAGS= -g -c -Wall -Werror -Wextra -pedantic $(INCDIR) -O3
+LDFLAGS= -g -Wall -O3
 
 # SOURCE FILES MACROS IN DEPENDENCY ORDER? SHOULDNT MATTER THANKS TO HEADERS
 SOURCES = ../RoBoCoP_CRN/RockyCoastCRN.cpp ../SeaLevel.cpp ../RPM.cpp ./RPM_CRN_DB_Driver.cpp
@@ -35,4 +35,4 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm -f ../*.o ../RoBoCoP_CRN/*.o *.o *.out *.xz *.xn 
+	rm -f ../*.o ../RoBoCoP_CRN/*.o *.o *.out *.xz *.xn

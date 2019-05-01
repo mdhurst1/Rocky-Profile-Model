@@ -92,7 +92,7 @@ int main(int nNumberofArgs,char *argv[])
 	//Test for correct input arguments
 	if (nNumberofArgs!=4)
 	{
-		cout << "Error: This program requires three inputs: " << endl;
+		cout << "Error: This program requires two inputs: " << endl;
 		cout << "* First a path to the folder where the model will be run" << endl;
 		cout << "* The name of the project/model run" << endl;
 		cout << " * A Flag to run with CRNs (1 = True)" << endl;
@@ -191,8 +191,8 @@ int main(int nNumberofArgs,char *argv[])
 
 	//reset the geology
 	double CliffFailureDepth = 0.1;
-	double Resistance = 0.001; //kg m^2 yr^-1 ? NOT CURRENTLY
-	double WeatheringRate = 0.0; //kg m^2 yr-1 ? NOT CURRENTLY
+	double Resistance = 0.05; //kg m^2 yr^-1 ? NOT CURRENTLY
+	double WeatheringRate = 0.; //kg m^2 yr-1 ? NOT CURRENTLY
 	double SubtidalEfficacy = 0.; //sets relative efficacy of subtidal weathering
 
 	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);	
@@ -262,5 +262,3 @@ int main(int nNumberofArgs,char *argv[])
 	//cout << UpliftMagnitude << endl << endl;
 	
 }
-
-

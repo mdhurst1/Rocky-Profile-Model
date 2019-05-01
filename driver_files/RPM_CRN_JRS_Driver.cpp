@@ -111,9 +111,9 @@ int main(int nNumberofArgs,char *argv[])
 	//initialisation parameters
 	double dZ = 0.1;
 	double dX = 0.1;
-	double Gradient = 0.5;
-	double CliffHeight = 35.;
-	double MinElevation = -40.;
+	double Gradient = 1.;
+	double CliffHeight = 15.;
+	double MinElevation = -15.;
 
 	//Time control parameters
 	//Time runs in yrs bp
@@ -129,13 +129,9 @@ int main(int nNumberofArgs,char *argv[])
 
 	// initialise sea level here and calculate MinElevation based on lowest sea level
 
-	// Initialise Sea level from datafile
-	string RelativeSeaLevelFile = "CB_RSL.data";
-	SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
-	
 	// initialise sea level using rate of change
-	//double SLR = -0.0005; //(m/yr)
-	//SeaLevel RelativeSeaLevel = SeaLevel(SLR);
+	double SLR = 0.001; //(m/yr)
+	SeaLevel RelativeSeaLevel = SeaLevel(SLR);
 	
 	// Get initial sea level
 	double InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
@@ -152,7 +148,7 @@ int main(int nNumberofArgs,char *argv[])
 
 	// Initialise sea level
 	PlatformModel.UpdateSeaLevel(InstantSeaLevel);
-		
+	
 	//initialise RockyCoastCRN friend object
 	RockyCoastCRN PlatformCRN = RockyCoastCRN();
 
@@ -166,10 +162,20 @@ int main(int nNumberofArgs,char *argv[])
 		PlatformCRN = RockyCoastCRN(PlatformModel, Nuclides);
 	}
 	
+	// Initialise Sea level from datafile
+	//string RelativeSeaLevelFile = Folder + Project + "_RSL.tz";
+	//SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
 	
+	// initialise sea level using rate of change
+	//double SLR = -0.0005; //(m/yr)
+	//SeaLevel RelativeSeaLevel = SeaLevel(SLR);
+	
+	// Get initial sea level
+	//double InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
+	//PlatformModel.UpdateSeaLevel(InstantSeaLevel);
 
 	//Initialise Tides
-	double TidalRange = 8.;
+	double TidalRange = 4.;
     double TidalPeriod = 12.42;
 	PlatformModel.InitialiseTides(TidalRange);
     if (CRNFlag) PlatformCRN.InitialiseTides(TidalRange/2.,TidalPeriod);
@@ -181,7 +187,7 @@ int main(int nNumberofArgs,char *argv[])
 	double WavePeriod_Mean = 6.;
 	double WavePeriod_StD = 0;
 	PlatformModel.InitialiseWaves(WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD);
-
+	
 	// Wave coefficient constant
 	double StandingCoefficient = 0.1;
 	double BreakingCoefficient = 10.;
@@ -191,9 +197,9 @@ int main(int nNumberofArgs,char *argv[])
 
 	//reset the geology
 	double CliffFailureDepth = 0.1;
-	double Resistance = 0.02; //kg m^2 yr^-1 ? NOT CURRENTLY
+	double Resistance = 0.1; //kg m^2 yr^-1 ? NOT CURRENTLY
 	double WeatheringRate = 0.; //kg m^2 yr-1 ? NOT CURRENTLY
-	double SubtidalEfficacy = 0.; //sets relative efficacy of subtidal weathering
+	double SubtidalEfficacy= 0.; //sets relative efficacy of subtidal weathering
 
 	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);	
 
@@ -204,12 +210,11 @@ int main(int nNumberofArgs,char *argv[])
 
 	//Loop through time
 	while (Time >= EndTime)
-	{		
+	{
 		
 		//Update Sea Level
 		InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
-		//cout << "Time: " << Time << "; Sea Level: " << InstantSeaLevel << endl;
-        PlatformModel.UpdateSeaLevel(InstantSeaLevel);
+		PlatformModel.UpdateSeaLevel(InstantSeaLevel);
 
 		//Get the wave conditions
 		PlatformModel.GetWave();
