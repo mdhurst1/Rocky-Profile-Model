@@ -252,7 +252,7 @@ int main(int nNumberofArgs,char *argv[])
 												                        +"_A_"+tostr(WaveAttenuationConst[n])+".xn";
 												                       
 	
-	                         //Reset the model
+	                         //Reset the models
 		                     PlatformModel = RPM(dZ, dX, Gradient[i], CliffHeight, MinElevation);
 		                     PlatformCRN = RockyCoastCRN(PlatformModel, Nuclides);
 		
@@ -363,8 +363,6 @@ int main(int nNumberofArgs,char *argv[])
 	
 	//a few blank lines to finish
 	cout << endl << endl;
-
-
 }
 
 }
