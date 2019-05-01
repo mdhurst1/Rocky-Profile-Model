@@ -54,17 +54,17 @@ void MCMC_RPM::Initialise(char* ProfileDatafile)
     //   X[1]   |   Z[1]
     //  X[...]  |  Z[...]
     //   X[n]   |   Z[n]
-   ReadProfileDatafile >> Dummy >>  Dummy;
-   while(ReadProfileDatafile >> TempProfileXData >> TempProfileZData)
+   READProfileDatafile >> Dummy >>  Dummy;
+   while(READProfileDatafile >> TempProfileXData >> TempProfileZData)
    {
        ProfileXData.push_back(TempProfileXData);
        ProfileZData.push_back(TempProfileZData);
    }
-   ProfileData = ProfileXData.size();
+   // get size of the profile data vectors
+   NProfileData = ProfileXData.size();
 
-   RPM MCMCRPM = RPM();
-
-   ////?????
+    // initialise empty RPM object
+   MCMCPlatform = RPM();
 }
 
 long double MCMC_RPM::CalculateLikelihood()
@@ -75,12 +75,13 @@ long double MCMC_RPM::CalculateLikelihood()
    //declarations
    double DiffX, Scale;
    long double Likelihood = 1.L;
+   vector<double> XModel, ZModel;
 
      //Work out the modelled morphology
    XModel = MCMCPlatform.get_X();  
    ZModel = MCMCPlatform.get_Z();
-   vector<double> TopoData(ProfileData);
-   vector<double> Residuals(ProfileData);
+   vector<double> TopoData(NProfileData);
+   vector<double> Residuals(NProfileData);
 
    //Interpolate to extracted morphology X positions
    for (int i=0; i<ProfileData; ++i)
@@ -88,11 +89,11 @@ long double MCMC_RPM::CalculateLikelihood()
        //Take X value of extracted morph position and interpolate to get model results at this point
        int j=0;
        while ((XModel[j]-ProfileXData[i]) <0) ++j;
-       DiffX = XModel[j]-XData[i];
+       DiffX = XModel[j] - ProfileXData[i];
          Scale = DiffX/(XModel[j]-XModel[j-1]);
         
         //Get Interpolated Z value
-        TopoData[i] = ZModel[j]-Scale*(ZModel[j]-Zmodel[j-1]);
+        TopoData[i] = ZModel[j]-Scale*(ZModel[j]-ZModel[j-1]);
    }
    
    //Calculate likelihood
@@ -104,11 +105,9 @@ long double MCMC_RPM::CalculateLikelihood()
    return Likelihood;
 }
 
-
-
-long double MCMC_RPM::RunCoastIteration(double Resistance, double WeatheringRate)  ////?????
+long double MCMC_RPM::RunCoastIteration(double Resistance, double WeatheringRate)  
 {
-    /* runs a single instance of the RPM Model, then reportd the likelihood of the parameters
+    /* runs a single instance of the RPM Model, then reported the likelihood of the parameters
     */
 
    //Run a coastal iteration
@@ -122,7 +121,7 @@ long double MCMC_RPM::RunCoastIteration(double Resistance, double WeatheringRate
     else return -9999;
 }
 
-void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char* OutFilename)   ///??
+void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char* OutFilename)
 {
     /* Run the metropolis algorithm along a chain with NIterations
 
@@ -153,11 +152,14 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 	double  Resistance_New, Resistance_Old, Resistance_Min, Resistance_Max, Resistance_Std, Resistance_Init,
             WeatheringRate_New, WeatheringRate_Old, WeatheringRate_Min, WeatheringRate_Max, WeatheringRate_Std, WeatheringRate_Init,
            
-	        //Parameters included in driver??? BermHeight, BeachSteepness, JunctionElevation, PlatformGradient, CliffHeight, CliffGradient, TidalAmplitude, SLR;
+	        //Parameters included in driver BermHeight, BeachSteepness, JunctionElevation, PlatformGradient, CliffHeight, CliffGradient, TidalAmplitude, SLR;
 
     double dFR, dK; //change in parameter values for Resistance (FR) and WeatheringRate (K)
-    //double MeanChange = 0.; //Change in parameter values centred on zero allow changes in both directions(pos and neg) ???
+    double MeanChange = 0.; //Change in parameter values centred on zero allow changes in both directions(pos and neg)
   
+    // morphology parameters
+    double dX, dY, Gradient, CliffHeight, MinElevation;
+    
     char Dummy[32];
     string RSLFilename, ScalingFilename;
         SLR = -9999;
@@ -190,10 +192,7 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
     ParamFileIn.close();
 
     //Initialise RPM object
-	MCMCPlatform = RPM(//RPM driver?? RetreatRate1_Init, RetreatRate2_Init, RetreatType, ChangeTime_Init, 
-                                    //BeachWidth_Init, BeachType, BermHeight, BeachSteepness, PlatformGradient, 
-                                    //CliffHeight, CliffGradient, JunctionElevation, TidalAmplitude,
-                                    //SLR, SteppedPlatform, StepSize, WhichNuclides);
+	MCMCPlatform = RPM(dZ, dX, Gradient, CliffHeight, MinElevation);
 
     //Initialise Sea Level history
     MCMCPlatform.InitialiseRSLData(RSLFilename);
@@ -242,7 +241,7 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 			Rand1 = (double)rand()/RAND_MAX; Rand2 = (double)rand()/RAND_MAX;
 	  		dK = MeanChange + WeatheringRate_Std*sqrt(-2.*log(Rand1))*cos(2.*M_PI*(Rand2));
 	  		WeatheringRate_New = WeatheringRate_Old + dK;
-			if ((WeatheringRate_New < WeatheringRate_Min) || (WeatheringRate_New > WeatheringRate_Max)) continue; ////????
+			if ((WeatheringRate_New < WeatheringRate_Min) || (WeatheringRate_New > WeatheringRate_Max)) continue;
 			else Accept = 1;
 	  	}
 

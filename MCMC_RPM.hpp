@@ -35,14 +35,15 @@ class MCMC_RPM
       int NProfileData;
       vector<double> ProfileXData;
       vector<double> ProfileZData;
+      double ZStd;
 
       //Vectors to hold Topographic Model results
       int NTopoData;
       vector<double> TopoXData;
       vector<double> TopoZData;
 
-          //Declare RPM object ??
-       RPM MCMCPlatform;
+      //Declare RPM object ??
+      RPM MCMCPlatform;
 
       //calculates the likelihood using measured and modelled data
       long double CalculateLikelihood();
@@ -77,7 +78,7 @@ class MCMC_RPM
 	  /// @details This function runs a Markov Chain Monte Carlo analysis to find the most likely
 	  ///   combination of parameters to fit observed concentrations of 10Be from a coastal platform.
 	  ///   The MCMC algorithm runs the RockyCoastCRN model many times (NIterations c. 200k), checks the 
-	  ///   likelihood betweeen modelled and measured cncentrations and either accepts or rejects the 
+	  ///   likelihood between modelled and measured concentrations and either accepts or rejects the 
 	  ///   new parameters. The model sometimes accepts less likely results to allow exploration of the
 	  ///   parameter space. 
 	  /// @param NIterations Number of times to run the RockyCoastCRN model in the Markov Chain
@@ -89,9 +90,3 @@ class MCMC_RPM
 };
 
 #endif
-
-
-
-      
-
-}
