@@ -42,6 +42,7 @@ def make_plot(FileName,ColourMap):
     # create a place holder for cliff position
     Times = np.zeros(NoLines-1)
     CliffPositionX = np.zeros(NoLines-1)
+    RSL = np.zeros(NoLines-1)
     
     for j in range(1,NoLines):
         
@@ -54,21 +55,49 @@ def make_plot(FileName,ColourMap):
         # record the cliff position to array
         CliffPositionX[j-1] = float(Line[2])
 
-    Times = Times[1::10]
-    CliffPositionX = CliffPositionX[1::10]
+        #record the RSL to array
+        RSL[j-1] = float(Line[1])
+
+    Times = Times[1::50]
+    CliffPositionX = CliffPositionX[1::50]
+    RSL = RSL[1::50]
 
     # calculate retreat rates
     Rates = np.diff(CliffPositionX)/(Times[1]-Times[0])
     plt.plot(Times[1:],Rates,'k-')
     plt.xlim(np.max(Times),np.min(Times))
 
+
+    fig, ax1 = plt.subplots()
+    ax1.set_xlabel("Age(BP)")
+    ax1.set_ylabel("Retreat Rate (m y$^-1$)")
+    ax1.plot(Times[1:],Rates,'k-', label='Retreat Rate')
+    ax1.set_xlim(np.max(Times),np.min(Times))
+    for label in ax1.xaxis.get_ticklabels():
+        label.set_rotation(45)
+
+    #plot RSL with different axis
+
+    ax2 = ax1.twinx()
+
+    ax2.set_ylabel("RSL (m)")
+    ax2.plot(Times[1:],RSL[1:],'b-', label='RSL')
+
+
+    ax1.legend(loc='lower right')
+    ax2.legend(loc='upper left')
+
+    plt.tight_layout(pad=1)
+    
+
     fig1 = plt.gcf()
     plt.show()
     plt.draw()
-    fig1.savefig('plot_RR_4.png',dpi=300)
+    fig1.savefig('plot_RR_RSL_DB_6.png',dpi=300)
+
 
 if __name__ == "__main__":
-    FileName = "../../RPM_JRS/Test_SLR_4" # /Users/jennyshadrick/RPM_JRS
+    FileName = "../../RPM_JRS/DB_Test_6" # /Users/jennyshadrick/RPM_JRS
     ColourMap = cm.RdBu
     make_plot(FileName,ColourMap)
         
