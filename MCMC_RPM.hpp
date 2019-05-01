@@ -15,15 +15,23 @@ comments
 #include <cstdlib>
 //#include <omp.h>
 #include "./RPM.hpp"
+#include "./SeaLevel.hpp"
 
 using namespace std;
 
 #ifndef MCMC_RPM_HPP
 #define MCMC_RPM_HPP
 
+//Dummy class for RPM
+class RPM;
+
+//Dummy class for SeaLevel
+class SeaLevel;
+
 class MCMC_RPM
 {
     friend class RPM;
+    friend class SeaLevel;
 
       private:
       //Initialise Function
@@ -45,11 +53,14 @@ class MCMC_RPM
       //Declare RPM object ??
       RPM MCMCPlatform;
 
+      //Declare a SeaLevel Object
+      SeaLevel MCMCSeaLevel;
+
       //calculates the likelihood using measured and modelled data
       long double CalculateLikelihood();
 
       //runs a single iteration of the RPM model, then reports the likelihood of the parameters - this read in from driver?
-      long double RunCoastIteration(double Resistance, double WeatheringRate);
+      long double RunCoastIteration();
 
     public:
 

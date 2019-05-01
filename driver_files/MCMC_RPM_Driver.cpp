@@ -24,7 +24,7 @@ int main (int nNumberofArgs,char *argv[])
 	if (nNumberofArgs!=5)
 	{
 		cout 	<< "FATAL ERROR: not enough inputs. The program needs:" << endl
-					<< "\t1) the CRN input data filename" << endl
+					<< "\t1) the platform topography input data filename" << endl
 					<< "\t2) the paramfilename filename, and" << endl
 					<< "\t3) the output chainfile " << endl
 					<< "\t4) the number of iterations " << endl;

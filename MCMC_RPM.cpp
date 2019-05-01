@@ -16,6 +16,7 @@ Comments
 //#include <omp.h>
 #include "RPM.hpp"
 #include "MCMC_RPM.hpp"
+#include "SeaLevel.hpp"
 
 using namespace std;
 
@@ -97,28 +98,68 @@ long double MCMC_RPM::CalculateLikelihood()
    }
    
    //Calculate likelihood
-   for (int i=0; i<ProfileData; ++i)
+   for (int i=0; i<NProfileData; ++i)
    {
        Residuals[i] = (ProfileZData[i]-TopoData[i])*(ProfileZData[i]-TopoData[i]);
-       Likelihood *= exp(-(fabs(Residuals[i]))/(ZStd[i]*ZStd[i]));    //ZStd read in from parameter file?
+       Likelihood *= exp(-(fabs(Residuals[i]))/(ZStd*ZStd));    //ZStd read in from parameter file?
    }
    return Likelihood;
 }
 
-long double MCMC_RPM::RunCoastIteration(double Resistance, double WeatheringRate)  
+long double MCMC_RPM::RunCoastIteration()  
 {
     /* runs a single instance of the RPM Model, then reported the likelihood of the parameters
     */
 
-   //Run a coastal iteration
-   int WriteResultsFlag = 0;
-    string OutfileName = "emptyfilename";
-	MCMCPlatform.UpdateParameters(Resistance, WeatheringRate);
-	bool Flag = MCMCPlatform.RunModel(OutfileName,WriteResultsFlag);
+     //Time control parameters
+	//Time runs in yrs bp
+	double EndTime = 0;
+	double Time = 10000.;
+	double TimeInterval = 1;
+    double InstantSeaLevel;
+    
+    //reset the model domain
+	MCMCPlatform.ResetModel();
 
+    //Loop through time
+	while (Time >= EndTime)
+	{
+		//Update Sea Level
+		InstantSeaLevel = MCMCSeaLevel.get_SeaLevel(Time);
+		MCMCPlatform.UpdateSeaLevel(InstantSeaLevel);
+
+		//Get the wave conditions
+		MCMCPlatform.GetWave();
+
+		//Calculate forces acting on the platform
+		MCMCPlatform.CalculateBackwearing();
+		MCMCPlatform.CalculateDownwearing();
+
+		//Do erosion
+		MCMCPlatform.ErodeBackwearing();
+		MCMCPlatform.ErodeDownwearing();
+
+		//Update the Morphology 
+		MCMCPlatform.UpdateMorphology();	  
+		
+		//Implement Weathering
+		MCMCPlatform.IntertidalWeathering();
+		
+		//Update the Morphology 
+		MCMCPlatform.UpdateMorphology();
+
+		//Check for Mass Failure
+		MCMCPlatform.MassFailure();
+		
+		//Update the Morphology 
+		MCMCPlatform.UpdateMorphology();
+				
+		//update time
+		Time -= TimeInterval;
+	}
+       
     //Calculate likelihood
-    if (Flag == false) return CalculateLikelihood();
-    else return -9999;
+    return CalculateLikelihood();    
 }
 
 void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char* OutFilename)
@@ -140,8 +181,6 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 	long double LikelihoodRatio = 0.L;			//Ratio between last and new likelihoods
 	double AcceptanceProbability; //New iteration is accepted if likelihood ratio exceeds
 
-
-
 	int NAccepted = 0;      //count accepted parameters
 	int NRejected = 0;      //count rejected parameters
 
@@ -150,19 +189,19 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
     //Holders to define parameter space	
 	double  Resistance_New, Resistance_Old, Resistance_Min, Resistance_Max, Resistance_Std, Resistance_Init,
             WeatheringRate_New, WeatheringRate_Old, WeatheringRate_Min, WeatheringRate_Max, WeatheringRate_Std, WeatheringRate_Init,
+            SubmarineDecayConst;
            
 	        //Parameters included in driver BermHeight, BeachSteepness, JunctionElevation, PlatformGradient, CliffHeight, CliffGradient, TidalAmplitude, SLR;
-
+    double TidalRange;
     double dFR, dK; //change in parameter values for Resistance (FR) and WeatheringRate (K)
     double MeanChange = 0.; //Change in parameter values centred on zero allow changes in both directions(pos and neg)
   
     // morphology parameters
-    double dZ, dX, Gradient, CliffHeight, MinElevation;
+    double dZ, dX, Gradient, CliffHeight, CliffFailureDepth, MinElevation;
     
     char Dummy[32];
     string RSLFilename, ScalingFilename;
-        SLR = -9999;
-
+    
     //Initialise seed for random number generation
     int RandomSeed = 1;
     srand(RandomSeed);
@@ -191,10 +230,28 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 	MCMCPlatform = RPM(dZ, dX, Gradient, CliffHeight, MinElevation);
 
     //Initialise Sea Level history
-    MCMCPlatform.InitialiseRSLData(RSLFilename);
+    MCMCSeaLevel = SeaLevel(RSLFilename);
+    
+    //Initialise Tides
+	MCMCPlatform.InitialiseTides(TidalRange);
 
-    //Initialise Geomag Scaling
-    MCMCPlatform.InitialiseScalingData(ScalingFilename);
+    //Initialise Waves
+	//Single Wave for now but could use the waveclimate object from COVE!?
+	double WaveHeight_Mean = 3.;
+	double WaveHeight_StD = 0.;
+	double WavePeriod_Mean = 6.;
+	double WavePeriod_StD = 0;
+	MCMCPlatform.InitialiseWaves(WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD);
+
+    // Wave coefficient constant
+	double StandingCoefficient = 0.1;
+	double BreakingCoefficient = 10.;
+	double BrokenCoefficient = 1.;
+	double WaveAttenuationConst = 0.01;
+	MCMCPlatform.Set_WaveCoefficients(StandingCoefficient, BreakingCoefficient, BrokenCoefficient, WaveAttenuationConst);
+
+    //initialise the geology
+	MCMCPlatform.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance_Init, WeatheringRate_Init, MinElevation);
 
     /*  start the chain with a guess this guess is a very coarse approximation of what the 'real' values 
 	    might be. The Metropolis algorithm will sample around this */
@@ -202,7 +259,7 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
     WeatheringRate_New = WeatheringRate_Init;
 
     //Run a single coastal iteration to get the initial Likelihood for the initial parameters
-	LastLikelihood = RunCoastIteration(Resistance_New, WeatheringRate_New);
+	LastLikelihood = RunCoastIteration();
 	LastLikelihood = CalculateLikelihood();
 
     //set old parameters for comparison and updating
@@ -241,17 +298,21 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 			else Accept = 1;
 	  	}
 
-      //Run a model iteration with new parameters
-		NewLikelihood = RunCoastIteration(Resistance_New, WeatheringRate_New); 
+        // reset model parameters with new values
+        MCMCPlatform.InitialiseGeology(CliffHeight, CliffFailureDepth, 
+                                        Resistance_New,  WeatheringRate_New, SubmarineDecayConst);
 
-      //Get the likelihood ratio
+        //Run a model iteration with new parameters
+		NewLikelihood = RunCoastIteration();
+
+        //Get the likelihood ratio
 		LikelihoodRatio = NewLikelihood/LastLikelihood;
 
-      //Get acceptance probability (from uniform distribution between 0 and 1)
+        //Get acceptance probability (from uniform distribution between 0 and 1)
 		//This allows some false results to be accepted in order to explore the parameter space.
 		AcceptanceProbability = (double)rand()/RAND_MAX;
 
-      //Test for acceptance
+        //Test for acceptance
 		if (LikelihoodRatio > AcceptanceProbability)
 		{
 			LastLikelihood = NewLikelihood;

@@ -79,9 +79,6 @@ using namespace std;
 //Dummy class for RockyCoastCRN
 class RockyCoastCRN;
 
-//Dummy class for SeaLevel
-class SeaLevel;
-
 ///@brief Main coastal platform object.
 class RPM
 {
