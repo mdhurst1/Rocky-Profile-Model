@@ -84,7 +84,7 @@ long double MCMC_RPM::CalculateLikelihood()
    vector<double> Residuals(NProfileData);
 
    //Interpolate to extracted morphology X positions
-   for (int i=0; i<ProfileData; ++i)
+   for (int i=0; i<NProfileData; ++i)
    {
        //Take X value of extracted morph position and interpolate to get model results at this point
        int j=0;

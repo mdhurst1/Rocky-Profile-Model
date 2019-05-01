@@ -1,6 +1,7 @@
 # Ignore
 .vscode/
 .DS_Store
+*.ipch
 *.o
 *.out
 *.xn

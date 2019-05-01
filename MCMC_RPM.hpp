@@ -13,7 +13,7 @@ comments
 #include <fstream>
 #include <sstream>
 #include <cstdlib>
-#include <omp.h>
+//#include <omp.h>
 #include "./RPM.hpp"
 
 using namespace std;
