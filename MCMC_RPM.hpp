@@ -13,7 +13,6 @@ comments
 #include <fstream>
 #include <sstream>
 #include <cstdlib>
-//#include <omp.h>
 #include "./RPM.hpp"
 #include "./SeaLevel.hpp"
 
@@ -22,18 +21,9 @@ using namespace std;
 #ifndef MCMC_RPM_HPP
 #define MCMC_RPM_HPP
 
-//Dummy class for RPM
-class RPM;
-
-//Dummy class for SeaLevel
-class SeaLevel;
-
 class MCMC_RPM
 {
-    friend class RPM;
-    friend class SeaLevel;
-
-      private:
+    private:
       //Initialise Function
       void Initialise();
       void Initialise(char* ProfileDatafile);

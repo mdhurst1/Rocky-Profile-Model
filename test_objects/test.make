@@ -15,7 +15,7 @@ CFLAGS= -g -c -Wall $(INCDIR)
 LDFLAGS= -g -Wall
 
 # SOURCE FILES MACROS IN DEPENDENCY ORDER? SHOULDNT MATTER THANKS TO HEADERS
-SOURCES = ../SeaLevel.cpp ../RPM.cpp ../MCMC_RPM.cpp ./MCMC_RPM_Driver.cpp
+SOURCES = ./SL.cpp ./RP.cpp ./MCMC.cpp ./Driver.cpp
 
 # LIBRARIES MACRO
 LIBS   = -lm -lstdc++ 
@@ -24,7 +24,7 @@ LIBS   = -lm -lstdc++
 OBJECTS=$(SOURCES:.cpp=.o)
 
 # EXECUTABLE MACRO
-EXECUTABLE=LaunchMCMC.out
+EXECUTABLE=test.out
 
 all: $(SOURCES) $(EXECUTABLE)
 

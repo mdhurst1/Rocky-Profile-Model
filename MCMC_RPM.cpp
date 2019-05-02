@@ -12,8 +12,6 @@ Comments
 #include <iomanip>
 #include <fstream>
 #include <sstream>
-#include <cstdlib>
-//#include <omp.h>
 #include "RPM.hpp"
 #include "MCMC_RPM.hpp"
 #include "SeaLevel.hpp"
