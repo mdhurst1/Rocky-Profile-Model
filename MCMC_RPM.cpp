@@ -42,11 +42,11 @@ void MCMC_RPM::Initialise(char* ProfileDatafile)
 
    //Generate input filestream and read data into vectors
    ifstream READProfileDatafile(ProfileDatafile);
-   if (!READProfileDatafile);
-   { 
-       printf("MCMC_Coast::%s line %d: Input Profile data file \"%s\" doesn't exist\n\n", __func__, __LINE__, ProfileDatafile);
-       exit(EXIT_SUCCESS);
-   }
+   //if (!READProfileDatafile);
+   //{ 
+   //    printf("MCMC_Coast::%s line %d: Input Profile data file \"%s\" doesn't exist\n\n", __func__, __LINE__, ProfileDatafile);
+   //    exit(EXIT_SUCCESS);
+   //}
 
     // ignore header lines by reading to Dummy
     // file format is...
