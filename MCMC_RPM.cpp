@@ -38,8 +38,6 @@ void MCMC_RPM::Initialise(char* ProfileDatafile)
    char Dummy[32];
    float TempProfileXData, TempProfileZData;
 
-   cout << ProfileDatafile << endl;
-
    //Generate input filestream and read data into vectors
    ifstream READProfileDatafile(ProfileDatafile);
    if (!READProfileDatafile)
