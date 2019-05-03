@@ -30,7 +30,7 @@ int main (int nNumberofArgs,char *argv[])
 					<< "\t4) the number of iterations " << endl;
 		exit(EXIT_SUCCESS);
 	}
-
+ 
 	// the name of the data
 	char* DataFilename = argv[1];
 	char* ParamFilename = argv[2];
