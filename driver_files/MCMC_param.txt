@@ -6,12 +6,13 @@ WeatheringRateMin: 0
 WeatheringRateMax: 1
 WeatheringRateStd: 0.0001
 WeatheringRateInit: 0.5
-TidalRange:4
+TidalRange: 4
 dZ: 0.1
 dX: 0.1
 Gradient: 0.5
 CliffHeight: 35
 MinElevation: -40
-SubmarineDecayConst:1
+SubmarineDecayConst: 1
+RSLFilename: SY_RSL.data
 
 
