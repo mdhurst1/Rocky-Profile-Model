@@ -187,7 +187,7 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
     //Holders to define parameter space	
 	double  Resistance_New, Resistance_Old, Resistance_Min, Resistance_Max, Resistance_Std, Resistance_Init,
             WeatheringRate_New, WeatheringRate_Old, WeatheringRate_Min, WeatheringRate_Max, WeatheringRate_Std, WeatheringRate_Init,
-            SubmarineDecayConst;
+            TidalRange, dZ, dX, Gradient, CliffHeight, CliffFailureDepth, MinElevation, SubmarineDecayConst;
            
 	        //Parameters included in driver BermHeight, BeachSteepness, JunctionElevation, PlatformGradient, CliffHeight, CliffGradient, TidalAmplitude, SLR;
     double TidalRange;
@@ -220,9 +220,12 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 
     ParamFileIn >> Dummy >> Resistance_Min >> Dummy >> Resistance_Max >> Dummy >> Resistance_Std >> Dummy >> Resistance_Init
 	            >> Dummy >> WeatheringRate_Min >> Dummy >> WeatheringRate_Max >> Dummy >> WeatheringRate_Std >> Dummy >> WeatheringRate_Init
-	            >> Dummy >> dZ >> Dummy >> dX >> Dummy >> Gradient >> Dummy >> CliffHeight >> Dummy >> MinElevation;
+	            >> Dummy >> TidalRange >> Dummy >> dZ >> Dummy >> dX >> Dummy >> Gradient >> Dummy >> CliffHeight >> Dummy >> MinElevation
+                >> Dummy >> SubmarineDecayConst;
 
     ParamFileIn.close();
+
+
 
     //Initialise RPM object
 	MCMCPlatform = RPM(dZ, dX, Gradient, CliffHeight, MinElevation);
