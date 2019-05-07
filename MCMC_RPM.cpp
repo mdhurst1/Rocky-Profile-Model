@@ -124,7 +124,10 @@ long double MCMC_RPM::RunCoastIteration()
 	{
 		// print time to screen
         printf("Time %4.f\n",Time);
+
+        //set up if statement to only print every 100/1000 years? 
         
+
         //Update Sea Level
 		InstantSeaLevel = MCMCSeaLevel.get_SeaLevel(Time);
 		MCMCPlatform.UpdateSeaLevel(InstantSeaLevel);
@@ -228,7 +231,7 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 
     ParamFileIn.close();
 
-    cout << "Resistance_Min: " << Resistance_Min << endl;
+    //cout << "Resistance_Min: " << Resistance_Min << endl;
 
 
     //Initialise RPM object
