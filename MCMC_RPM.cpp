@@ -122,7 +122,10 @@ long double MCMC_RPM::RunCoastIteration()
     //Loop through time
 	while (Time >= EndTime)
 	{
-		//Update Sea Level
+		// print time to screen
+        printf("Time %4.f\n",Time);
+        
+        //Update Sea Level
 		InstantSeaLevel = MCMCSeaLevel.get_SeaLevel(Time);
 		MCMCPlatform.UpdateSeaLevel(InstantSeaLevel);
 
@@ -279,8 +282,8 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
     //Do the metropolis algorithm
 	for (int j=0; j<NIterations; ++j)
 	{
-		fflush(stdout);
- 	  	printf("Iteration %d\r",j+1);  
+		//fflush(stdout);
+ 	  	printf("Iteration %d\n",j+1);  
 		
 		//Update the variables following a normal distribution
 
