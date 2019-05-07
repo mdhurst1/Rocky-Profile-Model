@@ -112,10 +112,13 @@ long double MCMC_RPM::RunCoastIteration()
      //Time control parameters
 	//Time runs in yrs bp
 	double EndTime = 0;
-	double Time = 10000.;
+	double Time = StartTime;
 	double TimeInterval = 1;
     double InstantSeaLevel;
     
+    double PrintTime = StartTime;
+    double PrintInterval = 100;
+
     //reset the model domain
 	MCMCPlatform.ResetModel();
 
@@ -123,7 +126,11 @@ long double MCMC_RPM::RunCoastIteration()
 	while (Time >= EndTime)
 	{
 		// print time to screen
-        printf("Time %4.f\n",Time);
+        if (Time < PrintTime)
+        {
+            printf("Time %4.f\n",Time);
+            PrintTime -= PrintInterval;
+        }
 
         //set up if statement to only print every 100/1000 years? 
         
