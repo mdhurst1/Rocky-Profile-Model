@@ -35,6 +35,9 @@ class MCMC_RPM
       vector<double> ProfileZData;
       double ZStd;
 
+      //Vector to hold StartTime input from parameter file
+      double StartTime;
+
       //Vectors to hold Topographic Model results
       int NTopoData;
       vector<double> TopoXData;

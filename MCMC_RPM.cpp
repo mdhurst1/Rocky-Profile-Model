@@ -221,7 +221,7 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
     ParamFileIn >> Dummy >> Resistance_Min >> Dummy >> Resistance_Max >> Dummy >> Resistance_Std >> Dummy >> Resistance_Init
 	            >> Dummy >> WeatheringRate_Min >> Dummy >> WeatheringRate_Max >> Dummy >> WeatheringRate_Std >> Dummy >> WeatheringRate_Init
 	            >> Dummy >> TidalRange >> Dummy >> dZ >> Dummy >> dX >> Dummy >> Gradient >> Dummy >> CliffHeight >> Dummy >> MinElevation
-                >> Dummy >> SubmarineDecayConst >> Dummy >> RSLFilename;
+                >> Dummy >> SubmarineDecayConst >> Dummy >> RSLFilename >> Dummy >> StartTime;
 
     ParamFileIn.close();
 
@@ -234,6 +234,12 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
     //Initialise Sea Level history
     MCMCSeaLevel = SeaLevel(RSLFilename);
     
+    //
+    double InitialSeaLevel = MCMCSeaLevel.get_SeaLevel(StartTime);
+
+    //
+    MCMCPlatform.UpdateSeaLevel(InitialSeaLevel);
+
     //Initialise Tides
 	MCMCPlatform.InitialiseTides(TidalRange);
 
