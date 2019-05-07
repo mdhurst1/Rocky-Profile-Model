@@ -21,7 +21,7 @@ int main (int nNumberofArgs,char *argv[])
 {
     //argv1 should be the input dataset
 	//Test for correct input arguments
-	if (nNumberofArgs!=5)
+	if (nNumberofArgs!=4)
 	{
 		cout 	<< "FATAL ERROR: not enough inputs. The program needs:" << endl
 					<< "\t1) the platform topography input data filename" << endl
