@@ -221,11 +221,12 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
     ParamFileIn >> Dummy >> Resistance_Min >> Dummy >> Resistance_Max >> Dummy >> Resistance_Std >> Dummy >> Resistance_Init
 	            >> Dummy >> WeatheringRate_Min >> Dummy >> WeatheringRate_Max >> Dummy >> WeatheringRate_Std >> Dummy >> WeatheringRate_Init
 	            >> Dummy >> TidalRange >> Dummy >> dZ >> Dummy >> dX >> Dummy >> Gradient >> Dummy >> CliffHeight >> Dummy >> MinElevation
-                >> Dummy >> SubmarineDecayConst >> RSLFilename;
+                >> Dummy >> SubmarineDecayConst >> Dummy >> RSLFilename;
 
     ParamFileIn.close();
 
     cout << "Resistance_Min: " << Resistance_Min << endl;
+
 
     //Initialise RPM object
 	MCMCPlatform = RPM(dZ, dX, Gradient, CliffHeight, MinElevation);
