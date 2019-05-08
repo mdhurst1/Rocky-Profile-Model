@@ -36,22 +36,15 @@ void MCMC_RPM::Initialise(char* ProfileDatafile)
 
    //Declare temp variables 
    char Dummy[32];
-   double TempProfileXData, TempProfileZData;
+   float TempProfileXData, TempProfileZData;
 
    //Generate input filestream and read data into vectors
    ifstream READProfileDatafile(ProfileDatafile);
-
-   // check for problem with file
    if (!READProfileDatafile)
    { 
-       printf("MCMC_RPM::%s line %d: Input Profile data file \"%s\" doesn't exist\n\n", __func__, __LINE__, ProfileDatafile);
+       printf("MCMC_Coast::%s line %d: Input Profile data file \"%s\" doesn't exist\n\n", __func__, __LINE__, ProfileDatafile);
        exit(EXIT_SUCCESS);
    }
-   else
-   {
-       printf("MCMC_RPM::%s line %d: Input Profile data file \"%s\" \n\n", __func__, __LINE__, ProfileDatafile);
-   }
-   
 
     // ignore header lines by reading to Dummy
     // file format is...
@@ -60,18 +53,12 @@ void MCMC_RPM::Initialise(char* ProfileDatafile)
     //   X[1]   |   Z[1]
     //  X[...]  |  Z[...]
     //   X[n]   |   Z[n]
-   READProfileDatafile >> Dummy;
-   READProfileDatafile >> Dummy;
-   READProfileDatafile >> TempProfileXData;
-   READProfileDatafile >> TempProfileZData;
-    
-    READProfileDatafile >> TempProfileXData;
-   READProfileDatafile >> TempProfileZData;
-   //while(READProfileDatafile >> TempProfileXData >> TempProfileZData)
-   //{
-   //    ProfileXData.push_back(TempProfileXData);
-   //    ProfileZData.push_back(TempProfileZData);
-   //}
+   READProfileDatafile >> Dummy >>  Dummy;
+   while(READProfileDatafile >> TempProfileXData >> TempProfileZData)
+   {
+       ProfileXData.push_back(TempProfileXData);
+       ProfileZData.push_back(TempProfileZData);
+   }
    // get size of the profile data vectors
    NProfileData = ProfileXData.size();
 
