@@ -78,17 +78,26 @@ long double MCMC_RPM::CalculateLikelihood()
 
      //Work out the modelled morphology
    XModel = MCMCPlatform.get_X();  
-   ZModel = MCMCPlatform.get_Z();
+   ZModel = MCMCPlatform.get_Elevations();
+   int XSize = XModel.size();
+   double CliffPositionX = XModel[XSize-1];
+   double XPos;
+
    vector<double> TopoData(NProfileData);
    vector<double> Residuals(NProfileData);
 
    //Interpolate to extracted morphology X positions
    for (int i=0; i<NProfileData; ++i)
    {
+       
+       //Normalising profile data to modelled cliff position - using Swath profile data where cliff position = 0
+       XPos = CliffPositionX - ProfileXData[i];
+
+
        //Take X value of extracted morph position and interpolate to get model results at this point
        int j=0;
-       while ((XModel[j]-ProfileXData[i]) <0) ++j;
-       DiffX = XModel[j] - ProfileXData[i];
+       while ((XModel[j]- XPos) <0) ++j;
+       DiffX = XModel[j] - XPos;
          Scale = DiffX/(XModel[j]-XModel[j-1]);
         
         //Get Interpolated Z value

@@ -10,7 +10,7 @@ TidalRange: 4
 dZ: 0.1
 dX: 0.1
 Gradient: 0.5
-CliffHeight: 35
+CliffHeight: 10
 MinElevation: -40
 SubmarineDecayConst: 1
 RSLFilename: ./SY_RSL.data

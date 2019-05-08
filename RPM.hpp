@@ -341,6 +341,8 @@ class RPM
 		/// @date 27/02/2017
 		vector<double> get_Z() const { return Z; }
 
+		vector<double> get_Elevations() const { return Zx; }
+		
 		double get_SeaLevel() const { return SeaLevel; }
 
 		void Set_InitialGradient(double Gradient)
