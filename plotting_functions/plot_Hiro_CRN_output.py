@@ -18,7 +18,7 @@ from matplotlib import rc
 
 # Customise figure style #
 rc('font',**{'family':'sans-serif','sans-serif':['Arial']})
-rc('font',size=6)
+rc('font',size=8)
 rc('ytick.major',pad=5)
 rc('xtick.major',pad=5)
 padding = 5
@@ -126,38 +126,37 @@ def make_plot(FileName,ColourMap):
     #Xprof += LCPosition
 
     #load the extracted shore platform profile (SY - profile read from highest to lowest Z)
-    ExProfileName = "../driver_files/Swath_Profile_SY.txt"
-    Xprof, Zprof = np.loadtxt(ExProfileName, unpack=True,skiprows=1,usecols=(0,1))
-    XCliffPosition = Xprof[0]
-    Xprof -= XCliffPosition
-    NXprof = LCPosition - Xprof
+    #ExProfileName = "../driver_files/Swath_Profile_SY.txt"
+    #Xprof, Zprof = np.loadtxt(ExProfileName, unpack=True,skiprows=1,usecols=(0,1))
+    #XCliffPosition = Xprof[0]
+    #Xprof -= XCliffPosition
+    #NXprof = LCPosition - Xprof
     
     #axis labels
     ax1.set_ylabel("Elevation (m)")
     ax2.set_ylabel("Concentration (a g$^-1$)")  #x 10$^3$ 
     ax2.set_xlabel("Distance (m)")
     xmin, xmax = ax1.get_xlim()
-    #ax1.set_xlim(300,550)
-    #ax2.set_xlim(300,550)
-    #ax1.set_ylim(-10,10)
+    ax1.set_xlim(920,1180)
+    ax2.set_xlim(920,1180)
+    ax1.set_ylim(-15,10)
 
-    
-    ax1.plot(NXprof,Zprof,'g-',lw=1.5, label='Extracted Morphology')
+    #ax1.plot(NXprof,Zprof,'g-',lw=1.5, label='Extracted Morphology')
 
    
 
-    ax1.legend(loc='lower left', numpoints=1)
-    ax2.legend(loc='upper left', numpoints=1)
+    ax1.legend(loc='upper left', numpoints=1)
+    ax2.legend(loc='upper right', numpoints=1)
     
 
 
     fig1 = plt.gcf()
     plt.show()
     plt.draw()
-   #fig1.savefig('DB_Test_13.png',dpi=300)
+    fig1.savefig('Poster_Scalby.png',dpi=300)
 
 if __name__ == "__main__":
-    FileName = "/Users/jennyshadrick/RPM_JRS/SY_Test_1" # /Users/jennyshadrick/RPM_JRS
+    FileName = "/Users/jennyshadrick/RPM_JRS/SY_Test_7" # /Users/jennyshadrick/RPM_JRS
     ColourMap = cm.RdBu
     make_plot(FileName,ColourMap)
         

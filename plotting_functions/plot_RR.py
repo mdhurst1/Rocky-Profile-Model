@@ -21,15 +21,12 @@ from matplotlib import cm, rc
 
 # Customise figure style #
 rc('font',**{'family':'sans-serif','sans-serif':['Arial']})
-rc('font',size=8)
+rc('font',size=12)
 rc('ytick.major',pad=1)
 rc('xtick.major',pad=1)
 padding = 1
 
-def make_plot(FileName,ColourMap):
-    
-    #create blank figure
-    plt.figure(1,figsize=(6.6,3.3))
+def read_profile(FileName):
 
     # declare the file and the axis
     ProfileName = FileName+"_ShoreProfile.xz"
@@ -41,9 +38,11 @@ def make_plot(FileName,ColourMap):
 
     # create a place holder for cliff position
     Times = np.zeros(NoLines-1)
-    CliffPositionX = np.zeros(NoLines-1)
+    XPos = np.zeros(NoLines-1)
     RSL = np.zeros(NoLines-1)
     
+    print(Lines[0])
+
     for j in range(1,NoLines):
         
         # extract each line
@@ -53,51 +52,67 @@ def make_plot(FileName,ColourMap):
         Times[j-1] = float(Line[0])
 
         # record the cliff position to array
-        CliffPositionX[j-1] = float(Line[2])
+        XPos[j-1] = float(Line[2])
 
         #record the RSL to array
         RSL[j-1] = float(Line[1])
 
-    Times = Times[1::50]
-    CliffPositionX = CliffPositionX[1::50]
-    RSL = RSL[1::50]
+    if Times[0] == -9999:
+        Times[0] = 10000.
 
-    # calculate retreat rates
-    Rates = np.diff(CliffPositionX)/(Times[1]-Times[0])
-    plt.plot(Times[1:],Rates,'k-')
-    plt.xlim(np.max(Times),np.min(Times))
+    Times = Times[0::50]
+    XPos = XPos[0::50]
+    RSL = RSL[0::50]
 
+    return Times, XPos, RSL
 
-    fig, ax1 = plt.subplots()
-    ax1.set_xlabel("Age(BP)")
-    ax1.set_ylabel("Retreat Rate (m y$^-1$)")
-    ax1.plot(Times[1:],Rates,'k-', label='Retreat Rate')
-    ax1.set_xlim(np.max(Times),np.min(Times))
-    for label in ax1.xaxis.get_ticklabels():
-        label.set_rotation(45)
+CB_Filename = "../../RPM_JRS/Test_4"
+SY_Filename = "../../RPM_JRS/SY_Test_7"
 
-    #plot RSL with different axis
+CB_Times, CB_XPos, CB_RSL = read_profile(CB_Filename)
+SY_Times, SY_XPos, SY_RSL = read_profile(SY_Filename)
 
-    ax2 = ax1.twinx()
+print CB_XPos
 
-    ax2.set_ylabel("RSL (m)")
-    ax2.plot(Times[1:],RSL[1:],'b-', label='RSL')
+# calculate retreat rates
+CB_Rates = np.diff(CB_XPos)/(CB_Times[1]-CB_Times[0])
+print(CB_Times[1], CB_Times[0])
+SY_Rates = np.diff(SY_XPos)/(SY_Times[1]-SY_Times[0])
 
-
-    ax1.legend(loc='lower right')
-    ax2.legend(loc='upper left')
-
-    plt.tight_layout(pad=1)
-    
-
-    fig1 = plt.gcf()
-    plt.show()
-    plt.draw()
-    fig1.savefig('plot_RR_RSL_DB_6.png',dpi=300)
+#create blank figure
+fig = plt.figure(1,figsize=(6.6,5))
 
 
-if __name__ == "__main__":
-    FileName = "../../RPM_JRS/DB_Test_6" # /Users/jennyshadrick/RPM_JRS
-    ColourMap = cm.RdBu
-    make_plot(FileName,ColourMap)
-        
+#plt.xlim(np.max(CB_Times),np.min(CB_Times))
+
+
+ax1 = fig.add_subplot(111)
+ax1.set_xlabel("Age(BP)")
+ax1.set_ylabel("Retreat Rate (m y$^-1$)")
+ax1.plot(CB_Times[1:],CB_Rates,'k-', label='Bideford Retreat Rate')
+ax1.plot(SY_Times[1:],SY_Rates,'b-', label='Scalby Retreat Rate')
+
+xmin, xmax = ax1.get_xlim()
+ax1.set_xlim(7000,0)
+
+ax1.set_xlim(np.max(CB_Times),np.min(CB_Times))
+for label in ax1.xaxis.get_ticklabels():
+    label.set_rotation(45)
+
+#plot RSL with different axis
+
+ax2 = ax1.twinx()
+
+ax2.set_ylabel("RSL (m)")
+ax2.plot(CB_Times[1:],CB_RSL[1:],'k--', label='Bideford RSL')
+ax2.plot(SY_Times[1:],SY_RSL[1:],'b--', label='Scalby RSL')
+ax2.set_xlim(7000,0)
+#ax1.set_ylim(0.01,0)
+#ax1.legend(loc='upper left')
+#ax2.legend(loc='upper left')
+
+plt.tight_layout(pad=1)
+
+plt.show()
+plt.draw()
+fig.savefig('poster_RR_CB_SY.png',dpi=300)
