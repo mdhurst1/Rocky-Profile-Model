@@ -217,7 +217,7 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
     double MeanChange = 0.; //Change in parameter values centred on zero allow changes in both directions(pos and neg)
   
     // morphology parameters
-    double dZ, dX, Gradient, CliffHeight, CliffFailureDepth, MinElevation, ZStd;
+    double dZ, dX, Gradient, CliffHeight, CliffFailureDepth, MinElevation;
     
     char Dummy[32];
     string RSLFilename, ScalingFilename;
