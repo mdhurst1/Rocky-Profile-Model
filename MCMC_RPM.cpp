@@ -217,7 +217,7 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
     double MeanChange = 0.; //Change in parameter values centred on zero allow changes in both directions(pos and neg)
   
     // morphology parameters
-    double dZ, dX, Gradient, CliffHeight, CliffFailureDepth, MinElevation;
+    double dZ, dX, Gradient, CliffHeight, CliffFailureDepth, MinElevation, ZStd;
     
     char Dummy[32];
     string RSLFilename, ScalingFilename;
@@ -243,7 +243,7 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
     ParamFileIn >> Dummy >> Resistance_Min >> Dummy >> Resistance_Max >> Dummy >> Resistance_Std >> Dummy >> Resistance_Init
 	            >> Dummy >> WeatheringRate_Min >> Dummy >> WeatheringRate_Max >> Dummy >> WeatheringRate_Std >> Dummy >> WeatheringRate_Init
 	            >> Dummy >> TidalRange >> Dummy >> dZ >> Dummy >> dX >> Dummy >> Gradient >> Dummy >> CliffHeight >> Dummy >> MinElevation
-                >> Dummy >> SubmarineDecayConst >> Dummy >> RSLFilename >> Dummy >> StartTime;
+                >> Dummy >> SubmarineDecayConst >> Dummy >> RSLFilename >> Dummy >> StartTime >> Dummy >> ZStd;
 
     ParamFileIn.close();
 
