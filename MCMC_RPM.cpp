@@ -130,7 +130,7 @@ long double MCMC_RPM::RunCoastIteration()
     double PrintInterval = 100;
 
     //reset the model domain
-	MCMCPlatform.ResetModel();
+	//MCMCPlatform.ResetModel();
 
     //Loop through time
 	while (Time >= EndTime)
@@ -182,6 +182,9 @@ long double MCMC_RPM::RunCoastIteration()
     //Calculate likelihood
     return CalculateLikelihood();    
 }
+
+
+
 
 void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char* OutFilename)
 {
@@ -328,6 +331,29 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 			if ((WeatheringRate_New < WeatheringRate_Min) || (WeatheringRate_New > WeatheringRate_Max)) continue;
 			else Accept = 1;
 	  	}
+        
+        //Reset parameters to be read from input file
+        //reset model
+        MCMCPlatform.ResetModel();
+        //reset morphology (input parameters)
+        //MCMCPlatform.ResetMorphology(dZ, dX, Gradient, CliffHeight, CliffFailureDepth, MinElevation);
+        //reset sea level
+        MCMCPlatform.UpdateSeaLevel(InitialSeaLevel);
+        //reset tides
+        MCMCPlatform.InitialiseTides(TidalRange);
+        // initialise waves
+        double WaveHeight_Mean = 3.;
+	    double WaveHeight_StD = 0.;
+	    double WavePeriod_Mean = 6.;
+	    double WavePeriod_StD = 0;
+	    MCMCPlatform.InitialiseWaves(WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD);
+
+        // Wave coefficient constant
+	    double StandingCoefficient = 0.1;
+	    double BreakingCoefficient = 10.;
+	    double BrokenCoefficient = 1.;
+	    double WaveAttenuationConst = 0.01;
+	    MCMCPlatform.Set_WaveCoefficients(StandingCoefficient, BreakingCoefficient, BrokenCoefficient, WaveAttenuationConst);
 
         // reset model parameters with new values
         MCMCPlatform.InitialiseGeology(CliffHeight, CliffFailureDepth, 

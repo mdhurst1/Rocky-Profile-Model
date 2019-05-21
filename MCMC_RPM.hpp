@@ -90,7 +90,9 @@ class MCMC_RPM
 	  /// @param OutFilename File to write the results of each iteration of the chain to.
 	  
       void RunMetropolisChain(int NIterations, char* ParamFilename, char* OutFilename);
- 
+
+  
+      
 //void ResetModel() - where to place reset model & update geology?
 		//{
 			//Initialise(dZ,dX, InitialGradient, CliffHeight, MinimumElevation);
