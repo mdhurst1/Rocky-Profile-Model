@@ -11,7 +11,7 @@ LD=g++
 # -pg does what?!
 # -O3 is an optimisation flag, not good for debugging
 
-CFLAGS= -03 -g -c -Wall $(INCDIR)
+CFLAGS= -O3 -g -c -Wall $(INCDIR)
 LDFLAGS= -g -Wall
 
 # SOURCE FILES MACROS IN DEPENDENCY ORDER? SHOULDNT MATTER THANKS TO HEADERS
