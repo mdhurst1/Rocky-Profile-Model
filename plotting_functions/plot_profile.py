@@ -42,13 +42,14 @@ def make_plot(FileName,ColourMap):
     plt.grid()
     plt.plot(Xprof[1:],Zprof[1:],'k-')
    
+   
     fig1 = plt.gcf()
     plt.show()
     plt.draw()
     fig1.savefig('plot_profile_CB.png',dpi=300)
 
 
-if __name__ == "__main__":
+    if __name__ == "__main__":
     FileName = "../../RPM_JRS/Test_4" # /Users/jennyshadrick/RPM_JRS
     ColourMap = cm.RdBu
     make_plot(FileName,ColourMap)
