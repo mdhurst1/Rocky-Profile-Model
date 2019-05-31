@@ -77,7 +77,7 @@ long double MCMC_RPM::CalculateLikelihood()
    vector<double> XModel, ZModel;
 
      //Work out the modelled morphology
-   XModel = MCMCPlatform.get_X();  
+   XModel = MCMCPlatform.get_X(); 
    ZModel = MCMCPlatform.get_Elevations();
    int XSize = XModel.size();
    double CliffPositionX = XModel[XSize-1];

@@ -1,7 +1,7 @@
 ResistanceMin: 0.001
 ResistanceMax: 1
 ResistanceStd: 0.005
-ResistanceInit: 0.01
+ResistanceInit: 0.05
 WeatheringRateMin: 0
 WeatheringRateMax: 0.001
 WeatheringRateStd: 0.00001
