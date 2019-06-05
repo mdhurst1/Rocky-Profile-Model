@@ -126,22 +126,22 @@ def make_plot(FileName,ColourMap):
     #Xprof += LCPosition
 
     #load the extracted shore platform profile (SY - profile read from highest to lowest Z)
-    #ExProfileName = "../driver_files/Swath_Profile_SY.txt"
-    #Xprof, Zprof = np.loadtxt(ExProfileName, unpack=True,skiprows=1,usecols=(0,1))
-    #XCliffPosition = Xprof[0]
-    #Xprof -= XCliffPosition
-    #NXprof = LCPosition - Xprof
+    ExProfileName = "../driver_files/Swath_Profile_SY.txt"
+    Xprof, Zprof = np.loadtxt(ExProfileName, unpack=True,skiprows=1,usecols=(0,1))
+    XCliffPosition = Xprof[0]
+    Xprof -= XCliffPosition
+    NXprof = LCPosition - Xprof
     
     #axis labels
     ax1.set_ylabel("Elevation (m)")
     ax2.set_ylabel("Concentration (a g$^-1$)")  #x 10$^3$ 
     ax2.set_xlabel("Distance (m)")
     xmin, xmax = ax1.get_xlim()
-    ax1.set_xlim(920,1180)
-    ax2.set_xlim(920,1180)
-    ax1.set_ylim(-15,10)
+    ax1.set_xlim(1600,1850)
+    ax2.set_xlim(1600,1850)
+    ax1.set_ylim(-5,10)
 
-    #ax1.plot(NXprof,Zprof,'g-',lw=1.5, label='Extracted Morphology')
+    ax1.plot(NXprof,Zprof,'r-',lw=1.5, label='Extracted Morphology')
 
    
 
@@ -153,10 +153,10 @@ def make_plot(FileName,ColourMap):
     fig1 = plt.gcf()
     plt.show()
     plt.draw()
-    fig1.savefig('Poster_Scalby.png',dpi=300)
+    #fig1.savefig('MCMC_Scalby_topo.png',dpi=300)
 
 if __name__ == "__main__":
-    FileName = "/Users/jennyshadrick/RPM_JRS/SY_Test_7" # /Users/jennyshadrick/RPM_JRS
-    ColourMap = cm.RdBu
+    FileName = "/Users/jennyshadrick/RPM_JRS/MCMC_1" # /Users/jennyshadrick/RPM_JRS
+    ColourMap = cm.gray
     make_plot(FileName,ColourMap)
         
