@@ -67,7 +67,7 @@ def read_profile(FileName):
     return Times, XPos, RSL
 
 CB_Filename = "../../RPM_JRS/Test_4"
-SY_Filename = "../../RPM_JRS/SY_Test_7"
+SY_Filename = "../../RPM_JRS/MCMC_1"
 
 CB_Times, CB_XPos, CB_RSL = read_profile(CB_Filename)
 SY_Times, SY_XPos, SY_RSL = read_profile(SY_Filename)

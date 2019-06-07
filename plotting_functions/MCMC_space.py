@@ -18,7 +18,7 @@ padding = 1
 def make_plot(FileName,ColourMap):
     
     #create blank figure
-    plt.figure(1,figsize=(6.6,3.3))
+    plt.figure(1,figsize=(6.6,4))
     area = np.pi*3
 
     #load the MCMC data and extract x and y
@@ -52,15 +52,11 @@ def make_plot(FileName,ColourMap):
     plt.ylim(0.00046,0.00051)
 
 
+   
+    fig1 = plt.gcf()
     plt.show()
-
-
-   
-   
-    #fig1 = plt.gcf()
-    #plt.show()
     #plt.draw()
-    #fig1.savefig('MCMC_SY_test1.png',dpi=300)
+    fig1.savefig('MCMC_SY_test1.png',dpi=300)
 
 
 
