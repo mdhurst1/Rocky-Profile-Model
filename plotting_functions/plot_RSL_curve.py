@@ -23,7 +23,7 @@ from matplotlib import cm, rc
 rc('font',**{'family':'sans-serif','sans-serif':['Arial']})
 rc('font',size=8)
 rc('ytick.major',pad=1)
-rc('xtick.major',pad=1)
+rc('xtick.major',pad=4)
 padding = 1
 
 def make_plot(FileName,ColourMap):
@@ -63,25 +63,25 @@ def make_plot(FileName,ColourMap):
         RSL[j-1] = float(Line[1])
 
     
-    plt.plot(Times[1:],RSL[1:],'k-',lw=1.5,label='Bideford RSL')
+    plt.plot(Times[1:],RSL[1:],'b-',lw=1.5,label='Bideford RSL')
     plt.xlim(np.max(Times),np.min(Times))
 
     #Plotting several RSL curves
-    File2 = "../driver_files/SY_RSL.data"
-    Time,RSL = np.loadtxt(File2,unpack=True,skiprows=1,usecols=(0,1),delimiter=" ")
-    plt.plot(Time,RSL,'r--',lw=1.5, label='Scalby RSL')
+    #File2 = "../driver_files/SY_RSL.data"
+    #Time,RSL = np.loadtxt(File2,unpack=True,skiprows=1,usecols=(0,1),delimiter=" ")
+    #plt.plot(Time,RSL,'k--',lw=1.5, label='Scalby RSL')
 
-    File3 = "../driver_files/DB_RSL.data"
-    Time3,RSL3 = np.loadtxt(File3,unpack=True,skiprows=1,usecols=(0,1),delimiter=" ")
-    plt.plot(Time3,RSL3, 'b--',lw=1.5, label='Dunbar RSL')
+    #File3 = "../driver_files/DB_RSL.data"
+    #Time3,RSL3 = np.loadtxt(File3,unpack=True,skiprows=1,usecols=(0,1),delimiter=" ")
+    #plt.plot(Time3,RSL3, 'b--',lw=1.5, label='Dunbar RSL')
 
-    File4 = "../driver_files/GM_RSL.data"
-    Time4,RSL4 = np.loadtxt(File4,unpack=True,skiprows=1,usecols=(0,1),delimiter=" ")
-    plt.plot(Time4,RSL4, 'g--',lw=1.5, label='Glamorgan RSL')
+   # File4 = "../driver_files/GM_RSL.data"
+    #Time4,RSL4 = np.loadtxt(File4,unpack=True,skiprows=1,usecols=(0,1),delimiter=" ")
+    #plt.plot(Time4,RSL4, 'g--',lw=1.5, label='Glamorgan RSL')
 
-    File5 = "../driver_files/SM_RSL.data"
-    Time5,RSL5 = np.loadtxt(File5,unpack=True,skiprows=1,usecols=(0,1),delimiter=" ")
-    plt.plot(Time5,RSL5, 'm--',lw=1.5, label='St. Margarets RSL')
+    #File5 = "../driver_files/SM_RSL.data"
+   # ime5,RSL5 = np.loadtxt(File5,unpack=True,skiprows=1,usecols=(0,1),delimiter=" ")
+    #plt.plot(Time5,RSL5, 'm--',lw=1.5, label='St. Margarets RSL')
 
 
     plt.ylabel("RSL (m)")
@@ -94,7 +94,7 @@ def make_plot(FileName,ColourMap):
     fig1 = plt.gcf()
     plt.show()
     plt.draw()
-    fig1.savefig('plot_RSL_test_SY.png',dpi=300)
+    fig1.savefig('plot_RSL_SY_CB_talk.png',dpi=300)
 
 if __name__ == "__main__":
     FileName = "../../RPM_JRS/Test_4" # /Users/jennyshadrick/RPM_JRS

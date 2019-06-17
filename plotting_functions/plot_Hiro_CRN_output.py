@@ -41,7 +41,7 @@ def make_plot(FileName,ColourMap):
     # Get last cliff position
     LastOutput = MorphLines[-1].strip().split(" ") 
     LastProfile = np.array(LastOutput[2:],dtype="float64")
-    LCPosition = float(LastOutput[2])
+    LCPosition = float(LastOutput[3])   #cliff position 2 for SY, 3 for CB - check this   
 
     LastProfile = LCPosition-LastProfile
     
@@ -137,26 +137,26 @@ def make_plot(FileName,ColourMap):
     ax2.set_ylabel("Concentration (a g$^-1$)")  #x 10$^3$ 
     ax2.set_xlabel("Distance (m)")
     xmin, xmax = ax1.get_xlim()
-    #ax1.set_xlim(1600,1850)
-    #ax2.set_xlim(1600,1850)
-    #ax1.set_ylim(-5,10)
+    ax1.set_xlim(1300,1610)
+    ax2.set_xlim(1300,1610)
+    ax1.set_ylim(-5,10)
 
-    ax1.plot(NXprof,Zprof,'r-',lw=1.5, label='Extracted Morphology')
+    ax1.plot(Xprof,Zprof,'r-',lw=1.5, label='Extracted Morphology')  #NXprof for scalby
 
    
 
-    ax1.legend(loc='upper left', numpoints=1)
-    ax2.legend(loc='upper right', numpoints=1)
+   #ax1.legend(loc='upper left', numpoints=1)
+    #ax2.legend(loc='upper right', numpoints=1)
     
 
 
     fig1 = plt.gcf()
     plt.show()
     plt.draw()
-    #fig1.savefig('MCMC_Scalby_topo.png',dpi=300)
+    fig1.savefig('MCMC_CB_topo.png',dpi=300)
 
 if __name__ == "__main__":
-    FileName = "/Users/jennyshadrick/RPM_JRS/MCMC_1" # /Users/jennyshadrick/RPM_JRS
+    FileName = "/Users/jennyshadrick/RPM_JRS/CB_MCMC_2" # /Users/jennyshadrick/RPM_JRS
     ColourMap = cm.gray
     make_plot(FileName,ColourMap)
         

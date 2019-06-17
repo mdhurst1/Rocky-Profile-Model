@@ -52,7 +52,7 @@ def read_profile(FileName):
         Times[j-1] = float(Line[0])
 
         # record the cliff position to array
-        XPos[j-1] = float(Line[2])
+        XPos[j-1] = float(Line[3])     #2 SY, 3 CB - check 
 
         #record the RSL to array
         RSL[j-1] = float(Line[1])
@@ -66,7 +66,7 @@ def read_profile(FileName):
 
     return Times, XPos, RSL
 
-CB_Filename = "../../RPM_JRS/Test_4"
+CB_Filename = "../../RPM_JRS/CB_MCMC_2"
 SY_Filename = "../../RPM_JRS/MCMC_1"
 
 CB_Times, CB_XPos, CB_RSL = read_profile(CB_Filename)
@@ -90,7 +90,7 @@ ax1 = fig.add_subplot(111)
 ax1.set_xlabel("Age(BP)")
 ax1.set_ylabel("Retreat Rate (m y$^-1$)")
 ax1.plot(CB_Times[1:],CB_Rates,'k-', label='Bideford Retreat Rate')
-ax1.plot(SY_Times[1:],SY_Rates,'b-', label='Scalby Retreat Rate')
+#ax1.plot(SY_Times[1:],SY_Rates,'b-', label='Scalby Retreat Rate')
 
 xmin, xmax = ax1.get_xlim()
 ax1.set_xlim(7000,0)
@@ -105,8 +105,8 @@ ax2 = ax1.twinx()
 
 ax2.set_ylabel("RSL (m)")
 ax2.plot(CB_Times[1:],CB_RSL[1:],'k--', label='Bideford RSL')
-ax2.plot(SY_Times[1:],SY_RSL[1:],'b--', label='Scalby RSL')
-ax2.set_xlim(7000,0)
+#ax2.plot(SY_Times[1:],SY_RSL[1:],'b--', label='Scalby RSL')
+ax2.set_xlim(8000,0)
 #ax1.set_ylim(0.01,0)
 #ax1.legend(loc='upper left')
 #ax2.legend(loc='upper left')
@@ -115,4 +115,4 @@ plt.tight_layout(pad=1)
 
 plt.show()
 plt.draw()
-fig.savefig('poster_RR_CB_SY.png',dpi=300)
+fig.savefig('MCMC_CB.png',dpi=300)

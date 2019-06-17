@@ -112,7 +112,7 @@ int main(int nNumberofArgs,char *argv[])
 	double dZ = 0.1;
 	double dX = 0.1;
 	double Gradient = 0.5;
-	double CliffHeight = 35.;
+	double CliffHeight = 10.;
 	double MinElevation = -40.;
 
 	//Time control parameters
@@ -191,8 +191,8 @@ int main(int nNumberofArgs,char *argv[])
 
 	//reset the geology
 	double CliffFailureDepth = 0.1;
-	double Resistance = 0.021; //kg m^2 yr^-1 ? NOT CURRENTLY
-	double WeatheringRate = 0.0000063; //kg m^2 yr-1 ? NOT CURRENTLY
+	double Resistance = 0.022; //kg m^2 yr^-1 ? NOT CURRENTLY
+	double WeatheringRate = 0.0000206; //kg m^2 yr-1 ? NOT CURRENTLY
 	double SubtidalEfficacy = 0.; //sets relative efficacy of subtidal weathering
 
 	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);	
