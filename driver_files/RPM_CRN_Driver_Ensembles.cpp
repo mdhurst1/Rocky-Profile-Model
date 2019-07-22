@@ -297,12 +297,12 @@ int main(int nNumberofArgs,char *argv[])
 								//run the model!
 								cout << "Running Model with..." << endl;
 								cout << "\tInitial Gradient " << setprecision(2) << Gradient[i] << endl;
-								cout << "\tSLR " << SLR[j];
+								cout << "\tSLR " << SLR[j] << " m/yr" << endl;
 								cout << "\tTidal Ranges " << TidalRanges[k] << " m" << endl;
 								cout << "\tMax Weathering Rate " << WeatheringRates[l] << " m/yr" << endl;
 								cout << "\tSubtidal Weathering Efficacy Scalar" << SubtidalEfficacy[m] << endl;
-								cout << "\tRock Resistance " << Resistances[n] << endl;
-								cout << "\tWave Attenuation Constant" << WaveAttenuationConst[o] << " m" << endl;
+								cout << "\tRock Resistance " << Resistances[n] << "kg/m^2" endl;
+								cout << "\tWave Attenuation Constant " << WaveAttenuationConst[o] << " m" << endl;
 			
 								Time = 0;
 								EndTime = 10000;
