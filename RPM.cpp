@@ -1145,7 +1145,7 @@ void RPM::EvolveCoast()
 	}
 }
 
-void RPM::WriteProfile(string OutputFileName, double Time)
+void RPM::WriteProfile(string OutputFileName, double Time, bool Print2Screen = true)
 {
   /* Writes a RPM object X coordinates to file, each value spans dZ in elevation
 		File format is
@@ -1154,9 +1154,12 @@ void RPM::WriteProfile(string OutputFileName, double Time)
 		Time | SeaLevel | X[0] | X[1] | X[2] =====> X[NoNodes] */
 
 
-	//Print to screen
-	cout.flush();
-	cout << "RPM: Writing output at Time " << setprecision(2) << fixed << Time << " years\r";
+	//Print to screen ?
+	if (Print2Screen)
+	{
+		cout.flush();
+		cout << "RPM: Writing output at Time " << setprecision(2) << fixed << Time << " years\r";
+	}
 
 	//test if output file already exists
 	int FileExists = 0;
