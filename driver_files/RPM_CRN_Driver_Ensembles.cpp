@@ -187,6 +187,10 @@ int main(int nNumberofArgs,char *argv[])
 	WeatheringRates.push_back(0.05);
 	WeatheringRates.push_back(0.5);
 
+	// sets relative efficacy of subtidal weathering	
+	vector<double> SubtidalEfficacy;
+	SubtidalEfficacy.push_back(0.001,0.01,0.1);
+
 	//Initialise Resistance       (kg m^2 yr^-1)
 	vector<double> Resistances;
 	Resistances.push_back(10.);
@@ -213,8 +217,7 @@ int main(int nNumberofArgs,char *argv[])
 	
 	//reset the geology
 	double CliffFailureDepth = 0.1;
-	double SubtidalEfficacy=0.02; //sets relative efficacy of subtidal weathering	
-
+	
 	// print initial condition to file
 	//double TempTime = -9999;
 	//PlatformModel.WriteProfile(OutputFileName, TempTime);			
@@ -224,136 +227,139 @@ int main(int nNumberofArgs,char *argv[])
 	
 	for (int i=0, Ni = Gradient.size(); i<Ni; ++i)
 	{
-		for (int j=0, Nj = Gradient.size(); j<Nj; ++j)
+		for (int j=0, Nj = SLR.size(); j<Nj; ++j)
 		{
-			for(int k=0, Nk = Gradient.size(); k<Nk; ++k)
+			for(int k=0, Nk = TidalRanges.size(); k<Nk; ++k)
 			{
-				for(int l=0, Nl = Gradient.size(); l<Nl; ++l)
+				for(int l=0, Nl = WeatheringRates.size(); l<Nl; ++l)
 				{
-					for(int m=0, Nm = Gradient.size(); m<Nm; ++m)
+					for(int m=0, Nm = SubtidalEfficacy.size(); m<Nm; ++m)
 					{
-						for(int n=0, Nn = Gradient.size(); n<Nn; ++n)
+						for(int n=0, Nn = Resistances.size(); n<Nn; ++n)
 						{
-					
-					        
-		                     //setup the output file                  
-		                     OutputMorphologyFileName = "ShoreProfile_G"+tostr(Gradient[i])
-		                                                                +"_S_"+tostr(SLR[j])
-												                        +"_T_"+tostr(TidalRanges[k])
-												                        +"_W_"+tostr(WeatheringRates[l])
-												                        +"_R_"+tostr(Resistances[m])
-												                        +"_A_"+tostr(WaveAttenuationConst[n])+".xz";
-												                  
-                             OutputConcentrationFileName = "Concentrations_G"+tostr(Gradient[i])
-												                        +"_S_"+tostr(SLR[j])
-												                        +"_T_"+tostr(TidalRanges[k])
-												                        +"_W_"+tostr(WeatheringRates[l])
-												                        +"_R_"+tostr(Resistances[m])
-												                        +"_A_"+tostr(WaveAttenuationConst[n])+".xn";
-												                       
-	
-	                         //Reset the models
-		                     PlatformModel = RPM(dZ, dX, Gradient[i], CliffHeight, MinElevation);
-		                     PlatformCRN = RockyCoastCRN(PlatformModel, Nuclides);
+							for(int o=0, No = WaveAttenuationConst.size(); o<No; ++o)
+					        {
+								//setup the output file                  
+								OutputMorphologyFileName = "ShoreProfile_G"+tostr(Gradient[i])
+																			+"_S_"+tostr(SLR[j])
+																			+"_T_"+tostr(TidalRanges[k])
+																			+"_W_"+tostr(WeatheringRates[l])
+																			+"_Ws_"+tostr(SubtidalEfficacy[m])
+																			+"_R_"+tostr(Resistances[n])
+																			+"_A_"+tostr(WaveAttenuationConst[o])+".xz";
+																	
+								OutputConcentrationFileName = "Concentrations_G"+tostr(Gradient[i])
+																			+"_S_"+tostr(SLR[j])
+																			+"_T_"+tostr(TidalRanges[k])
+																			+"_W_"+tostr(WeatheringRates[l])
+																			+"_Ws_"+tostr(SubtidalEfficacy[m])
+																			+"_R_"+tostr(Resistances[n])
+																			+"_A_"+tostr(WaveAttenuationConst[o])+".xn";
+																		
 		
-							// initialise sea level using rate of change
-							double SLR_Run = SLR[j];
-							SeaLevel RelativeSeaLevel = SeaLevel(SLR_Run);
+								//Reset the models
+								PlatformModel = RPM(dZ, dX, Gradient[i], CliffHeight, MinElevation);
+								PlatformCRN = RockyCoastCRN(PlatformModel, Nuclides);
+			
+								// initialise sea level using rate of change
+								double SLR_Run = SLR[j];
+								SeaLevel RelativeSeaLevel = SeaLevel(SLR_Run);
 
-							// Get initial sea level
-							double InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
-							PlatformModel.UpdateSeaLevel(InstantSeaLevel);
+								// Get initial sea level
+								double InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
+								PlatformModel.UpdateSeaLevel(InstantSeaLevel);
 
-		                     //Initialise Tides
-		                     PlatformModel.InitialiseTides(TidalRanges[k]);
-		                     PlatformCRN.InitialiseTides(TidalRanges[k]/2.,TidalPeriod);
-		                     PlatformModel.InitialiseSeaLevel(SLR[j]);
-							 if (CRNFlag) PlatformCRN.InitialiseTides(TidalRanges[k]/2.,TidalPeriod);
-	
-		                     //Setup Morphology
-		                     //Populate geometric metrics
-		                     PlatformModel.UpdateMorphology();
-
-		                     //Initialise Waves
-		                     //Single Wave for now but could use the waveclimate object from COVE!?
-		                     PlatformModel.InitialiseWaves(WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD);
+								//Initialise Tides
+								PlatformModel.InitialiseTides(TidalRanges[k]);
+								PlatformCRN.InitialiseTides(TidalRanges[k]/2.,TidalPeriod);
+								PlatformModel.InitialiseSeaLevel(SLR[j]);
+								if (CRNFlag) PlatformCRN.InitialiseTides(TidalRanges[k]/2.,TidalPeriod);
 		
-		                     //reset wave height
-		                     PlatformModel.InitialiseWaves(WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD);
+								//Setup Morphology
+								//Populate geometric metrics
+								PlatformModel.UpdateMorphology();
 
-		                     //set wave coefficients
-		                     PlatformModel.Set_WaveCoefficients(StandingCoefficient, BreakingCoefficient, BrokenCoefficient, WaveAttenuationConst[n]);
-		
-		                     //reset the geology
-		                     PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, SubtidalEfficacy, Resistances[m], WeatheringRates[l]);
+								//Initialise Waves
+								//Single Wave for now but could use the waveclimate object from COVE!?
+								PlatformModel.InitialiseWaves(WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD);
+			
+								//reset wave height
+								PlatformModel.InitialiseWaves(WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD);
 
-		                     //run the model!
-		                     cout << "Running Model with..." << endl;
-		                     cout << "\tInitial Gradient " << setprecision(2) << Gradient[i] << endl;
-							 cout << "\tSLR " << SLR[j];
-		                     cout << "\tTidal Ranges " << TidalRanges[k] << " m" << endl;
-		                     cout << "\tMax Weathering Rate " << WeatheringRates[l] << " m/yr" << endl;
-		                     cout << "\tRock Resistance " << Resistances[m] << endl;
-							 cout << "\tWave Attenuation Constant" << WaveAttenuationConst[n] << " m" << endl;
-		
-		                     Time = 0;
-		                     EndTime = 10000;
-		                     PrintTime = 0;
-		                     PrintInterval = 100;
-		                     TimeInterval = 1;
+								//set wave coefficients
+								PlatformModel.Set_WaveCoefficients(StandingCoefficient, BreakingCoefficient, BrokenCoefficient, WaveAttenuationConst[o]);
+			
+								//reset the geology
+								PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, SubtidalEfficacy[m], Resistances[n], WeatheringRates[l]);
+
+								//run the model!
+								cout << "Running Model with..." << endl;
+								cout << "\tInitial Gradient " << setprecision(2) << Gradient[i] << endl;
+								cout << "\tSLR " << SLR[j];
+								cout << "\tTidal Ranges " << TidalRanges[k] << " m" << endl;
+								cout << "\tMax Weathering Rate " << WeatheringRates[l] << " m/yr" << endl;
+								cout << "\tSubtidal Weathering Efficacy Scalar" << SubtidalEfficacy[m] << endl;
+								cout << "\tRock Resistance " << Resistances[n] << endl;
+								cout << "\tWave Attenuation Constant" << WaveAttenuationConst[o] << " m" << endl;
+			
+								Time = 0;
+								EndTime = 10000;
+								PrintTime = 0;
+								PrintInterval = 100;
+								TimeInterval = 1;
 
 
-	                         //Loop through time
-	                         while (Time >= EndTime)
-	                         {
-		                        //Update Sea Level
-		                        InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
-		                        PlatformModel.UpdateSeaLevel(InstantSeaLevel);
+								//Loop through time
+								while (Time >= EndTime)
+								{
+									//Update Sea Level
+									InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
+									PlatformModel.UpdateSeaLevel(InstantSeaLevel);
 
-		                        //Get the wave conditions
-		                        PlatformModel.GetWave();
+									//Get the wave conditions
+									PlatformModel.GetWave();
 
-		                        //Calculate forces acting on the platform
-		                        PlatformModel.CalculateBackwearing();
-		                        PlatformModel.CalculateDownwearing();
+									//Calculate forces acting on the platform
+									PlatformModel.CalculateBackwearing();
+									PlatformModel.CalculateDownwearing();
 
-		                        //Do erosion
-		                        PlatformModel.ErodeBackwearing();
-		                        PlatformModel.ErodeDownwearing();
+									//Do erosion
+									PlatformModel.ErodeBackwearing();
+									PlatformModel.ErodeDownwearing();
 
-		                        //Update the Morphology 
-		                        PlatformModel.UpdateMorphology();	
-		
-		                        //Implement Weathering
-		                        PlatformModel.IntertidalWeathering();
-		                        PlatformModel.SubtidalWeathering();
-		
-		                        //Update the Morphology 
-		                        PlatformModel.UpdateMorphology();
+									//Update the Morphology 
+									PlatformModel.UpdateMorphology();	
+			
+									//Implement Weathering
+									PlatformModel.IntertidalWeathering();
+									PlatformModel.SubtidalWeathering();
+			
+									//Update the Morphology 
+									PlatformModel.UpdateMorphology();
 
-		                        //Check for Mass Failure
-		                        PlatformModel.MassFailure();
-		
-		                        //Update the Morphology 
-		                        PlatformModel.UpdateMorphology();
+									//Check for Mass Failure
+									PlatformModel.MassFailure();
+			
+									//Update the Morphology 
+									PlatformModel.UpdateMorphology();
 
-                                //Update the morphology inside RockyCoastCRN
-		                        if (CRNFlag) PlatformCRN.UpdateMorphology(PlatformModel);
+									//Update the morphology inside RockyCoastCRN
+									if (CRNFlag) PlatformCRN.UpdateMorphology(PlatformModel);
 
-		                        //Update the CRN concentrations
-		                        if (CRNFlag) PlatformCRN.UpdateCRNs();
-        	
-		                        //print?
-		                        if (Time <= PrintTime)
-		                        {
-			                        PlatformModel.WriteProfile(OutputMorphologyFileName, Time);
-			                        if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
-			                        PrintTime -= PrintInterval;
-		                        }
-		
-		                     //update time
-		                     Time -= TimeInterval;
-							 
+									//Update the CRN concentrations
+									if (CRNFlag) PlatformCRN.UpdateCRNs();
+				
+									//print?
+									if (Time <= PrintTime)
+									{
+										PlatformModel.WriteProfile(OutputMorphologyFileName, Time);
+										if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
+										PrintTime -= PrintInterval;
+									}
+			
+								//update time
+								Time -= TimeInterval;
+							} 
 						}
 					}
 				}
