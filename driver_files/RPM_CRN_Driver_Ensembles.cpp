@@ -189,7 +189,9 @@ int main(int nNumberofArgs,char *argv[])
 
 	// sets relative efficacy of subtidal weathering	
 	vector<double> SubtidalEfficacy;
-	SubtidalEfficacy.push_back(0.001,0.01,0.1);
+	SubtidalEfficacy.push_back(0.001);
+	SubtidalEfficacy.push_back(0.01);
+	SubtidalEfficacy.push_back(0.1);
 
 	//Initialise Resistance       (kg m^2 yr^-1)
 	vector<double> Resistances;
