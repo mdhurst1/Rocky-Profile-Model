@@ -312,7 +312,7 @@ int main(int nNumberofArgs,char *argv[])
 
 
 								//Loop through time
-								while (Time >= EndTime)
+								while (Time <= EndTime)
 								{
 									//Update Sea Level
 									InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
