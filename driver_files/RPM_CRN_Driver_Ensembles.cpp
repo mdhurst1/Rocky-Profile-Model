@@ -352,25 +352,23 @@ int main(int nNumberofArgs,char *argv[])
 									if (CRNFlag) PlatformCRN.UpdateCRNs();
 				
 									//print?
-									if (Time <= PrintTime)
+									if (Time >= PrintTime)
 									{
 										PlatformModel.WriteProfile(OutputMorphologyFileName, Time);
 										if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
-										PrintTime -= PrintInterval;
+										PrintTime += PrintInterval;
 									}
 			
-								//update time
-								Time -= TimeInterval;
-							} 
+									//update time
+									Time += TimeInterval;
+								} 
+							}
 						}
 					}
 				}
-			}
-		}	
+			}	
+		}
 	}
-	
 	//a few blank lines to finish
 	cout << endl << endl;
-}
-
 }
