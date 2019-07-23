@@ -67,11 +67,7 @@
 #include <fstream>
 #include <sstream>
 #include <cstdlib>
-//#include <omp.h>
 #include <unistd.h>
-#include "../RPM.hpp"
-#include "../RoBoCoP_CRN/RockyCoastCRN.hpp"
-#include "../SeaLevel.hpp"
 
 using namespace std;
 
@@ -182,12 +178,30 @@ int main(int nNumberofArgs,char *argv[])
 								sprintf(sh_name, "RPM_CRN_%i.sh", Run);
 								write_sh.open(sh_name);
 								write_sh << "#!/bin/bash" << endl;
-								write_sh << "#PBS -d /home/manchu/random_pbs" << endl;
+								write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+								write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
+								write_sh << "#PBS -N Run" << Run << endl;
+								write_sh << "#PBS -l cput=15:00:00" << endl;
+								write_sh << "#PBS -l walltime=24:00:00" << endl;
+								write_sh << "#PBS -l nodes=1:ppn=4" << endl;
+								write_sh << "#PBS -m abe" << endl;
+								write_sh << "" << endl;
+								write_sh << "" << endl;
 
-								// setup the command and launch
-								char launch[128];
-		  						sprintf(launch,"qsub RPM_CRN_%i.sh", Run);
-		  						system(launch);
+								// set up command to launch the model
+								write_sh << "RPM_CRN.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+										 << Gradient[i] << " "
+										 << SLR[j] << " "
+										 << TidalRanges[k] << " "
+										 << WeatheringRates[l] << " "
+										 << SubtidalEfficacy[m] << " "
+										 << Resistances[n] << " "
+										 << WaveAttenuationConst[o] << endl;
+										 								
+								// setup the shell script command and launch
+								//char launch[128];
+		  						//sprintf(launch,"qsub RPM_CRN_%i.sh", Run);
+		  						//system(launch);
 								
 							}
 						}
