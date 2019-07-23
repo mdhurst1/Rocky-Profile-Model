@@ -180,12 +180,13 @@ int main(int nNumberofArgs,char *argv[])
 								write_sh << "#!/bin/bash" << endl;
 								write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
 								write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
-								write_sh << "#PBS -N Run" << Run << endl;
-								write_sh << "#PBS -l cput=15:00:00" << endl;
-								write_sh << "#PBS -l walltime=24:00:00" << endl;
-								write_sh << "#PBS -l nodes=1:ppn=4" << endl;
 								write_sh << "#PBS -m abe" << endl;
-								write_sh << "" << endl;
+								write_sh << "#PBS -N Run" << Run << endl;
+								write_sh << "#PBS -l cput=02:00:00" << endl;
+								write_sh << "#PBS -l walltime=24:00:00" << endl;
+								write_sh << "#PBS -e ./" << endl;
+								write_sh << "#PBS -o ./" << endl;
+								
 								write_sh << "" << endl;
 
 								// set up command to launch the model
