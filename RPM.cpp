@@ -108,7 +108,7 @@ void RPM::Initialise(double dZ_in, double dX_in)
 	dZ = dZ_in;
 	dX = dX_in;
 	NXNodes = 1000;
-	NZNodes = round(2.*CliffHeight/dZ)+1;
+	NZNodes = (int)(round(2.*CliffHeight/dZ)+1);
 
 	//declare an array of zeros for assignment of Z vector
 	Z = vector<double>(NZNodes,0.0);
@@ -187,7 +187,7 @@ void RPM::Initialise(double dZ_in, double dX_in, double Gradient, double CliffHe
 	dX = dX_in;
 	InitialGradient = Gradient;
 	NXNodes = 1000;
-	NZNodes = round((CliffHeight-MinElevation)/dZ)+1;
+	NZNodes = (int)(round((CliffHeight-MinElevation)/dZ)+1);
 
 	//declare an array of zeros for assignment of Z vector
 	vector<double> TempZ(NZNodes,0);
@@ -296,7 +296,7 @@ void RPM::InitialiseTides(double TideRange)
 			Total += ErosionShapeFunction[i];
 			if (ErosionShapeFunction[i] > Max) Max = ErosionShapeFunction[i];
 		}
-		for (int i=0.45*NTideValues; i<NTideValues; ++i)
+		for (int i=(int)(round(0.45*NTideValues)); i<NTideValues; ++i)
 		{
 			ErosionShapeFunction[i] += sin((i*dZ-0.45*TidalRange)*M_PI/(0.55*TidalRange));
 			Total += ErosionShapeFunction[i];
@@ -386,7 +386,7 @@ void RPM::InitialiseWavePressure_Rectangle(double WaveHeight)
 {
     /* initialise wave pressure */
     int NWPValues;
-    NWPValues = (int)(WaveHeight/dZ)+1.0;
+    NWPValues = (int)((WaveHeight/dZ)+1.0);
     vector<double> EmptyTideVec(NWPValues,dZ/WaveHeight);
 	//vector<double> EmptyTideVec(NWPValues,0.1);
 	WavePressure = EmptyTideVec;
@@ -399,7 +399,7 @@ void RPM::InitialiseWavePressure_Triangle(double WaveHeight)
     int NWPValues,ccc;
     double sum=0.;
     //double sum1=0.;
-    NWPValues = (int)(WaveHeight/dZ)+1.0;
+    NWPValues = (int)((WaveHeight/dZ)+1.0);
     vector<double> EmptyTideVec1(NWPValues,dZ/WaveHeight);
 	StandingWavePressure = EmptyTideVec1;
 
@@ -471,8 +471,8 @@ void RPM::GetWave()
 	BreakingWaveWaterDepth = BreakingWaveHeight/0.78;
 
 	//Get Wave Pressure Distribution as Uniform
-	PressureDistMaxInd = 0.5*BreakingWaveHeight/dZ;
-	PressureDistMinInd = -0.5*BreakingWaveHeight/dZ;
+	PressureDistMaxInd = (int)(0.5*BreakingWaveHeight/dZ);
+	PressureDistMinInd = (int)(-0.5*BreakingWaveHeight/dZ);
 	
 	// test the initialise wave pressure functions
 	InitialiseWavePressure_Rectangle(WaveHeight);
@@ -493,9 +493,11 @@ void RPM::UpdateSeaLevel()
 	/*Update sea level based on a constant sea level rise rate*/
 
 	//In case sea level rate is less than cm/year
-	if ( abs(SeaLevelRise) < 0.1 ){
+	if ( abs(SeaLevelRise) < 0.1 )
+	{
 		SLR_sum = SLR_sum + SeaLevelRise;
-		if( SLR_sum >= 0.1){
+		if( SLR_sum >= 0.1)
+		{
 			//SeaLevel += SeaLevelRise*TimeInterval;
 			SeaLevel = SeaLevel + (round(SLR_sum*10))*0.1;
 			SLR_sum = 0.;
@@ -957,8 +959,8 @@ void RPM::UpdateMorphology()
 	}
 
 	//Loop across all intertidal elevations
-	MinTideZInd = SeaLevelInd+0.5*TidalRange/dZ;
-	MaxTideZInd = SeaLevelInd-0.5*TidalRange/dZ;
+	MinTideZInd = (int)round(SeaLevelInd+0.5*TidalRange/dZ);
+	MaxTideZInd = (int)round(SeaLevelInd-0.5*TidalRange/dZ);
 
 	//Determine intertidal range indices in X-direction
 	bool LowTideFlag = false;
@@ -1145,7 +1147,7 @@ void RPM::EvolveCoast()
 	}
 }
 
-void RPM::WriteProfile(string OutputFileName, double Time, bool Print2Screen = true)
+void RPM::WriteProfile(string OutputFileName, double Time, bool Print2Screen)
 {
   /* Writes a RPM object X coordinates to file, each value spans dZ in elevation
 		File format is
