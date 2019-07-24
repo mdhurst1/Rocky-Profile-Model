@@ -174,7 +174,7 @@ int main(int nNumberofArgs,char *argv[])
                     << Resistances[1] << " "
                     << WaveAttenuationConst[1] << endl;
     
-        LaunchString = SS.str();
+        string LaunchString = SS.str();
         system(LaunchString.c_str());
     }
 
@@ -197,7 +197,7 @@ int main(int nNumberofArgs,char *argv[])
                     << Resistances[1] << " "
                     << WaveAttenuationConst[1] << endl;
     
-        LaunchString = SS.str();
+        string LaunchString = SS.str();
         system(LaunchString.c_str());
     }
 
@@ -278,11 +278,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         stringstream SS;
         
-        // set up command to launch the model
-        SS << "" << endl;
-
-        // set up command to launch the model
-        write_sh << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        SS << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
