@@ -77,6 +77,14 @@
 
 using namespace std;
 
+template <typename T> string tostr(const T& t)
+{ 
+   ostringstream os; 
+   os<<t; 
+   return os.str(); 
+}
+
+
 int main(int nNumberofArgs,char *argv[])
 {
 	cout << endl;
@@ -144,21 +152,21 @@ int main(int nNumberofArgs,char *argv[])
 	double PrintTime = Time-PrintInterval;
 	
     //setup the output file                  
-    OutputMorphologyFileName = Folder+Project+"ShoreProfile_G"+to_string(Gradient)
-                                                +"_S_"+to_string(SLR)
-                                                +"_T_"+to_string(TidalRange)
-                                                +"_W_"+to_string(WeatheringRate)
-                                                +"_Ws_"+to_string(SubtidalEfficacy)
-                                                +"_R_"+to_string(Resistance)
-                                                +"_A_"+to_string(WaveAttenuationConst)+".xz";
+    string OutputMorphologyFileName = Folder+Project+"ShoreProfile_G"+tostr(Gradient)
+                                                +"_S_"+tostr(SLR)
+                                                +"_T_"+tostr(TidalRange)
+                                                +"_W_"+tostr(WeatheringRate)
+                                                +"_Ws_"+tostr(SubtidalEfficacy)
+                                                +"_R_"+tostr(Resistance)
+                                                +"_A_"+tostr(WaveAttenuationConst)+".xz";
                                         
-    OutputConcentrationFileName = Folder+Project+"Concentrations_G"+to_string(Gradient)
-                                                +"_S_"+to_string(SLR)
-                                                +"_T_"+to_string(TidalRange)
-                                                +"_W_"+to_string(WeatheringRate)
-                                                +"_Ws_"+to_string(SubtidalEfficacy)
-                                                +"_R_"+to_string(Resistance)
-                                                +"_A_"+to_string(WaveAttenuationConst)+".xn";
+    string OutputConcentrationFileName = Folder+Project+"Concentrations_G"+tostr(Gradient)
+                                                +"_S_"+tostr(SLR)
+                                                +"_T_"+tostr(TidalRange)
+                                                +"_W_"+tostr(WeatheringRate)
+                                                +"_Ws_"+tostr(SubtidalEfficacy)
+                                                +"_R_"+tostr(Resistance)
+                                                +"_A_"+tostr(WaveAttenuationConst)+".xn";
                                                 
 	//initialise RPM Model
 	RPM PlatformModel = RPM(dZ, dX, Gradient, CliffHeight, MinElevation);
@@ -217,7 +225,7 @@ int main(int nNumberofArgs,char *argv[])
 
 	// print initial condition to file
 	double TempTime = -9999;
-	PlatformModel.WriteProfile(OutputFileName, TempTime);			
+	PlatformModel.WriteProfile(OutputMorphologyFileName, TempTime);			
 	if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
 
 	//Loop through time
@@ -263,7 +271,7 @@ int main(int nNumberofArgs,char *argv[])
 		//print?
 		if (Time >= PrintTime)
 		{
-			PlatformModel.WriteProfile(OutputFileName, Time);
+			PlatformModel.WriteProfile(OutputMorphologyFileName, Time);
 			if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
 			PrintTime += PrintInterval;
 		}

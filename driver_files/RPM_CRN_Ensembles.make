@@ -11,31 +11,25 @@ LD=g++
 # -pg is some sort of debugging option
 # -O3 is an optimisation flag, not good for debugging
 # -fopenmp is a flag for openmp directives
-CFLAGS= -g -c -Wall -Werror -Wextra -pedantic -O3 $(INCDIR)
-LDFLAGS= -g -Wall -O3
+CFLAGS= -c -Wall -Werror -Wextra -pedantic -O3 $(INCDIR)
+LDFLAGS= -Wall -O3
 
 # SOURCE FILES MACROS IN DEPENDENCY ORDER? SHOULDNT MATTER THANKS TO HEADERS
 SOURCES = ../RoBoCoP_CRN/RockyCoastCRN.cpp ../SeaLevel.cpp ../RPM.cpp ./RPM_CRN_Ensemble_Driver.cpp
-ENSEMBLE_SOURCE =  ./RPM_CRN_Launch_Ensemble.cpp
 
 # LIBRARIES MACRO
 LIBS   = -lm -lstdc++ 
 
 # OBJECT FILES SAME NAME AS SOURCES MACRO
 OBJECTS=$(SOURCES:.cpp=.o)
-ENSEMBLE_OBJECT = $(ENSEMBLE_SOURCE:.cpp=.o)
 
 # EXECUTABLE MACRO
-MODEL_EXECUTABLE = RPM_CRN.out
-ENSEMBLE_EXECUTABLE = RPM_CRN_Ensemble.out
+EXECUTABLE=RPM_CRN_Ensemble.out
 
-all: $(SOURCES) $(MODEL_EXECUTABLE)
+all: $(SOURCES) $(EXECUTABLE)
 
-$(MODEL_EXECUTABLE): $(OBJECTS)
+$(EXECUTABLE): $(OBJECTS)
 	$(CC) $(LDFLAGS) $(OBJECTS) $(LIBS) -o $@
-
-$(ENSEMBLE_EXECUTABLE): $(ENSEMBLE_OBJECT)
-	$(CC) $(LDFLAGS) $(ENSEMBLE_OBJECT) $(LIBS) -o $@
 
 .cpp.o:
 	$(CC) $(CFLAGS) $< -o $@
