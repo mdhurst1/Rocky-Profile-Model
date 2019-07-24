@@ -161,24 +161,10 @@ int main(int nNumberofArgs,char *argv[])
         ++Run;
 
         // setup the script
-        ofstream write_sh;
-        char sh_name[128];
-        sprintf(sh_name, "RPM_CRN_%i.sh", Run);
-        write_sh.open(sh_name);
-        write_sh << "#!/bin/bash" << endl;
-        write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
-        write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
-        write_sh << "#PBS -m abe" << endl;
-        write_sh << "#PBS -N Run" << Run << endl;
-        write_sh << "#PBS -l cput=02:00:00" << endl;
-        write_sh << "#PBS -l walltime=24:00:00" << endl;
-        write_sh << "#PBS -e ./" << endl;
-        write_sh << "#PBS -o ./" << endl;
+        stringstream SS;
         
-        write_sh << "" << endl;
-
         // set up command to launch the model
-        write_sh << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        SS << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
                     << CRNFlag << " "
                     << Gradient[i] << " "
                     << SLR[1] << " "
@@ -187,6 +173,9 @@ int main(int nNumberofArgs,char *argv[])
                     << SubtidalEfficacy[1] << " "
                     << Resistances[1] << " "
                     << WaveAttenuationConst[1] << endl;
+    
+        LaunchString = SS.str();
+        system(LaunchString);
     }
 
     for (int j=0, Nj = SLR.size(); j<Nj; ++j)
@@ -195,24 +184,10 @@ int main(int nNumberofArgs,char *argv[])
         ++Run;
 
         // setup the script
-        ofstream write_sh;
-        char sh_name[128];
-        sprintf(sh_name, "RPM_CRN_%i.sh", Run);
-        write_sh.open(sh_name);
-        write_sh << "#!/bin/bash" << endl;
-        write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
-        write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
-        write_sh << "#PBS -m abe" << endl;
-        write_sh << "#PBS -N Run" << Run << endl;
-        write_sh << "#PBS -l cput=02:00:00" << endl;
-        write_sh << "#PBS -l walltime=24:00:00" << endl;
-        write_sh << "#PBS -e ./" << endl;
-        write_sh << "#PBS -o ./" << endl;
+        stringstream SS;
         
-        write_sh << "" << endl;
-
         // set up command to launch the model
-        write_sh << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        SS << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[j] << " "
@@ -221,6 +196,9 @@ int main(int nNumberofArgs,char *argv[])
                     << SubtidalEfficacy[1] << " "
                     << Resistances[1] << " "
                     << WaveAttenuationConst[1] << endl;
+    
+        LaunchString = SS.str();
+        system(LaunchString);
     }
 
     for(int k=0, Nk = TidalRanges.size(); k<Nk; ++k)
@@ -229,24 +207,10 @@ int main(int nNumberofArgs,char *argv[])
         ++Run;
 
         // setup the script
-        ofstream write_sh;
-        char sh_name[128];
-        sprintf(sh_name, "RPM_CRN_%i.sh", Run);
-        write_sh.open(sh_name);
-        write_sh << "#!/bin/bash" << endl;
-        write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
-        write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
-        write_sh << "#PBS -m abe" << endl;
-        write_sh << "#PBS -N Run" << Run << endl;
-        write_sh << "#PBS -l cput=02:00:00" << endl;
-        write_sh << "#PBS -l walltime=24:00:00" << endl;
-        write_sh << "#PBS -e ./" << endl;
-        write_sh << "#PBS -o ./" << endl;
+        stringstream SS;
         
-        write_sh << "" << endl;
-
         // set up command to launch the model
-        write_sh << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        SS << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
@@ -255,6 +219,9 @@ int main(int nNumberofArgs,char *argv[])
                     << SubtidalEfficacy[1] << " "
                     << Resistances[1] << " "
                     << WaveAttenuationConst[1] << endl;
+    
+        LaunchString = SS.str();
+        system(LaunchString);
     }
 
     for(int l=0, Nl = WeatheringRates.size(); l<Nl; ++l)
@@ -263,24 +230,10 @@ int main(int nNumberofArgs,char *argv[])
         ++Run;
 
         // setup the script
-        ofstream write_sh;
-        char sh_name[128];
-        sprintf(sh_name, "RPM_CRN_%i.sh", Run);
-        write_sh.open(sh_name);
-        write_sh << "#!/bin/bash" << endl;
-        write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
-        write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
-        write_sh << "#PBS -m abe" << endl;
-        write_sh << "#PBS -N Run" << Run << endl;
-        write_sh << "#PBS -l cput=02:00:00" << endl;
-        write_sh << "#PBS -l walltime=24:00:00" << endl;
-        write_sh << "#PBS -e ./" << endl;
-        write_sh << "#PBS -o ./" << endl;
+        stringstream SS;
         
-        write_sh << "" << endl;
-
         // set up command to launch the model
-        write_sh << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        SS << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
@@ -289,6 +242,9 @@ int main(int nNumberofArgs,char *argv[])
                     << SubtidalEfficacy[1] << " "
                     << Resistances[1] << " "
                     << WaveAttenuationConst[1] << endl;
+    
+        LaunchString = SS.str();
+        system(LaunchString);
     }
 
     for(int m=0, Nm = SubtidalEfficacy.size(); m<Nm; ++m)
@@ -297,24 +253,10 @@ int main(int nNumberofArgs,char *argv[])
         ++Run;
 
         // setup the script
-        ofstream write_sh;
-        char sh_name[128];
-        sprintf(sh_name, "RPM_CRN_%i.sh", Run);
-        write_sh.open(sh_name);
-        write_sh << "#!/bin/bash" << endl;
-        write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
-        write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
-        write_sh << "#PBS -m abe" << endl;
-        write_sh << "#PBS -N Run" << Run << endl;
-        write_sh << "#PBS -l cput=02:00:00" << endl;
-        write_sh << "#PBS -l walltime=24:00:00" << endl;
-        write_sh << "#PBS -e ./" << endl;
-        write_sh << "#PBS -o ./" << endl;
+        stringstream SS;
         
-        write_sh << "" << endl;
-
         // set up command to launch the model
-        write_sh << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        SS << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
@@ -323,6 +265,9 @@ int main(int nNumberofArgs,char *argv[])
                     << SubtidalEfficacy[m] << " "
                     << Resistances[1] << " "
                     << WaveAttenuationConst[1] << endl;
+    
+        LaunchString = SS.str();
+        system(LaunchString);
     }
 
     for(int n=0, Nn = Resistances.size(); n<Nn; ++n)
@@ -331,21 +276,10 @@ int main(int nNumberofArgs,char *argv[])
         ++Run;
 
         // setup the script
-        ofstream write_sh;
-        char sh_name[128];
-        sprintf(sh_name, "RPM_CRN_%i.sh", Run);
-        write_sh.open(sh_name);
-        write_sh << "#!/bin/bash" << endl;
-        write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
-        write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
-        write_sh << "#PBS -m abe" << endl;
-        write_sh << "#PBS -N Run" << Run << endl;
-        write_sh << "#PBS -l cput=02:00:00" << endl;
-        write_sh << "#PBS -l walltime=24:00:00" << endl;
-        write_sh << "#PBS -e ./" << endl;
-        write_sh << "#PBS -o ./" << endl;
+        stringstream SS;
         
-        write_sh << "" << endl;
+        // set up command to launch the model
+        SS << "" << endl;
 
         // set up command to launch the model
         write_sh << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
@@ -357,6 +291,9 @@ int main(int nNumberofArgs,char *argv[])
                     << SubtidalEfficacy[1] << " "
                     << Resistances[n] << " "
                     << WaveAttenuationConst[1] << endl;
+        
+        LaunchString = SS.str();
+        system(LaunchString);
     }
 
     for(int o=0, No = WaveAttenuationConst.size(); o<No; ++o)
@@ -365,24 +302,10 @@ int main(int nNumberofArgs,char *argv[])
         ++Run;
 
         // setup the script
-        ofstream write_sh;
-        char sh_name[128];
-        sprintf(sh_name, "RPM_CRN_%i.sh", Run);
-        write_sh.open(sh_name);
-        write_sh << "#!/bin/bash" << endl;
-        write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
-        write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
-        write_sh << "#PBS -m abe" << endl;
-        write_sh << "#PBS -N Run" << Run << endl;
-        write_sh << "#PBS -l cput=02:00:00" << endl;
-        write_sh << "#PBS -l walltime=24:00:00" << endl;
-        write_sh << "#PBS -e ./" << endl;
-        write_sh << "#PBS -o ./" << endl;
+        stringstream SS;
         
-        write_sh << "" << endl;
-
         // set up command to launch the model
-        write_sh << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        SS << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
@@ -391,16 +314,14 @@ int main(int nNumberofArgs,char *argv[])
                     << SubtidalEfficacy[1] << " "
                     << Resistances[1] << " "
                     << WaveAttenuationConst[o] << endl;
+        
+        LaunchString = SS.str();
+        system(LaunchString);
     }
         
-    for (int job=1; job<=Run; ++job)
-    {
-        // loop through jobs and launch them all
-        char launch[128];
-        sprintf(launch,"qsub RPM_CRN_%i.sh", job);
-        system(launch);
-    }
-
-	//a few blank lines to finish
+    
+        
+    
+    //a few blank lines to finish
 	cout << "All jobs launched" << endl << endl;
 }
