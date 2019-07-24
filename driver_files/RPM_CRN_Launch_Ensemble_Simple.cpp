@@ -312,6 +312,8 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[o] << endl;
         
         string LaunchString = SS.str();
+        cout << "Launching command: " << endl;
+        cout << "\tLaunchString" << endl;
         system(LaunchString.c_str());
     }
         
