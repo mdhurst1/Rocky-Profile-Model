@@ -175,7 +175,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
     
         LaunchString = SS.str();
-        system(LaunchString);
+        system(LaunchString.c_str());
     }
 
     for (int j=0, Nj = SLR.size(); j<Nj; ++j)
@@ -198,7 +198,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
     
         LaunchString = SS.str();
-        system(LaunchString);
+        system(LaunchString.c_str());
     }
 
     for(int k=0, Nk = TidalRanges.size(); k<Nk; ++k)
@@ -221,7 +221,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
     
         string LaunchString = SS.str();
-        system(LaunchString);
+        system(LaunchString.c_str());
     }
 
     for(int l=0, Nl = WeatheringRates.size(); l<Nl; ++l)
@@ -244,7 +244,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
     
         string LaunchString = SS.str();
-        system(LaunchString);
+        system(LaunchString.c_str());
     }
 
     for(int m=0, Nm = SubtidalEfficacy.size(); m<Nm; ++m)
@@ -267,7 +267,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
     
         string LaunchString = SS.str();
-        system(LaunchString);
+        system(LaunchString.c_str());
     }
 
     for(int n=0, Nn = Resistances.size(); n<Nn; ++n)
@@ -293,7 +293,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
         
         string LaunchString = SS.str();
-        system(LaunchString);
+        system(LaunchString.c_str());
     }
 
     for(int o=0, No = WaveAttenuationConst.size(); o<No; ++o)
@@ -316,7 +316,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[o] << endl;
         
         string LaunchString = SS.str();
-        system(LaunchString);
+        system(LaunchString.c_str());
     }
         
     
