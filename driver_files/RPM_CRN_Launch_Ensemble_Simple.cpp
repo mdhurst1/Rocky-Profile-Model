@@ -188,7 +188,7 @@ int main(int nNumberofArgs,char *argv[])
                     << Resistances[1] << " "
                     << WaveAttenuationConst[1] << endl;
     }
-    
+
     for (int j=0, Nj = SLR.size(); j<Nj; ++j)
 	{
         // Track run number
@@ -396,9 +396,9 @@ int main(int nNumberofArgs,char *argv[])
     for (int job=1; job<=Run; ++job)
     {
         // loop through jobs and launch them all
-        //char launch[128];
-        //sprintf(launch,"qsub RPM_CRN_%i.sh", job);
-        //system(launch);
+        char launch[128];
+        sprintf(launch,"qsub RPM_CRN_%i.sh", job);
+        system(launch);
     }
 
 	//a few blank lines to finish
