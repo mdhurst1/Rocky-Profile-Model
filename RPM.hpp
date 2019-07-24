@@ -312,7 +312,7 @@ class RPM
 		///   a file. If the file exists, this is appended.
 		///	@author Martin D. Hurst
 		/// @date 27/02/2017
-		void WriteProfile(string OutputFileName, double Time);
+		void WriteProfile(string OutputFileName, double Time, bool Print2Screen = true);
 
 		/// @brief Writes the ResistanceArray to file
 		/// @details This function writes the rock Resistance at the current time to

@@ -67,28 +67,20 @@
 #include <fstream>
 #include <sstream>
 #include <cstdlib>
-//#include <omp.h>
 #include <unistd.h>
-#include "../RPM.hpp"
-#include "../RoBoCoP_CRN/RockyCoastCRN.hpp"
-#include "../SeaLevel.hpp"
 
 using namespace std;
-
-template <typename T> string tostr(const T& t)
-{ 
-   ostringstream os; 
-   os<<t; 
-   return os.str(); 
-}
 
 int main(int nNumberofArgs,char *argv[])
 {
 	cout << endl;
 	cout << "--------------------------------------------------------------" << endl;
 	cout << "|  Rocky Profile Model (RPM)                                 |" << endl;
-	cout << "|  This program models the development of shore platforms    |" << endl;
-	cout << "|  following model developed by Matsumoto et al. (2016)      |" << endl;
+	cout << "|  This program launches an ensemble of model runs that      |" << endl;
+	cout << "|  simulate the development of shore platforms following     |" << endl;
+	cout << "|  model developed by Matsumoto et al. (2016)                |" << endl;
+	cout << "|                                                            |" << endl;
+	cout << "|  launches qsub jobs across a range of parameter values     |" << endl;
 	cout << "|                                                            |" << endl;
 	cout << "|  Implemented in C++ by Martin Hurst, University of Glasgow |" << endl;
 	cout << "|  for coupling to RockyCoastCRN; model for predicting       |" << endl;
@@ -100,14 +92,14 @@ int main(int nNumberofArgs,char *argv[])
 	if (nNumberofArgs!=4)
 	{
 		cout << "Error: This program requires two inputs: " << endl;
-		cout << "* First a path to the folder where the model will be run" << endl;
-		cout << "* The name of the project/model run" << endl;
+		cout << " * First a path to the folder where the model will be run" << endl;
+		cout << " * The name of the project/model run" << endl;
 		cout << " * A Flag to run with CRNs (1 = True)" << endl;
-		cout << "------------------------------------------------------" << endl;
+		cout << "-----------------------------------------------------------" << endl;
 		cout << "Then the command line argument will be: " << endl;
 		cout << "In linux:" << endl;
 		cout << "  ./RPM_Driver.out /ProjectFolder/ Waipapa" << endl;
-		cout << "------------------------------------------------------" << endl;
+		cout << "-----------------------------------------------------------" << endl;
 		exit(EXIT_SUCCESS);
 	}
 
@@ -115,47 +107,6 @@ int main(int nNumberofArgs,char *argv[])
 	string Project = argv[2];
 	int CRNFlag = atoi(argv[3]);
 	
-	//initialisation parameters
-	double dZ = 0.1;
-	double dX = 0.1;
-	double CliffHeight = 15.;
-	double MinElevation = -15.;
-	double TempGradient= 1.;
-
-	//Time control parameters
-	//Time runs in yrs bp
-	double EndTime = 0;
-	double Time = 10000.;
-	double TimeInterval = 1;
-
-	//Print Control
-	double PrintInterval = 10;
-	double PrintTime = Time-PrintInterval;
-	string OutputMorphologyFileName = Folder+Project+"_ShoreProfile.xz";
-	string OutputConcentrationFileName = Folder+Project+"Concentrations.xn";
-
-	//Which Nuclides to track 10Be, 14C, 26Al, 36Cl?
-	vector<int> Nuclides;
-	Nuclides.push_back(10);
-
-	//initialise RPM Model
-	RPM PlatformModel = RPM(dZ, dX, TempGradient, CliffHeight, MinElevation);
-	
-	//initialise RockyCoastCRN friend object
-	RockyCoastCRN PlatformCRN = RockyCoastCRN(PlatformModel, Nuclides);
-	
-	if (CRNFlag)
-	{
-		//Which Nuclides to track 10Be, 14C, 26Al, 36Cl?
-		vector<int> Nuclides;
-		Nuclides.push_back(10);
-
-		
-		//initialise RockyCoastCRN friend object
-		PlatformCRN = RockyCoastCRN(PlatformModel, Nuclides);
-	}
-	
-
 	// Changing parameters for exploratory iterarions
     //Initial Gradient
 	vector<double> Gradient;
@@ -170,12 +121,7 @@ int main(int nNumberofArgs,char *argv[])
 	SLR.push_back(0.);
 	SLR.push_back(-0.001);
 
-	// Get initial sea level
-	//double InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
-	//PlatformModel.UpdateSeaLevel(InstantSeaLevel);
-
 	//Initialise Tidal range
-	double TidalPeriod = 12.42;
 	vector<double> TidalRanges;
 	TidalRanges.push_back(1.);
 	TidalRanges.push_back(4.);
@@ -186,6 +132,12 @@ int main(int nNumberofArgs,char *argv[])
 	WeatheringRates.push_back(0.005);
 	WeatheringRates.push_back(0.05);
 	WeatheringRates.push_back(0.5);
+
+	// sets relative efficacy of subtidal weathering	
+	vector<double> SubtidalEfficacy;
+	SubtidalEfficacy.push_back(0.001);
+	SubtidalEfficacy.push_back(0.01);
+	SubtidalEfficacy.push_back(0.1);
 
 	//Initialise Resistance       (kg m^2 yr^-1)
 	vector<double> Resistances;
@@ -199,170 +151,66 @@ int main(int nNumberofArgs,char *argv[])
 	WaveAttenuationConst.push_back(0.1);
 	WaveAttenuationConst.push_back(1.);
 
-	//Initialise Waves
-	//Single Wave for now but could use the waveclimate object from COVE!?
-	double WaveHeight_Mean = 3.;
-	double WaveHeight_StD = 0.;
-	double WavePeriod_Mean = 6.;
-	double WavePeriod_StD = 0;
-	
-	// Wave coefficient constant
-	double StandingCoefficient = 0.1;
-	double BreakingCoefficient = 10.;
-	double BrokenCoefficient = 1.;
-	
-	//reset the geology
-	double CliffFailureDepth = 0.1;
-	double SubtidalEfficacy=0.02; //sets relative efficacy of subtidal weathering	
-
-	// print initial condition to file
-	//double TempTime = -9999;
-	//PlatformModel.WriteProfile(OutputFileName, TempTime);			
-	//if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
+	// set up a number to track runs
+	int Run = 0;
 
 	//loop across parameter space
-	
 	for (int i=0, Ni = Gradient.size(); i<Ni; ++i)
 	{
-		for (int j=0, Nj = Gradient.size(); j<Nj; ++j)
+		for (int j=0, Nj = SLR.size(); j<Nj; ++j)
 		{
-			for(int k=0, Nk = Gradient.size(); k<Nk; ++k)
+			for(int k=0, Nk = TidalRanges.size(); k<Nk; ++k)
 			{
-				for(int l=0, Nl = Gradient.size(); l<Nl; ++l)
+				for(int l=0, Nl = WeatheringRates.size(); l<Nl; ++l)
 				{
-					for(int m=0, Nm = Gradient.size(); m<Nm; ++m)
+					for(int m=0, Nm = SubtidalEfficacy.size(); m<Nm; ++m)
 					{
-						for(int n=0, Nn = Gradient.size(); n<Nn; ++n)
+						for(int n=0, Nn = Resistances.size(); n<Nn; ++n)
 						{
-					
-					        
-		                     //setup the output file                  
-		                     OutputMorphologyFileName = "ShoreProfile_G"+tostr(Gradient[i])
-		                                                                +"_S_"+tostr(SLR[j])
-												                        +"_T_"+tostr(TidalRanges[k])
-												                        +"_W_"+tostr(WeatheringRates[l])
-												                        +"_R_"+tostr(Resistances[m])
-												                        +"_A_"+tostr(WaveAttenuationConst[n])+".xz";
-												                  
-                             OutputConcentrationFileName = "Concentrations_G"+tostr(Gradient[i])
-												                        +"_S_"+tostr(SLR[j])
-												                        +"_T_"+tostr(TidalRanges[k])
-												                        +"_W_"+tostr(WeatheringRates[l])
-												                        +"_R_"+tostr(Resistances[m])
-												                        +"_A_"+tostr(WaveAttenuationConst[n])+".xn";
-												                       
-	
-	                         //Reset the models
-		                     PlatformModel = RPM(dZ, dX, Gradient[i], CliffHeight, MinElevation);
-		                     PlatformCRN = RockyCoastCRN(PlatformModel, Nuclides);
-		
-							// initialise sea level using rate of change
-							double SLR_Run = SLR[j];
-							SeaLevel RelativeSeaLevel = SeaLevel(SLR_Run);
+							for(int o=0, No = WaveAttenuationConst.size(); o<No; ++o)
+					        {
+								// Track run number
+								++Run;
 
-							// Get initial sea level
-							double InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
-							PlatformModel.UpdateSeaLevel(InstantSeaLevel);
+								// setup the script
+								ofstream write_sh;
+								char sh_name[128];
+								sprintf(sh_name, "RPM_CRN_%i.sh", Run);
+								write_sh.open(sh_name);
+								write_sh << "#!/bin/bash" << endl;
+								write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+								write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
+								write_sh << "#PBS -m abe" << endl;
+								write_sh << "#PBS -N Run" << Run << endl;
+								write_sh << "#PBS -l cput=02:00:00" << endl;
+								write_sh << "#PBS -l walltime=24:00:00" << endl;
+								write_sh << "#PBS -e ./" << endl;
+								write_sh << "#PBS -o ./" << endl;
+								
+								write_sh << "" << endl;
 
-		                     //Initialise Tides
-		                     PlatformModel.InitialiseTides(TidalRanges[k]);
-		                     PlatformCRN.InitialiseTides(TidalRanges[k]/2.,TidalPeriod);
-		                     PlatformModel.InitialiseSeaLevel(SLR[j]);
-							 if (CRNFlag) PlatformCRN.InitialiseTides(TidalRanges[k]/2.,TidalPeriod);
-	
-		                     //Setup Morphology
-		                     //Populate geometric metrics
-		                     PlatformModel.UpdateMorphology();
-
-		                     //Initialise Waves
-		                     //Single Wave for now but could use the waveclimate object from COVE!?
-		                     PlatformModel.InitialiseWaves(WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD);
-		
-		                     //reset wave height
-		                     PlatformModel.InitialiseWaves(WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD);
-
-		                     //set wave coefficients
-		                     PlatformModel.Set_WaveCoefficients(StandingCoefficient, BreakingCoefficient, BrokenCoefficient, WaveAttenuationConst[n]);
-		
-		                     //reset the geology
-		                     PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, SubtidalEfficacy, Resistances[m], WeatheringRates[l]);
-
-		                     //run the model!
-		                     cout << "Running Model with..." << endl;
-		                     cout << "\tInitial Gradient " << setprecision(2) << Gradient[i] << endl;
-							 cout << "\tSLR " << SLR[j];
-		                     cout << "\tTidal Ranges " << TidalRanges[k] << " m" << endl;
-		                     cout << "\tMax Weathering Rate " << WeatheringRates[l] << " m/yr" << endl;
-		                     cout << "\tRock Resistance " << Resistances[m] << endl;
-							 cout << "\tWave Attenuation Constant" << WaveAttenuationConst[n] << " m" << endl;
-		
-		                     Time = 0;
-		                     EndTime = 10000;
-		                     PrintTime = 0;
-		                     PrintInterval = 100;
-		                     TimeInterval = 1;
-
-
-	                         //Loop through time
-	                         while (Time >= EndTime)
-	                         {
-		                        //Update Sea Level
-		                        InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
-		                        PlatformModel.UpdateSeaLevel(InstantSeaLevel);
-
-		                        //Get the wave conditions
-		                        PlatformModel.GetWave();
-
-		                        //Calculate forces acting on the platform
-		                        PlatformModel.CalculateBackwearing();
-		                        PlatformModel.CalculateDownwearing();
-
-		                        //Do erosion
-		                        PlatformModel.ErodeBackwearing();
-		                        PlatformModel.ErodeDownwearing();
-
-		                        //Update the Morphology 
-		                        PlatformModel.UpdateMorphology();	
-		
-		                        //Implement Weathering
-		                        PlatformModel.IntertidalWeathering();
-		                        PlatformModel.SubtidalWeathering();
-		
-		                        //Update the Morphology 
-		                        PlatformModel.UpdateMorphology();
-
-		                        //Check for Mass Failure
-		                        PlatformModel.MassFailure();
-		
-		                        //Update the Morphology 
-		                        PlatformModel.UpdateMorphology();
-
-                                //Update the morphology inside RockyCoastCRN
-		                        if (CRNFlag) PlatformCRN.UpdateMorphology(PlatformModel);
-
-		                        //Update the CRN concentrations
-		                        if (CRNFlag) PlatformCRN.UpdateCRNs();
-        	
-		                        //print?
-		                        if (Time <= PrintTime)
-		                        {
-			                        PlatformModel.WriteProfile(OutputMorphologyFileName, Time);
-			                        if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
-			                        PrintTime -= PrintInterval;
-		                        }
-		
-		                     //update time
-		                     Time -= TimeInterval;
-							 
+								// set up command to launch the model
+								write_sh << "RPM_CRN.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+										 << Gradient[i] << " "
+										 << SLR[j] << " "
+										 << TidalRanges[k] << " "
+										 << WeatheringRates[l] << " "
+										 << SubtidalEfficacy[m] << " "
+										 << Resistances[n] << " "
+										 << WaveAttenuationConst[o] << endl;
+										 								
+								// setup the shell script command and launch
+								//char launch[128];
+		  						//sprintf(launch,"qsub RPM_CRN_%i.sh", Run);
+		  						//system(launch);
+								
+							}
 						}
 					}
 				}
-			}
-		}	
+			}	
+		}
 	}
-	
 	//a few blank lines to finish
 	cout << endl << endl;
-}
-
 }
