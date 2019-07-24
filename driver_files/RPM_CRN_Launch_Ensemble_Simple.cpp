@@ -164,7 +164,7 @@ int main(int nNumberofArgs,char *argv[])
         stringstream SS;
         
         // set up command to launch the model
-        SS << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        SS << "./RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
                     << CRNFlag << " "
                     << Gradient[i] << " "
                     << SLR[1] << " "
@@ -187,7 +187,7 @@ int main(int nNumberofArgs,char *argv[])
         stringstream SS;
         
         // set up command to launch the model
-        SS << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        SS << "./RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[j] << " "
@@ -233,7 +233,7 @@ int main(int nNumberofArgs,char *argv[])
         stringstream SS;
         
         // set up command to launch the model
-        SS << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        SS << "./RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
@@ -256,7 +256,7 @@ int main(int nNumberofArgs,char *argv[])
         stringstream SS;
         
         // set up command to launch the model
-        SS << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        SS << "./RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
@@ -278,7 +278,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         stringstream SS;
         
-        SS << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        SS << "./RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
@@ -301,7 +301,7 @@ int main(int nNumberofArgs,char *argv[])
         stringstream SS;
         
         // set up command to launch the model
-        SS << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        SS << "./RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
