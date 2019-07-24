@@ -100,7 +100,7 @@ int main(int nNumberofArgs,char *argv[])
 	cout << endl;
 
 	//Test for correct input arguments
-	if (nNumberofArgs!=10)
+	if (nNumberofArgs!=11)
 	{
 		cout << "Error: This program requires 10 (YES TEN, one-zero) command line inputs: " << endl;
 		cout << " * First a path to the folder where the model will be run" << endl;
