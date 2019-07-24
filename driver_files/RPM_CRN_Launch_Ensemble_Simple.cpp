@@ -155,7 +155,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, "RPM_CRN_%i.sh", Run);
+        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%i.sh", Run);
         write_sh.open(sh_name);
         write_sh << "#!/bin/bash" << endl;
         write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
@@ -164,13 +164,13 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "#PBS -N Run" << Run << endl;
         write_sh << "#PBS -l cput=02:00:00" << endl;
         write_sh << "#PBS -l walltime=24:00:00" << endl;
-        write_sh << "#PBS -e ./" << endl;
-        write_sh << "#PBS -o ./" << endl;
+        write_sh << "#PBS -e /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        write_sh << "#PBS -o /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
         
         write_sh << "" << endl;
 
         // set up command to launch the model
-        write_sh << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        write_sh << "/export/home/mh322u/Rocky-Profile-Model/driver_files/RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
                     << CRNFlag << " "
                     << Gradient[i] << " "
                     << SLR[1] << " "
@@ -189,7 +189,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, "RPM_CRN_%i.sh", Run);
+        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%i.sh", Run);
         write_sh.open(sh_name);
         write_sh << "#!/bin/bash" << endl;
         write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
@@ -198,13 +198,13 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "#PBS -N Run" << Run << endl;
         write_sh << "#PBS -l cput=02:00:00" << endl;
         write_sh << "#PBS -l walltime=24:00:00" << endl;
-        write_sh << "#PBS -e ./" << endl;
-        write_sh << "#PBS -o ./" << endl;
+        write_sh << "#PBS -e /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        write_sh << "#PBS -o /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
         
         write_sh << "" << endl;
 
         // set up command to launch the model
-        write_sh << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        write_sh << "/export/home/mh322u/Rocky-Profile-Model/driver_files/RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[j] << " "
@@ -223,7 +223,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, "RPM_CRN_%i.sh", Run);
+        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%i.sh", Run);
         write_sh.open(sh_name);
         write_sh << "#!/bin/bash" << endl;
         write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
@@ -232,13 +232,13 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "#PBS -N Run" << Run << endl;
         write_sh << "#PBS -l cput=02:00:00" << endl;
         write_sh << "#PBS -l walltime=24:00:00" << endl;
-        write_sh << "#PBS -e ./" << endl;
-        write_sh << "#PBS -o ./" << endl;
+        write_sh << "#PBS -e /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        write_sh << "#PBS -o /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
         
         write_sh << "" << endl;
 
         // set up command to launch the model
-        write_sh << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        write_sh << "/export/home/mh322u/Rocky-Profile-Model/driver_files/RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
@@ -257,7 +257,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, "RPM_CRN_%i.sh", Run);
+        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%i.sh", Run);
         write_sh.open(sh_name);
         write_sh << "#!/bin/bash" << endl;
         write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
@@ -266,13 +266,13 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "#PBS -N Run" << Run << endl;
         write_sh << "#PBS -l cput=02:00:00" << endl;
         write_sh << "#PBS -l walltime=24:00:00" << endl;
-        write_sh << "#PBS -e ./" << endl;
-        write_sh << "#PBS -o ./" << endl;
+        write_sh << "#PBS -e /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        write_sh << "#PBS -o /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
         
         write_sh << "" << endl;
 
         // set up command to launch the model
-        write_sh << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        write_sh << "/export/home/mh322u/Rocky-Profile-Model/driver_files/RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
@@ -291,7 +291,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, "RPM_CRN_%i.sh", Run);
+        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%i.sh", Run);
         write_sh.open(sh_name);
         write_sh << "#!/bin/bash" << endl;
         write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
@@ -300,13 +300,13 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "#PBS -N Run" << Run << endl;
         write_sh << "#PBS -l cput=02:00:00" << endl;
         write_sh << "#PBS -l walltime=24:00:00" << endl;
-        write_sh << "#PBS -e ./" << endl;
-        write_sh << "#PBS -o ./" << endl;
+        write_sh << "#PBS -e /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        write_sh << "#PBS -o /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
         
         write_sh << "" << endl;
 
         // set up command to launch the model
-        write_sh << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        write_sh << "/export/home/mh322u/Rocky-Profile-Model/driver_files/RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
@@ -325,7 +325,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, "RPM_CRN_%i.sh", Run);
+        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%i.sh", Run);
         write_sh.open(sh_name);
         write_sh << "#!/bin/bash" << endl;
         write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
@@ -334,13 +334,13 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "#PBS -N Run" << Run << endl;
         write_sh << "#PBS -l cput=02:00:00" << endl;
         write_sh << "#PBS -l walltime=24:00:00" << endl;
-        write_sh << "#PBS -e ./" << endl;
-        write_sh << "#PBS -o ./" << endl;
+        write_sh << "#PBS -e /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        write_sh << "#PBS -o /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
         
         write_sh << "" << endl;
 
         // set up command to launch the model
-        write_sh << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        write_sh << "/export/home/mh322u/Rocky-Profile-Model/driver_files/RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
@@ -359,7 +359,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, "RPM_CRN_%i.sh", Run);
+        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%i.sh", Run);
         write_sh.open(sh_name);
         write_sh << "#!/bin/bash" << endl;
         write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
@@ -368,13 +368,13 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "#PBS -N Run" << Run << endl;
         write_sh << "#PBS -l cput=02:00:00" << endl;
         write_sh << "#PBS -l walltime=24:00:00" << endl;
-        write_sh << "#PBS -e ./" << endl;
-        write_sh << "#PBS -o ./" << endl;
+        write_sh << "#PBS -e /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        write_sh << "#PBS -o /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
         
         write_sh << "" << endl;
 
         // set up command to launch the model
-        write_sh << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        write_sh << "/export/home/mh322u/Rocky-Profile-Model/driver_files/RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
@@ -389,7 +389,7 @@ int main(int nNumberofArgs,char *argv[])
     {
         // loop through jobs and launch them all
         char launch[128];
-        sprintf(launch,"qsub RPM_CRN_%i.sh", job);
+        sprintf(launch,"qsub /export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%i.sh", job);
         system(launch);
     }
 

@@ -8,10 +8,12 @@ LD=g++
 # -g option build tables for debugging
 # -c option compile but do not try to link (yet)
 # -Wall display all warning messages
+# -Werror
+# -Wextra
 # -pg is some sort of debugging option
 # -O3 is an optimisation flag, not good for debugging
 # -fopenmp is a flag for openmp directives
-CFLAGS= -c -Wall -Werror -Wextra -pedantic -O3 $(INCDIR)
+CFLAGS= -c -Wall -O3 $(INCDIR)
 LDFLAGS= -Wall -O3
 
 # SOURCE FILES MACROS IN DEPENDENCY ORDER? SHOULDNT MATTER THANKS TO HEADERS
