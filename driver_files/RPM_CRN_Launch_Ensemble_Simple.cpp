@@ -175,6 +175,8 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
     
         string LaunchString = SS.str();
+        cout << "Launching command: " << endl;
+        cout << "\t" << LaunchString << endl;
         system(LaunchString.c_str());
     }
 
@@ -198,6 +200,8 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
     
         string LaunchString = SS.str();
+        cout << "Launching command: " << endl;
+        cout << "\t" << LaunchString << endl;
         system(LaunchString.c_str());
     }
 
@@ -221,6 +225,8 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
     
         string LaunchString = SS.str();
+        cout << "Launching command: " << endl;
+        cout << "\t" << LaunchString << endl;
         system(LaunchString.c_str());
     }
 
@@ -244,6 +250,8 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
     
         string LaunchString = SS.str();
+        cout << "Launching command: " << endl;
+        cout << "\t" << LaunchString << endl;
         system(LaunchString.c_str());
     }
 
@@ -267,6 +275,8 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
     
         string LaunchString = SS.str();
+        cout << "Launching command: " << endl;
+        cout << "\t" << LaunchString << endl;
         system(LaunchString.c_str());
     }
 
@@ -289,6 +299,8 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
         
         string LaunchString = SS.str();
+        cout << "Launching command: " << endl;
+        cout << "\t" << LaunchString << endl;
         system(LaunchString.c_str());
     }
 
@@ -313,13 +325,10 @@ int main(int nNumberofArgs,char *argv[])
         
         string LaunchString = SS.str();
         cout << "Launching command: " << endl;
-        cout << "\tLaunchString" << endl;
+        cout << "\t" << LaunchString << endl;
         system(LaunchString.c_str());
     }
         
-    
-        
-    
     //a few blank lines to finish
 	cout << "All jobs launched" << endl << endl;
 }
