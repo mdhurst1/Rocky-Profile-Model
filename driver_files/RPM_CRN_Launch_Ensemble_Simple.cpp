@@ -187,9 +187,8 @@ int main(int nNumberofArgs,char *argv[])
                     << SubtidalEfficacy[1] << " "
                     << Resistances[1] << " "
                     << WaveAttenuationConst[1] << endl;
-                                                
-        
     }
+    
     for (int j=0, Nj = SLR.size(); j<Nj; ++j)
 	{
         // Track run number
@@ -222,11 +221,6 @@ int main(int nNumberofArgs,char *argv[])
                     << SubtidalEfficacy[1] << " "
                     << Resistances[1] << " "
                     << WaveAttenuationConst[1] << endl;
-                                                
-        // setup the shell script command and launch
-        //char launch[128];
-        //sprintf(launch,"qsub RPM_CRN_%i.sh", Run);
-        //system(launch);
     }
 
     for(int k=0, Nk = TidalRanges.size(); k<Nk; ++k)
@@ -261,11 +255,6 @@ int main(int nNumberofArgs,char *argv[])
                     << SubtidalEfficacy[1] << " "
                     << Resistances[1] << " "
                     << WaveAttenuationConst[1] << endl;
-                                                
-        // setup the shell script command and launch
-        //char launch[128];
-        //sprintf(launch,"qsub RPM_CRN_%i.sh", Run);
-        //system(launch);
     }
 
     for(int l=0, Nl = WeatheringRates.size(); l<Nl; ++l)
@@ -300,12 +289,8 @@ int main(int nNumberofArgs,char *argv[])
                     << SubtidalEfficacy[1] << " "
                     << Resistances[1] << " "
                     << WaveAttenuationConst[1] << endl;
-                                                
-        // setup the shell script command and launch
-        //char launch[128];
-        //sprintf(launch,"qsub RPM_CRN_%i.sh", Run);
-        //system(launch);
     }
+
     for(int m=0, Nm = SubtidalEfficacy.size(); m<Nm; ++m)
     {
         // Track run number
@@ -338,12 +323,8 @@ int main(int nNumberofArgs,char *argv[])
                     << SubtidalEfficacy[m] << " "
                     << Resistances[1] << " "
                     << WaveAttenuationConst[1] << endl;
-                                                
-        // setup the shell script command and launch
-        //char launch[128];
-        //sprintf(launch,"qsub RPM_CRN_%i.sh", Run);
-        //system(launch);
     }
+
     for(int n=0, Nn = Resistances.size(); n<Nn; ++n)
     {
         // Track run number
@@ -376,12 +357,8 @@ int main(int nNumberofArgs,char *argv[])
                     << SubtidalEfficacy[1] << " "
                     << Resistances[n] << " "
                     << WaveAttenuationConst[1] << endl;
-                                                
-        // setup the shell script command and launch
-        //char launch[128];
-        //sprintf(launch,"qsub RPM_CRN_%i.sh", Run);
-        //system(launch);
     }
+
     for(int o=0, No = WaveAttenuationConst.size(); o<No; ++o)
     {
         // Track run number
@@ -414,11 +391,6 @@ int main(int nNumberofArgs,char *argv[])
                     << SubtidalEfficacy[1] << " "
                     << Resistances[1] << " "
                     << WaveAttenuationConst[o] << endl;
-                                                
-        // setup the shell script command and launch
-        //char launch[128];
-        //sprintf(launch,"qsub RPM_CRN_%i.sh", Run);
-        //system(launch);
     }
         
     for (int job=1; job<=Run; ++job)
@@ -428,7 +400,7 @@ int main(int nNumberofArgs,char *argv[])
         //sprintf(launch,"qsub RPM_CRN_%i.sh", job);
         //system(launch);
     }
-    
+
 	//a few blank lines to finish
 	cout << "All jobs launched" << endl << endl;
 }
