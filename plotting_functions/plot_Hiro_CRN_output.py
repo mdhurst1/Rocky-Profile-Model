@@ -109,14 +109,13 @@ def make_plot(FileName,ColourMap):
     X,CRN,Error=np.loadtxt(File2,unpack=True,skiprows=1,usecols=(1,2,3),delimiter=" ")
     NormalisedX = LCPosition - X
     ax2.errorbar(NormalisedX,CRN,fmt='o', yerr=Error,c='grey', label='Measured CRN Concentrations (corrected)')    
-    #ax2.scatter(NormalisedX,CRN, s=0.1)
+    ax2.scatter(NormalisedX,CRN, s=0.1)
 
     #File 3 uncorrected CRN data for Dunbar?
     #File3 = "../driver_files/DB_CRN_uncorrected.data"
     #X2,CRN2,Error2=np.loadtxt(File3,unpack=True,skiprows=1,usecols=(1,2,3),delimiter=" ")
     #NormalisedX2 = LCPosition - X2
     #ax2.errorbar(NormalisedX2,CRN2, fmt='o', yerr=Error2, c='k', label='Measured CRN Concentrations (uncorrected)')
-
 
     #load the extracted shore platform profile (CB - profile read from lowest to highest Z)
     ExProfileName = "../driver_files/Swath_Profile_CB.txt"
@@ -137,15 +136,16 @@ def make_plot(FileName,ColourMap):
     ax2.set_ylabel("Concentration (a g$^-1$)")  #x 10$^3$ 
     ax2.set_xlabel("Distance (m)")
     xmin, xmax = ax1.get_xlim()
-    ax1.set_xlim(1300,1610)
-    ax2.set_xlim(1300,1610)
-    ax1.set_ylim(-5,10)
+    ax1.set_xlim(1600,2120)
+    ax2.set_xlim(1600,2120)
+    #ax1.set_ylim(-5,10)
+    #ax2.set_ylim(0,9000)
 
-    ax1.plot(Xprof,Zprof,'r-',lw=1.5, label='Extracted Morphology')  #NXprof for scalby
+    ax1.plot(Xprof,Zprof,'r-',lw=1.5, label='Extracted Morphology')  #NXprof for scalby, Xprof for CB
 
    
 
-   #ax1.legend(loc='upper left', numpoints=1)
+    #ax1.legend(loc='upper left', numpoints=1)
     #ax2.legend(loc='upper right', numpoints=1)
     
 
@@ -153,10 +153,10 @@ def make_plot(FileName,ColourMap):
     fig1 = plt.gcf()
     plt.show()
     plt.draw()
-    fig1.savefig('MCMC_CB_topo.png',dpi=300)
+    #fig1.savefig('MCMC_SY_5_topo.png',dpi=300)
 
 if __name__ == "__main__":
-    FileName = "/Users/jennyshadrick/RPM_JRS/CB_MCMC_2" # /Users/jennyshadrick/RPM_JRS
+    FileName = "/Users/jennyshadrick/RPM_JRS/CB_MCMC_test2" # /Users/jennyshadrick/RPM_JRS
     ColourMap = cm.gray
     make_plot(FileName,ColourMap)
         
