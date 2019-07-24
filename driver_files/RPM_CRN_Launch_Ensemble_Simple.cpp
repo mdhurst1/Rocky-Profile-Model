@@ -154,10 +154,14 @@ int main(int nNumberofArgs,char *argv[])
 	// set up a number to track runs
 	int Run = 0;
 
+    cout << "I am here" << endl;
+
 	//loop across parameter space varying one-at-a-time
 	for (int i=0, Ni = Gradient.size(); i<Ni; ++i)
 	{
-		// Track run number
+	    cout << "Now I am here" << endl;
+
+        // Track run number
         ++Run;
 
         // setup the script
@@ -182,6 +186,8 @@ int main(int nNumberofArgs,char *argv[])
 
     for (int j=0, Nj = SLR.size(); j<Nj; ++j)
 	{
+        cout << "and now I am here" << endl;
+        
         // Track run number
         ++Run;
 
@@ -207,6 +213,8 @@ int main(int nNumberofArgs,char *argv[])
 
     for(int k=0, Nk = TidalRanges.size(); k<Nk; ++k)
     {
+        cout << "and now... I am here" << endl;
+        
         // Track run number
         ++Run;
 
@@ -232,6 +240,8 @@ int main(int nNumberofArgs,char *argv[])
 
     for(int l=0, Nl = WeatheringRates.size(); l<Nl; ++l)
     {
+        cout << "I have made it to here" << endl;
+        
         // Track run number
         ++Run;
 
@@ -257,6 +267,8 @@ int main(int nNumberofArgs,char *argv[])
 
     for(int m=0, Nm = SubtidalEfficacy.size(); m<Nm; ++m)
     {
+        cout << "and I have made it to here" << endl;
+        
         // Track run number
         ++Run;
 
@@ -282,6 +294,8 @@ int main(int nNumberofArgs,char *argv[])
 
     for(int n=0, Nn = Resistances.size(); n<Nn; ++n)
     {
+        cout << "and now I have made it to here" << endl;
+        
         // Track run number
         ++Run;
 
@@ -306,6 +320,8 @@ int main(int nNumberofArgs,char *argv[])
 
     for(int o=0, No = WaveAttenuationConst.size(); o<No; ++o)
     {
+        cout << "and now... I have made it to here" << endl;
+        
         // Track run number
         ++Run;
 
