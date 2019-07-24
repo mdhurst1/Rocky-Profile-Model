@@ -220,7 +220,7 @@ int main(int nNumberofArgs,char *argv[])
                     << Resistances[1] << " "
                     << WaveAttenuationConst[1] << endl;
     
-        LaunchString = SS.str();
+        string LaunchString = SS.str();
         system(LaunchString);
     }
 
@@ -243,7 +243,7 @@ int main(int nNumberofArgs,char *argv[])
                     << Resistances[1] << " "
                     << WaveAttenuationConst[1] << endl;
     
-        LaunchString = SS.str();
+        string LaunchString = SS.str();
         system(LaunchString);
     }
 
@@ -266,7 +266,7 @@ int main(int nNumberofArgs,char *argv[])
                     << Resistances[1] << " "
                     << WaveAttenuationConst[1] << endl;
     
-        LaunchString = SS.str();
+        string LaunchString = SS.str();
         system(LaunchString);
     }
 
@@ -292,7 +292,7 @@ int main(int nNumberofArgs,char *argv[])
                     << Resistances[n] << " "
                     << WaveAttenuationConst[1] << endl;
         
-        LaunchString = SS.str();
+        string LaunchString = SS.str();
         system(LaunchString);
     }
 
@@ -315,7 +315,7 @@ int main(int nNumberofArgs,char *argv[])
                     << Resistances[1] << " "
                     << WaveAttenuationConst[o] << endl;
         
-        LaunchString = SS.str();
+        string LaunchString = SS.str();
         system(LaunchString);
     }
         
