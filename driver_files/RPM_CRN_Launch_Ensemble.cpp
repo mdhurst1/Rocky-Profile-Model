@@ -191,7 +191,8 @@ int main(int nNumberofArgs,char *argv[])
 
 								// set up command to launch the model
 								write_sh << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
-										 << Gradient[i] << " "
+										 << CRNFlag << " "
+                                         << Gradient[i] << " "
 										 << SLR[j] << " "
 										 << TidalRanges[k] << " "
 										 << WeatheringRates[l] << " "
