@@ -280,7 +280,7 @@ int main(int nNumberofArgs,char *argv[])
 		Time += TimeInterval;
 	}
 
-
+	// DO MODEL/DATA COMPARISON HERE IF WE'RE DOING IT
 }
 
 
