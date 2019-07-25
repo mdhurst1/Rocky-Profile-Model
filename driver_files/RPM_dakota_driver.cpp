@@ -143,13 +143,13 @@ int main(int nNumberofArgs,char *argv[])
 
 	//Time control parameters
 	//Time runs in yrs bp
-	double EndTime = 10000;
-	double Time = 0.;
-	double TimeInterval = 1;
+	double EndTime = 0.;
+	double Time = 10000.;
+	double TimeInterval = 1.;
 
 	//Print Control
-	//double PrintInterval = 100;
-	//double PrintTime = Time-PrintInterval;
+	double PrintInterval = 100;
+	double PrintTime = Time;
 
     //set up output file? 
 
@@ -211,7 +211,7 @@ int main(int nNumberofArgs,char *argv[])
 	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);
 
     //Loop through time
-	while (Time <= EndTime)
+	while (Time >= EndTime)
 	{
 		//Update Sea Level
 		InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
@@ -251,15 +251,15 @@ int main(int nNumberofArgs,char *argv[])
 		if (CRNFlag) PlatformCRN.UpdateCRNs();
         	
 		//print?
-		//if (Time >= PrintTime)
-		//{
-		//	PlatformModel.WriteProfile(OutputMorphologyFileName, Time);
-		//	if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
-		//	PrintTime += PrintInterval;
-		//}
+		if (Time <= PrintTime)
+		{
+			cout.flush();
+			cout << "RPM: Time " << setprecision(2) << fixed << Time << " years\r";
+			PrintTime -= PrintInterval;
+		}
 		
 		//update time
-		Time += TimeInterval;
+		Time -= TimeInterval;
 	}
     
     //declarations
