@@ -152,7 +152,6 @@ double SeaLevel::get_SeaLevel(double Time)
 		if (Time == Times[ind])
 		{
 			TimeCondition = 1;
-			++ind;
 		}
 		else if (Time < Times[ind]) ++ind;
 		else TimeCondition = 1;
