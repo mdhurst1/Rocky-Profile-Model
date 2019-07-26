@@ -29,4 +29,4 @@ static union
 
 #define EXP_A (1048576/0.69314718055994530942)
 #define EXP_C 60801
-#define FAST_EXP(y) (_eco.n.i = EXP_A*(y) + (1072693248 - EXP_C), _eco.d)
+#define fastexp(y) (_eco.n.i = EXP_A*(y) + (1072693248 - EXP_C), _eco.d)
