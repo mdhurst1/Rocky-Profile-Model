@@ -8,11 +8,11 @@ LD=g++
 # -g option build tables for debugging
 # -c option compile but do not try to link (yet)
 # -Wall display all warning messages
-# -pg is some sort of debugging option
+# -pg is a gprof option
 # -O3 is an optimisation flag, not good for debugging
 # -fopenmp is a flag for openmp directives
-CFLAGS= -g -c -pg -Wall -Werror -Wextra -pedantic  $(INCDIR)
-LDFLAGS= -g -pg -Wall 
+CFLAGS= -c -Wall -Werror -Wextra -pedantic -O3 $(INCDIR)
+LDFLAGS= -Wall -O3
 
 # SOURCE FILES MACROS IN DEPENDENCY ORDER? SHOULDNT MATTER THANKS TO HEADERS
 SOURCES = ../RoBoCoP_CRN/RockyCoastCRN.cpp ../SeaLevel.cpp ../RPM.cpp ./RPM_CRN_Driver.cpp

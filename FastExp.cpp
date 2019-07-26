@@ -1,6 +1,13 @@
 /* 
 
-Fast implementation of */
+Fast implementation of approximation to the exponential function taken from
+
+N. N. Schraudolph. "A fast, compact approximation of the exponential function." 
+Neural Computation, 11(4), May 1999, pp.853-862.
+
+MDH, July 2018
+
+*/
 
 #include <cmath>
 #include <iostream>
