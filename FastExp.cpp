@@ -1,32 +1,22 @@
-/* 
+/* max. rel. error <= 1.73e-3 on [-87,88] */
 
-Fast implementation of approximation to the exponential function taken from
+#include <cmath> 
+#include "FastExp.hpp"
 
-N. N. Schraudolph. "A fast, compact approximation of the exponential function." 
-Neural Computation, 11(4), May 1999, pp.853-862.
-
-MDH, July 2018
-
-*/
-
-#include <cmath>
-#include <iostream>
-
-
-using namespace std;
-
-static union 
+float fastexp (float x)
 {
-  double d;
-  struct {
-#ifdef LITTLE_ENDIAN
-    int j,i;
-#else 
-    int i,j;
-#endif
-  } n;
-} _eco;
+    volatile union
+    {
+        float f;
+        unsigned int i;
+    } cvt;
 
-#define EXP_A (1048576/0.69314718055994530942)
-#define EXP_C 60801
-#define fastexp(y) (_eco.n.i = EXP_A*(y) + (1072693248 - EXP_C), _eco.d)
+   /* exp(x) = 2^i * 2^f; i = floor (log2(e) * x), 0 <= f <= 1 */
+   float t = x * 1.442695041f;
+   float fi = floorf(t);
+   float f = t - fi;
+   int i = (int)fi;
+   cvt.f = (0.3371894346f * f + 0.657636276f) * f + 1.00172476f; /* compute 2^f */
+   cvt.i += (i << 23);                                          /* scale by 2^i */
+   return cvt.f;
+}
