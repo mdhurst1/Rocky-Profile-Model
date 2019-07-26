@@ -11,7 +11,7 @@ LD=g++
 # -pg is a gprof option
 # -O3 is an optimisation flag, not good for debugging
 # -fopenmp is a flag for openmp directives
-CFLAGS= -c -Wall -Werror -Wextra -pedantic -O3 --ffast-math $(INCDIR)
+CFLAGS= -c -Wall -Werror -Wextra -pedantic -O3 -ffast-math $(INCDIR)
 LDFLAGS= -Wall -O3 --ffast-math
 
 # SOURCE FILES MACROS IN DEPENDENCY ORDER? SHOULDNT MATTER THANKS TO HEADERS
