@@ -3,6 +3,6 @@
 
 using namespace std;
 
-outstream = ofstream("myfile.txt");
+ofstream outstream("myfile.txt");
 outstream << "write this text" << endl;
 outstream.close();
