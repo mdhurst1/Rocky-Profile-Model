@@ -1,9 +1,16 @@
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
+#include <cstring>
 
 using namespace std;
 
-ofstream outstream;
-outstream.open("myfile.txt");
-outstream << "write this text" << endl;
-outstream.close();
+int main()
+{
+    ofstream WriteFile;
+    string Filename = "myfile.txt";
+
+    WriteFile.open(Filename.c_str());
+    WriteFile << "write this text" << endl;
+    WriteFile.close();
+}

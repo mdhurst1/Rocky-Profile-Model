@@ -5,6 +5,7 @@ Fast implementation of */
 #include <cmath>
 #include <iostream>
 
+
 using namespace std;
 
 static union 
