@@ -11,8 +11,8 @@ March 7th 2016
 """
 
 # import plotting tools and set the back end for running on server
-#import matplotlib
-#matplotlib.use('Agg')
+import matplotlib
+matplotlib.use('Agg')
 
 #import modules
 import numpy as np
