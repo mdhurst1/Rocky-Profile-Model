@@ -24,7 +24,7 @@ LIBS   = -lm -lstdc++
 OBJECTS=$(SOURCES:.cpp=.o)
 
 # EXECUTABLE MACRO
-EXECUTABLE=RPM.out
+EXECUTABLE=RPM_dakota.out
 
 all: $(SOURCES) $(EXECUTABLE)
 

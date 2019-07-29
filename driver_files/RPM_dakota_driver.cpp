@@ -117,7 +117,7 @@ int main(int nNumberofArgs,char *argv[])
 		cout << "-----------------------------------------------------------------------------" << endl;
 		cout << "Then the command line argument will be: " << endl;
 		cout << "In linux:" << endl;
-		cout << "  ./RPM_dakota.out /ProjectFolder/ RPM_dakota_test CB_profile.txt 1 1. 0.001 4. 0.005 0.01 1000. 10." << endl;
+		cout << "  ./RPM_dakota.out /ProjectFolder/ RPM_dakota_test CB_profile.txt 1 1. 4. 0.005 0.01 1000. 10." << endl;
 		cout << "-----------------------------------------------------------------------------" << endl;
         cout << endl;
 		exit(EXIT_SUCCESS);
@@ -125,7 +125,7 @@ int main(int nNumberofArgs,char *argv[])
 
     // read parameters from command line arguments
 	string Folder = argv[1];
-	string Project = argv[2];
+	char* DakotaFilename = argv[2];
     char* ProfileDatafile = argv[3];
 	int CRNFlag = atoi(argv[4]);
 	double Gradient = atof(argv[5]);
@@ -143,7 +143,7 @@ int main(int nNumberofArgs,char *argv[])
 
 	//Time control parameters
 	//Time runs in yrs bp
-	double EndTime = 0.;
+	double EndTime = 9999.;
 	double Time = 10000.;
 	double TimeInterval = 1.;
 
@@ -341,18 +341,12 @@ int main(int nNumberofArgs,char *argv[])
        RMSE = sqrt(Residuals[i]);
        Likelihood *= exp(-(fabs(Residuals[i]))/(ZStd*ZStd));    //ZStd read in from parameter file?
    }
-   return Likelihood;
-   return RMSE;
-   
 
    //Output residuals/ likelihood to file 
    ofstream outfile;
-   outfile.open("results.out");
-   outfile << RMSE;
+   outfile.open(DakotaFilename);
+   outfile << RMSE << endl;
    outfile.close();
-
-
-
 }
 
 
