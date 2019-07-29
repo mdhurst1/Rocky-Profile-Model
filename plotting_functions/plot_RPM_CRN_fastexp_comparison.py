@@ -39,14 +39,14 @@ for i in range(0,len(ProfileFileList)):
     # declare the file and the axis
     f = open(ProfileFileList[i],'r')
     Lines = f.readlines()
-    NoLines = len(FastLines)
+    NoLines = len(Lines)
     StartTime = float(Lines[1].strip().split(" ")[0])
     EndTime = float(Lines[-1].strip().split(" ")[0])
     f.close()
 
     f = open(ConcentrationFileList[i],'r')
     ConcLines = f.readlines()
-    NoLines = len(FastLines)
+    NoLines = len(ConcLines)
     StartTime = float(Lines[1].strip().split(" ")[0])
     EndTime = float(Lines[-1].strip().split(" ")[0])
     f.close()
