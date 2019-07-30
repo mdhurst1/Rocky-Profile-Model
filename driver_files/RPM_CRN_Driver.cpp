@@ -185,7 +185,7 @@ int main(int nNumberofArgs,char *argv[])
 
 	//reset the geology
 	double CliffFailureDepth = 0.1;
-	double Resistance = 0.2; //kg m^2 yr^-1 ? NOT CURRENTLY
+	double Resistance = 0.002; //kg m^2 yr^-1 ? NOT CURRENTLY
 	double WeatheringRate = 0.01; //kg m^2 yr-1 ? NOT CURRENTLY
 	double SubtidalEfficacy=0.02; //sets relative efficacy of subtidal weathering
 
