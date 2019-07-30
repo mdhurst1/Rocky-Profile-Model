@@ -11,8 +11,8 @@ LD=g++
 # -pg is some sort of debugging option
 # -O3 is an optimisation flag, not good for debugging
 # -fopenmp is a flag for openmp directives
-CFLAGS= -g -c -Wall -Werror -Wextra -pedantic -pg -O3 $(INCDIR)
-LDFLAGS= -g -Wall -pg -O3
+CFLAGS= -g -c -Wall -Werror -Wextra -pedantic -pg -O3 -fopenmp $(INCDIR)
+LDFLAGS= -g -Wall -pg -O3 -fopenmp
 
 # SOURCE FILES MACROS IN DEPENDENCY ORDER? SHOULDNT MATTER THANKS TO HEADERS
 SOURCES = ../SeaLevel.cpp ../RPM.cpp ./RPM_Driver.cpp
