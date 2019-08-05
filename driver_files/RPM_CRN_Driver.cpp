@@ -79,27 +79,29 @@ int main(int nNumberofArgs,char *argv[])
 {
 	cout << endl;
 	cout << "--------------------------------------------------------------" << endl;
-	cout << "|  Rocky Profile Model (RPM)                                 |" << endl;
-	cout << "|  This program models the development of shore platforms    |" << endl;
-	cout << "|  following model developed by Matsumoto et al. (2016)      |" << endl;
-	cout << "|                                                            |" << endl;
-	cout << "|  Implemented in C++ by Martin Hurst, University of Glasgow |" << endl;
-	cout << "|  for coupling to RockyCoastCRN; model for predicting       |" << endl;
-	cout << "|  cosmogenic radionuclide concentrations in shore platforms |" << endl;
-	cout << "--------------------------------------------------------------" << endl;
+	cout << "|  Rocky Profile Model with Cosmogenic RadioNuclides (RPM_CRN) |" << endl;
+	cout << "|  This program models the development of shore platforms      |" << endl;
+	cout << "|  following model developed by Matsumoto et al. (2016), and   |" << endl;
+	cout << "|  the accumulation of cosmogenic isotopes following Hurst     |" << endl;
+	cout << "|  et al. (2016; 2017)                                         |" << endl;
+	cout << "|                                                              |" << endl;
+	cout << "|  Implemented in C++ by Martin Hurst, University of Glasgow   |" << endl;
+	cout << "|  for coupling to RockyCoastCRN; model for predicting         |" << endl;
+	cout << "|  cosmogenic radionuclide concentrations in shore platforms   |" << endl;
+	cout << "----------------------------------------------------------------" << endl;
 	cout << endl;
 
 	//Test for correct input arguments
 	if (nNumberofArgs!=4)
 	{
 		cout << "Error: This program requires two inputs: " << endl;
-		cout << "* First a path to the folder where the model will be run" << endl;
-		cout << "* The name of the project/model run" << endl;
+		cout << " * First a path to the folder where the model will be run" << endl;
+		cout << " * The name of the project/model run" << endl;
 		cout << " * A Flag to run with CRNs (1 = True)" << endl;
 		cout << "------------------------------------------------------" << endl;
 		cout << "Then the command line argument will be: " << endl;
 		cout << "In linux:" << endl;
-		cout << "  ./RPM_Driver.out /ProjectFolder/ Waipapa" << endl;
+		cout << "  ./RPM_Driver.out /ProjectFolder/ Waipapa 1" << endl;
 		cout << "------------------------------------------------------" << endl;
 		exit(EXIT_SUCCESS);
 	}
@@ -125,7 +127,7 @@ int main(int nNumberofArgs,char *argv[])
 	double PrintInterval = 10;
 	double PrintTime = Time-PrintInterval;
 	string OutputFileName = Folder+Project+"_ShoreProfile.xz";
-	string OutputConcentrationFileName = Folder+Project+"Concentrations.xn";
+	string OutputConcentrationFileName = Folder+Project+"_Concentrations.xn";
 
 	//initialise RPM Model
 	RPM PlatformModel = RPM(dZ, dX, Gradient, CliffHeight, MinElevation);
@@ -183,7 +185,7 @@ int main(int nNumberofArgs,char *argv[])
 
 	//reset the geology
 	double CliffFailureDepth = 0.1;
-	double Resistance = 0.2; //kg m^2 yr^-1 ? NOT CURRENTLY
+	double Resistance = 0.002; //kg m^2 yr^-1 ? NOT CURRENTLY
 	double WeatheringRate = 0.01; //kg m^2 yr-1 ? NOT CURRENTLY
 	double SubtidalEfficacy=0.02; //sets relative efficacy of subtidal weathering
 
@@ -227,16 +229,10 @@ int main(int nNumberofArgs,char *argv[])
 		PlatformModel.ErodeBackwearing();
 		PlatformModel.ErodeDownwearing();
 
-		//Update the Morphology 
-		PlatformModel.UpdateMorphology();	
-		
 		//Implement Weathering
 		PlatformModel.IntertidalWeathering();
 		PlatformModel.SubtidalWeathering();
 		
-		//Update the Morphology 
-		PlatformModel.UpdateMorphology();
-
 		//Check for Mass Failure
 		PlatformModel.MassFailure();
 		

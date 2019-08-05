@@ -1,7 +1,10 @@
-/* max. rel. error <= 1.73e-3 on [-87,88] */
+/* 
+A fast implementation of the exp algorithm taken from
+https://stackoverflow.com/questions/10552280/fast-exp-calculation-possible-to-improve-accuracy-without-losing-too-much-perfo
+max. rel. error <= 1.73e-3 on [-87,88] */
 
 #include <cmath> 
-#include "FastExp.hpp"
+
 
 float fastexp (float x)
 {

@@ -190,15 +190,9 @@ int main(int nNumberofArgs,char *argv[])
 		PlatformModel.ErodeBackwearing();
 		PlatformModel.ErodeDownwearing();
 
-		//Update the Morphology 
-		PlatformModel.UpdateMorphology();	  
-		
 		//Implement Weathering
 		PlatformModel.IntertidalWeathering();
 		
-		//Update the Morphology 
-		PlatformModel.UpdateMorphology();
-
 		//Check for Mass Failure
 		PlatformModel.MassFailure();
 		
