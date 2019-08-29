@@ -71,9 +71,9 @@
 #include <sstream>
 #include <cstdlib>
 #include <unistd.h>
-#include "../RPM.hpp"
-#include "../RoBoCoP_CRN/RockyCoastCRN.hpp"
-#include "../SeaLevel.hpp"
+#include "../../RPM.hpp"
+#include "../../RoBoCoP_CRN/RockyCoastCRN.hpp"
+#include "../../SeaLevel.hpp"
 
 using namespace std;
 
