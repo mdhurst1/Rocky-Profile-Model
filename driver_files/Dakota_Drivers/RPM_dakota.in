@@ -12,7 +12,7 @@ method,
         samples = 100 seed = 348
 
 variables,
-	 continuous_design = 2 
+	 continuous_design 2 
 	    initial_point 0.02    0.000002
 	    lower_bounds  0.00005 0
             upper_bounds  1       0.001
@@ -25,8 +25,6 @@ interface,
 
 	  parameters_file = 'params.in'
 	  results_file    = 'results.out'
-
-     #copy_files "template_dir/*"
 
      work_directory
       named "Queso/run"
