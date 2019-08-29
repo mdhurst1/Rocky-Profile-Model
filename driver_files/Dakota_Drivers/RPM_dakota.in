@@ -1,6 +1,6 @@
 #  DAKOTA INPUT FILE - RPM_test.in
 #  Usage:
-#   dakota -i RPM_dakota.in -o RPM_dakota.out > RPM_dakota.stdout
+#  dakota -i RPM_dakota.in -o RPM_dakota.out > RPM_dakota.stdout
 
 environment
   tabular_data
@@ -8,15 +8,15 @@ environment
 
 method,
 	bayes_calibration queso 
-     metropolis_hastings #/DRAM?
-     samples = 100 seed = 348
+        metropolis_hastings                        #/DRAM?
+        samples = 100 seed = 348
 
 variables,
 	 continuous_design = 2 
-	  cdv_initial_point 0.02    0.000002
-	  cdv_lower_bounds  0.00005 0
-	  cdv_upper_bounds  1       0.001
-	  cdv_descriptor    'FR'    'K'
+	    initial_point 0.02    0.000002
+	    lower_bounds  0.00005 0
+            upper_bounds  1       0.001
+	  descriptor    'FR'    'K'
 
 interface,
 	fork
@@ -37,6 +37,6 @@ interface,
 	  
 responses,
 	num_response_functions = 1
-    response_descriptors "rmse"  #/likelihood
+        response_descriptors "rmse"  #/likelihood
 	no_gradients
 	no_hessians
