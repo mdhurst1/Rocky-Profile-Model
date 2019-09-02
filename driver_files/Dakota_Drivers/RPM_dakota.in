@@ -23,7 +23,7 @@ interface,
 	fork
 	  asynchronous
 	evaluation_concurrency 1
-	  analysis_driver = "python ./RPM_driver.py"
+	  analysis_driver = "python RPM_driver.py"
 
 	  parameters_file = "params.in"
 	  results_file    = "results.out"
