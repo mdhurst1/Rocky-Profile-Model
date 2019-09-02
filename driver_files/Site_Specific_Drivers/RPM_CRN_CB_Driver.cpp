@@ -69,9 +69,9 @@
 #include <cstdlib>
 //#include <omp.h>
 #include <unistd.h>
-#include "../RPM.hpp"
-#include "../RoBoCoP_CRN/RockyCoastCRN.hpp"
-#include "../SeaLevel.hpp"
+#include "../../RPM.hpp"
+#include "../../RoBoCoP_CRN/RockyCoastCRN.hpp"
+#include "../../SeaLevel.hpp"
 
 using namespace std;
 
@@ -130,7 +130,7 @@ int main(int nNumberofArgs,char *argv[])
 	// initialise sea level here and calculate MinElevation based on lowest sea level
 
 	// Initialise Sea level from datafile
-	string RelativeSeaLevelFile = "CB_RSL.data";
+	string RelativeSeaLevelFile = "../Data/CB_RSL_future.data";
 	SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
 	
 	// initialise sea level using rate of change
