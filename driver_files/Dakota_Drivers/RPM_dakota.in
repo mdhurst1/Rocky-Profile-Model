@@ -10,21 +10,24 @@ method,
 	bayes_calibration queso 
         metropolis_hastings                        #/DRAM?
         samples = 100 seed = 348
+	output debug
 
 variables,
-	 continuous_design 2 
-	    initial_point 0.02    0.000002
-	    lower_bounds  0.00005 0
-            upper_bounds  1       0.001
-	  descriptor    'FR'    'K'
+	 uniform_uncertain = 2 
+	 initial_point 0.02 0.000002
+	 lower_bounds  0.00005 0.
+         upper_bounds  1. 0.001
+	 descriptor "FR" "K"
 
 interface,
 	fork
 	  asynchronous
-	  analysis_driver = 'RPM_driver.py'
+	evaluation_concurrency 1
+	  analysis_driver = "python ./RPM_driver.py"
 
-	  parameters_file = 'params.in'
-	  results_file    = 'results.out'
+	  parameters_file = "params.in"
+	  results_file    = "results.out"
+	copy_files "template_dir/*"
 
      work_directory
       named "Queso/run"

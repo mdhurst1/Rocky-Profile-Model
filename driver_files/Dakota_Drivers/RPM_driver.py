@@ -12,7 +12,7 @@ from subprocess import call
 from yaml import safe_load
 
 # Import RPM model 
-subprocess.Popen(["RPM_dakota.out"])
+subprocess.Popen(["./RPM_dakota.out"])
 
 # Set physical constants as used by RPM - these are values read in command line
 
@@ -23,7 +23,9 @@ WaveAttenuationConst = 0.01
 
 #########################################
 #                                       #
-#    Step 1: Use Dakota created         #
+#
+
+   Step 1: Use Dakota created         #
 #    input files to prepare for         #
 #    model run.                         #
 #                                       #
@@ -48,7 +50,8 @@ with open(inputs, "r") as f:
   
 # set up command to run model 
   
-Launchstr = " ./RPM_dakota.out /dakotaQuesoWorking/Rocky-Profile-Model/driver_files/Dakota_Drivers  "+ sys.argv[2] +"  0  "+ str(Gradient) +" "+ str(TidalRange) +" "+ str(SubtidalEfficacy) +" "+ str(WaveAttenuationConst) +" "+ str(Resistance) +" "+ str(WeatheringRate) +"" 
+Launchstr = " ./RPM_dakota.out /COAST/Rocky-Profile-Model/driver_files/Dakota_Drivers/  "+ sys.argv[2] +" ../driver_files/Data/CB_profile.txt 0  "+ str(Gradient) +" "+ str(TidalRange) +" "+ str(SubtidalEfficacy) +" "+ str(WaveAttenuationConst) +" "+ str(Resistance) +" "+ str(WeatheringRate)
+exec(Launchstr)
 print(Launchstr) 
 
 #########################################
