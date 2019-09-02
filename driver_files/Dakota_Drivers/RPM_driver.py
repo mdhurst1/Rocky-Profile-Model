@@ -12,7 +12,7 @@ from subprocess import call
 from yaml import safe_load
 
 # Import RPM model 
-subprocess.Popen(["./RPM_dakota.out"])
+#subprocess.Popen(["./RPM_dakota.out"])
 
 # Set physical constants as used by RPM - these are values read in command line
 
