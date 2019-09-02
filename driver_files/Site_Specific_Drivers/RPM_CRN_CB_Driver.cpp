@@ -113,12 +113,12 @@ int main(int nNumberofArgs,char *argv[])
 	double dX = 0.1;
 	double Gradient = 0.5;
 	double CliffHeight = 10.;
-	double MinElevation = -40.;
+	double MinElevation = -20.;
 
 	//Time control parameters
 	//Time runs in yrs bp
 	double EndTime = 0;
-	double Time = 10000.;
+	double Time = 7100.;
 	double TimeInterval = 1;
 
 	//Print Control
