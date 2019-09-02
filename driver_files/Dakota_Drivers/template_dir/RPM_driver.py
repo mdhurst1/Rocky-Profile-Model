@@ -23,9 +23,7 @@ WaveAttenuationConst = 0.01
 
 #########################################
 #                                       #
-#
-
-   Step 1: Use Dakota created         #
+#    Step 1: Use Dakota created         #
 #    input files to prepare for         #
 #    model run.                         #
 #                                       #
