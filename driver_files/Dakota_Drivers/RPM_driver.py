@@ -31,7 +31,7 @@ WaveAttenuationConst = 0.01
 
 input_template = "input_template.yml"
 inputs = "inputs.yml"
-call(["dprepro", sys.argv[1], input_template, inputs])
+call(["./dprepro", sys.argv[1], input_template, inputs])
 call(['rm', input_template])
 
 #########################################
