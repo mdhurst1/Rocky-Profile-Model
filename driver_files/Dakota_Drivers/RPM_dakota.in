@@ -17,15 +17,15 @@ variables,
 	 initial_point 0.02 0.000002
 	 lower_bounds  0.00005 0.
          upper_bounds  1. 0.001
-	 descriptor 'FR' 'K'
+	 descriptor "FR" "K"
 
 interface,
 	fork
 	  asynchronous
-	  analysis_driver = 'python ./RPM_driver.py'
+	  analysis_driver = "python RPM_driver.py"
 
-	  parameters_file = 'params.in'
-	  results_file    = 'results.out'
+	  parameters_file = "params.in"
+	  results_file    = "results.out"
 
      work_directory
       named "Queso/run"
