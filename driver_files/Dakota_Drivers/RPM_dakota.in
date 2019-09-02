@@ -14,10 +14,10 @@ method,
 
 variables,
 	 continuous_design 2 
-	    initial_point 0.02    0.000002
+	    initial_point 0.02 0.000002
 	    lower_bounds  0.00005 0.
-            upper_bounds  1.      0.001
-	  descriptor    'FR'    'K'
+            upper_bounds  1. 0.001
+	  descriptor 'FR' 'K'
 
 interface,
 	fork
