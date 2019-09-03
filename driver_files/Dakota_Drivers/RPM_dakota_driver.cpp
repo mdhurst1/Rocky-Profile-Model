@@ -255,7 +255,7 @@ int main(int nNumberofArgs,char *argv[])
 		{
 			cout.flush();
 			cout << "RPM: Time " << setprecision(2) << fixed << Time << " years\r";
-			PrintTime -= PrintInterval;
+			PrintTime += PrintInterval;
 		}
 		
 		//update time
