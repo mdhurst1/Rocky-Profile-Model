@@ -48,7 +48,7 @@ with open(inputs, "r") as f:
   
 # set up command to run model 
   
-Launchstr = "../../RPM_dakota.exe /dakotaQuesoWorking/Rocky-Profile-Model/driver_files/Dakota_Drivers/  "+ sys.argv[2] +" ../driver_files/Data/CB_profile.txt 0  "+ str(Gradient) +" "+ str(TidalRange) +" "+ str(SubtidalEfficacy) +" "+ str(WaveAttenuationConst) +" "+ str(Resistance) +" "+ str(WeatheringRate)
+Launchstr = "../../RPM_dakota.exe /dakotaQuesoWorking/Rocky-Profile-Model/driver_files/Dakota_Drivers/  "+ sys.argv[2] +" /dakotaQuesoWorking/Rocky-Profile-Model/driver_files/Data/CB_profile.txt 0  "+ str(Gradient) +" "+ str(TidalRange) +" "+ str(SubtidalEfficacy) +" "+ str(WaveAttenuationConst) +" "+ str(Resistance) +" "+ str(WeatheringRate)
 subprocess.Popen(Launchstr,shell=True)
 print(Launchstr) 
 
