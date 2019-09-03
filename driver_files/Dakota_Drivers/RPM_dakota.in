@@ -9,7 +9,7 @@ environment
 method,
 	bayes_calibration queso 
         metropolis_hastings                        #/DRAM?
-        samples = 100 seed = 348
+        samples = 10 seed = 348
 	output debug
 
 variables,
