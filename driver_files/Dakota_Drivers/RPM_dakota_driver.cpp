@@ -344,7 +344,7 @@ int main(int nNumberofArgs,char *argv[])
 
    //Output residuals/ likelihood to file 
    ofstream outfile;
-   outfile.open(DakotaFilename,"w");
+   outfile.open(DakotaFilename);
    outfile << RMSE << endl;
    outfile.close();
 }
