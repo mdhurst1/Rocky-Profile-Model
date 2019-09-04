@@ -75,8 +75,7 @@ print(Launchstr)
 with open("RPM_results.out") as f:
    with open(sys.argv[2], "w") as f1:
         for line in f:
-            if "ROW" in line:
-                f1.write(line) 
+            f1.write(line) 
 
 f1.close()
 f.close()
