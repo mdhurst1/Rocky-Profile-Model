@@ -6,7 +6,7 @@ Created on Wed Jul 24 13:23:06 2019
 """
 
 # Import  modules
-import sys
+import sys, os
 import subprocess
 from subprocess import call
 from yaml import safe_load
@@ -15,6 +15,10 @@ from yaml import safe_load
 #subprocess.Popen(["./RPM_dakota.out"])
 
 # Set physical constants as used by RPM - these are values read in command line
+
+print (sys.argv[1])
+print (sys.argv[2])
+print (os.getcwd())
 
 Gradient = 1
 TidalRange = 8
@@ -72,7 +76,7 @@ print(Launchstr)
 # RMSE/ Likelihood (objective function) currently calculated within RPM model 
 
 #Write it to the expected file.
-with open("RPM_results.out") as f:
+with open("RPM_results.out", "r") as f:
    with open(sys.argv[2], "w") as f1:
         for line in f:
             f1.write(line) 
