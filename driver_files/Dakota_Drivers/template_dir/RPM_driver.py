@@ -48,9 +48,11 @@ with open(inputs, "r") as f:
   
 # set up command to run model 
   
-Launchstr = "../../RPM_dakota.exe /dakotaQuesoWorking/Rocky-Profile-Model/driver_files/Dakota_Drivers/ "+ sys.argv[2] +" /dakotaQuesoWorking/Rocky-Profile-Model/driver_files/Data/CB_profile.txt 0 "+ str(Gradient) +" "+ str(TidalRange) +" "+ str(SubtidalEfficacy) +" "+ str(WaveAttenuationConst) +" "+ str(Resistance) +" "+ str(WeatheringRate)
+Launchstr = "../../RPM_dakota.exe /dakotaQuesoWorking/Rocky-Profile-Model/driver_files/Dakota_Drivers/ "+ RPM_results.out +" /dakotaQuesoWorking/Rocky-Profile-Model/driver_files/Data/CB_profile.txt 0 "+ str(Gradient) +" "+ str(TidalRange) +" "+ str(SubtidalEfficacy) +" "+ str(WaveAttenuationConst) +" "+ str(Resistance) +" "+ str(WeatheringRate)
 subprocess.Popen(Launchstr,shell=True)
 print(Launchstr) 
+
+#changed from sys.argv[2] to RPM_results.out for test
 
 #########################################
 #                                       #
@@ -69,5 +71,15 @@ print(Launchstr)
 # Get RMSE/ Likelihood output file from RPM_dakota 
 # RMSE/ Likelihood (objective function) currently calculated within RPM model 
 
+# Write it to the expected file.
+with open("RPM_results.out") as f:
+    with open(sys.argv[2], "w") as f1:
+        for line in f:
+            if "ROW" in line:
+                f1.write(line) 
+
+f1.close()
+f.close()
+#rm RPM_results.out
 
   
