@@ -23,12 +23,14 @@ interface,
 	fork
 	  asynchronous
 	  evaluation_concurrency 1
-	  analysis_driver = "python ./RPM_driver.py"
-
+	  
 	  parameters_file = "params.in"
 	  results_file    = "results.out"
 	
 	  copy_files "template_dir/*"
+
+	  analysis_driver = "python ./RPM_driver.py"
+
 
       work_directory
       named "./Queso/run"
