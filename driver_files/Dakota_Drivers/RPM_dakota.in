@@ -33,7 +33,7 @@ interface,
 
 
       work_directory
-      named "./Queso/run"
+      named "QUESO/run"
 	  directory_tag
       directory_save
       file_save
