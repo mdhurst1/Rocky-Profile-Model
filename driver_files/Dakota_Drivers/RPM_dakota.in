@@ -3,14 +3,14 @@
 #  dakota -i RPM_dakota.in -o RPM_dakota.out > RPM_dakota.stdout
 
 environment
-  tabular_data
-    tabular_data_file "RPM_dakota.dat"
+     tabular_data
+     tabular_data_file "RPM_dakota.dat"
 
 method,
-	bayes_calibration queso 
-        metropolis_hastings                        #/DRAM?
-        samples = 10 seed = 348
-	output debug
+	 bayes_calibration queso 
+     metropolis_hastings                        #/DRAM?
+     samples = 10 seed = 348
+	 output debug
 
 variables,
 	 uniform_uncertain = 2 
@@ -28,13 +28,12 @@ interface,
 	  parameters_file = "params.in"
 	  results_file    = "results.out"
 	
-	 #copy_files "template_dir/*"
+	  copy_files "template_dir/*"
 
-     #work_directory
-      #named "./Queso/run"
-	  #directory_tag
-      #directory_save
-	  file_tag
+      work_directory
+      named "./Queso/run"
+	  directory_tag
+      directory_save
       file_save
 
 	  
