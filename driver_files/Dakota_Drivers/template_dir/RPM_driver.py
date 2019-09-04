@@ -53,7 +53,7 @@ with open(inputs, "r") as f:
 # set up command to run model 
   
 Launchstr = "../../RPM_dakota.exe /dakotaQuesoWorking/Rocky-Profile-Model/driver_files/Dakota_Drivers/ RPM_results.out /dakotaQuesoWorking/Rocky-Profile-Model/driver_files/Data/CB_profile.txt 0 "+ str(Gradient) +" "+ str(TidalRange) +" "+ str(SubtidalEfficacy) +" "+ str(WaveAttenuationConst) +" "+ str(Resistance) +" "+ str(WeatheringRate)
-subprocess.Popen(Launchstr,shell=True)
+subprocess.call(Launchstr,shell=True)
 print(Launchstr) 
 
 #changed from + sys.argv[2] + to RPM_results.out for test
