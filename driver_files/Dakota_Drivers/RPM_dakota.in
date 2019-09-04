@@ -16,18 +16,19 @@ variables,
 	 uniform_uncertain = 2 
 	 initial_point 0.02 0.000002
 	 lower_bounds  0.00005 0.
-         upper_bounds  1. 0.001
+     upper_bounds  1. 0.001
 	 descriptor "FR" "K"
 
 interface,
 	fork
 	  asynchronous
-	evaluation_concurrency 1
+	  evaluation_concurrency 1
 	  analysis_driver = "python ./RPM_driver.py"
 
 	  parameters_file = "params.in"
 	  results_file    = "results.out"
-	copy_files "template_dir/*"
+	
+	#copy_files "template_dir/*"
 
      work_directory
       named "./Queso/run"
@@ -38,6 +39,6 @@ interface,
 	  
 responses,
 	num_response_functions = 1
-        response_descriptors "rmse"  #/likelihood
+    response_descriptors "rmse"  #/likelihood
 	no_gradients
 	no_hessians
