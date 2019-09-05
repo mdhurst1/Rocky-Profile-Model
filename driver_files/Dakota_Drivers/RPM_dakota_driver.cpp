@@ -269,7 +269,7 @@ int main(int nNumberofArgs,char *argv[])
 
     //get morphology from model 
     XModel = PlatformModel.get_X();
-    ZModel = PlatformModel.get_Z();
+    ZModel = PlatformModel.get_Elevations();
     int XSize = XModel.size();
     double CliffPositionX = XModel[XSize-1];
 
