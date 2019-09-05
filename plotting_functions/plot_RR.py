@@ -66,7 +66,7 @@ def read_profile(FileName):
 
     return Times, XPos, RSL
 
-CB_Filename = "../../RPM_JRS/Future_RSL_test"   #best fit CB CB_MCMC_2 
+CB_Filename = "../../RPM_JRS/CB_MCMC_2"   #best fit CB CB_MCMC_2 
 #SY_Filename = "../../RPM_JRS/MCMC_1"
 
 CB_Times, CB_XPos, CB_RSL = read_profile(CB_Filename)
@@ -75,7 +75,7 @@ CB_Times, CB_XPos, CB_RSL = read_profile(CB_Filename)
 print CB_XPos
 
 # calculate retreat rates
-CB_Rates = np.diff(CB_XPos)/(CB_Times[0]-CB_Times[1]) #changed to time 0 - time 1 
+CB_Rates = np.diff(CB_XPos)/(CB_Times[1]-CB_Times[0]) #changed to time 0 - time 1 
 print(CB_Times[1], CB_Times[0])
 #SY_Rates = np.diff(SY_XPos)/(SY_Times[1]-SY_Times[0])
 
@@ -104,11 +104,11 @@ for label in ax1.xaxis.get_ticklabels():
 ax2 = ax1.twinx()
 
 ax2.set_ylabel("RSL (m)")
-ax2.plot(CB_Times[1:],CB_RSL[1:],'k--', label='Bideford RSL')
+ax2.plot(CB_Times[1:],CB_RSL[1:],'b-', label='Bideford RSL')
 #ax2.plot(SY_Times[1:],SY_RSL[1:],'b--', label='Scalby RSL')
-ax2.set_xlim(10000,0)
-#ax1.set_ylim(0,0.2)
-#ax2.set_ylim(-5,1)
+ax2.set_xlim(8000,0)
+#ax1.set_ylim(-0.30,0)
+ax2.set_ylim(-30,0)
 #ax1.legend(loc='upper left')
 #ax2.legend(loc='upper left')
 
@@ -116,4 +116,4 @@ plt.tight_layout(pad=1)
 
 plt.show()
 plt.draw()
-#fig.savefig('MCMC_CB.png',dpi=300)
+fig.savefig('MCMC_CB_BSG_poster.png',dpi=300)
