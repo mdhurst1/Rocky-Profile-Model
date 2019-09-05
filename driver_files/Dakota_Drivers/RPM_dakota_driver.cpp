@@ -341,6 +341,7 @@ int main(int nNumberofArgs,char *argv[])
        TotalResiduals += pow(ProfileZData[i]-TopoData[i],2);
        Likelihood *= exp(-(fabs(Residuals[i]))/(ZStd*ZStd));    //ZStd read in from parameter file?
    }
+   return TotalResiduals;
 
    RMSE = sqrt(TotalResiduals/NProfileData);
        
