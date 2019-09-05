@@ -151,7 +151,10 @@ int main(int nNumberofArgs,char *argv[])
 	double PrintInterval = 100;
 	double PrintTime = Time;
 
-    //set up output file? 
+    //set up output file - used for visual when testing 
+	string OutputFileName = Folder+DakotaFilename+"_ShoreProfile.xz";
+	//string OutputConcentrationFileName = Folder+Project+"Concentrations.xn";
+	
 
     // initialise sea level here and calculate MinElevation based on lowest sea level
 	// Initialise Sea level from datafile
@@ -210,6 +213,11 @@ int main(int nNumberofArgs,char *argv[])
 	double CliffFailureDepth = 0.1;
 	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);
 
+    // print initial condition to file - this is for testing - remove
+	double TempTime = -9999;
+	PlatformModel.WriteProfile(OutputFileName, TempTime);			
+	//if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
+
     //Loop through time
 	while (Time >= EndTime)
 	{
@@ -255,8 +263,10 @@ int main(int nNumberofArgs,char *argv[])
 		{
 			cout.flush();
 			cout << "RPM: Time " << setprecision(2) << fixed << Time << " years\r";
+			PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
 			PrintTime += PrintInterval;
 		}
+
 		
 		//update time
 		Time -= TimeInterval;
@@ -327,8 +337,9 @@ int main(int nNumberofArgs,char *argv[])
        //Take X value of extracted morph position and interpolate to get model results at this point
        int j=0;
        while ((XModel[j]- XPos[i]) <0) ++j;
+
        DiffX[i] = XModel[j] - XPos[i];
-         Scale = DiffX[i]/(XModel[j]-XModel[j-1]);
+    	Scale = DiffX[i]/(XModel[j]-XModel[j-1]);
         
         //Get Interpolated Z value
         TopoData[i] = ZModel[j]-Scale*(ZModel[j]-ZModel[j-1]);
@@ -347,10 +358,10 @@ int main(int nNumberofArgs,char *argv[])
        
 
    //Output residuals/ likelihood to file 
-   ofstream outfile;
-   outfile.open(DakotaFilename);
-   outfile << RMSE << endl;
-   outfile.close();
+   //ofstream outfile;
+   //outfile.open(DakotaFilename);
+   //outfile << RMSE << endl;
+   //outfile.close();
 }
 
 
