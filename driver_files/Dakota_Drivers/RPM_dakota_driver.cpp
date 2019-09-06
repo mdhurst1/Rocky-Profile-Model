@@ -358,10 +358,10 @@ int main(int nNumberofArgs,char *argv[])
        
 
    //Output residuals/ likelihood to file 
-   //ofstream outfile;
-   //outfile.open(DakotaFilename);
-   //outfile << RMSE << endl;
-   //outfile.close();
+   ofstream outfile;
+   outfile.open(DakotaFilename);
+   outfile << RMSE << endl;
+   outfile.close();
 }
 
 
