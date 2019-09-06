@@ -152,7 +152,7 @@ int main(int nNumberofArgs,char *argv[])
 	double PrintTime = Time;
 
     //set up output file - used for visual when testing 
-	string OutputFileName = Folder+DakotaFilename+"_ShoreProfile.xz";
+	//string OutputFileName = Folder+DakotaFilename+"_ShoreProfile.xz";
 	//string OutputConcentrationFileName = Folder+Project+"Concentrations.xn";
 	
 
@@ -214,8 +214,8 @@ int main(int nNumberofArgs,char *argv[])
 	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);
 
     // print initial condition to file - this is for testing - remove
-	double TempTime = -9999;
-	PlatformModel.WriteProfile(OutputFileName, TempTime);			
+	//double TempTime = -9999;
+	//PlatformModel.WriteProfile(OutputFileName, TempTime);			
 	//if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
 
     //Loop through time
@@ -263,7 +263,7 @@ int main(int nNumberofArgs,char *argv[])
 		{
 			cout.flush();
 			cout << "RPM: Time " << setprecision(2) << fixed << Time << " years\r";
-			PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
+			//PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
 			PrintTime += PrintInterval;
 		}
 
