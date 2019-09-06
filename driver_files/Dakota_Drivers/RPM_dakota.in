@@ -23,6 +23,8 @@ interface,
 	fork
 	  asynchronous
 	  evaluation_concurrency 1
+
+	  failure_capture recover
 	  
 	  parameters_file = "params.in"
 	  results_file    = "results.out"
