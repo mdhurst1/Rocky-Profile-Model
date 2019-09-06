@@ -23,3 +23,5 @@ float fastexp (float x)
    cvt.i += (i << 23);                                          /* scale by 2^i */
    return cvt.f;
 }
+
+

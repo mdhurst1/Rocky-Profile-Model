@@ -84,6 +84,7 @@ def make_plot(FileName,ColourMap):
 
     
     ax1.plot(X,Z,'k-',lw=1.5)
+
         
     # tweak the plot
     #ax1.set_xticklabels([])
@@ -93,10 +94,12 @@ def make_plot(FileName,ColourMap):
     plt.ylim(-CliffHeight/2,CliffHeight/2)
     #plt.ylim(-30,30)
     plt.tight_layout()
-    plt.savefig('RPM_test_SLR_5.png',dpi=300)
+    plt.draw()
+    plt.show()
+    plt.savefig('dakota_test.png',dpi=300)
 
 if __name__ == "__main__":
-    FileName = "../../RPM_JRS/Test_SLR_5_" # /Users/jennyshadrick/RPM_JRS
+    FileName = "../driver_files/Dakota_Drivers/test.out_" # /Users/jennyshadrick/RPM_JRS
     ColourMap = cm.RdBu
     make_plot(FileName,ColourMap)
         
