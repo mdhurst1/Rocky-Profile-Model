@@ -152,7 +152,7 @@ int main(int nNumberofArgs,char *argv[])
 	double PrintTime = Time;
 
     //set up output file - used for visual when testing 
-	//string OutputFileName = Folder+DakotaFilename+"_ShoreProfile.xz";
+	string OutputFileName = Folder+DakotaFilename+"_ShoreProfile.xz";
 	//string OutputConcentrationFileName = Folder+Project+"Concentrations.xn";
 	
 
@@ -256,15 +256,15 @@ int main(int nNumberofArgs,char *argv[])
 		if (CRNFlag) PlatformCRN.UpdateMorphology(PlatformModel);
 
 		//Update the CRN concentrations
-		if (CRNFlag) PlatformCRN.UpdateCRNs();
+		//if (CRNFlag) PlatformCRN.UpdateCRNs();
         	
 		//print?
 		if (Time <= PrintTime)
 		{
 			cout.flush();
-			cout << "RPM: Time " << setprecision(2) << fixed << Time << " years\r";
-			//PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
-			PrintTime += PrintInterval;
+			//cout << "RPM: Time " << setprecision(2) << fixed << Time << " years\r";
+			PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
+			PrintTime -= PrintInterval;
 		}
 
 		
@@ -346,22 +346,34 @@ int main(int nNumberofArgs,char *argv[])
    }
 
    //Calculate likelihood
+   bool FailFlag = false;
    double TotalResiduals = 0;
    for (int i=0; i<NProfileData; ++i)
    {
 	   TotalResiduals += pow(ProfileZData[i]-TopoData[i],2);
+	   if (isinf(TotalResiduals))
+	   {
+		   FailFlag = true;
+		   break;
+	   }
        Likelihood *= exp(-(fabs(Residuals[i]))/(ZStd*ZStd));    //ZStd read in from parameter file?
    }
    
-
-   RMSE = sqrt(TotalResiduals/NProfileData);
-       
-
    //Output residuals/ likelihood to file 
    ofstream outfile;
    outfile.open(DakotaFilename);
-   outfile << RMSE << endl;
-   outfile.close();
+
+	if (FailFlag)
+	{
+		outfile << "FAIL" << endl;
+	}
+	else
+	{
+		RMSE = sqrt(TotalResiduals/NProfileData);
+   		outfile << RMSE << endl;
+	}
+	
+	outfile.close();
 }
 
 

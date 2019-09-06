@@ -42,8 +42,12 @@ def make_plot(FileName,ColourMap):
 
     # Get info on vertical from header
     Header = np.array(Lines[0].strip().split(" "),dtype=np.float)
-    CliffHeight = Header[0]
-    dz = Header[1]
+    MaxZ = Header[0]
+    MinZ = Header[1]
+    dz = Header[2]
+    Line = (Lines[2].strip().split(" "))
+    NValues = len(np.array(Line[2:],dtype="float64")) 
+    Z = np.arange(MaxZ,MinZ,-dz)
     
     # Only plot every so many years
     StartTime = 10000
@@ -65,8 +69,8 @@ def make_plot(FileName,ColourMap):
         
         #Read morphology
         X = np.array(Line[2:],dtype="float64")
-        NValues = len(X)
-        Z = np.linspace(CliffHeight,-CliffHeight, NValues)
+        #NValues = len(X)
+        #Z = np.linspace(CliffHeight,-CliffHeight, NValues)
         
         if (Time == StartTime) or (Time == -9999):
             print(Time)
@@ -99,7 +103,7 @@ def make_plot(FileName,ColourMap):
     plt.savefig('dakota_test.png',dpi=300)
 
 if __name__ == "__main__":
-    FileName = "../driver_files/Dakota_Drivers/test.out_" # /Users/jennyshadrick/RPM_JRS
+    FileName = "../driver_files/Dakota_Drivers/test_" # /Users/jennyshadrick/RPM_JRS
     ColourMap = cm.RdBu
     make_plot(FileName,ColourMap)
         
