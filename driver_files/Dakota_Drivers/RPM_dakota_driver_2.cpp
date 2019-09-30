@@ -158,8 +158,8 @@ int main(int nNumberofArgs,char *argv[])
 	double PrintTime = Time;
 
     //set up output file - used for visual when testing 
-	//string OutputFileName = Folder+DakotaFilename+"_ShoreProfile.xz";
-	//string OutputConcentrationFileName = Folder+DakotaFilename+"Concentrations.xn";
+	string OutputFileName = Folder+DakotaFilename+"_ShoreProfile.xz";
+	string OutputConcentrationFileName = Folder+DakotaFilename+"Concentrations.xn";
 	
 
     // initialise sea level here and calculate MinElevation based on lowest sea level
@@ -220,9 +220,9 @@ int main(int nNumberofArgs,char *argv[])
 	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);
 
     // print initial condition to file - this is for testing - remove
-	//double TempTime = -9999;
-    //PlatformModel.WriteProfile(OutputFileName, TempTime);			
-	//if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
+	double TempTime = -9999;
+    PlatformModel.WriteProfile(OutputFileName, TempTime);			
+	if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
 
     //Loop through time
 	while (Time >= EndTime)
@@ -268,9 +268,9 @@ int main(int nNumberofArgs,char *argv[])
 		if (Time <= PrintTime)
 		{
 			cout.flush();
-			//cout << "RPM: Time " << setprecision(2) << fixed << Time << " years\r";
-			//PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
-            //if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
+			cout << "RPM: Time " << setprecision(2) << fixed << Time << " years\r";
+			PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
+            if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
 			PrintTime -= PrintInterval;
 		}
 
@@ -350,7 +350,7 @@ int main(int nNumberofArgs,char *argv[])
 
 
    //Declare temp variables
-	float TempXData, TempCRNConcData, TempCRNConcErrorData;
+   float TempXData, TempCRNConcData, TempCRNConcErrorData;
   
    //Generate input filestream and read data into vectors
 
@@ -377,10 +377,9 @@ int main(int nNumberofArgs,char *argv[])
     XData.push_back(TempXData);
     CRNConcData.push_back(TempCRNConcData);
     CRNConcErrorData.push_back(TempCRNConcErrorData);
-  }
+	}
 
-  NData = XData.size();
-
+    NData = XData.size();
 
    ///////////////////////////////
    //                           //
@@ -399,10 +398,8 @@ int main(int nNumberofArgs,char *argv[])
    //Interpolate to extracted morphology X positions
    for (int i=0; i<NProfileData; ++i)
    {
-       
        //Normalising profile data to modelled cliff position - using Swath profile data where cliff position = 0
        XPos[i] = CliffPositionX - ProfileXData[i];
-
 
        //Take X value of extracted morph position and interpolate to get model results at this point
        int j=0;
@@ -497,6 +494,7 @@ int main(int nNumberofArgs,char *argv[])
 
    		outfile << RMSE << CRN_RMSE << endl;
 	}
+
 	
 	outfile.close();
 }
