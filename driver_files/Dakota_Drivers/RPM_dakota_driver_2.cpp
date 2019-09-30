@@ -158,8 +158,8 @@ int main(int nNumberofArgs,char *argv[])
 	double PrintTime = Time;
 
     //set up output file - used for visual when testing 
-	string OutputFileName = Folder+DakotaFilename+"_ShoreProfile.xz";
-	string OutputConcentrationFileName = Folder+DakotaFilename+"Concentrations.xn";
+	//string OutputFileName = Folder+DakotaFilename+"_ShoreProfile.xz";
+	//string OutputConcentrationFileName = Folder+DakotaFilename+"Concentrations.xn";
 	
 
     // initialise sea level here and calculate MinElevation based on lowest sea level
@@ -221,8 +221,8 @@ int main(int nNumberofArgs,char *argv[])
 
     // print initial condition to file - this is for testing - remove
 	double TempTime = -9999;
-    PlatformModel.WriteProfile(OutputFileName, TempTime);			
-	if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
+    //PlatformModel.WriteProfile(OutputFileName, TempTime);			
+	//if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
 
     //Loop through time
 	while (Time >= EndTime)
@@ -269,8 +269,8 @@ int main(int nNumberofArgs,char *argv[])
 		{
 			cout.flush();
 			//cout << "RPM: Time " << setprecision(2) << fixed << Time << " years\r";
-			PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
-            if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
+			//PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
+            //if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
 			PrintTime -= PrintInterval;
 		}
 
