@@ -445,13 +445,13 @@ int main(int nNumberofArgs,char *argv[])
 	for (int i=0; i<NData; ++i)
 	{
 	    //Normalising CRN data to modelled cliff position (CRN data file: cliff position = 0)
-        XPosCRN[i] = CliffPositionCRNX - XPosCRN[i];
+        XPosCRN[i] = CliffPositionCRNX - XData[i];
         
         //Take X value of sample and interpolate to get model results at this point
 	    int j=0;
 	    while ((XDataModel[j]-XPosCRN[i]) < 0) ++j;
 
-	    DiffCRNX[i] = XDataModel[j]-XData[i];
+	    DiffCRNX[i] = XDataModel[j]-XPosCRN[i];
         ScaleCRN = DiffCRNX[i]/(XDataModel[j]-XDataModel[j-1]);
   
         //Get Interpolated N value
@@ -460,9 +460,12 @@ int main(int nNumberofArgs,char *argv[])
 	
 	//Calculate likelihood
     double TotalResidualsCRN = 0;
+	//vector<double> Residuals(NData); - used for variance calc?
+
 	for (int i=0; i<NData; i++)
 	{
-        TotalResidualsCRN += pow(CRNConcData[i]-NModel[i],2);
+        //Residuals[i] = pow(CRNConcData[i]-NModel[i],2); - used for variance calc?
+		TotalResidualsCRN += pow(CRNConcData[i]-NModel[i],2);
 		LikelihoodCRN *= exp(-(fabs(ResidualsCRN[i]))/(CRNConcErrorData[i]*CRNConcErrorData[i]));
 		
 	}
