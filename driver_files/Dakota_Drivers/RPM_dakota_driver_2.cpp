@@ -471,6 +471,9 @@ int main(int nNumberofArgs,char *argv[])
 	}
 	return LikelihoodCRN;
 
+	RMSE = sqrt(TotalResiduals/NProfileData);
+    CRN_RMSE = sqrt(TotalResidualsCRN/NData);
+
 
     ////////////////////////////////////
     //                                //
@@ -489,15 +492,9 @@ int main(int nNumberofArgs,char *argv[])
 	}
 	else
 	{
-		RMSE = sqrt(TotalResiduals/NProfileData);
-        CRN_RMSE = sqrt(TotalResidualsCRN/NData);
-
         //normalise RMSE by max/ mean 
         //add weightings 
-
-   		outfile << RMSE << CRN_RMSE << endl;
+        outfile << RMSE << CRN_RMSE << endl;
 	}
-
-	
 	outfile.close();
 }
