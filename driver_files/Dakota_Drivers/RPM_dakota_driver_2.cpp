@@ -471,9 +471,7 @@ int main(int nNumberofArgs,char *argv[])
 	}
 	return LikelihoodCRN;
 
-	RMSE = sqrt(TotalResiduals/NProfileData);
-    CRN_RMSE = sqrt(TotalResidualsCRN/NData);
-
+	
 
     ////////////////////////////////////
     //                                //
@@ -482,7 +480,6 @@ int main(int nNumberofArgs,char *argv[])
     ////////////////////////////////////
    
    //Output residuals/ likelihood to file 
-   
    ofstream outfile;
    outfile.open(DakotaFilename);
 
@@ -492,8 +489,12 @@ int main(int nNumberofArgs,char *argv[])
 	}
 	else
 	{
-        //normalise RMSE by max/ mean 
+        RMSE = sqrt(TotalResiduals/NProfileData);
+        CRN_RMSE = sqrt(TotalResidualsCRN/NData);
+
+		//standardise RMSE  
         //add weightings 
+
         outfile << RMSE << CRN_RMSE << endl;
 	}
 	outfile.close();
