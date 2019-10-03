@@ -413,14 +413,12 @@ int main(int nNumberofArgs,char *argv[])
    }
 
    //Calculate likelihood
-   bool FailFlag = false;
    double TotalResiduals = 0;
    for (int i=0; i<NProfileData; ++i)
    {
 	   TotalResiduals += pow(ProfileZData[i]-TopoData[i],2);
 	   if (isinf(TotalResiduals))
 	   {
-		   FailFlag = true;
 		   break;
 	   }
        Likelihood *= exp(-(fabs(Residuals[i]))/(ZStd*ZStd));    //ZStd read in from parameter file?
@@ -469,7 +467,7 @@ int main(int nNumberofArgs,char *argv[])
 		LikelihoodCRN *= exp(-(fabs(ResidualsCRN[i]))/(CRNConcErrorData[i]*CRNConcErrorData[i]));
 		
 	}
-	return LikelihoodCRN;
+	//return LikelihoodCRN;
 
 	
 
@@ -483,19 +481,24 @@ int main(int nNumberofArgs,char *argv[])
    ofstream outfile;
    outfile.open(DakotaFilename);
 
-	if (FailFlag)
+	if (outfile)
 	{
-		outfile << "FAIL" << endl;
+		cout << "Filestream open" << endl;
 	}
 	else
 	{
-        RMSE = sqrt(TotalResiduals/NProfileData);
-        CRN_RMSE = sqrt(TotalResidualsCRN/NData);
-
-		//standardise RMSE  
-        //add weightings 
-
-        outfile << RMSE << CRN_RMSE << endl;
+		cout << "Filestream failed to open" << endl;
 	}
+
+	RMSE = sqrt(TotalResiduals/NProfileData);
+	CRN_RMSE = sqrt(TotalResidualsCRN/NData);
+
+	//standardise RMSE  
+	//add weightings 
+
+	outfile << RMSE << " " << CRN_RMSE << endl;
+	
 	outfile.close();
+
+	cout << endl << "Done!" << endl << endl;
 }
