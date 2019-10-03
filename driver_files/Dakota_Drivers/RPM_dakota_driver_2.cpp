@@ -496,17 +496,17 @@ int main(int nNumberofArgs,char *argv[])
 	else
 	{
         
-
-		cout << "Filestream failed to open" << endl;
-
-		//standardise RMSE  
-        //add weightings 
-
-		RMSE = sqrt(TotalResiduals/NProfileData);
-        CRN_RMSE = sqrt(TotalResidualsCRN/NData);
-
-        outfile << RMSE << " " << CRN_RMSE << endl;
+		cout << "Filestream failed to open" << endl;   
 	}
+
+	//standardise RMSE  
+    //add weightings 
+
+	RMSE = sqrt(TotalResiduals/NProfileData);
+    CRN_RMSE = sqrt(TotalResidualsCRN/NData);
+	
+	outfile << RMSE << " " << CRN_RMSE << endl;
+
 	outfile.close();
 
 	cout << endl << "Done!" << endl << endl;
