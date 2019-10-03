@@ -413,12 +413,14 @@ int main(int nNumberofArgs,char *argv[])
    }
 
    //Calculate likelihood
+   bool FailFlag = false;
    double TotalResiduals = 0;
    for (int i=0; i<NProfileData; ++i)
    {
 	   TotalResiduals += pow(ProfileZData[i]-TopoData[i],2);
 	   if (isinf(TotalResiduals))
 	   {
+		   FailFlag = true;
 		   break;
 	   }
        Likelihood *= exp(-(fabs(Residuals[i]))/(ZStd*ZStd));    //ZStd read in from parameter file?
@@ -460,6 +462,10 @@ int main(int nNumberofArgs,char *argv[])
     double TotalResidualsCRN = 0;
 	//vector<double> Residuals(NData); - used for variance calc?
 
+
+	//Standardise CRN and topo residuals
+	
+
 	for (int i=0; i<NData; i++)
 	{
         //Residuals[i] = pow(CRNConcData[i]-NModel[i],2); - used for variance calc?
@@ -481,24 +487,28 @@ int main(int nNumberofArgs,char *argv[])
    ofstream outfile;
    outfile.open(DakotaFilename);
 
+	//if (FailFlag)
 	if (outfile)
 	{
+		//outfile << "FAIL" << endl;
 		cout << "Filestream open" << endl;
 	}
 	else
 	{
+        
+
 		cout << "Filestream failed to open" << endl;
+
+		//standardise RMSE  
+        //add weightings 
+
+		RMSE = sqrt(TotalResiduals/NProfileData);
+        CRN_RMSE = sqrt(TotalResidualsCRN/NData);
+
+        outfile << RMSE << " " << CRN_RMSE << endl;
 	}
-
-	RMSE = sqrt(TotalResiduals/NProfileData);
-	CRN_RMSE = sqrt(TotalResidualsCRN/NData);
-
-	//standardise RMSE  
-	//add weightings 
-
-	outfile << RMSE << " " << CRN_RMSE << endl;
-	
 	outfile.close();
 
 	cout << endl << "Done!" << endl << endl;
+
 }
