@@ -136,10 +136,6 @@ int main(int nNumberofArgs,char *argv[])
     double WaveAttenuationConst = atof(argv[9]);
     double Resistance = atof(argv[10]);
     double WeatheringRate = atof(argv[11]);
-    
-    //cout test 
-    cout << ProfileDatafile << endl;
-    cout << CRNDatafile << endl;
 
     //initialisation parameters
 	double dZ = 0.1;
@@ -220,9 +216,9 @@ int main(int nNumberofArgs,char *argv[])
 	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);
 
     // print initial condition to file - this is for testing - remove
-	double TempTime = -9999;
-    PlatformModel.WriteProfile(OutputFileName, TempTime);			
-	if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
+	//double TempTime = -9999;
+    //PlatformModel.WriteProfile(OutputFileName, TempTime);			
+	//if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
 
     //Loop through time
 	while (Time >= EndTime)
@@ -269,8 +265,8 @@ int main(int nNumberofArgs,char *argv[])
 		{
 			cout.flush();
 			cout << "RPM: Time " << setprecision(2) << fixed << Time << " years\r";
-			PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
-            if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
+			//PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
+            //if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
 			PrintTime -= PrintInterval;
 		}
 
@@ -390,7 +386,6 @@ int main(int nNumberofArgs,char *argv[])
    //declarations
    vector<double> XPos(NProfileData);
    vector<double> TopoData(NProfileData);
-   vector<double> Residuals(NProfileData);
    vector<double> DiffX(NProfileData);
    double RMSE, Scale;
    long double Likelihood = 1.L;
@@ -412,19 +407,52 @@ int main(int nNumberofArgs,char *argv[])
        TopoData[i] = ZModel[j]-Scale*(ZModel[j]-ZModel[j-1]);
    }
 
-   //Calculate likelihood
+   //Calculate Residuals and likelihood
+   //Calculating max and min Residual for topo data 
+
    bool FailFlag = false;
    double TotalResiduals = 0;
+   vector<double> Residuals(NProfileData); 
+   double MaxTopo = Residuals[0];
+   double MinTopo = Residuals[0];
+
    for (int i=0; i<NProfileData; ++i)
    {
+	   
+	   Residuals[i] = pow(ProfileZData[i]-TopoData[i],2);
 	   TotalResiduals += pow(ProfileZData[i]-TopoData[i],2);
+
 	   if (isinf(TotalResiduals))
 	   {
 		   FailFlag = true;
 		   break;
 	   }
+
+	   if (Residuals[i] > MaxTopo)
+	   {
+		   MaxTopo = Residuals[i];
+	   }
+
+	   if (Residuals[i] < MinTopo)
+	   {
+		   MinTopo = Residuals[i];
+	   }
+
        Likelihood *= exp(-(fabs(Residuals[i]))/(ZStd*ZStd));    //ZStd read in from parameter file?
    }
+
+	cout << " MaxTopo = " << MaxTopo << endl;
+	cout << " MinTopo = " << MinTopo << endl;
+
+	//Feature scaling - min-max normalisation (distribution between 0 and 1)
+
+	//vector<double> NResiduals(NProfileData);
+
+    //for loop
+
+	//NResiduals[i] = (Residuals[i]-MinCRN)/(MaxCRN-MinCRN)
+	//Total NResiduals? +=
+
 
    ///////////////////////////////////////                                
    //                                   //
@@ -436,7 +464,6 @@ int main(int nNumberofArgs,char *argv[])
    vector<double> DiffCRNX(NData);
    vector<double> XPosCRN(NData);
    vector<double> NModel(NData);
-   vector<double> ResidualsCRN(NData); 
    double ScaleCRN, CRN_RMSE;
    long double LikelihoodCRN = 1.L;  
 
@@ -460,7 +487,8 @@ int main(int nNumberofArgs,char *argv[])
 	
 	//Calculate likelihood
     double TotalResidualsCRN = 0;
-	//vector<double> Residuals(NData); - used for variance calc?
+	vector<double> ResidualsCRN(NData); 
+	//double MaxCRN = ResidualsCRN[0];
 
 
 	//Standardise CRN and topo residuals
@@ -468,7 +496,7 @@ int main(int nNumberofArgs,char *argv[])
 
 	for (int i=0; i<NData; i++)
 	{
-        //Residuals[i] = pow(CRNConcData[i]-NModel[i],2); - used for variance calc?
+        //ResidualsCRN[i] = pow(CRNConcData[i]-NModel[i],2); - used for variance calc?
 		TotalResidualsCRN += pow(CRNConcData[i]-NModel[i],2);
 		LikelihoodCRN *= exp(-(fabs(ResidualsCRN[i]))/(CRNConcErrorData[i]*CRNConcErrorData[i]));
 		
@@ -487,25 +515,32 @@ int main(int nNumberofArgs,char *argv[])
    ofstream outfile;
    outfile.open(DakotaFilename);
 
-	//if (FailFlag)
+	
 	if (outfile)
 	{
-		//outfile << "FAIL" << endl;
 		cout << "Filestream open" << endl;
 	}
 	else
-	{
-        
+	{ 
 		cout << "Filestream failed to open" << endl;   
 	}
+    
 
-	//standardise RMSE  
-    //add weightings 
+	if (FailFlag)
+	{
+		outfile << "FAIL" << endl;
+	}
+	else
+	{
+	    //standardise RMSE  
+        //add weightings 
 
-	RMSE = sqrt(TotalResiduals/NProfileData);
-    CRN_RMSE = sqrt(TotalResidualsCRN/NData);
+	    RMSE = sqrt(TotalResiduals/NProfileData);
+        CRN_RMSE = sqrt(TotalResidualsCRN/NData);
 	
-	outfile << RMSE << " " << CRN_RMSE << endl;
+	    outfile << RMSE << " " << CRN_RMSE << endl;
+	}
+
 
 	outfile.close();
 
