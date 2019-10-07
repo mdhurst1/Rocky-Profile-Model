@@ -408,6 +408,7 @@ int main(int nNumberofArgs,char *argv[])
    }
 
    //Calculate Residuals and likelihood
+   //Fail flag for inf numbers (topo profile)
    //Calculating max and min Residual for topo data 
 
    bool FailFlag = false;
@@ -416,10 +417,10 @@ int main(int nNumberofArgs,char *argv[])
    double MaxTopo = Residuals[0];
    double MinTopo = Residuals[0];
 
+   //Try with no equal 
+
    for (int i=0; i<NProfileData; ++i)
    {
-	   
-	   Residuals[i] = pow(ProfileZData[i]-TopoData[i],2);
 	   TotalResiduals += pow(ProfileZData[i]-TopoData[i],2);
 
 	   if (isinf(TotalResiduals))
@@ -428,29 +429,42 @@ int main(int nNumberofArgs,char *argv[])
 		   break;
 	   }
 
-	   if (Residuals[i] > MaxTopo)
+       Likelihood *= exp(-(fabs(Residuals[i]))/(ZStd*ZStd));    //ZStd read in from parameter file?
+   }
+
+   for (int i=0; i<NProfileData; ++i)
+   {
+	   Residuals[i] = pow(ProfileZData[i]-TopoData[i],2);
+
+	    if (Residuals[i] > MaxTopo)
 	   {
-		   MaxTopo = Residuals[i];
+		   MaxTopo = Residuals[i];  
 	   }
 
 	   if (Residuals[i] < MinTopo)
 	   {
-		   MinTopo = Residuals[i];
+		   MinTopo = Residuals[i];   
 	   }
 
-       Likelihood *= exp(-(fabs(Residuals[i]))/(ZStd*ZStd));    //ZStd read in from parameter file?
    }
 
-	cout << " MaxTopo = " << MaxTopo << endl;
-	cout << " MinTopo = " << MinTopo << endl;
+   
+   cout << " MaxTopo = " << MaxTopo << endl;
+   cout << " MinTopo = " << MinTopo << endl;
+
+	
+	
 
 	//Feature scaling - min-max normalisation (distribution between 0 and 1)
 
 	//vector<double> NResiduals(NProfileData);
 
-    //for loop
+   // for (int i=0; i<NProfileData; ++i)
+	//{
+	//	NResiduals[i] = (Residuals[i]-MinTopo)/(MaxTopo-MinTopo);
+//	}
 
-	//NResiduals[i] = (Residuals[i]-MinCRN)/(MaxCRN-MinCRN)
+	
 	//Total NResiduals? +=
 
 
