@@ -414,8 +414,8 @@ int main(int nNumberofArgs,char *argv[])
    bool FailFlag = false;
    double TotalResiduals = 0;
    vector<double> Residuals(NProfileData); 
-   double MaxTopo = Residuals[0];
-   double MinTopo = Residuals[0];
+   double MaxTopo;
+   double MinTopo;
    
    //Declarations for normalised residuals 
    vector<double> NResiduals(NProfileData);
