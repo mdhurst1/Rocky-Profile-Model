@@ -293,7 +293,7 @@ int main(int nNumberofArgs,char *argv[])
     int NProfileData;
     vector<double> ProfileXData;
     vector<double> ProfileZData;
-    double ZStd = 1.;   //where define ZStd?
+    //double ZStd = 1.;   //where define ZStd?
 
     //Vectors to hold CRN concentration data
     int NData;
@@ -388,7 +388,7 @@ int main(int nNumberofArgs,char *argv[])
    vector<double> TopoData(NProfileData);
    vector<double> DiffX(NProfileData);
    double RMSE, Scale;
-   long double Likelihood = 1.L;
+   //long double Likelihood = 1.L;
 
    //Interpolate to extracted morphology X positions
    for (int i=0; i<NProfileData; ++i)
@@ -416,11 +416,17 @@ int main(int nNumberofArgs,char *argv[])
    vector<double> Residuals(NProfileData); 
    double MaxTopo = Residuals[0];
    double MinTopo = Residuals[0];
+   
+   //Declarations for normalised residuals 
+   vector<double> NResiduals(NProfileData);
+   double TotalNResiduals = 0;
 
-   //Try with no equal 
 
    for (int i=0; i<NProfileData; ++i)
    {
+       Residuals[i] = fabs(ProfileZData[i]-TopoData[i]);
+
+	   //Fail flag 
 	   TotalResiduals += pow(ProfileZData[i]-TopoData[i],2);
 
 	   if (isinf(TotalResiduals))
@@ -429,44 +435,26 @@ int main(int nNumberofArgs,char *argv[])
 		   break;
 	   }
 
-       Likelihood *= exp(-(fabs(Residuals[i]))/(ZStd*ZStd));    //ZStd read in from parameter file?
-   }
+	   if (Residuals[i] < MinTopo)
+	   {
+		   MinTopo = Residuals[i];  
+	   }
 
-   for (int i=0; i<NProfileData; ++i)
-   {
-	   Residuals[i] = pow(ProfileZData[i]-TopoData[i],2);
-
-	    if (Residuals[i] > MaxTopo)
+	   if (Residuals[i] > MaxTopo)
 	   {
 		   MaxTopo = Residuals[i];  
 	   }
 
-	   if (Residuals[i] < MinTopo)
-	   {
-		   MinTopo = Residuals[i];   
-	   }
+	   //Feature scaling - min-max normalisation (distribution between 0 and 1)
+	   NResiduals[i] = (Residuals[i]-MinTopo)/(MaxTopo-MinTopo);
+	   TotalNResiduals += pow(NResiduals[i],2);
 
+	   //Likelihood *= exp(-(fabs(Residuals[i]))/(ZStd*ZStd));    //ZStd read in from parameter file?
    }
-
    
-   cout << " MaxTopo = " << MaxTopo << endl;
-   cout << " MinTopo = " << MinTopo << endl;
-
-	
-	
-
-	//Feature scaling - min-max normalisation (distribution between 0 and 1)
-
-	//vector<double> NResiduals(NProfileData);
-
-   // for (int i=0; i<NProfileData; ++i)
-	//{
-	//	NResiduals[i] = (Residuals[i]-MinTopo)/(MaxTopo-MinTopo);
-//	}
-
-	
-	//Total NResiduals? +=
-
+   cout << " MaxTopo = " << setprecision(10) << MaxTopo << endl;
+   cout << " MinTopo = " << setprecision(10) << MinTopo << endl;
+   cout << " TotalNResiduals = " << TotalNResiduals << endl;
 
    ///////////////////////////////////////                                
    //                                   //
@@ -479,7 +467,7 @@ int main(int nNumberofArgs,char *argv[])
    vector<double> XPosCRN(NData);
    vector<double> NModel(NData);
    double ScaleCRN, CRN_RMSE;
-   long double LikelihoodCRN = 1.L;  
+   //long double LikelihoodCRN = 1.L;  
 
 
    //Interpolate to sample locations
@@ -500,24 +488,45 @@ int main(int nNumberofArgs,char *argv[])
 	}
 	
 	//Calculate likelihood
-    double TotalResidualsCRN = 0;
+    //double TotalResidualsCRN = 0;
 	vector<double> ResidualsCRN(NData); 
-	//double MaxCRN = ResidualsCRN[0];
+	double MaxCRN;
+	double MinCRN;
+
+
+    //Declarations for normalised Residuals 
+    vector<double> NResidualsCRN(NData);
+    double TotalNResidualsCRN = 0;
 
 
 	//Standardise CRN and topo residuals
-	
 
-	for (int i=0; i<NData; i++)
-	{
-        //ResidualsCRN[i] = pow(CRNConcData[i]-NModel[i],2); - used for variance calc?
-		TotalResidualsCRN += pow(CRNConcData[i]-NModel[i],2);
-		LikelihoodCRN *= exp(-(fabs(ResidualsCRN[i]))/(CRNConcErrorData[i]*CRNConcErrorData[i]));
-		
-	}
-	//return LikelihoodCRN;
+	for (int i=0; i<NData; ++i)
+   {
+       ResidualsCRN[i] = fabs(CRNConcData[i]-NModel[i]);
 
+	   if (ResidualsCRN[i] < MinCRN)
+	   {
+		   MinCRN = ResidualsCRN[i];  
+	   }
+
+	   if (ResidualsCRN[i] > MaxCRN)
+	   {
+		   MaxCRN = ResidualsCRN[i]; 
+	   }
+
+	   //Feature scaling - min-max normalisation (distribution between 0 and 1)
+	   NResidualsCRN[i] = (ResidualsCRN[i]-MinCRN)/(MaxCRN-MinCRN);
+	   TotalNResidualsCRN += pow(NResidualsCRN[i],2);
+
+	   //TotalResidualsCRN += pow(CRNConcData[i]-NModel[i],2);
+	   //LikelihoodCRN *= exp(-(fabs(ResidualsCRN[i]))/(CRNConcErrorData[i]*CRNConcErrorData[i]));
+   }
 	
+    
+   cout << " MaxCRN = " << setprecision(10) << MaxCRN << endl;
+   cout << " MinCRN = " << setprecision(10) << MinCRN << endl;
+   cout << " TotalNResidualsCRN = " << TotalNResidualsCRN << endl;
 
     ////////////////////////////////////
     //                                //
@@ -529,7 +538,16 @@ int main(int nNumberofArgs,char *argv[])
    ofstream outfile;
    outfile.open(DakotaFilename);
 
-	
+   //Weightings - eqaul to 1
+   double TopoWeighting = 0.9;
+   double CRNWeighting = 0.1;
+   double WeightedRMSE;
+
+   RMSE = sqrt(TotalNResiduals/NProfileData);
+   CRN_RMSE = sqrt(TotalNResidualsCRN/NData);
+
+   WeightedRMSE = (RMSE*TopoWeighting)+(CRN_RMSE*CRNWeighting);
+
 	if (outfile)
 	{
 		cout << "Filestream open" << endl;
@@ -546,13 +564,7 @@ int main(int nNumberofArgs,char *argv[])
 	}
 	else
 	{
-	    //standardise RMSE  
-        //add weightings 
-
-	    RMSE = sqrt(TotalResiduals/NProfileData);
-        CRN_RMSE = sqrt(TotalResidualsCRN/NData);
-	
-	    outfile << RMSE << " " << CRN_RMSE << endl;
+	    outfile << WeightedRMSE << endl;
 	}
 
 
