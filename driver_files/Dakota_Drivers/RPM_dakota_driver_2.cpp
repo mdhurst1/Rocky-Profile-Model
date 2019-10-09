@@ -414,18 +414,19 @@ int main(int nNumberofArgs,char *argv[])
    bool FailFlag = false;
    double TotalResiduals = 0;
    vector<double> Residuals(NProfileData); 
-   double MaxTopo;
-   double MinTopo;
+   
    
    //Declarations for normalised residuals 
    vector<double> NResiduals(NProfileData);
    double TotalNResiduals = 0;
+   double MaxTopo = 0;
+   double MinTopo = 100000000;
 
-
+   //standardise topo residuals
    for (int i=0; i<NProfileData; ++i)
    {
        Residuals[i] = fabs(ProfileZData[i]-TopoData[i]);
-
+	   
 	   //Fail flag 
 	   TotalResiduals += pow(ProfileZData[i]-TopoData[i],2);
 
@@ -448,7 +449,6 @@ int main(int nNumberofArgs,char *argv[])
 	   //Feature scaling - min-max normalisation (distribution between 0 and 1)
 	   NResiduals[i] = (Residuals[i]-MinTopo)/(MaxTopo-MinTopo);
 	   TotalNResiduals += pow(NResiduals[i],2);
-
 	   //Likelihood *= exp(-(fabs(Residuals[i]))/(ZStd*ZStd));    //ZStd read in from parameter file?
    }
    
@@ -490,17 +490,14 @@ int main(int nNumberofArgs,char *argv[])
 	//Calculate likelihood
     //double TotalResidualsCRN = 0;
 	vector<double> ResidualsCRN(NData); 
-	double MaxCRN;
-	double MinCRN;
-
+	double MaxCRN = ResidualsCRN[0];
+	double MinCRN = ResidualsCRN[0];
 
     //Declarations for normalised Residuals 
     vector<double> NResidualsCRN(NData);
     double TotalNResidualsCRN = 0;
 
-
-	//Standardise CRN and topo residuals
-
+	//Standardise CRN residuals
 	for (int i=0; i<NData; ++i)
    {
        ResidualsCRN[i] = fabs(CRNConcData[i]-NModel[i]);
@@ -517,7 +514,7 @@ int main(int nNumberofArgs,char *argv[])
 
 	   //Feature scaling - min-max normalisation (distribution between 0 and 1)
 	   NResidualsCRN[i] = (ResidualsCRN[i]-MinCRN)/(MaxCRN-MinCRN);
-	   TotalNResidualsCRN += pow(NResidualsCRN[i],2);
+	   TotalNResidualsCRN += pow(NResidualsCRN[i],2);    
 
 	   //TotalResidualsCRN += pow(CRNConcData[i]-NModel[i],2);
 	   //LikelihoodCRN *= exp(-(fabs(ResidualsCRN[i]))/(CRNConcErrorData[i]*CRNConcErrorData[i]));
@@ -543,10 +540,19 @@ int main(int nNumberofArgs,char *argv[])
    double CRNWeighting = 0.1;
    double WeightedRMSE;
 
+   //RMSE calculations 
+
    RMSE = sqrt(TotalNResiduals/NProfileData);
    CRN_RMSE = sqrt(TotalNResidualsCRN/NData);
-
    WeightedRMSE = (RMSE*TopoWeighting)+(CRN_RMSE*CRNWeighting);
+
+   cout << " RMSE = " << RMSE << endl;
+   cout << " CRN RMSE = " << CRN_RMSE << endl;
+   
+
+
+
+   //Check outfile is open
 
 	if (outfile)
 	{
@@ -557,6 +563,7 @@ int main(int nNumberofArgs,char *argv[])
 		cout << "Filestream failed to open" << endl;   
 	}
     
+	//Write to outfile
 
 	if (FailFlag)
 	{
