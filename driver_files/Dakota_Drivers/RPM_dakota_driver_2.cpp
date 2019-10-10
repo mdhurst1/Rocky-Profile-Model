@@ -419,8 +419,8 @@ int main(int nNumberofArgs,char *argv[])
    //Declarations for normalised residuals 
    vector<double> NResiduals(NProfileData);
    double TotalNResiduals = 0;
-   double MaxTopo = 0;
-   double MinTopo = 100000000;
+   double MaxTopo = Residuals[0];
+   double MinTopo = Residuals[0];
 
    //standardise topo residuals
    for (int i=0; i<NProfileData; ++i)
@@ -436,25 +436,32 @@ int main(int nNumberofArgs,char *argv[])
 		   break;
 	   }
 
-	   if (Residuals[i] < MinTopo)
+   }
+
+   for (int i=0; i<NProfileData; ++i)
+   {
+	    if (Residuals[i] < MinTopo)
 	   {
 		   MinTopo = Residuals[i];  
 	   }
-
-	   if (Residuals[i] > MaxTopo)
+	   
+	    if (Residuals[i] > MaxTopo)
 	   {
 		   MaxTopo = Residuals[i];  
 	   }
-
-	   //Feature scaling - min-max normalisation (distribution between 0 and 1)
+	   
+       //Feature scaling - min-max normalisation (distribution between 0 and 1)
 	   NResiduals[i] = (Residuals[i]-MinTopo)/(MaxTopo-MinTopo);
 	   TotalNResiduals += pow(NResiduals[i],2);
+
 	   //Likelihood *= exp(-(fabs(Residuals[i]))/(ZStd*ZStd));    //ZStd read in from parameter file?
    }
+
    
    cout << " MaxTopo = " << setprecision(10) << MaxTopo << endl;
    cout << " MinTopo = " << setprecision(10) << MinTopo << endl;
    cout << " TotalNResiduals = " << TotalNResiduals << endl;
+   
 
    ///////////////////////////////////////                                
    //                                   //
