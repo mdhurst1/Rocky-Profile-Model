@@ -71,6 +71,7 @@
 #include <sstream>
 #include <cstdlib>
 #include <unistd.h>
+#include <algorithm>
 #include "../../RPM.hpp"
 #include "../../RoBoCoP_CRN/RockyCoastCRN.hpp"
 #include "../../SeaLevel.hpp"
