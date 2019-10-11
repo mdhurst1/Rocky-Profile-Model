@@ -416,9 +416,10 @@ int main(int nNumberofArgs,char *argv[])
    bool FailFlag = false;
    double TotalResiduals = 0;
    double TotalNResiduals = 0;
-   double MaxTopo, MinTopo;
    vector<double> Residuals(NProfileData); 
    vector<double> NResiduals(NProfileData);
+   double MaxTopo = Residuals[0];
+   double MinTopo = Residuals[0];
    
 
    //standardise topo residuals
@@ -487,7 +488,8 @@ int main(int nNumberofArgs,char *argv[])
 	//Calculate likelihood
     //double TotalResidualsCRN = 0;
 	vector<double> ResidualsCRN(NData); 
-	double MaxCRN, MinCRN;
+	double MaxCRN = ResidualsCRN[0];
+	double MinCRN = ResidualsCRN[0];
 
     //Declarations for normalised Residuals 
     vector<double> NResidualsCRN(NData);
