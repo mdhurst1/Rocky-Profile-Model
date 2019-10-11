@@ -411,17 +411,15 @@ int main(int nNumberofArgs,char *argv[])
    //Calculate Residuals and likelihood
    //Fail flag for inf numbers (topo profile)
    //Calculating max and min Residual for topo data 
+   //Declarations for normalised residuals 
 
    bool FailFlag = false;
    double TotalResiduals = 0;
-   vector<double> Residuals(NProfileData); 
-   
-   
-   //Declarations for normalised residuals 
-   vector<double> NResiduals(NProfileData);
    double TotalNResiduals = 0;
-   double MaxTopo;
-   double MinTopo;
+   double MaxTopo, MinTopo;
+   vector<double> Residuals(NProfileData); 
+   vector<double> NResiduals(NProfileData);
+   
 
    //standardise topo residuals
    for (int i=0; i<NProfileData; ++i)
@@ -489,8 +487,7 @@ int main(int nNumberofArgs,char *argv[])
 	//Calculate likelihood
     //double TotalResidualsCRN = 0;
 	vector<double> ResidualsCRN(NData); 
-	double MaxCRN = ResidualsCRN[0];
-	double MinCRN = ResidualsCRN[0];
+	double MaxCRN, MinCRN;
 
     //Declarations for normalised Residuals 
     vector<double> NResidualsCRN(NData);
@@ -501,16 +498,12 @@ int main(int nNumberofArgs,char *argv[])
    {
        ResidualsCRN[i] = fabs(CRNConcData[i]-NModel[i]);
 
-	   if (ResidualsCRN[i] < MinCRN)
-	   {
-		   MinCRN = ResidualsCRN[i];  
-	   }
+	   MinCRN = *min_element(begin(ResidualsCRN), end(ResidualsCRN));
+	   MaxCRN = *max_element(begin(ResidualsCRN), end(ResidualsCRN)); 
+   }
 
-	   if (ResidualsCRN[i] > MaxCRN)
-	   {
-		   MaxCRN = ResidualsCRN[i]; 
-	   }
-
+   for (int i=0; i<NData; ++i)
+   { 
 	   //Feature scaling - min-max normalisation (distribution between 0 and 1)
 	   NResidualsCRN[i] = (ResidualsCRN[i]-MinCRN)/(MaxCRN-MinCRN);
 	   TotalNResidualsCRN += pow(NResidualsCRN[i],2);    
@@ -547,10 +540,8 @@ int main(int nNumberofArgs,char *argv[])
 
    cout << " RMSE = " << RMSE << endl;
    cout << " CRN RMSE = " << CRN_RMSE << endl;
+   cout << " Weighted RMSE = " << WeightedRMSE << endl; 
    
-
-
-
    //Check outfile is open
 
 	if (outfile)
