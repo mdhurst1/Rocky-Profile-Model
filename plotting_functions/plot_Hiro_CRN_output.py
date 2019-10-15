@@ -75,7 +75,7 @@ def make_plot(FileName,ColourMap):
         
         MorphLine = (MorphLines[j].strip().split(" "))
         
-        Time = int(MorphLine[0])
+        Time = float(MorphLine[0]) 
         RSL = float(MorphLine[1])
         
         #Read morphology
@@ -105,7 +105,7 @@ def make_plot(FileName,ColourMap):
     #ax1.set_xticklabels([])
 
     #Normalising CRN x positions to final cliff position
-    File2 = "../driver_files/CB_CRN.data"
+    File2 = "../driver_files/Data/CB_CRN.data"
     X,CRN,Error=np.loadtxt(File2,unpack=True,skiprows=1,usecols=(1,2,3),delimiter=" ")
     NormalisedX = LCPosition - X
     ax2.errorbar(NormalisedX,CRN,fmt='o', yerr=Error,c='grey', label='Measured CRN Concentrations (corrected)')    
@@ -118,27 +118,27 @@ def make_plot(FileName,ColourMap):
     #ax2.errorbar(NormalisedX2,CRN2, fmt='o', yerr=Error2, c='k', label='Measured CRN Concentrations (uncorrected)')
 
     #load the extracted shore platform profile (CB - profile read from lowest to highest Z)
-    ExProfileName = "../driver_files/Swath_Profile_CB.txt"
-    Xprof, Zprof = np.loadtxt(ExProfileName, unpack=True,skiprows=1,usecols=(0,1))
-    XCliffPosition = Xprof[-1]
-    Xprof -= XCliffPosition
-    Xprof += LCPosition
+    #ExProfileName = "../driver_files/Data/Swath_Profile_CB.txt"
+    #Xprof, Zprof = np.loadtxt(ExProfileName, unpack=True,skiprows=1,usecols=(0,1))
+    #XCliffPosition = Xprof[-1]
+    #Xprof -= XCliffPosition
+    #Xprof += LCPosition
 
     #load the extracted shore platform profile (SY - profile read from highest to lowest Z)
-    #ExProfileName = "../driver_files/Swath_Profile_SY.txt"
-    #Xprof, Zprof = np.loadtxt(ExProfileName, unpack=True,skiprows=1,usecols=(0,1))
+    ExProfileName = "../driver_files/Data/CB_profile.txt"
+    Xprof, Zprof = np.loadtxt(ExProfileName, unpack=True,skiprows=1,usecols=(0,1))
     #XCliffPosition = Xprof[0]
     #Xprof -= XCliffPosition
-    #NXprof = LCPosition - Xprof
+    Xprof = LCPosition - Xprof
     
     #axis labels
     ax1.set_ylabel("Elevation (m)")
     ax2.set_ylabel("Concentration (a g$^-1$)")  #x 10$^3$ 
     ax2.set_xlabel("Distance (m)")
-    xmin, xmax = ax1.get_xlim()
-    ax1.set_xlim(1600,2120)
-    ax2.set_xlim(1600,2120)
-    #ax1.set_ylim(-5,10)
+    #xmin, xmax = ax1.get_xlim()
+    ax1.set_xlim(1200,1550)
+    ax2.set_xlim(1200,1550)
+    ax1.set_ylim(-5,4)
     #ax2.set_ylim(0,9000)
 
     ax1.plot(Xprof,Zprof,'r-',lw=1.5, label='Extracted Morphology')  #NXprof for scalby, Xprof for CB
@@ -156,7 +156,7 @@ def make_plot(FileName,ColourMap):
     #fig1.savefig('MCMC_SY_5_topo.png',dpi=300)
 
 if __name__ == "__main__":
-    FileName = "/Users/jennyshadrick/RPM_JRS/CB_MCMC_test2" # /Users/jennyshadrick/RPM_JRS
+    FileName = "/Users/jennyshadrick/Rocky-Profile-Model/driver_files/Dakota_drivers/test1plot" # /Users/jennyshadrick/RPM_JRS
     ColourMap = cm.gray
     make_plot(FileName,ColourMap)
         

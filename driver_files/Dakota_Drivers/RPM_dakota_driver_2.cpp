@@ -217,9 +217,9 @@ int main(int nNumberofArgs,char *argv[])
 	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);
 
     // print initial condition to file - this is for testing - remove
-	//double TempTime = -9999;
-    //PlatformModel.WriteProfile(OutputFileName, TempTime);			
-	//if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
+	double TempTime = -9999;
+    PlatformModel.WriteProfile(OutputFileName, TempTime);			
+	if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
 
     //Loop through time
 	while (Time >= EndTime)
@@ -266,8 +266,8 @@ int main(int nNumberofArgs,char *argv[])
 		{
 			cout.flush();
 			cout << "RPM: Time " << setprecision(2) << fixed << Time << " years\r";
-			//PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
-            //if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
+			PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
+            if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
 			PrintTime -= PrintInterval;
 		}
 
@@ -287,8 +287,8 @@ int main(int nNumberofArgs,char *argv[])
     //get CRN concentrations from model 
     XDataModel = PlatformCRN.get_X();
 	CRNConcModel = PlatformCRN.get_SurfaceN()[0];
-    int XCRNSize = XDataModel.size();
-    double CliffPositionCRNX = XDataModel[XCRNSize-1];
+    //int XCRNSize = XDataModel.size();
+    //double CliffPositionCRNX = XDataModel[XCRNSize-1];
 
     //Vectors to hold extracted profile data
     int NProfileData;
@@ -472,7 +472,7 @@ int main(int nNumberofArgs,char *argv[])
 	for (int i=0; i<NData; ++i)
 	{
 	    //Normalising CRN data to modelled cliff position (CRN data file: cliff position = 0)
-        XPosCRN[i] = CliffPositionCRNX - XData[i];
+        XPosCRN[i] = CliffPositionX - XData[i];   //testing with CliffX not CliffPositionCRNX
         
         //Take X value of sample and interpolate to get model results at this point
 	    int j=0;
