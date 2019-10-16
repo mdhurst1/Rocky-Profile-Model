@@ -60,13 +60,14 @@ def read_profile(FileName):
     if Times[0] == -9999:
         Times[0] = 10000.
 
-    Times = Times[0::50]
-    XPos = XPos[0::50]
-    RSL = RSL[0::50]
+    Times = Times[0::10]
+    XPos = XPos[0::10]
+    RSL = RSL[0::10]
 
     return Times, XPos, RSL
 
-CB_Filename = "../../RPM_JRS/CB_MCMC_2"   #best fit CB CB_MCMC_2 
+CB_Filename = "../../RPM_JRS/Dakota/Run1"   #best fit CB CB_MCMC_2 
+CB_2_Filename = "../../RPM_JRS/Dakota/Run2"
 #SY_Filename = "../../RPM_JRS/MCMC_1"
 
 CB_Times, CB_XPos, CB_RSL = read_profile(CB_Filename)
@@ -78,6 +79,8 @@ print CB_XPos
 CB_Rates = np.diff(CB_XPos)/(CB_Times[1]-CB_Times[0]) #changed to time 0 - time 1 
 print(CB_Times[1], CB_Times[0])
 #SY_Rates = np.diff(SY_XPos)/(SY_Times[1]-SY_Times[0])
+
+#print CB_Rates
 
 #create blank figure
 fig = plt.figure(1,figsize=(6.6,5))
