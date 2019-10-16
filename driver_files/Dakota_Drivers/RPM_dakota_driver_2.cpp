@@ -284,6 +284,8 @@ int main(int nNumberofArgs,char *argv[])
     int XSize = XModel.size();
     double CliffPositionX = XModel[XSize-1];
 
+	cout << "CliffPositionX = " << CliffPositionX << endl;
+
     //get CRN concentrations from model 
     XDataModel = PlatformCRN.get_X();
 	CRNConcModel = PlatformCRN.get_SurfaceN()[0];
@@ -530,8 +532,8 @@ int main(int nNumberofArgs,char *argv[])
    outfile.open(DakotaFilename);
 
    //Weightings - eqaul to 1
-   double TopoWeighting = 0.5;
-   double CRNWeighting = 0.5;
+   double TopoWeighting = 0.1;
+   double CRNWeighting = 0.9;
    double WeightedRMSE;
 
    //RMSE calculations 
