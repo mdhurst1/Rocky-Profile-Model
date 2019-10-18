@@ -453,6 +453,7 @@ int main(int nNumberofArgs,char *argv[])
    
    cout << " MaxTopo = " << setprecision(10) << MaxTopo << endl;
    cout << " MinTopo = " << setprecision(10) << MinTopo << endl;
+   cout << " Total residuals Topo = " << TotalResiduals << endl;
    cout << " TotalNResiduals = " << TotalNResiduals << endl;
    
 
@@ -496,11 +497,14 @@ int main(int nNumberofArgs,char *argv[])
     //Declarations for normalised Residuals 
     vector<double> NResidualsCRN(NData);
     double TotalNResidualsCRN = 0;
+	double TotalResidualsCRN = 0;
 
 	//Standardise CRN residuals
 	for (int i=0; i<NData; ++i)
    {
        ResidualsCRN[i] = fabs(CRNConcData[i]-NModel[i]);
+
+	   TotalResidualsCRN += pow(CRNConcData[i]-NModel[i],2);
 
 	   MinCRN = *min_element(begin(ResidualsCRN), end(ResidualsCRN));
 	   MaxCRN = *max_element(begin(ResidualsCRN), end(ResidualsCRN)); 
@@ -519,6 +523,7 @@ int main(int nNumberofArgs,char *argv[])
     
    cout << " MaxCRN = " << setprecision(10) << MaxCRN << endl;
    cout << " MinCRN = " << setprecision(10) << MinCRN << endl;
+   cout << " Total Residuals CRN = " << TotalResidualsCRN << endl;
    cout << " TotalNResidualsCRN = " << TotalNResidualsCRN << endl;
 
     ////////////////////////////////////

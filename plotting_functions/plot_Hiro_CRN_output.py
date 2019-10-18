@@ -136,9 +136,9 @@ def make_plot(FileName,ColourMap):
     ax2.set_ylabel("Concentration (a g$^-1$)")  #x 10$^3$ 
     ax2.set_xlabel("Distance (m)")
     #xmin, xmax = ax1.get_xlim()
-    #ax1.set_xlim(1450,1770)
-    #ax2.set_xlim(1450,1770) 
-    #ax1.set_ylim(-6,6)
+    ax1.set_xlim(1700,2100)
+    ax2.set_xlim(1700,2100) 
+    ax1.set_ylim(-6,6)
     #ax2.set_ylim(0,9000)
 
     ax1.plot(Xprof,Zprof,'r-',lw=1.5, label='Extracted Morphology')  #NXprof for scalby, Xprof for CB
@@ -156,7 +156,7 @@ def make_plot(FileName,ColourMap):
     #fig1.savefig('MCMC_SY_5_topo.png',dpi=300)
 
 if __name__ == "__main__":
-    FileName = "/Users/jennyshadrick/Rocky-Profile-Model/driver_files/Dakota_drivers/Run1" # /Users/jennyshadrick/RPM_JRS
+    FileName = "/Users/jennyshadrick/Rocky-Profile-Model/driver_files/Dakota_drivers/Run3" # /Users/jennyshadrick/RPM_JRS
     ColourMap = cm.gray
     make_plot(FileName,ColourMap)
         
