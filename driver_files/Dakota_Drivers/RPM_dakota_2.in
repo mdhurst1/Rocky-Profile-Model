@@ -14,7 +14,8 @@ method,
 
 variables,
 	 normal_uncertain = 2 
-	 initial_point 0.02 0.000002
+	 means 0.02 0.000002
+	 std_deviations 0.002 0.00002
 	 lower_bounds  0.00005 0.
      upper_bounds  1. 0.001
 	 descriptor "FR" "K"
