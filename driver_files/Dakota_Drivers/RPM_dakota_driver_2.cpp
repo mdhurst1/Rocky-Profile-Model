@@ -445,7 +445,11 @@ int main(int nNumberofArgs,char *argv[])
 	for (int i=0; i<NProfileData; ++i)
 	{
 	   //Feature scaling - min-max normalisation (distribution between 0 and 1)
-	   NResiduals[i] = (Residuals[i]-MinTopo)/(MaxTopo-MinTopo);
+	   //NResiduals[i] = (Residuals[i]-MinTopo)/(MaxTopo-MinTopo);
+
+	   //normalise topo to tidalrange 
+	   NResiduals[i] = (Residuals[i]/TidalRange);
+
 	   TotalNResiduals += pow(NResiduals[i],2);
 	   //Likelihood *= exp(-(fabs(Residuals[i]))/(ZStd*ZStd));    //ZStd read in from parameter file?
 	}
@@ -498,6 +502,7 @@ int main(int nNumberofArgs,char *argv[])
     vector<double> NResidualsCRN(NData);
     double TotalNResidualsCRN = 0;
 	double TotalResidualsCRN = 0;
+	double MaxCRNCB = 16162;
 
 	//Standardise CRN residuals
 	for (int i=0; i<NData; ++i)
@@ -513,7 +518,11 @@ int main(int nNumberofArgs,char *argv[])
    for (int i=0; i<NData; ++i)
    { 
 	   //Feature scaling - min-max normalisation (distribution between 0 and 1)
-	   NResidualsCRN[i] = (ResidualsCRN[i]-MinCRN)/(MaxCRN-MinCRN);
+	   //NResidualsCRN[i] = (ResidualsCRN[i]-MinCRN)/(MaxCRN-MinCRN);
+
+	   //Normalise CRN to max measured CRN conc
+	   NResidualsCRN[i] = (ResidualsCRN[i]/MaxCRNCB);
+
 	   TotalNResidualsCRN += pow(NResidualsCRN[i],2);    
 
 	   //TotalResidualsCRN += pow(CRNConcData[i]-NModel[i],2);
