@@ -390,7 +390,8 @@ int main(int nNumberofArgs,char *argv[])
    vector<double> XPos(NProfileData);
    vector<double> TopoData(NProfileData);
    vector<double> DiffX(NProfileData);
-   double RMSE, Scale;
+   double RMSE;
+   double Scale;
    //long double Likelihood = 1.L;
 
    //Interpolate to extracted morphology X positions
@@ -471,7 +472,8 @@ int main(int nNumberofArgs,char *argv[])
    vector<double> DiffCRNX(NData);
    vector<double> XPosCRN(NData);
    vector<double> NModel(NData);
-   double ScaleCRN, CRN_RMSE;
+   double ScaleCRN;
+   double CRN_RMSE;
    //long double LikelihoodCRN = 1.L;  
 
 
@@ -546,18 +548,30 @@ int main(int nNumberofArgs,char *argv[])
    outfile.open(DakotaFilename);
 
    //Weightings - eqaul to 1
-   double TopoWeighting = 0.1;
-   double CRNWeighting = 0.9;
+   double TopoWeighting = 0.5;
+   double CRNWeighting = 0.5;
    double WeightedRMSE;
+   double RMSE_N;
+   double CRN_RMSE_N;
 
    //RMSE calculations 
 
-   RMSE = sqrt(TotalNResiduals/NProfileData);
-   CRN_RMSE = sqrt(TotalNResidualsCRN/NData);
-   WeightedRMSE = (RMSE*TopoWeighting)+(CRN_RMSE*CRNWeighting);
+   //RMSE = sqrt(TotalNResiduals/NProfileData);
+   //CRN_RMSE = sqrt(TotalNResidualsCRN/NData);
+
+   RMSE = sqrt(TotalResiduals/NProfileData);
+   CRN_RMSE = sqrt(TotalResidualsCRN/NData);
+
+   //Normalise RMSE
+   RMSE_N = RMSE/TidalRange;
+   CRN_RMSE_N = CRN_RMSE/MaxCRNCB;
+
+   WeightedRMSE = (RMSE_N*TopoWeighting)+(CRN_RMSE_N*CRNWeighting);
 
    cout << " RMSE = " << RMSE << endl;
    cout << " CRN RMSE = " << CRN_RMSE << endl;
+   cout << " Normalised RMSE = " << RMSE_N << endl;
+   cout << " Normalised RMSE CRN = " << CRN_RMSE_N << endl;
    cout << " Weighted RMSE = " << WeightedRMSE << endl; 
    
    //Check outfile is open
