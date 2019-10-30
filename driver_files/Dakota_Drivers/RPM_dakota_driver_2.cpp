@@ -548,8 +548,8 @@ int main(int nNumberofArgs,char *argv[])
    outfile.open(DakotaFilename);
 
    //Weightings - eqaul to 1
-   double TopoWeighting = 0.5;
-   double CRNWeighting = 0.5;
+   double TopoWeighting = 0.1;
+   double CRNWeighting = 0.9;
    double WeightedRMSE;
    double RMSE_N;
    double CRN_RMSE_N;
