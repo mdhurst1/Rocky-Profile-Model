@@ -217,9 +217,9 @@ int main(int nNumberofArgs,char *argv[])
 	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);
 
     // print initial condition to file - this is for testing - remove
-	//double TempTime = -9999;
-    //PlatformModel.WriteProfile(OutputFileName, TempTime);			
-	//if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
+	double TempTime = -9999;
+    PlatformModel.WriteProfile(OutputFileName, TempTime);			
+	if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
 
     //Loop through time
 	while (Time >= EndTime)
@@ -266,8 +266,8 @@ int main(int nNumberofArgs,char *argv[])
 		{
 			cout.flush();
 			cout << "RPM: Time " << setprecision(2) << fixed << Time << " years\r";
-			//PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
-            //if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
+			PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
+            if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
 			PrintTime -= PrintInterval;
 		}
 
@@ -430,8 +430,9 @@ int main(int nNumberofArgs,char *argv[])
    {
        Residuals[i] = fabs(ProfileZData[i]-TopoData[i]);
 	   
-	   //Fail flag 
 	   TotalResiduals += pow(ProfileZData[i]-TopoData[i],2);
+
+	   //Fail Flag
 
 	   if (isinf(TotalResiduals))
 	   {
@@ -513,6 +514,12 @@ int main(int nNumberofArgs,char *argv[])
 
 	   TotalResidualsCRN += pow(CRNConcData[i]-NModel[i],2);
 
+	   if (isinf(TotalResidualsCRN))
+	   {
+		   FailFlag = true;
+		   break;
+	   }
+
 	   MinCRN = *min_element(begin(ResidualsCRN), end(ResidualsCRN));
 	   MaxCRN = *max_element(begin(ResidualsCRN), end(ResidualsCRN)); 
    }
@@ -563,7 +570,7 @@ int main(int nNumberofArgs,char *argv[])
    CRN_RMSE = sqrt(TotalResidualsCRN/NData);
 
    //Normalise RMSE
-   RMSE_N = RMSE/TidalRange;
+   RMSE_N = RMSE/TidalRange;  // min-max rather than tidal range?
    CRN_RMSE_N = CRN_RMSE/MaxCRNCB;
 
    WeightedRMSE = (RMSE_N*TopoWeighting)+(CRN_RMSE_N*CRNWeighting);
