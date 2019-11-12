@@ -403,12 +403,13 @@ int main(int nNumberofArgs,char *argv[])
        //Take X value of extracted morph position and interpolate to get model results at this point
        int j=0;
        while ((XModel[j]- XPos[i]) <0) ++j;
-
+	   
        DiffX[i] = XModel[j] - XPos[i];
        Scale = DiffX[i]/(XModel[j]-XModel[j-1]);
-        
+
        //Get Interpolated Z value
        TopoData[i] = ZModel[j]-Scale*(ZModel[j]-ZModel[j-1]);
+	   
    }
 
    //Calculate Residuals and likelihood
@@ -580,6 +581,8 @@ int main(int nNumberofArgs,char *argv[])
    cout << " Normalised RMSE = " << RMSE_N << endl;
    cout << " Normalised RMSE CRN = " << CRN_RMSE_N << endl;
    cout << " Weighted RMSE = " << WeightedRMSE << endl; 
+
+   //add another fail flag for nan?
    
    //Check outfile is open
 

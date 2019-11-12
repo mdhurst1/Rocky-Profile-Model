@@ -136,9 +136,9 @@ def make_plot(FileName,ColourMap):
     ax2.set_ylabel("Concentration (a g$^-1$)")  #x 10$^3$ 
     ax2.set_xlabel("Distance (m)")
     #xmin, xmax = ax1.get_xlim()
-    ax1.set_xlim(1700,2000)
-    ax2.set_xlim(1700,2000) 
-    ax1.set_ylim(-10,20)
+    #ax1.set_xlim(1800,2150)
+    #ax2.set_xlim(1800,2150) 
+    #ax1.set_ylim(-10,20)
     #ax2.set_ylim(0,9000)
 
     ax1.plot(Xprof,Zprof,'r-',lw=1.5, label='Extracted Morphology')  #NXprof for scalby, Xprof for CB
