@@ -13,7 +13,7 @@ Gradient: 1
 CliffHeight: 10
 MinElevation: -40
 SubmarineDecayConst: 1
-RSLFilename: ./SY_RSL.data
+RSLFilename: ../Data/SY_RSL.data
 StartTime: 10000
 ZStd: 1
 
