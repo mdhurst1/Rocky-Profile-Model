@@ -397,12 +397,12 @@ int main(int nNumberofArgs,char *argv[])
    //Interpolate to extracted morphology X positions
    for (int i=0; i<NProfileData; ++i)
    {
-       //Normalising profile data to modelled cliff position - using Swath profile data where cliff position = 0
+       //Normalising profile data to modelled cliff position (using Swath profile data where cliff position of measured data = 0)
        XPos[i] = CliffPositionX - ProfileXData[i];
 
        //Take X value of extracted morph position and interpolate to get model results at this point
        int j=0;
-       while ((XModel[j]- XPos[i]) <0) ++j;
+       while ((XModel[j]- XPos[i]) <0) ++j; //XPos starts at point nearest cliff and works offshore - starts at 40m from cliff so will never =0
 	   
        DiffX[i] = XModel[j] - XPos[i];
        Scale = DiffX[i]/(XModel[j]-XModel[j-1]);

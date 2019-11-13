@@ -12,8 +12,8 @@
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
-#include "../MCMC_RPM.hpp"
-#include "../RPM.hpp"
+#include "../../MCMC_RPM.hpp"
+#include "../../RPM.hpp"
 
 using namespace std;
 
