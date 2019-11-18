@@ -392,6 +392,7 @@ int main(int nNumberofArgs,char *argv[])
    vector<double> DiffX(NProfileData);
    double RMSE;
    double Scale;
+   bool FailFlag = false;
    //long double Likelihood = 1.L;
 
    //Interpolate to extracted morphology X positions
@@ -399,6 +400,13 @@ int main(int nNumberofArgs,char *argv[])
    {
        //Normalising profile data to modelled cliff position (using Swath profile data where cliff position of measured data = 0)
        XPos[i] = CliffPositionX - ProfileXData[i];
+
+	   //if statement XPos [i] < 0 fail flag?
+	   if (XPos[i]<0)
+	   {
+		   FailFlag = true;
+		   break;
+	   }
 
        //Take X value of extracted morph position and interpolate to get model results at this point
        int j=0;
@@ -417,7 +425,7 @@ int main(int nNumberofArgs,char *argv[])
    //Calculating max and min Residual for topo data 
    //Declarations for normalised residuals 
 
-   bool FailFlag = false;
+   
    double TotalResiduals = 0;
    double TotalNResiduals = 0;
    vector<double> Residuals(NProfileData); 
