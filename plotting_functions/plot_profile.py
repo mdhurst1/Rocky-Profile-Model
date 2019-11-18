@@ -32,7 +32,7 @@ def make_plot(FileName,ColourMap):
     plt.figure(1,figsize=(6.6,3.3))
 
     #load the extracted shore platform profile
-    ExProfileName = "../driver_files/Data/CB_profile.txt"
+    ExProfileName = "../driver_files/Data/SY_profile.txt"
     Xprof, Zprof = np.loadtxt(ExProfileName, unpack=True,skiprows=1,usecols=(0,1))
     XCliffPosition = Xprof[-1]
     Xprof -= XCliffPosition
@@ -50,7 +50,7 @@ def make_plot(FileName,ColourMap):
 
 
     if __name__ == "__main__":
-    #FileName = "../../RPM_JRS/Test_4" # /Users/jennyshadrick/RPM_JRS
+    FileName = "../../RPM_JRS/Test_4" # /Users/jennyshadrick/RPM_JRS
     ColourMap = cm.RdBu
     make_plot(FileName,ColourMap)
         
