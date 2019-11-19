@@ -443,11 +443,11 @@ int main(int nNumberofArgs,char *argv[])
 
 	   //Fail Flag
 
-	   if (isinf(TotalResiduals))
-	   {
-		   FailFlag = true;
-		   break;
-	   }
+	   //if (isinf(TotalResiduals))
+	   //{
+		//   FailFlag = true;
+		//   break;
+	   //}
 
 	   MinTopo = *min_element(begin(Residuals), end(Residuals));
 	   MaxTopo = *max_element(begin(Residuals), end(Residuals));  
