@@ -523,11 +523,11 @@ int main(int nNumberofArgs,char *argv[])
 
 	   TotalResidualsCRN += pow(CRNConcData[i]-NModel[i],2);
 
-	   if (isinf(TotalResidualsCRN))
-	   {
-		   FailFlag = true;
-		   break;
-	   }
+	   //if (isinf(TotalResidualsCRN))
+	   //{
+		 //  FailFlag = true;
+		 //  break;
+	   //}
 
 	   MinCRN = *min_element(begin(ResidualsCRN), end(ResidualsCRN));
 	   MaxCRN = *max_element(begin(ResidualsCRN), end(ResidualsCRN)); 
