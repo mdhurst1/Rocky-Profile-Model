@@ -156,7 +156,7 @@ def make_plot(FileName,ColourMap):
     #fig1.savefig('MCMC_SY_5_topo.png',dpi=300)
 
 if __name__ == "__main__":
-    FileName = "/Users/jennyshadrick/Rocky-Profile-Model/driver_files/Dakota_drivers/Test" # /Users/jennyshadrick/RPM_JRS
+    FileName = "/home/jrs17/Rocky-Profile-Model/driver_files/Dakota_drivers/Test1" # /Users/jennyshadrick/RPM_JRS
     ColourMap = cm.gray
     make_plot(FileName,ColourMap)
         
