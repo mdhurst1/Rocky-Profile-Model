@@ -155,7 +155,7 @@ int main(int nNumberofArgs,char *argv[])
 	double PrintTime = Time;
 
     //set up output file - used for visual when testing 
-	string OutputFileName = Folder+DakotaFilename+"_ShoreProfile.xn";
+	string OutputFileName = Folder+DakotaFilename+"_ShoreProfile.xz";
 	string OutputConcentrationFileName = Folder+DakotaFilename+"Concentrations.xn";
 	
 
