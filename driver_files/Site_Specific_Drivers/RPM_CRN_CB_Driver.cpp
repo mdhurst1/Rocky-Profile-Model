@@ -99,7 +99,7 @@ int main(int nNumberofArgs,char *argv[])
 		cout << "------------------------------------------------------" << endl;
 		cout << "Then the command line argument will be: " << endl;
 		cout << "In linux:" << endl;
-		cout << "  ./RPM_Driver.out /ProjectFolder/ Waipapa" << endl;
+		cout << "  ./RPM_Driver.out /ProjectFolder/ Waipapa 1" << endl;
 		cout << "------------------------------------------------------" << endl;
 		exit(EXIT_SUCCESS);
 	}
@@ -130,7 +130,7 @@ int main(int nNumberofArgs,char *argv[])
 	// initialise sea level here and calculate MinElevation based on lowest sea level
 
 	// Initialise Sea level from datafile
-	string RelativeSeaLevelFile = "../Data/CB_RSL_future.data";
+	string RelativeSeaLevelFile = "../Data/CB_RSL.data";
 	SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
 	
 	// initialise sea level using rate of change
@@ -191,8 +191,8 @@ int main(int nNumberofArgs,char *argv[])
 
 	//reset the geology
 	double CliffFailureDepth = 0.1;
-	double Resistance = 0.0213; //kg m^2 yr^-1 ? NOT CURRENTLY
-	double WeatheringRate = 0.0000074; //kg m^2 yr-1 ? NOT CURRENTLY
+	double Resistance = 0.02; //kg m^2 yr^-1 ? NOT CURRENTLY
+	double WeatheringRate = 0.; //kg m^2 yr-1 ? NOT CURRENTLY
 	double SubtidalEfficacy = 0.; //sets relative efficacy of subtidal weathering
 
 	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);	

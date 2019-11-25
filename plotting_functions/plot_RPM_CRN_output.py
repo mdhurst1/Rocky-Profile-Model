@@ -69,8 +69,8 @@ def make_plot(FileName,ColourMap):
         
         #Read morphology
         X = np.array(Line[2:],dtype="float64")
-        #NValues = len(X)
-        #Z = np.linspace(CliffHeight,-CliffHeight, NValues)
+        NValues = len(X)
+        Z = np.linspace(CliffHeight,-CliffHeight, NValues)
         
         if (Time == StartTime) or (Time == -9999):
             print(Time)
@@ -103,7 +103,7 @@ def make_plot(FileName,ColourMap):
     plt.savefig('dakota_test.png',dpi=300)
 
 if __name__ == "__main__":
-    FileName = "../driver_files/Dakota_Drivers/test_" # /Users/jennyshadrick/RPM_JRS
+    FileName = "../driver_files/test__" # /Users/jennyshadrick/RPM_JRS
     ColourMap = cm.RdBu
     make_plot(FileName,ColourMap)
         
