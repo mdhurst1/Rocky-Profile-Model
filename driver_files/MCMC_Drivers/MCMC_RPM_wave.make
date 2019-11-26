@@ -11,8 +11,8 @@ LD=g++
 # -pg does what?!
 # -O3 is an optimisation flag, not good for debugging
 
-CFLAGS= -g -c -Wall -O3 $(INCDIR)
-LDFLAGS= -g -Wall -O3
+CFLAGS= -g -c -Wall -fopenmp $(INCDIR)
+LDFLAGS= -g -Wall -fopenmp
 
 # SOURCE FILES MACROS IN DEPENDENCY ORDER? SHOULDNT MATTER THANKS TO HEADERS
 SOURCES = ../../FastExp.cpp ../../SeaLevel.cpp ../../RPM.cpp ../../MCMC_RPM_wave.cpp ./MCMC_RPM_Driver.cpp
