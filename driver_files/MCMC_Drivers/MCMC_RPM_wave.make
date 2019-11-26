@@ -2,21 +2,20 @@
 
 # COMPILER and LINKER MACROs
 CC=g++
-#CC=clang 
 LD=g++
 
 # COMPILER AND LINKER OPTION FLAGS MACRO
 # -g option build tables for debugging
 # -c option compile but do not try to link (yet)
 # -Wall display all warning messages
-# -pg is some sort of debugging option
+# -pg does what?!
 # -O3 is an optimisation flag, not good for debugging
-# -fopenmp is a flag for openmp directives
-CFLAGS= -c -Wall -Werror -Wextra -pedantic -g -O3 $(INCDIR) 
-LDFLAGS= -Wall -g -O3
+
+CFLAGS= -g -c -Wall -fopenmp $(INCDIR)
+LDFLAGS= -g -Wall -fopenmp
 
 # SOURCE FILES MACROS IN DEPENDENCY ORDER? SHOULDNT MATTER THANKS TO HEADERS
-SOURCES = ../../FastExp.cpp ../../RoBoCoP_CRN/RockyCoastCRN.cpp ../../SeaLevel.cpp ../../RPM.cpp ./RPM_dakota_driver_2.cpp
+SOURCES = ../../FastExp.cpp ../../SeaLevel.cpp ../../RPM.cpp ../../MCMC_RPM_wave.cpp ./MCMC_RPM_Driver.cpp
 
 # LIBRARIES MACRO
 LIBS   = -lm -lstdc++ 
@@ -25,7 +24,7 @@ LIBS   = -lm -lstdc++
 OBJECTS=$(SOURCES:.cpp=.o)
 
 # EXECUTABLE MACRO
-EXECUTABLE=RPM_dakota.exe
+EXECUTABLE=LaunchMCMC.out
 
 all: $(SOURCES) $(EXECUTABLE)
 
@@ -36,4 +35,4 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm -f ../../*.o ../../RoBoCoP_CRN/*.o ../*.o ../*.out *.o *.out *.xz *.xn *.exe *.rst 
+	rm -f ../*.o *.o *.out *.exe

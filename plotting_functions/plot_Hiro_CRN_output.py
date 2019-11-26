@@ -18,7 +18,7 @@ from matplotlib import rc
 
 # Customise figure style #
 rc('font',**{'family':'sans-serif','sans-serif':['Arial']})
-rc('font',size=8)
+rc('font',size=9)
 rc('ytick.major',pad=5)
 rc('xtick.major',pad=5)
 padding = 5
@@ -108,7 +108,7 @@ def make_plot(FileName,ColourMap):
     File2 = "../driver_files/Data/CB_CRN.data"
     X,CRN,Error=np.loadtxt(File2,unpack=True,skiprows=1,usecols=(1,2,3),delimiter=" ")
     NormalisedX = LCPosition - X
-    ax2.errorbar(NormalisedX,CRN,fmt='o', yerr=Error,c='grey', label='Measured CRN Concentrations (corrected)')    
+    ax2.errorbar(NormalisedX,CRN,fmt='o', yerr=Error,c='grey', label='Measured CRN Concentrations')    
     ax2.scatter(NormalisedX,CRN, s=0.1)
 
     #File 3 uncorrected CRN data for Dunbar?
@@ -136,19 +136,18 @@ def make_plot(FileName,ColourMap):
     ax2.set_ylabel("Concentration (a g$^-1$)")  #x 10$^3$ 
     ax2.set_xlabel("Distance (m)")
     #xmin, xmax = ax1.get_xlim()
-    #ax1.set_xlim(1800,2150)
-    #ax2.set_xlim(1800,2150) 
-    #ax1.set_ylim(-10,20)
+    #ax1.set_xlim(1200,1500)
+    #ax2.set_xlim(1200,1500) 
+    #ax1.set_ylim(-10,10)
     #ax2.set_ylim(0,9000)
 
     ax1.plot(Xprof,Zprof,'r-',lw=1.5, label='Extracted Morphology')  #NXprof for scalby, Xprof for CB
 
    
 
-    #ax1.legend(loc='upper left', numpoints=1)
-    #ax2.legend(loc='upper right', numpoints=1)
+    ax1.legend(loc='upper left', numpoints=1)
+    ax2.legend(loc='lower left', numpoints=1)
     
-
 
     fig1 = plt.gcf()
     plt.show()
