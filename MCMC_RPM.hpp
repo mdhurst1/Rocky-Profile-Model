@@ -39,7 +39,7 @@ class MCMC_RPM
       double StartTime;
 
       //Vectors to hold Topographic Model results
-      //int NTopoData;
+      int NTopoData;
       vector<double> TopoXData;
       vector<double> TopoZData;
 
