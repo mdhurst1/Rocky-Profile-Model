@@ -38,10 +38,10 @@ int main (int nNumberofArgs,char *argv[])
     int NIterations = atoi(argv[4]);
   	
 	// load an MCMC driver object
-    MCMC_RPM MCMC_RPM_Driver = MCMC_RPM(DataFilename);
+    MCMC_RPM MCMC_RPM_W_Driver = MCMC_RPM(DataFilename);
   
     //now run the metropolis algorithm along a chain
-	MCMC_RPM_Driver.RunMetropolisChain(NIterations, ParamFilename, ChainFilename);
+	MCMC_RPM_W_Driver.RunMetropolisChain(NIterations, ParamFilename, ChainFilename);
 	
 	cout << "Done!" << endl;
 	

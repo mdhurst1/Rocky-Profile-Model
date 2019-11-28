@@ -9,7 +9,7 @@ WeatheringRateInit: 0.00002
 WaveDecayMin: 0.01
 WaveDecayMax: 10
 WaveDecayStd: 5
-WaveDecayInit:1
+WaveDecayInit: 1
 TidalRange: 8
 dZ: 0.1
 dX: 0.1
