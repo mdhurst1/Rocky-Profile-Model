@@ -217,7 +217,7 @@ int main(int nNumberofArgs,char *argv[])
 	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);
 
     // print initial condition to file - this is for testing - remove
-	double TempTime = -9999;
+	//double TempTime = -9999;
     //PlatformModel.WriteProfile(OutputFileName, TempTime);			
 	//if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
 
@@ -268,7 +268,7 @@ int main(int nNumberofArgs,char *argv[])
 			cout << "RPM: Time " << setprecision(2) << fixed << Time << " years\r";
 			//PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
             //if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
-			//PrintTime -= PrintInterval;
+			PrintTime -= PrintInterval;
 		}
 
 		//update time
