@@ -1,0 +1,48 @@
+#  DAKOTA INPUT FILE - RPM_test.in
+#  Usage:
+#  dakota -i RPM_dakota_2.in -o RPM_dakota_2.out > RPM_dakota.stdout
+
+environment
+     tabular_data
+     tabular_data_file "RPM_dakota_2.dat"
+
+method,
+	 bayes_calibration queso 
+     metropolis_hastings                           #metropolis_hastings/DRAM
+     samples = 1000 seed = 348
+	 output debug
+
+variables,
+	 normal_uncertain = 3
+	 means 5. 1. 1. 
+	 std_deviations 4. 0.9 0.9 
+	 lower_bounds  0. 0. 0.
+     upper_bounds  10. 2. 2. 
+	 descriptor "FR" "K" "Y"
+
+interface,
+	fork
+	  asynchronous
+	  evaluation_concurrency 1
+
+	  failure_capture recover 999999999999999
+	  
+	  parameters_file = "params.in"
+	  results_file    = "results.out"
+	
+	  copy_files "template_dir/*"
+
+	  analysis_driver = "python ./RPM_driver_2.py"
+
+
+      work_directory
+      named "run"
+	  directory_tag
+      directory_save
+      file_save
+
+responses,
+	num_response_functions = 1
+    response_descriptors "rmse"  #/likelihood
+	no_gradients
+	no_hessians

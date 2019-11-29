@@ -609,6 +609,10 @@ int main(int nNumberofArgs,char *argv[])
 	{
 		outfile << "FAIL" << endl;
 	}
+	else if (!CRNFlag)
+	{
+		outfile << RMSE << endl;
+	}
 	else
 	{
 	    outfile << WeightedRMSE << endl;
