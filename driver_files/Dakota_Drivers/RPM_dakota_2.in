@@ -23,7 +23,7 @@ variables,
 	 lognormal_uncertain = 1
 	 means 1.
 	 std_deviations 0.9
-	 lower_bounds 0.
+	 lower_bounds 0.0000000001
 	 upper_bounds 2. 
 	 descriptor "K"
 
