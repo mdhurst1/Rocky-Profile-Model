@@ -8,14 +8,15 @@ environment
 
 method,
 	 bayes_calibration queso 
-     metropolis_hastings                           #metropolis_hastings/DRAM
+     metropolis_hastings 
+	 proposal_covariance prior                          
      samples = 1000 seed = 348
 	 output debug
 
 variables,
 	 normal_uncertain = 2
 	 means 5. 1.
-	 std_deviations 2. 0.3
+	 std_deviations 4. 0.9
 	 lower_bounds  0. 0.
      upper_bounds  10. 2.
 	 descriptor "FR" "K"
