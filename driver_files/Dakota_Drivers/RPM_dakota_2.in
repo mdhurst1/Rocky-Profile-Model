@@ -13,19 +13,12 @@ method,
 	 output debug
 
 variables,
-	 normal_uncertain = 1
-	 means 5.
-	 std_deviations 4.
-	 lower_bounds  0.
-     upper_bounds  10. 
-	 descriptor "FR"
-
-	 lognormal_uncertain = 1
-	 means 1.
-	 std_deviations 0.9
-	 lower_bounds 0.0000000001
-	 upper_bounds 2. 
-	 descriptor "K"
+	 normal_uncertain = 2
+	 means 5. 1.
+	 std_deviations 2. 0.3
+	 lower_bounds  0. 0.
+     upper_bounds  10. 2.
+	 descriptor "FR" "K"
 
 interface,
 	fork
