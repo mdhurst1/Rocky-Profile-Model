@@ -572,9 +572,6 @@ int main(int nNumberofArgs,char *argv[])
 
    //RMSE calculations 
 
-   //RMSE = sqrt(TotalNResiduals/NProfileData);
-   //CRN_RMSE = sqrt(TotalNResidualsCRN/NData);
-
    RMSE = sqrt(TotalResiduals/NProfileData);
    CRN_RMSE = sqrt(TotalResidualsCRN/NData);
 
