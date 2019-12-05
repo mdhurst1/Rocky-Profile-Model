@@ -608,7 +608,7 @@ int main(int nNumberofArgs,char *argv[])
 	}
 	else if (!CRNFlag)
 	{
-		outfile << RMSE << endl;
+		outfile << RMSE_N << endl;
 	}
 	else
 	{
