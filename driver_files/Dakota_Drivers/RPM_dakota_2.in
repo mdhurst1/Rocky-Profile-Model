@@ -8,9 +8,9 @@ environment
 
 method,
 	 bayes_calibration queso 
-     adaptive_metropolis 
+     metropolis_hastings 
 	 proposal_covariance prior                          
-     chain_samples = 10000 seed = 348
+     chain_samples = 1000 seed = 348
 	 output debug
 
 variables,
@@ -26,7 +26,7 @@ interface,
 	  asynchronous
 	  evaluation_concurrency 1
 
-	  failure_capture recover 999999999999999
+	  failure_capture recover 2
 	  
 	  parameters_file = "params.in"
 	  results_file    = "results.out"
