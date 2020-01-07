@@ -7,19 +7,18 @@ environment
      tabular_data_file "RPM_dakota_2.dat"
 
 method,
-	 bayes_calibration queso 
-     metropolis_hastings
-	 proposal_covariance prior                          
-     chain_samples = 1000 seed = 348
+     efficient_global
+	 gaussian_process surfpack
+	 seed = 348
 	 export_chain_points_file  'posterior.dat'
 	 output debug
 
 variables,
-	 uniform_uncertain = 2
-	 #means 5. 2.5
-	 #std_deviations 0.5 0.25
-	 lower_bounds  0.00000001 0.00000001
-     upper_bounds  10. 5.
+	 normal_uncertain = 2
+	 means 5. 2.5
+	 std_deviations 0.5 0.25
+	 #lower_bounds  0.00000001 0.00000001
+     #upper_bounds  10. 5.
 	 descriptor "FR" "K"
 
 interface,
