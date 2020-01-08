@@ -1,16 +1,16 @@
 #  DAKOTA INPUT FILE - RPM_test.in
 #  Usage:
-#  dakota -i RPM_dakota_2.in -o RPM_dakota_2.out > RPM_dakota.stdout
+#  dakota -i RPM_dakota_ego.in -o RPM_dakota_ego.out > RPM_dakota.stdout
 
 environment
      tabular_data
-     tabular_data_file "RPM_dakota_2.dat"
+     tabular_data_file "RPM_dakota_ego.dat"
 
 method,
      efficient_global
 	 gaussian_process surfpack
 	 seed = 348
-	 export_chain_points_file  'posterior.dat'
+	 #samples = ???
 	 output debug
 
 variables,
@@ -44,7 +44,7 @@ interface,
 
 	  
 responses,
-	num_response_functions = 1
+	calibration_terms = 1
     response_descriptors "rmse"  #/likelihood
 	no_gradients
 	no_hessians
