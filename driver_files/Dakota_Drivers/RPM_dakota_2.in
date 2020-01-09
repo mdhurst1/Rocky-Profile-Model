@@ -18,8 +18,8 @@ variables,
 	 uniform_uncertain = 2
 	 #means 5. 2.5
 	 #std_deviations 0.5 0.25
-	 lower_bounds  -5. -5.
-     upper_bounds  1. 1.
+	 lower_bounds  -5. 0.
+     upper_bounds  1. 0.5
 	 descriptor "FR" "K"
 
 interface,

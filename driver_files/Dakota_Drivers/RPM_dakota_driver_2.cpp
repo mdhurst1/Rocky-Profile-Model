@@ -136,7 +136,7 @@ int main(int nNumberofArgs,char *argv[])
     double SubtidalEfficacy = atof(argv[8]);
     double WaveAttenuationConst = atof(argv[9]);
     double Resistance = pow(10,(atof(argv[10])));          //dakota varies FR on log scale
-    double WeatheringRate = pow(10,(atof(argv[11])));      //dakota varies K on log scale 
+    double WeatheringRate = (atof(argv[11])*Resistance);      //dakota varies K proportional to FR 0 - 0.5 range 
 
     //initialisation parameters
 	double dZ = 0.1;
