@@ -430,8 +430,8 @@ int main(int nNumberofArgs,char *argv[])
    double TotalNResiduals = 0;
    vector<double> Residuals(NProfileData); 
    vector<double> NResiduals(NProfileData);
-   double MaxTopo = Residuals[0];
-   double MinTopo = Residuals[0];
+   //double MaxTopo = Residuals[0];
+   //double MinTopo = Residuals[0];
    
 
    //standardise topo residuals
@@ -449,8 +449,8 @@ int main(int nNumberofArgs,char *argv[])
 		   break;
 	   }
 
-	   MinTopo = *min_element(begin(Residuals), end(Residuals));
-	   MaxTopo = *max_element(begin(Residuals), end(Residuals));  
+	   //MinTopo = *min_element(begin(Residuals), end(Residuals));
+	   //MaxTopo = *max_element(begin(Residuals), end(Residuals));  
     }
 
 	for (int i=0; i<NProfileData; ++i)
@@ -466,8 +466,8 @@ int main(int nNumberofArgs,char *argv[])
 	}
 
    
-   cout << " MaxTopo = " << setprecision(10) << MaxTopo << endl;
-   cout << " MinTopo = " << setprecision(10) << MinTopo << endl;
+   //cout << " MaxTopo = " << setprecision(10) << MaxTopo << endl;
+   //cout << " MinTopo = " << setprecision(10) << MinTopo << endl;
    cout << " Total residuals Topo = " << TotalResiduals << endl;
    cout << " TotalNResiduals = " << TotalNResiduals << endl;
    
