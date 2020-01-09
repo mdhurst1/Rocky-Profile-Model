@@ -147,7 +147,7 @@ int main(int nNumberofArgs,char *argv[])
 	//Time control parameters
 	//Time runs in yrs bp
 	double EndTime = 0.;
-	double Time = 10000.;
+	double Time = 8000.;
 	double TimeInterval = 1.;
 
 	//Print Control
