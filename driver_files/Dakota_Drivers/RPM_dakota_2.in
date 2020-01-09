@@ -10,7 +10,7 @@ method,
 	 bayes_calibration queso 
      metropolis_hastings
 	 proposal_covariance prior                          
-     chain_samples = 20 seed = 348
+     chain_samples = 10 seed = 348
 	 export_chain_points_file  'posterior.dat'
 	 output debug
 
