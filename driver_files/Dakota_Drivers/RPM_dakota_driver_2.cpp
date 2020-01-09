@@ -430,8 +430,8 @@ int main(int nNumberofArgs,char *argv[])
    double TotalNResiduals = 0;
    vector<double> Residuals(NProfileData); 
    vector<double> NResiduals(NProfileData);
-   double MaxTopo = Residuals[0];
-   double MinTopo = Residuals[0];
+   //double MaxTopo = Residuals[0];
+   //double MinTopo = Residuals[0];
    
 
    //standardise topo residuals
@@ -449,8 +449,8 @@ int main(int nNumberofArgs,char *argv[])
 		   break;
 	   }
 
-	   MinTopo = *min_element(begin(Residuals), end(Residuals));
-	   MaxTopo = *max_element(begin(Residuals), end(Residuals));  
+	   //MinTopo = *min_element(begin(Residuals), end(Residuals));
+	   //MaxTopo = *max_element(begin(Residuals), end(Residuals));  
     }
 
 	for (int i=0; i<NProfileData; ++i)
@@ -466,8 +466,8 @@ int main(int nNumberofArgs,char *argv[])
 	}
 
    
-   cout << " MaxTopo = " << setprecision(10) << MaxTopo << endl;
-   cout << " MinTopo = " << setprecision(10) << MinTopo << endl;
+   //cout << " MaxTopo = " << setprecision(10) << MaxTopo << endl;
+   //cout << " MinTopo = " << setprecision(10) << MinTopo << endl;
    cout << " Total residuals Topo = " << TotalResiduals << endl;
    cout << " TotalNResiduals = " << TotalNResiduals << endl;
    
@@ -507,8 +507,8 @@ int main(int nNumberofArgs,char *argv[])
 	//Calculate likelihood
     //double TotalResidualsCRN = 0;
 	vector<double> ResidualsCRN(NData); 
-	double MaxCRN = ResidualsCRN[0];
-	double MinCRN = ResidualsCRN[0];
+	//double MaxCRN = ResidualsCRN[0];
+	//double MinCRN = ResidualsCRN[0];
 
     //Declarations for normalised Residuals 
     vector<double> NResidualsCRN(NData);
@@ -529,8 +529,8 @@ int main(int nNumberofArgs,char *argv[])
 		   break;
 	   }
 
-	   MinCRN = *min_element(begin(ResidualsCRN), end(ResidualsCRN));
-	   MaxCRN = *max_element(begin(ResidualsCRN), end(ResidualsCRN)); 
+	   //MinCRN = *min_element(begin(ResidualsCRN), end(ResidualsCRN));
+	   //MaxCRN = *max_element(begin(ResidualsCRN), end(ResidualsCRN)); 
    }
 
    for (int i=0; i<NData; ++i)
@@ -548,8 +548,8 @@ int main(int nNumberofArgs,char *argv[])
    }
 	
     
-   cout << " MaxCRN = " << setprecision(10) << MaxCRN << endl;
-   cout << " MinCRN = " << setprecision(10) << MinCRN << endl;
+   //cout << " MaxCRN = " << setprecision(10) << MaxCRN << endl;
+   //cout << " MinCRN = " << setprecision(10) << MinCRN << endl;
    cout << " Total Residuals CRN = " << TotalResidualsCRN << endl;
    cout << " TotalNResidualsCRN = " << TotalNResidualsCRN << endl;
 
