@@ -132,6 +132,7 @@ class RPM
 		double SeaLevelRise;
 		double SeaLevel;
 		int SeaLevelInd;
+		int OffshoreZInd, OffshoreXInd;
 		double SLR_sum;
 
 		// TECTONIC UPLIFT
@@ -301,6 +302,7 @@ class RPM
 		void SupratidalWeathering();
 		void SubtidalWeathering();
 
+		void DestroyOffshore();
 		void UpdateMorphology();
 
 		// File name holder
