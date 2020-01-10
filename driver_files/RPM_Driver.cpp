@@ -104,7 +104,8 @@ int main(int nNumberofArgs,char *argv[])
 	double dX = 0.1;
 	double Gradient = 1.;
 	double CliffHeight = 10.;
-
+	double MinElevation = -20.;
+	
 	//Time control parameters
 	//Time runs in yrs bp
 	double EndTime = 0;
@@ -117,7 +118,7 @@ int main(int nNumberofArgs,char *argv[])
 	string OutputFileName = Folder+Project+"_ShoreProfile.xz";
 	
 	//initialise RPM Model
-	RPM PlatformModel = RPM(dZ, dX, Gradient, CliffHeight);
+	RPM PlatformModel = RPM(dZ, dX, Gradient, CliffHeight, MinElevation);
 	
 	//Initialise Tides
 	double TidalRange = 1.5;
@@ -156,7 +157,8 @@ int main(int nNumberofArgs,char *argv[])
 	double CliffFailureDepth = 0.1;
 	double Resistance = 0.1; //kg m^2 yr^-1 ? NOT CURRENTLY
 	double WeatheringRate = 0.01; //kg m^2 yr-1 ? NOT CURRENTLY
-	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate);
+	double SubtidalWeatheringEfficacy = 0.1; // fraction of max weathering rate
+	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate, SubtidalWeatheringEfficacy);
 
 	// print initial condition to file
 	double TempTime = -9999;
@@ -176,8 +178,8 @@ int main(int nNumberofArgs,char *argv[])
 		//}
 		
 		//Update Sea Level
-		InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
-		PlatformModel.UpdateSeaLevel(InstantSeaLevel);
+		//InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
+		//PlatformModel.UpdateSeaLevel(InstantSeaLevel);
 
 		//Get the wave conditions
 		PlatformModel.GetWave();

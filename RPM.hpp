@@ -105,8 +105,6 @@ class RPM
 		vector< vector<int> > MorphologyArray;		// array to store morphology
 		vector< vector<double> > ResistanceArray;	// array to store resistance
 
-		bool DestroyOffshore;
-
 		// Local Angle Array
 		//vector< vector<double> > LocalangleArray;	    // array to store localangle
 

@@ -15,7 +15,7 @@ CFLAGS= -g -c -Wall -Werror -Wextra -pedantic -pg -O3 -fopenmp $(INCDIR)
 LDFLAGS= -g -Wall -pg -O3 -fopenmp
 
 # SOURCE FILES MACROS IN DEPENDENCY ORDER? SHOULDNT MATTER THANKS TO HEADERS
-SOURCES = ../SeaLevel.cpp ../RPM.cpp ./RPM_Driver.cpp
+SOURCES = ../FastExp.cpp ../SeaLevel.cpp ../RPM.cpp ./RPM_Driver.cpp
 
 # LIBRARIES MACRO
 LIBS   = -lm -lstdc++ 

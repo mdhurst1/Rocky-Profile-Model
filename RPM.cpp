@@ -135,8 +135,6 @@ void RPM::Initialise(double dZ_in, double dX_in)
 	MorphologyArray = vector< vector<int> >(NZNodes,vector<int>(NXNodes,1));
 	ResistanceArray = vector< vector<double> >(NZNodes,vector<double>(NXNodes,RockResistance));
 
-	DestroyOffshore = false;
-
 	//default time interval
 	Time = 0;
 	TimeInterval = 1;
@@ -945,12 +943,12 @@ void RPM::DestroyOffshore()
 	// MDH, Jan 2020
 
 	// find lowest point to maintain in simulation.
-	MaxWaterDepth = 0.5*TidalRange+3.*MeanWaveHeight;
+	double MaxWaterDepth = 0.5*TidalRange+3.*MeanWaveHeight;
 
 	// find new min elevation in vertical
 	for (int i=0; i<NZNodes; ++i)
 	{
-		if (Z[i] < MeanSeaLevel-MaxWaterDepth)
+		if (Z[i] < SeaLevel-MaxWaterDepth)
 		{
 			OffshoreZInd = i-1;
 			break;
@@ -1037,8 +1035,7 @@ void RPM::UpdateMorphology()
 	//Determine indices in X-direction
 	bool LowTideFlag = false;
 	bool HighTideFlag = false;
-	bool OffshoreFlag = false;
-
+	
 	for (int j=0; j<NXNodes; ++j)
 	{
 		if ((MorphologyArray[MaxTideZInd][j] == 1) && (HighTideFlag == false))
