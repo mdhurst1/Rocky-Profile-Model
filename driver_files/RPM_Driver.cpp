@@ -105,7 +105,7 @@ int main(int nNumberofArgs,char *argv[])
 	double Gradient = 1.;
 	double CliffHeight = 10.;
 	double MinElevation = -20.;
-	
+
 	//Time control parameters
 	//Time runs in yrs bp
 	double EndTime = 0;
@@ -120,6 +120,9 @@ int main(int nNumberofArgs,char *argv[])
 	//initialise RPM Model
 	RPM PlatformModel = RPM(dZ, dX, Gradient, CliffHeight, MinElevation);
 	
+	//Sea level rise?
+	double SLR = 0;
+	PlatformModel.InitialiseSeaLevel(SLR);
 	//Initialise Tides
 	double TidalRange = 1.5;
 	PlatformModel.InitialiseTides(TidalRange);
@@ -132,10 +135,6 @@ int main(int nNumberofArgs,char *argv[])
 	double WavePeriod_StD = 0;
 	PlatformModel.InitialiseWaves(WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD);
 
-	//Sea level rise?
-	double SLR = 0;
-	PlatformModel.InitialiseSeaLevel(SLR);
-	
 	//Sea level rise?
 	//string RelativeSeaLevelFile = Folder + Project + "_RSL.tz";
 	//SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);

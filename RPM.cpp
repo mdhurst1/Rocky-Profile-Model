@@ -483,6 +483,7 @@ void RPM::InitialiseSeaLevel(double SLR)
 	// dont let sea level rise be zero, just make it tinee!
 	if (SeaLevelRise == 0) SeaLevelRise = 0.0000000001;
 	SLR_sum = 0.;
+	SeaLevel = 0;
 }
 
 void RPM::UpdateSeaLevel()
@@ -1079,6 +1080,7 @@ void RPM::UpdateMorphology()
 		//Grow them
 		X.push_back(NXNodes*dX);
 		Zx.push_back(Zx[NXNodes-1]);
+		ZInd.push_back(ZInd[NXNodes-1]);
 		
 		for (int i=0; i<NZNodes; ++i)
 		{
