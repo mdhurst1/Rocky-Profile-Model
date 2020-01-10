@@ -942,13 +942,17 @@ void RPM::ErodeDownwearing()
 
 void RPM::UpdateMorphology()
 {
-	"""
+	/*
 	Retrieves the morphology of the shore platform and cliff from the resistance and
 	morphology arrays. Vectors and arrays are grown dynamically as the coast retreats.
 	Vectors and arrays can optionally be shrunk dynamically at the offshore boundary. 
 	This is useful for model simulations with continuous RSLR where the offshore domain
 	becomes inactive.
-	"""
+
+	MDH
+	
+	*/
+
 	//function to update morphology vectors and indices
 
 	// Find Sea Level in vertical
