@@ -135,6 +135,8 @@ void RPM::Initialise(double dZ_in, double dX_in)
 	MorphologyArray = vector< vector<int> >(NZNodes,vector<int>(NXNodes,1));
 	ResistanceArray = vector< vector<double> >(NZNodes,vector<double>(NXNodes,RockResistance));
 
+	DestroyOffshore = false;
+
 	//default time interval
 	Time = 0;
 	TimeInterval = 1;
@@ -215,9 +217,6 @@ void RPM::Initialise(double dZ_in, double dX_in, double Gradient, double CliffHe
 	//declare an array of ones for assignment of the Morphology Array
 	MorphologyArray = vector< vector<int> >(NZNodes,vector<int>(NXNodes,1));
 	ResistanceArray = vector< vector<double> >(NZNodes,vector<double>(NXNodes,RockResistance));
-
-    // teset
-	// LocalangleArray = vector< vector<double> >(NZNodes,vector<double>(NXNodes,0.));
 
 	if (InitialGradient != 0)
 	{
@@ -940,6 +939,69 @@ void RPM::ErodeDownwearing()
 	}
 }
 
+void RPM::DestroyOffshore()
+{
+	// Function to turn on flag to destroy offshore cells in arrays and vectors
+	// MDH, Jan 2020
+
+	// find lowest point to maintain in simulation.
+	MaxWaterDepth = 0.5*TidalRange+3.*MeanWaveHeight;
+
+	// find new min elevation in vertical
+	for (int i=0; i<NZNodes; ++i)
+	{
+		if (Z[i] < MeanSeaLevel-MaxWaterDepth)
+		{
+			OffshoreZInd = i-1;
+			break;
+		}
+	}
+
+	// find in horizontal
+	for (int j=0; j<NXNodes; ++j)
+	{
+		if (MorphologyArray[OffshoreZInd][j] == 1)
+		{
+			OffshoreXInd = j;
+			break;
+		}
+	}
+	
+	//Destroy the left hand side of X direction vectors and arrays dynamically
+	//Destroy them first in horizontal
+	X.erase(X.begin(),X.begin()+OffshoreXInd);
+	  		
+	for (int i=0; i<NZNodes; ++i)
+	{
+		MorphologyArray[i].erase(MorphologyArray[i].begin(),MorphologyArray[i].begin()+OffshoreXInd);
+		ResistanceArray[i].erase(ResistanceArray[i].begin(),ResistanceArray[i].begin()+OffshoreXInd);
+	}
+	
+	// update size value
+	NXNodes -= OffshoreXInd;
+	
+	// then destroy in the vertical
+	MorphologyArray.erase(MorphologyArray.begin()+OffshoreZInd,MorphologyArray.end());
+	ResistanceArray.erase(ResistanceArray.begin()+OffshoreZInd,ResistanceArray.end());
+	Z.erase(Z.begin()+OffshoreZInd,Z.end());
+	
+	NZNodes -= (NZNodes-OffshoreZInd);
+	
+	//declare arrays of zeros to initalise various other vectors
+	vector<double> ZZeros(NZNodes,0);
+	Bw_Erosion = ZZeros;
+	Dw_Erosion = ZZeros;
+	Weathering = ZZeros;
+	
+	//Indices trackers
+	XInd = vector<int>(NZNodes,0);
+	ZInd = vector<int>(NXNodes,0);
+	
+	// rebuild other vectors as appropriate
+	UpdateMorphology();
+	
+}
+
 void RPM::UpdateMorphology()
 {
 	/*
@@ -950,10 +1012,8 @@ void RPM::UpdateMorphology()
 	becomes inactive.
 
 	MDH
-	
-	*/
 
-	//function to update morphology vectors and indices
+	*/
 
 	// Find Sea Level in vertical
 	// Only need to do this once if sea level isnt changing
@@ -967,16 +1027,18 @@ void RPM::UpdateMorphology()
 				SeaLevelInd = i-1;
 				break;
 			}
-		}
+		}		
 	}
 
 	//Loop across all intertidal elevations
 	MinTideZInd = (int)round(SeaLevelInd+0.5*TidalRange/dZ);
 	MaxTideZInd = (int)round(SeaLevelInd-0.5*TidalRange/dZ);
 
-	//Determine intertidal range indices in X-direction
+	//Determine indices in X-direction
 	bool LowTideFlag = false;
 	bool HighTideFlag = false;
+	bool OffshoreFlag = false;
+
 	for (int j=0; j<NXNodes; ++j)
 	{
 		if ((MorphologyArray[MaxTideZInd][j] == 1) && (HighTideFlag == false))
@@ -1014,13 +1076,13 @@ void RPM::UpdateMorphology()
 		}
 	}
 
-	//Grow the X direction arrays dynamically
+	//Grow the X direction arrays dynamically shoreward as required
 	if (MaxXXInd > NXNodes-10)
 	{
 		//Grow them
 		X.push_back(NXNodes*dX);
 		Zx.push_back(Zx[NXNodes-1]);
-		ZInd.push_back(ZInd[NXNodes-1]);
+		
 		for (int i=0; i<NZNodes; ++i)
 		{
 			MorphologyArray[i].push_back(MorphologyArray[i][NXNodes-1]);

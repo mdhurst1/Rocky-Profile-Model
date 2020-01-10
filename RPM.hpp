@@ -105,6 +105,8 @@ class RPM
 		vector< vector<int> > MorphologyArray;		// array to store morphology
 		vector< vector<double> > ResistanceArray;	// array to store resistance
 
+		bool DestroyOffshore;
+
 		// Local Angle Array
 		//vector< vector<double> > LocalangleArray;	    // array to store localangle
 
@@ -132,6 +134,7 @@ class RPM
 		double SeaLevelRise;
 		double SeaLevel;
 		int SeaLevelInd;
+		int OffshoreZInd, OffshoreXInd;
 		double SLR_sum;
 
 		// TECTONIC UPLIFT
@@ -301,6 +304,7 @@ class RPM
 		void SupratidalWeathering();
 		void SubtidalWeathering();
 
+		void DestroyOffshore();
 		void UpdateMorphology();
 
 		// File name holder
