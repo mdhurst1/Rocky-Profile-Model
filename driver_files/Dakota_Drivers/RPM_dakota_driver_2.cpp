@@ -170,7 +170,9 @@ int main(int nNumberofArgs,char *argv[])
 	//MinElevation calculated from InitialRSL
 	 if (MinElevation >= InstantSeaLevel)
 	 { 
-		MinElevation = (InstantSeaLevel-10.);
+		MinElevation = round((InstantSeaLevel-10.)*10)/10;
+
+		//dz needs to be rounded to 0.1 
 	 }
 
     //initialise RPM Model

@@ -58,6 +58,8 @@ print(Launchstr)
 
 #changed from + sys.argv[2] + to RPM_results.out for test
 
+#os command to copy shore profile file to corresponding run folder
+
 #########################################
 #                                       #
 #    Step 3: Write Output in format     #

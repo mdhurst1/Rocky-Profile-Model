@@ -63,7 +63,7 @@ def make_plot(FileName,ColourMap):
     f.close()
     
     # Only plot every 1 000 years
-    PlotTime = 9900
+    PlotTime = 8000
     PlotInterval = 100
 
     
@@ -80,8 +80,12 @@ def make_plot(FileName,ColourMap):
         
         #Read morphology
         X = np.array(MorphLine[2:],dtype="float64")
+        Z = np.linspace(CliffHeight, MinElev, len(X))
                 
         if (j == 1):
+            print(Time)
+            print (np.shape(X))
+            print (np.shape(Z))
             ax1.plot(X,Z,'--',lw=1.5,color=ColourMap((Time)/(StartTime)), label='Modelled Morphology')
         if (Time == PlotTime):
             #print (Time,StartTime)
