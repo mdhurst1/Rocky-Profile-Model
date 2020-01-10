@@ -27,7 +27,7 @@ interface,
 	  asynchronous
 	  evaluation_concurrency 1
 
-	  failure_capture recover 2
+	  failure_capture recover 2 #change to higher?
 	  
 	  parameters_file = "params.in"
 	  results_file    = "results.out"

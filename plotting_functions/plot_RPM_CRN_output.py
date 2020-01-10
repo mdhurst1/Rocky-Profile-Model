@@ -33,7 +33,7 @@ def make_plot(FileName,ColourMap):
 
     #First plot the morphology through time
     # declare the file and the axis
-    ProfileName = FileName+"ShoreProfile.xz"
+    ProfileName = FileName+"_ShoreProfile.xz"
     f = open(ProfileName,'r')
     Lines = f.readlines()
     NoLines = len(Lines)
@@ -103,7 +103,7 @@ def make_plot(FileName,ColourMap):
     plt.savefig('dakota_test.png',dpi=300)
 
 if __name__ == "__main__":
-    FileName = "../driver_files/test__" # /Users/jennyshadrick/RPM_JRS
+    FileName = "../driver_files/Dakota_Drivers/test" # /Users/jennyshadrick/RPM_JRS
     ColourMap = cm.RdBu
     make_plot(FileName,ColourMap)
         
