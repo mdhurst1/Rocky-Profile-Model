@@ -136,8 +136,8 @@ int main(int nNumberofArgs,char *argv[])
     double SubtidalEfficacy = atof(argv[8]);
     double WaveAttenuationConst = atof(argv[9]);
     double Resistance = pow(10,(atof(argv[10])));          //dakota varies FR on log scale
-    //double WeatheringRate = Resistance * pow(10,(atof(argv[11])));      //dakota varies K proportional to FR 0 - 0.5 range 
-	double WeatheringRate = Resistance * (atof(argv[11])); 
+    double WeatheringRate = Resistance * pow(10,(atof(argv[11])));      //dakota varies K proportional to FR 0 - 0.5 range 
+	//double WeatheringRate = Resistance * (atof(argv[11])); 
 	cout << "Resistance = " << Resistance << endl;
 	cout << "Weatheringrate = " << WeatheringRate << endl;
 	//double Resistance = atof(argv[10]);
