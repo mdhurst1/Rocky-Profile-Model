@@ -23,12 +23,13 @@ rc('ytick.major',pad=5)
 rc('xtick.major',pad=5)
 padding = 5
 
-def make_plot(FileName,ColourMap):
+#def make_plot(FileName,ColourMap):
+
+    for filename in ('/Users/jennyshadrick/Dakota_Runs/Run_1','/Users/jennyshadrick/Dakota_Runs/Run_2'):
+        
     
     #create blank figure
     plt.figure(1,figsize=(8,4))
-
-    #for fname in Filename 
 
     #First load the morphology through time
     # declare the file and the axis
@@ -160,8 +161,8 @@ def make_plot(FileName,ColourMap):
     plt.draw()
     #fig1.savefig('MCMC_SY_5_topo.png',dpi=300)
 
-if __name__ == "__main__":
-    FileName = "/Users/jennyshadrick/Dakota_Runs/Run_1","/Users/jennyshadrick/Dakota_Runs/Run_2" # /Users/jennyshadrick/RPM_JRS
-    ColourMap = cm.gray
-    make_plot(FileName,ColourMap)
+#if __name__ == "__main__":
+    #FileName = "/Users/jennyshadrick/Dakota_Runs/Run_1","/Users/jennyshadrick/Dakota_Runs/Run_2" # /Users/jennyshadrick/RPM_JRS
+    #ColourMap = cm.gray
+    #make_plot(FileName,ColourMap)
         
