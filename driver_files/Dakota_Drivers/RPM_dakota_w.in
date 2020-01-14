@@ -17,7 +17,7 @@ method,
 variables,
 	 uniform_uncertain = 3
 	
-	 lower_bounds  -3. -8. 0.01
+	 lower_bounds  -3. -8. 0.001
      upper_bounds  1. 0. 10. 
 	 descriptor "FR" "K" "Y"
 
