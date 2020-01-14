@@ -163,8 +163,9 @@ int main(int nNumberofArgs,char *argv[])
 	double PrintTime = Time;
 
     //set up output file - used for visual when testing 
-	string OutputFileName = Folder+Res+WRate+"_ShoreProfile.xz";
-	string OutputConcentrationFileName = Folder+Res+WRate+"Concentrations.xn";
+	//whwen using dakota use FR arguments etc. 
+	string OutputFileName = Folder+DakotaFilename+"_ShoreProfile.xz";
+	string OutputConcentrationFileName = Folder+DakotaFilename+"Concentrations.xn";
 	
 
     // initialise sea level here and calculate MinElevation based on lowest sea level

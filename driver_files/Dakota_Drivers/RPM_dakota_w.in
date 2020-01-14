@@ -4,35 +4,37 @@
 
 environment
      tabular_data
-     tabular_data_file "RPM_dakota_2.dat"
+     tabular_data_file "RPM_dakota_w.dat"
 
 method,
 	 bayes_calibration queso 
-     metropolis_hastings                           #metropolis_hastings/DRAM
-     samples = 1000 seed = 348
+     metropolis_hastings
+	 proposal_covariance prior                          
+     chain_samples = 1000 seed = 348
+	 export_chain_points_file  'posterior.dat'
 	 output debug
 
 variables,
-	 normal_uncertain = 3
-	 means 5. 1. 1. 
-	 std_deviations 4. 0.9 0.9 
-	 lower_bounds  0. 0. 0.
-     upper_bounds  10. 2. 2. 
+	 uniform_uncertain = 3
+	
+	 lower_bounds  -3. -8. 0.01
+     upper_bounds  1. 0. 10. 
 	 descriptor "FR" "K" "Y"
+
 
 interface,
 	fork
 	  asynchronous
 	  evaluation_concurrency 1
 
-	  failure_capture recover 999999999999999
+	  failure_capture recover 2
 	  
 	  parameters_file = "params.in"
 	  results_file    = "results.out"
 	
 	  copy_files "template_dir/*"
 
-	  analysis_driver = "python ./RPM_driver_2.py"
+	  analysis_driver = "python ./RPM_driver_W.py"
 
 
       work_directory
