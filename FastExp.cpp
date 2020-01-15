@@ -8,6 +8,12 @@ max. rel. error <= 1.73e-3 on [-87,88] */
 
 float fastexp (float x)
 {
+    //divergence at values of +/- 10 in exponent so do regular exp
+    if (fabs(x) > 10.) 
+    {
+        return exp(x);
+    }
+
     volatile union
     {
         float f;

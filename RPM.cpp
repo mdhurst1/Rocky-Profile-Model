@@ -691,12 +691,12 @@ void RPM::CalculateBackwearing()
 				}
 				else if (Xz[ii] <= (Xz[BreakingPointZInd]+BreakingWaveDist))
 				{
-					BreakingWaveHeight = WaveHeight*fastexp(-WaveAttenuConst*(Xz[ii]-Xz[BreakingPointZInd]));
+					BreakingWaveHeight = WaveHeight*exp(-WaveAttenuConst*(Xz[ii]-Xz[BreakingPointZInd]));
 					WaveForce = BreakingWaveConst_New[i-MaxTideZInd]*BreakingWaveHeight*ErosionShapeFunction[i-MaxTideZInd]*BreakingWavePressure_Bw;
 				}
 				else
 				{
-					BrokenWaveHeight = WaveHeight*fastexp(-WaveAttenuConst*BreakingWaveDist)*fastexp(-WaveAttenuConst*(Xz[ii]-(Xz[BreakingPointZInd]+BreakingWaveDist)));
+					BrokenWaveHeight = WaveHeight*exp(-WaveAttenuConst*BreakingWaveDist)*exp(-WaveAttenuConst*(Xz[ii]-(Xz[BreakingPointZInd]+BreakingWaveDist)));
 					WaveForce = BrokenWaveConst*BrokenWaveHeight*ErosionShapeFunction[i-MaxTideZInd]*BrokenWavePressure_Bw;
 				}
 				Bw_Erosion[ii] += WaveForce;
