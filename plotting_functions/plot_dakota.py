@@ -24,10 +24,12 @@ rc('xtick.major',pad=5)
 padding = 5
 
 Folder = "/home/jrs17/Dakota_Results/"
+Files = [Folder+'Run_1',Folder+'Run_2',Folder+'Run_3',Folder+'Run_4',Folder+'Run_5',Folder+'Run_6',Folder+'Run_7',Folder+'Run_8',Folder+'Run_9']
+NumFiles = len(Files)
 
-for FileName in (Folder+'Run_1',Folder+'Run_2',Folder+'Run_3',Folder+'Run_4',Folder+'Run_5',Folder+'Run_6',Folder+'Run_7',Folder+'Run_8',Folder+'Run_9'):
+ColourMap = cm.viridis
 
-    ColourMap = cm.gray
+for i, FileName in enumerate(Files):
 
 
     #create blank figure
@@ -80,7 +82,7 @@ for FileName in (Folder+'Run_1',Folder+'Run_2',Folder+'Run_3',Folder+'Run_4',Fol
     ax1 = plt.subplot(211)
     ax2 = plt.subplot(212)
 
-    ax1.plot(LastProfile,Z_LastProfile,'k-',lw=1.5) 
+    ax1.plot(LastProfile,Z_LastProfile,'-',color=ColourMap(float(i)/float(NumFiles)), lw=1.5) 
     
     #Get header info and setup X coord
     for j in range(1,NoLines-1):
