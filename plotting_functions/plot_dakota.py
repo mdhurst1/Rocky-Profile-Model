@@ -25,7 +25,7 @@ padding = 5
 
 Folder = "/Users/jennyshadrick/Dakota_Runs/"
 
-for FileName in (Folder+'Wave_Test_1',Folder+'Wave_Test_2',Folder+'Wave_Test_3'):  #Folder+'Run_1',Folder+'Run_2',Folder+'Run_3',Folder+'Run_4'):
+for FileName in (Folder+'Run_1',Folder+'Run_2',Folder+'Run_3',Folder+'Run_4'):
 
     ColourMap = cm.gray
 
