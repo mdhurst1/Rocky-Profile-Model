@@ -10,15 +10,15 @@ method,
 	 bayes_calibration queso 
      metropolis_hastings
 	 proposal_covariance prior                          
-     chain_samples = 800 seed = 348
+     chain_samples = 1000 seed = 348
 	 export_chain_points_file  'posterior.dat'
 	 output debug
 
 variables,
-	 normal_uncertain = 2
-	 means -1. -4.
-	 std_deviations 1. 2.
-	 lower_bounds  -3. -8.
+	 uniform_uncertain = 2
+	 #means -1. -4.
+	 #std_deviations 1. 2.
+	 lower_bounds  -2. -6.
      upper_bounds  1. 0.
 	 descriptor "FR" "K"
 
