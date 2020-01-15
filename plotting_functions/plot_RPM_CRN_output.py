@@ -70,7 +70,7 @@ def make_plot(FileName,ColourMap):
         #Read morphology
         X = np.array(Line[2:],dtype="float64")
         NValues = len(X)
-        Z = np.linspace(CliffHeight,-CliffHeight, NValues)
+        Z = np.linspace(MaxZ,MinZ, NValues)
         
         if (Time == StartTime) or (Time == -9999):
             print(Time)
@@ -95,7 +95,7 @@ def make_plot(FileName,ColourMap):
     plt.xlabel("Distance (m)")
     plt.ylabel("Elevation (m)")
     #plt.xlim(np.min(X),np.max(X))
-    plt.ylim(-CliffHeight/2,CliffHeight/2)
+    plt.ylim(MinZ,MaxZ/2.)
     #plt.ylim(-30,30)
     plt.tight_layout()
     plt.draw()
@@ -103,7 +103,7 @@ def make_plot(FileName,ColourMap):
     plt.savefig('dakota_test.png',dpi=300)
 
 if __name__ == "__main__":
-    FileName = "../driver_files/Dakota_Drivers/test" # /Users/jennyshadrick/RPM_JRS
+    FileName = "../driver_files/Dakota_Drivers/Wave_Test_4" # /Users/jennyshadrick/RPM_JRS
     ColourMap = cm.RdBu
     make_plot(FileName,ColourMap)
         
