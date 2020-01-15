@@ -146,9 +146,9 @@ ax1.set_ylabel("Elevation (m)")
 ax2.set_ylabel("Concentration (a g$^-1$)")  #x 10$^3$ 
 ax2.set_xlabel("Distance (m)")
 #xmin, xmax = ax1.get_xlim()
-ax1.set_xlim(-300,0)
-ax2.set_xlim(-300,0) 
-ax1.set_ylim(-10,5)
+#ax1.set_xlim(-300,0)
+#ax2.set_xlim(-300,0) 
+#ax1.set_ylim(-10,5)
 #ax2.set_ylim(0,9000)
 ax1.plot(Xprof,Zprof,'r-',lw=1.5, label='Extracted Morphology')  #NXprof for scalby, Xprof for CB
 
