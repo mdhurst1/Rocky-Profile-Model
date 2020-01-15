@@ -13,7 +13,7 @@ LD=g++
 # -O3 is an optimisation flag, not good for debugging
 # -fopenmp is a flag for openmp directives
 CFLAGS= -c -Wall -Werror -Wextra -pedantic -g -O3 -fopenmp $(INCDIR) 
-LDFLAGS= -Wall -g -O3 fopenmp
+LDFLAGS= -Wall -g -O3 -fopenmp
 # SOURCE FILES MACROS IN DEPENDENCY ORDER? SHOULDNT MATTER THANKS TO HEADERS
 SOURCES = ../../FastExp.cpp ../../RoBoCoP_CRN/RockyCoastCRN.cpp ../../SeaLevel.cpp ../../RPM.cpp ./RPM_dakota_driver_2.cpp
 
