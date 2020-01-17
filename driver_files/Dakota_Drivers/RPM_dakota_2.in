@@ -8,7 +8,7 @@ environment
 
 method,
 	 bayes_calibration queso 
-     metropolis_hastings
+     dram 
 	 proposal_covariance prior                          
      chain_samples = 1000 seed = 348
 	 export_chain_points_file  'posterior.dat'
@@ -27,7 +27,7 @@ interface,
 	  asynchronous
 	  evaluation_concurrency 1
 
-	  failure_capture recover 2 #change to higher?
+	  failure_capture recover 2 
 	  
 	  parameters_file = "params.in"
 	  results_file    = "results.out"
