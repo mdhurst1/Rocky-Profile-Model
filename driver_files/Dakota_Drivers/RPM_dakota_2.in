@@ -47,7 +47,9 @@ interface,
 
 	  
 responses,
-	num_response_functions = 1
-    response_descriptors "rmse"  #/likelihood
+	calibration_terms = 1
+    response_descriptors "rmse"  
+	calibration_data_file = rmse.dat
+	experiment_variance_type 'scalar'
 	no_gradients
 	no_hessians
