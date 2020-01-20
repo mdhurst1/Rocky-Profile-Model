@@ -49,7 +49,7 @@ interface,
 responses,
 	calibration_terms = 1
     response_descriptors "rmse"  
-	calibration_data_file = rmse.dat
+	calibration_data_file = 'rmse.dat'
 	experiment_variance_type 'scalar'
 	no_gradients
 	no_hessians
