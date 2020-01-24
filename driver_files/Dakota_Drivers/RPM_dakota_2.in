@@ -8,8 +8,9 @@ environment
 
 method,
 	 bayes_calibration queso 
-     dram 
-	 proposal_covariance prior                          
+     metropolis_hastings
+	 proposal_covariance prior 
+	 logit_transform                         
      chain_samples = 4000 seed = 348
 	 #burn_in_samples = 100
 	 chain_diagnostics confidence_intervals
@@ -17,9 +18,9 @@ method,
 	 output debug
 
 variables,
-	 normal_uncertain = 2
-	 means -1.5 -3.
-	 std_deviations 0.5 1.
+	 uniform_uncertain = 2
+	 #means -1.5 -3.
+	 #std_deviations 0.5 3.
 	 lower_bounds  -2. -6.
      upper_bounds  -1 0.
 	 descriptor "FR" "K"
