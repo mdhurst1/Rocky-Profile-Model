@@ -24,7 +24,7 @@ rc('xtick.major',pad=5)
 padding = 5
 
 Folder = "/home/jrs17/Dakota_Results/"
-Files = [Folder+'Run_1',Folder+'Run_2',Folder+'Run_3']  #,Folder+'Run_4',Folder+'Run_5',Folder+'Run_6',Folder+'Run_7',Folder+'Run_8',Folder+'Run_9']
+Files = [Folder+'Run_1',Folder+'Run_2',Folder+'Run_3',Folder+'Run_4'] #,Folder+'Run_5',Folder+'Run_6',Folder+'Run_7',Folder+'Run_8',Folder+'Run_9']
 NumFiles = len(Files)
 
 ColourMap = cm.viridis
