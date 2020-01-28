@@ -22,7 +22,7 @@ variables,
 	 #means -1.5 -3.
 	 #std_deviations 0.5 3.
 	 lower_bounds  0.01 0.
-     upper_bounds  0.05 0.0005
+     upper_bounds  0.05 0.0004
 	 descriptor "FR" "K"
 
 interface,
