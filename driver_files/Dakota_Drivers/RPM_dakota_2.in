@@ -9,8 +9,7 @@ environment
 method,
 	 bayes_calibration queso 
      metropolis_hastings
-	 proposal_covariance prior 
-	 logit_transform                         
+	 proposal_covariance prior                          
      chain_samples = 2000 seed = 348
 	 #burn_in_samples = 100
 	 chain_diagnostics confidence_intervals
@@ -21,8 +20,8 @@ variables,
 	 uniform_uncertain = 2
 	 #means -1.5 -3.
 	 #std_deviations 0.5 3.
-	 lower_bounds  0.01 0.
-     upper_bounds  0.05 0.0004
+	 lower_bounds  0.01 -8
+     upper_bounds  0.05 -4
 	 descriptor "FR" "K"
 
 interface,
