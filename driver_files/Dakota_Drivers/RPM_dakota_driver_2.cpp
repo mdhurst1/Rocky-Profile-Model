@@ -138,7 +138,7 @@ int main(int nNumberofArgs,char *argv[])
     //double Resistance = pow(10,(atof(argv[10])));          //dakota varies FR on log scale
     //double WeatheringRate = Resistance * pow(10,(atof(argv[11])));      //dakota varies K proportional to FR 0 - 0.5 range 
 	double Resistance = atof(argv[10]);
-	double WeatheringRate = pow(10,(atof(argv[11]))); 
+	double WeatheringRate = atof(argv[11]); 
 	//double WeatheringRate = atof(argv[11]);
 	cout << "Resistance = " << Resistance << endl;
 	cout << "WeatheringRate = " << WeatheringRate << endl;
@@ -230,9 +230,9 @@ int main(int nNumberofArgs,char *argv[])
 	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);
 
     // print initial condition to file - this is for testing - remove
-	//double TempTime = -9999;
-    //PlatformModel.WriteProfile(OutputFileName, TempTime);			
-	//if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
+	double TempTime = -9999;
+    PlatformModel.WriteProfile(OutputFileName, TempTime);			
+	if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
 
     //Loop through time
 	while (Time >= EndTime)
@@ -279,8 +279,8 @@ int main(int nNumberofArgs,char *argv[])
 		{
 			cout.flush();
 			cout << "RPM: Time " << setprecision(2) << fixed << Time << " years\r";
-			//PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
-            //if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
+			PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
+            if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
 			PrintTime -= PrintInterval;
 		}
 
@@ -406,7 +406,7 @@ int main(int nNumberofArgs,char *argv[])
    double RMSE;
    double Scale;
    bool FailFlag = false;
-   //long double Likelihood = 1.L;
+   long double Likelihood = 1.L;
 
    //Interpolate to extracted morphology X positions
    for (int i=0; i<NProfileData; ++i)
@@ -443,6 +443,8 @@ int main(int nNumberofArgs,char *argv[])
    double TotalNResiduals = 0;
    vector<double> Residuals(NProfileData); 
    vector<double> NResiduals(NProfileData);
+   vector<double> LResiduals(NProfileData);
+   double ZStd = 0.1;
    //double MaxTopo = Residuals[0];
    //double MinTopo = Residuals[0];
    
@@ -452,6 +454,11 @@ int main(int nNumberofArgs,char *argv[])
    {
        Residuals[i] = fabs(ProfileZData[i]-TopoData[i]);
 	   
+	   //Residuals calc for Likelihood
+	   LResiduals[i] = (ProfileZData[i]-TopoData[i])*(ProfileZData[i]-TopoData[i]);
+	   Likelihood *= exp(-(fabs(LResiduals[i]))/(ZStd*ZStd));
+
+
 	   TotalResiduals += pow(ProfileZData[i]-TopoData[i],2);
 
 	   //Fail Flag
@@ -465,6 +472,9 @@ int main(int nNumberofArgs,char *argv[])
 	   //MinTopo = *min_element(begin(Residuals), end(Residuals));
 	   //MaxTopo = *max_element(begin(Residuals), end(Residuals));  
     }
+	//return Likelihood;
+
+	//do we need to return likelihood?
 
 	for (int i=0; i<NProfileData; ++i)
 	{
@@ -473,6 +483,8 @@ int main(int nNumberofArgs,char *argv[])
 
 	   //normalise topo to tidalrange 
 	   NResiduals[i] = (Residuals[i]/TidalRange);
+	   
+	   
 
 	   TotalNResiduals += pow(NResiduals[i],2);
 	   //Likelihood *= exp(-(fabs(Residuals[i]))/(ZStd*ZStd));    //ZStd read in from parameter file?
@@ -483,6 +495,7 @@ int main(int nNumberofArgs,char *argv[])
    //cout << " MinTopo = " << setprecision(10) << MinTopo << endl;
    cout << " Total residuals Topo = " << TotalResiduals << endl;
    cout << " TotalNResiduals = " << TotalNResiduals << endl;
+   cout << " Likelihood = " << Likelihood << endl;
    
 
    ///////////////////////////////////////                                
@@ -582,6 +595,8 @@ int main(int nNumberofArgs,char *argv[])
    double WeightedRMSE;
    double RMSE_N;
    double CRN_RMSE_N;
+   long double Likelihood_N = 1.L;
+   long double Neg_Log_Likelihood = 1.L;
 
    //RMSE calculations 
 
@@ -594,11 +609,21 @@ int main(int nNumberofArgs,char *argv[])
 
    WeightedRMSE = (RMSE_N*TopoWeighting)+(CRN_RMSE_N*CRNWeighting);
 
+   //Normalise Likelihood
+   Likelihood_N = Likelihood/TidalRange;
+
+   //negative log likelihood
+   //if normalised correct, take -ve log of normalised likelihood
+   Neg_Log_Likelihood = -log(Likelihood);
+
+
    cout << " RMSE = " << RMSE << endl;
    cout << " CRN RMSE = " << CRN_RMSE << endl;
    cout << " Normalised RMSE = " << RMSE_N << endl;
    cout << " Normalised RMSE CRN = " << CRN_RMSE_N << endl;
    cout << " Weighted RMSE = " << WeightedRMSE << endl; 
+   cout << " Normalised Likelihood = " << Likelihood_N << endl;
+   cout << " -ve log likelihood = " << Neg_Log_Likelihood << endl;
 
    //add another fail flag for nan?
    
