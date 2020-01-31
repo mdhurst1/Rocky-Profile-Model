@@ -138,7 +138,7 @@ int main(int nNumberofArgs,char *argv[])
     //double Resistance = pow(10,(atof(argv[10])));          //dakota varies FR on log scale
     //double WeatheringRate = Resistance * pow(10,(atof(argv[11])));      //dakota varies K proportional to FR 0 - 0.5 range 
 	double Resistance = atof(argv[10]);
-	double WeatheringRate = atof(argv[11]); 
+	double WeatheringRate = pow(10,(atof(argv[11]))); 
 	//double WeatheringRate = atof(argv[11]);
 	cout << "Resistance = " << Resistance << endl;
 	cout << "WeatheringRate = " << WeatheringRate << endl;
@@ -453,13 +453,11 @@ int main(int nNumberofArgs,char *argv[])
    for (int i=0; i<NProfileData; ++i)
    {
        Residuals[i] = fabs(ProfileZData[i]-TopoData[i]);
+	   TotalResiduals += pow(ProfileZData[i]-TopoData[i],2);
 	   
 	   //Residuals calc for Likelihood
 	   LResiduals[i] = (ProfileZData[i]-TopoData[i])*(ProfileZData[i]-TopoData[i]);
 	   //Likelihood *= exp(-(fabs(LResiduals[i]))/(ZStd*ZStd));
-
-
-	   TotalResiduals += pow(ProfileZData[i]-TopoData[i],2);
 
 	   //Fail Flag
 
