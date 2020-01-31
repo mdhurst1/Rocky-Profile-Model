@@ -18,7 +18,7 @@ from matplotlib import rc
 
 # Customise figure style #
 rc('font',**{'family':'sans-serif','sans-serif':['Arial']})
-rc('font',size=9)
+rc('font',size=10)
 rc('ytick.major',pad=5)
 rc('xtick.major',pad=5)
 padding = 5
@@ -102,7 +102,7 @@ def make_plot(FileName,ColourMap):
     X2 = X2[mask]
 
            
-    ax2.plot(X2,N10,'k-',lw=1.5, label='Modelled CRN Concentrations')
+    ax2.plot(X2,N10,'k-',lw=1.5, label='Modelled CRN')
   
         
     #tweak the plot
@@ -112,7 +112,7 @@ def make_plot(FileName,ColourMap):
     File2 = "../driver_files/Data/CB_CRN.data"
     X,CRN,Error=np.loadtxt(File2,unpack=True,skiprows=1,usecols=(1,2,3),delimiter=" ")
     NormalisedX = LCPosition - X
-    ax2.errorbar(NormalisedX,CRN,fmt='o', yerr=Error,c='grey', label='Measured CRN Concentrations')    
+    ax2.errorbar(NormalisedX,CRN,fmt='o', yerr=Error,c='grey', label="Measured CRN")    
     ax2.scatter(NormalisedX,CRN, s=0.1)
 
     #File 3 uncorrected CRN data for Dunbar?
@@ -140,26 +140,26 @@ def make_plot(FileName,ColourMap):
     ax2.set_ylabel("Concentration (a g$^-1$)")  #x 10$^3$ 
     ax2.set_xlabel("Distance (m)")
     #xmin, xmax = ax1.get_xlim()
-    #ax1.set_xlim(1200,1500)
-    #ax2.set_xlim(1200,1500) 
-    #ax1.set_ylim(-10,10)
-    #ax2.set_ylim(0,9000)
+    ax1.set_xlim(1200,1500)
+    ax2.set_xlim(1200,1500) 
+    ax1.set_ylim(-10,10)
+    ax2.set_ylim(0,20000)
 
-    ax1.plot(Xprof,Zprof,'r-',lw=1.5, label='Extracted Morphology')  #NXprof for scalby, Xprof for CB
+    ax1.plot(Xprof,Zprof,'g-',lw=1.5, label='Extracted Morphology')  #NXprof for scalby, Xprof for CB
 
    
 
-    ax1.legend(loc='upper left', numpoints=1)
-    ax2.legend(loc='lower left', numpoints=1)
+    ax1.legend(loc='upper left', numpoints=1, fontsize=10)
+    ax2.legend(loc='upper left', numpoints=1, fontsize=10)
     
 
     fig1 = plt.gcf()
     plt.show()
     plt.draw()
-    #fig1.savefig('MCMC_SY_5_topo.png',dpi=300)
+    fig1.savefig('best_fit.png',dpi=300)
 
 if __name__ == "__main__":
-    FileName = "/Users/jennyshadrick/Dakota_Runs/plot_test" # /Users/jennyshadrick/RPM_JRS
-    ColourMap = cm.gray
+    FileName = "/Users/jennyshadrick/Dakota_Runs/Test_4" # /Users/jennyshadrick/RPM_JRS
+    ColourMap = cm.RdBu
     make_plot(FileName,ColourMap)
         

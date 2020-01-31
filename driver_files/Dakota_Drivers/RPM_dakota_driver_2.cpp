@@ -444,7 +444,7 @@ int main(int nNumberofArgs,char *argv[])
    vector<double> Residuals(NProfileData); 
    vector<double> NResiduals(NProfileData);
    vector<double> LResiduals(NProfileData);
-   double ZStd = 0.1;
+   double ZStd = 0.3;
    //double MaxTopo = Residuals[0];
    //double MinTopo = Residuals[0];
    
@@ -494,7 +494,9 @@ int main(int nNumberofArgs,char *argv[])
    //cout << " MaxTopo = " << setprecision(10) << MaxTopo << endl;
    //cout << " MinTopo = " << setprecision(10) << MinTopo << endl;
    cout << " Total residuals Topo = " << TotalResiduals << endl;
-   cout << " TotalNResiduals = " << TotalNResiduals << endl;
+   //cout << " TotalNResiduals = " << TotalNResiduals << endl;
+   
+
    cout << " Likelihood = " << Likelihood << endl;
    
 
