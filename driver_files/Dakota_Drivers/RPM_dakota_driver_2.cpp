@@ -457,7 +457,8 @@ int main(int nNumberofArgs,char *argv[])
 	   
 	   //Residuals calc for Likelihood
 	   LResiduals[i] = (ProfileZData[i]-TopoData[i])*(ProfileZData[i]-TopoData[i]);
-	   //Likelihood *= exp(-(fabs(LResiduals[i]))/(ZStd*ZStd));
+	   Likelihood *= exp(-(fabs(LResiduals[i]))/(ZStd*ZStd));
+	   
 
 	   //Fail Flag
 
@@ -482,7 +483,7 @@ int main(int nNumberofArgs,char *argv[])
 	   //normalise topo to tidalrange 
 	   NResiduals[i] = (Residuals[i]/TidalRange);
 
-	   Likelihood *= exp(-(fabs(LResiduals[i]))/(ZStd*ZStd));
+	   //Likelihood *= exp(-(fabs(LResiduals[i]))/(ZStd*ZStd));
 	   
 	   TotalNResiduals += pow(NResiduals[i],2);
 	   //Likelihood *= exp(-(fabs(Residuals[i]))/(ZStd*ZStd));    //ZStd read in from parameter file?
