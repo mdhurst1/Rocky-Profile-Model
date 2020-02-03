@@ -406,7 +406,7 @@ int main(int nNumberofArgs,char *argv[])
    double RMSE;
    double Scale;
    bool FailFlag = false;
-   long double Likelihood = 1.L;
+   
 
    //Interpolate to extracted morphology X positions
    for (int i=0; i<NProfileData; ++i)
@@ -444,6 +444,7 @@ int main(int nNumberofArgs,char *argv[])
    vector<double> Residuals(NProfileData); 
    vector<double> NResiduals(NProfileData);
    vector<double> LResiduals(NProfileData);
+   long double Likelihood = 1.L;
    double ZStd = 0.3;
    //double MaxTopo = Residuals[0];
    //double MinTopo = Residuals[0];
@@ -455,11 +456,6 @@ int main(int nNumberofArgs,char *argv[])
        Residuals[i] = fabs(ProfileZData[i]-TopoData[i]);
 	   TotalResiduals += pow(ProfileZData[i]-TopoData[i],2);
 	   
-	   //Residuals calc for Likelihood
-	   LResiduals[i] = (ProfileZData[i]-TopoData[i])*(ProfileZData[i]-TopoData[i]);
-	   Likelihood *= exp(-(fabs(LResiduals[i]))/(ZStd*ZStd));
-	   
-
 	   //Fail Flag
 
 	   if (isinf(TotalResiduals))
@@ -471,7 +467,14 @@ int main(int nNumberofArgs,char *argv[])
 	   //MinTopo = *min_element(begin(Residuals), end(Residuals));
 	   //MaxTopo = *max_element(begin(Residuals), end(Residuals));  
     }
-	//return Likelihood;
+	
+	for (int i=0; i<NProfileData; ++i)
+	{
+		//Residuals calc for Likelihood
+	   LResiduals[i] = (ProfileZData[i]-TopoData[i])*(ProfileZData[i]-TopoData[i]);
+	   Likelihood *= exp(-(fabs(LResiduals[i]))/(ZStd*ZStd));
+	}
+	return Likelihood;
 
 	//do we need to return likelihood?
 
