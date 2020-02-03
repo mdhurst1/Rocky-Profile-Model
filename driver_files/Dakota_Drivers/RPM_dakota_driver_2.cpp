@@ -75,6 +75,7 @@
 #include "../../RPM.hpp"
 #include "../../RoBoCoP_CRN/RockyCoastCRN.hpp"
 #include "../../SeaLevel.hpp"
+#include "../../FastExp.hpp"
 
 using namespace std;
 
@@ -472,11 +473,9 @@ int main(int nNumberofArgs,char *argv[])
 	{
 		//Residuals calc for Likelihood
 	   LResiduals[i] = (ProfileZData[i]-TopoData[i])*(ProfileZData[i]-TopoData[i]);
-	   Likelihood *= exp(-(fabs(LResiduals[i]))/(ZStd*ZStd));
+	   Likelihood *= fastexp(-(fabs(LResiduals[i]))/(ZStd*ZStd));
 	}
-	return Likelihood;
-
-	//do we need to return likelihood?
+	//return Likelihood;
 
 	for (int i=0; i<NProfileData; ++i)
 	{
