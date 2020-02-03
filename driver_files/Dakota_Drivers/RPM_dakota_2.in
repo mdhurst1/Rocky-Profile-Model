@@ -18,7 +18,7 @@ method,
 
 variables,
 	 normal_uncertain = 2
-	 means 0.02 -6
+	 means 0.03 -6
 	 std_deviations 0.01 1.
 	 lower_bounds  0.01 -8
      upper_bounds  0.05 -4
