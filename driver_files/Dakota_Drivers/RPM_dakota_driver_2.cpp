@@ -498,7 +498,7 @@ int main(int nNumberofArgs,char *argv[])
    //cout << " TotalNResiduals = " << TotalNResiduals << endl;
    
 
-   cout << " Likelihood = " << Likelihood << endl;
+   cout << " Likelihood = " << scientific << Likelihood << endl;
    
 
    ///////////////////////////////////////                                
@@ -630,8 +630,8 @@ int main(int nNumberofArgs,char *argv[])
    //cout << " Normalised RMSE CRN = " << CRN_RMSE_N << endl;
    //cout << " Weighted RMSE = " << WeightedRMSE << endl; 
    //cout << " Likelihood = " << setprecision(10) << Likelihood << endl;
-   cout << " Normalised Likelihood = " << setprecision(10) << Likelihood_N << endl;
-   cout << " -ve log likelihood = " << setprecision(10) << Neg_Log_Likelihood << endl;
+   cout << " Normalised Likelihood = " << scientific << Likelihood_N << endl;
+   cout << " -ve log likelihood = " << scientific << Neg_Log_Likelihood << endl;
 
    //add another fail flag for nan?
    
