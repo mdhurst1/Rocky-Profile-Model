@@ -1,6 +1,6 @@
 #  DAKOTA INPUT FILE - RPM_test.in
 #  Usage:
-#  dakota -i RPM_dakota_2.in -o RPM_dakota_2.out > RPM_dakota.stdout
+#  dakota -i RPM_dakota_w.in -o RPM_dakota_w.out > RPM_dakota.stdout
 
 environment
      tabular_data
@@ -11,14 +11,16 @@ method,
      metropolis_hastings
 	 proposal_covariance prior                          
      chain_samples = 1000 seed = 348
+	 #burn_in_samples = 100
+	 chain_diagnostics confidence_intervals
 	 export_chain_points_file  'posterior.dat'
 	 output debug
 
 variables,
 	 uniform_uncertain = 3
 	
-	 lower_bounds  -3. -8. 0.001
-     upper_bounds  1. 0. 10. 
+	 lower_bounds  -2. -6. -3
+     upper_bounds  1. 0. 1. 
 	 descriptor "FR" "K" "Y"
 
 
