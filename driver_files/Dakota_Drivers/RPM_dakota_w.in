@@ -17,11 +17,11 @@ method,
 	 output debug
 
 variables,
-	 normal_uncertain = 3
+	 uniform_uncertain = 3
 	 lower_bounds  -2. -6. -4
      upper_bounds  1. 0. 1. 
-	 means -1.5 -3 -2
-	 std_deviations 0.1 0.1 0.1
+	 #means -1.5 -3 -2
+	 #std_deviations 0.1 0.1 0.1
 	 descriptor "FR" "K" "Y"
 
 
