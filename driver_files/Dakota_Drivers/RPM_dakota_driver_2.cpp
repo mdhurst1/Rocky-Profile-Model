@@ -144,8 +144,8 @@ int main(int nNumberofArgs,char *argv[])
 	double Resistance = atof(argv[10]);
 
     //double WeatheringRate = Resistance * pow(10,(atof(argv[11])));      //dakota varies K proportional to FR 0 - 0.5 range 
-	double WeatheringRate = pow(10,(atof(argv[11]))); 
-	//double WeatheringRate = atof(argv[11]);
+	//double WeatheringRate = pow(10,(atof(argv[11]))); 
+	double WeatheringRate = atof(argv[11]);
 
 	cout << "Resistance = " << Resistance << endl;
 	cout << "WeatheringRate = " << WeatheringRate << endl;
@@ -237,9 +237,9 @@ int main(int nNumberofArgs,char *argv[])
 	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);
 
     // print initial condition to file - this is for testing - remove
-	double TempTime = -9999;
-    PlatformModel.WriteProfile(OutputFileName, TempTime);			
-	if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
+	//double TempTime = -9999;
+    //PlatformModel.WriteProfile(OutputFileName, TempTime);			
+	//if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
 
     //Loop through time
 	while (Time >= EndTime)
@@ -286,8 +286,8 @@ int main(int nNumberofArgs,char *argv[])
 		{
 			cout.flush();
 			cout << "RPM: Time " << setprecision(2) << fixed << Time << " years\r";
-			PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
-            if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
+			//PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
+            //if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
 			PrintTime -= PrintInterval;
 		}
 
