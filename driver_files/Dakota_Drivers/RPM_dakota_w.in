@@ -20,8 +20,8 @@ variables,
 	 normal_uncertain = 3
 	 lower_bounds  0.005 0.00000001 0.00001 
      upper_bounds  0.1 0.001 0.1 
-	 means 0.05 0.0005 0.05
-	 std_deviations 0.005 0.000005 0.0005
+	 means 0.05 0.000006 0.0002
+	 std_deviations 0.01 0.000001 0.0001
 	 descriptor "FR" "K" "Y"
 
 
