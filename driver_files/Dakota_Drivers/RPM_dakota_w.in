@@ -10,7 +10,7 @@ method,
 	 bayes_calibration queso 
      metropolis_hastings
 	 proposal_covariance prior                          
-     chain_samples = 1000 seed = 348
+     chain_samples = 4000 seed = 348
 	 #burn_in_samples = 100
 	 chain_diagnostics confidence_intervals
 	 export_chain_points_file  'posterior.dat'
@@ -21,7 +21,7 @@ variables,
 	 lower_bounds  0.005 0.00000001 0.00001 
      upper_bounds  0.1 0.001 0.1 
 	 means 0.05 0.000006 0.0002
-	 std_deviations 0.01 0.000001 0.0001
+	 std_deviations 0.001 0.0000001 0.00001
 	 descriptor "FR" "K" "Y"
 
 
