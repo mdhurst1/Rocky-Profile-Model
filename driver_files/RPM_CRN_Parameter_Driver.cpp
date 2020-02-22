@@ -111,7 +111,7 @@ int main(int nNumberofArgs,char *argv[])
 	string InputParamFilename = argv[2];
 	
 	// load parameter parser object
-  	Parameters Params(Folder+InputParamFilename);
+  	Parameters Params(Folder,InputParamFilename);
 
 	//initialisation parameters, these are currently not in parameters object
 	double dZ = 0.1;

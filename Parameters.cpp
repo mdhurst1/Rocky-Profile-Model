@@ -64,11 +64,12 @@ void Parameters::Initialise()
     SetDefaultValues();
 }
 
-void Parameters::Initialise(string ParameterFilename)
+void Parameters::Initialise(string Folder, string ParameterFilename)
 {
-    printf("\nParameters.Initialise: Initialised parameters from %s\n", ParameterFilename);
+    printf("\nParameters.Initialise: Initialised parameters from:\n\tfolder: %s\n\tfile%s\n", Folder, ParameterFilename);
 
     // set filename
+    WorkingFolder = Folder;
     Filename = ParameterFilename;
 
     // initialise with default values
@@ -81,33 +82,33 @@ void Parameters::Initialise(string ParameterFilename)
 void Parameters::SetDefaultValues()
 {
     // Cosmogenic Isotopes
-	bool_DefaultParams["CRN_predictions"] = true;
-	bool_DefaultParams["Berylium"] = true;
-	bool_DefaultParams["Carbon"] = true;
-	bool_DefaultParams["Aluminium"] = true;
+	bool_Params["CRN_predictions"] = true;
+	bool_Params["Berylium"] = true;
+	bool_Params["Carbon"] = true;
+	bool_Params["Aluminium"] = true;
 	
 	// Hydrodynamics
-	float_DefaultParams["SeaLevelRise"] = 0.001;
-	float_DefaultParams["TidalRange"] = 2.;
-	float_DefaultParams["WaveHeight"] = 2.;
-	float_DefaultParams["StandingWaveCoef"] = 0.1;
-	float_DefaultParams["BreakingWaveCoef"] = 10.;
-	float_DefaultParams["BrokenWaveCoef"] = 0.01;
+	float_Params["SeaLevelRise"] = 0.001;
+	float_Params["TidalRange"] = 2.;
+	float_Params["WaveHeight"] = 2.;
+	float_Params["StandingWaveCoef"] = 0.1;
+	float_Params["BreakingWaveCoef"] = 10.;
+	float_Params["BrokenWaveCoef"] = 0.01;
 
 	// geology
-	float_DefaultParams["InitialGradient"] = 1.;
-	float_DefaultParams["CliffHeight"] = 15.;
-	float_DefaultParmas["MinElevation"] = -15.;
-	float_DefaultParams["Resistance"] = 0.002;
-	float_DefaultParams["WeatheringRate"] = 0.0001;
-	float_DefaultParams["SubtidalEfficacy"] = 0.1;
-	float_DefaultParams["CliffFailureDepth"] = 0.1;
+	float_Params["InitialGradient"] = 1.;
+	float_Params["CliffHeight"] = 15.;
+	float_Parmas["MinElevation"] = -15.;
+	float_Params["Resistance"] = 0.002;
+	float_Params["WeatheringRate"] = 0.0001;
+	float_Params["SubtidalEfficacy"] = 0.1;
+	float_Params["CliffFailureDepth"] = 0.1;
 
 	// time control
-	int_DefaultParmas["StartTime"] = -8000;
-	int_DefaultParmas["EndTime"] = 0;
-	int_DefaultParams["TimeStep"] = 1;
-	int_DefaultParmas["PrintInterval"] = 100;
+	int_Parmas["StartTime"] = -8000;
+	int_Parmas["EndTime"] = 0;
+	int_Params["TimeStep"] = 1;
+	int_Parmas["PrintInterval"] = 100;
 
 	// output files
 	string_DefaultParams["OutputProfileFilename"] = "RPM_ShoreProfile.xz";
@@ -163,10 +164,67 @@ void Parameters::ParseValuesFromFile()
         }
 
         //if in default map overwite
-        if (Parameter in bool_DefaultParams) bool_DefaultParams[Parameter] = Value;
-        else if (Parameter in float_DefaultParams) float_DefaultParams[Parameter] = Value;
-        else if (Parameter in int_DefaultParams) int_DefaultParmas[Parameter] = Value;
+        if (Parameter in bool_Params) bool_Params[Parameter] = Value;
+        else if (Parameter in float_Params) float_Params[Parameter] = Value;
+        else if (Parameter in int_Params) int_Parmas[Parameter] = Value;
         else if (Parameter in string_DefaultParams) string_DefaultParams[Parameter] = Value;
         else printf("Parameter %s not found, ignoring value Value\n");
+    }
+}
+
+void Parameters::WriteToFile()
+{
+    ofstream ParamsOut;
+    ParamsOut.open(ParameterOutFile.c_str());
+
+    ParamsOut << "# Here are the parameters used by RPM_CRN:" << endl;
+    ParamsOut << "# The folder and file names are: " << endl;
+    ParamsOut << "Folder: " << Folder << endl;
+    ParamsOut << "ParameterFile: " << Filename << endl;
+    ParamsOut << "ProfileOutFilename: " << ProfileOutFilename << endl;
+    ParamsOut << "ConcentrationsOutFilename: " << ConcentrationsOutFilename << endl;
+    ParamsOut << "# _________________________________________"  << endl;
+    ParamsOut << "# Here are the parameters used in your run" << endl;
+    
+    for (int i=0; i<int(bool_Params); ++i)
+    {
+        ParamsOut << bool_Params[i] << endl;
+    }
+
+    for (int i=0; i<int(bool_Params); ++i)
+    {
+        ParamsOut << int_Params[i] << endl;
+    }
+
+    for (int i=0; i<int(bool_Params); ++i)
+    {
+        ParamsOut << float_Params[i] << endl;
+    }
+}
+
+void Parameters::PrintToScreen()
+{
+    cout << "# Here are the parameters used by RPM_CRN:" << endl;
+    cout << "# The folder and file names are: " << endl;
+    cout << "Folder: " << Folder << endl;
+    cout << "ParameterFile: " << Filename << endl;
+    cout << "ProfileOutFilename: " << ProfileOutFilename << endl;
+    cout << "ConcentrationsOutFilename: " << ConcentrationsOutFilename << endl;
+    cout << "# _________________________________________"  << endl;
+    cout << "# Here are the parameters used in your run" << endl;
+    
+    for (int i=0; i<int(bool_Params); ++i)
+    {
+        cout << bool_Params[i] << endl;
+    }
+
+    for (int i=0; i<int(bool_Params); ++i)
+    {
+        cout << int_Params[i] << endl;
+    }
+
+    for (int i=0; i<int(bool_Params); ++i)
+    {
+        cout << float_Params[i] << endl;
     }
 }

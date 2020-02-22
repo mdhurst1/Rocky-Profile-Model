@@ -69,12 +69,16 @@ class Parameters
 		int StartTime, EndTime, TimeStep, PrintInterval;
 
 		// output files
-		string OutputProfileFilename, OutputConcentrationFilename;
+		string Folder, Filename;
+		string ProfileOutFilename, ConcentrationsOutFilename;
+		string ParameterOutFilename;
 
-		void Parameters::Initialise();	
-		void Parameters::Initialise(string ParameterFilename);
-		void Parameters::SetDefaultValues();
-		void Parameters::ParseValuesFromFile();
+		void Initialise();	
+		void Initialise(string ParameterFilename);
+		void SetDefaultValues();
+		void ParseValuesFromFile();
+		void WriteToFile();
+		void PrintToScreen();
 	
 	public:
 		Parameters()
