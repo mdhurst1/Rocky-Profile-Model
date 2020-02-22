@@ -132,14 +132,17 @@ void Parameters::ParseValuesFromFile()
     {
         Line = infile.getline();
 
-        // ignore if commented out
+        
         for (int i = 0; i<Line.length(); i++)
         {
+            // ignore if commented out
             if (Line[i] == "#"):
                 break;
             
+            // find whitespace characters and colon
             else if (Line[i] == ":" || Line[i] == "\t" || Line[i] == " " || Line[i] == ",")
             {
+                // split to get parameter name and value and overwrite default
                 if !(GotParameter)
                 {
                     Parameter = Line.substr(0,i);
@@ -159,12 +162,11 @@ void Parameters::ParseValuesFromFile()
             }
         }
 
-        // find whitespace characters and colon
-
-        // split to get parameter name and value and overwrite default
-
-
-        LSDPP_parse_line(infile, parameter, value);
-        lower = parameter;
+        //if in default map overwite
+        if (Parameter in bool_DefaultParams) bool_DefaultParams[Parameter] = Value;
+        else if (Parameter in float_DefaultParams) float_DefaultParams[Parameter] = Value;
+        else if (Parameter in int_DefaultParams) int_DefaultParmas[Parameter] = Value;
+        else if (Parameter in string_DefaultParams) string_DefaultParams[Parameter] = Value;
+        else printf("Parameter %s not found, ignoring value Value\n");
     }
-
+}

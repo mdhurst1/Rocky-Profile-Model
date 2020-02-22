@@ -54,9 +54,27 @@ class Parameters
   		map<string,bool> bool_DefaultParams;
   		map<string,string> string_DefaultParams;
 
+		// actual parameter holders
+		// Cosmogenic Isotopes
+		bool CRN_Predictions, Berylium, Carbon, Aluminium;
+		
+		// Hydrodynamics
+		float SeaLevelRise, TidalRange, WaveHeight, StandingWaveCoef, BreakingWaveCoef;
+
+		// geology
+		float InitialGradient, CliffHeight, MinElevation, Resistance, 
+				WeatheringRate, SubtidalEfficacy, CliffFailureDepth;
+
+		// time control
+		int StartTime, EndTime, TimeStep, PrintInterval;
+
+		// output files
+		string OutputProfileFilename, OutputConcentrationFilename;
+
 		void Parameters::Initialise();	
 		void Parameters::Initialise(string ParameterFilename);
 		void Parameters::SetDefaultValues();
+		void Parameters::ParseValuesFromFile();
 	
 	public:
 		Parameters()
