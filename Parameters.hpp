@@ -45,6 +45,9 @@ class Parameters
 {
 	private:
 
+		// filename
+		string Filename;
+		
 		// maps for setting default parameters
  		map<string,int> int_DefaultParams;
  		map<string,float> float_DefaultParams;

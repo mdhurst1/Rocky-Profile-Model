@@ -68,11 +68,14 @@ void Parameters::Initialise(string ParameterFilename)
 {
     printf("\nParameters.Initialise: Initialised parameters from %s\n", ParameterFilename);
 
+    // set filename
+    Filename = ParameterFilename;
+
     // initialise with default values
     SetDefaultValues();
 
     // update to include values parsed form the input file
-
+    ParseValuesFromFile();
 }
 
 void Parameters::SetDefaultValues()
@@ -110,3 +113,58 @@ void Parameters::SetDefaultValues()
 	string_DefaultParams["OutputProfileFilename"] = "RPM_ShoreProfile.xz";
 	string_DefaultParams["OutputConcentrationFilename"] = "RPM_Concentrations.xn";
 }
+
+void Parameters::ParseValuesFromFile()
+{
+    // temp variables to hold values read from file
+    string Line, ParameterName, Value;
+    string Parameter, value, lower, lower_val;
+    string bc;
+    int ValuePosition;
+    bool GotParameter = false;
+
+    // file stream to read contents
+    ifstream infile;
+    infile.open(Filename.c_str());
+
+    // now ingest parameters
+    while (infile.good())
+    {
+        Line = infile.getline();
+
+        // ignore if commented out
+        for (int i = 0; i<Line.length(); i++)
+        {
+            if (Line[i] == "#"):
+                break;
+            
+            else if (Line[i] == ":" || Line[i] == "\t" || Line[i] == " " || Line[i] == ",")
+            {
+                if !(GotParameter)
+                {
+                    Parameter = Line.substr(0,i);
+                    ValuePosition = i+1;
+                    GotParameter = true;
+                }
+                else
+                {
+                    ValuePosition = i+1;
+                }
+            }
+
+            else if (Line[i] == "\n")
+            {
+                Value = Line.substr(ValuePosition,i);
+                GotValue = true;
+            }
+        }
+
+        // find whitespace characters and colon
+
+        // split to get parameter name and value and overwrite default
+
+
+        LSDPP_parse_line(infile, parameter, value);
+        lower = parameter;
+    }
+
