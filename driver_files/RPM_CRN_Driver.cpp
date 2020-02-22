@@ -67,6 +67,7 @@
 #include <fstream>
 #include <sstream>
 #include <cstdlib>
+#include <map>
 //#include <omp.h>
 #include <unistd.h>
 #include "../RPM.hpp"
@@ -107,15 +108,24 @@ int main(int nNumberofArgs,char *argv[])
 	}
 
 	string Folder = argv[1];
-	string Project = argv[2];
-		
-	//initialisation parameters
+	string InputParamFilename = argv[2];
+	
+	// load parameter parser object
+  	//LSDParameterParser LSDPP(Folder,InputParamFilename);
+
+	// set up default parameters
+
+	// get parameters from the parameter file
+	LSDPP.parse_all_parameters(float_DefaultParams, int_DefaultParmas, bool_DefaultParams, string_DefaultParams);
+	map<string,float> float_Params = LSDPP.get_float_parameters();
+	map<string,int> int_Params = LSDPP.get_int_parameters();
+	map<string,bool> bool_Params = LSDPP.get_bool_parameters();
+	map<string,string> string_Params = LSDPP.get_string_parameters();
+
+	//initialisation parameters, these are currently not 
 	double dZ = 0.1;
 	double dX = 0.1;
-	double Gradient = 1.;
-	double CliffHeight = 15.;
-	double MinElevation = -15.;
-
+	
 	//Time control parameters
 	//Time runs in yrs bp
 	double EndTime = 0;
@@ -125,9 +135,7 @@ int main(int nNumberofArgs,char *argv[])
 	//Print Control
 	double PrintInterval = 10;
 	double PrintTime = Time-PrintInterval;
-	string OutputFileName = Folder+Project+"_ShoreProfile.xz";
-	string OutputConcentrationFileName = Folder+Project+"_Concentrations.xn";
-
+	
 	//initialise RPM Model
 	RPM PlatformModel = RPM(dZ, dX, Gradient, CliffHeight, MinElevation);
 	
