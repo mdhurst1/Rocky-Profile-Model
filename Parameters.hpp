@@ -75,7 +75,7 @@ class Parameters
 		int StartTime, EndTime, TimeStep, PrintInterval;
 
 		// output files
-		string Folder, Filename;
+		string Folder, Filename, ProjectName;
 		string SeaLevelFilename;
 		string ProfileOutFilename, ConcentrationsOutFilename;
 		string ParameterOutFilename;

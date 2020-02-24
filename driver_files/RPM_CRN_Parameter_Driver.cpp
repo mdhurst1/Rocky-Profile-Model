@@ -126,7 +126,7 @@ int main(int nNumberofArgs,char *argv[])
 	RPM PlatformModel = RPM(dZ, dX, Params.InitialGradient, Params.CliffHeight, Params.MinElevation);
 	
 	//initialise RockyCoastCRN friend object
-	RockyCoastCRN PlatformCRN = RockyCoastCRN();
+	RockyCoastCRN PlatformCRN;
 
 	// THIS SHOULD BE IN PARAMETER FILE
 	if (Params.CRN_Predictions)
@@ -176,7 +176,7 @@ int main(int nNumberofArgs,char *argv[])
 	if (Params.CRN_Predictions) PlatformCRN.WriteCRNProfile(Params.ConcentrationsOutFilename, TempTime);
 
 	//Loop through time
-	while (Time <= Params.EndTime)
+	while (Time >= Params.EndTime)
 	{
 		//Do an earthquake?
 		//if (Time < UpliftTime)
@@ -234,7 +234,7 @@ int main(int nNumberofArgs,char *argv[])
 		}
 		
 		//update time
-		Time += Params.TimeStep;
+		Time -= Params.TimeStep;
 		
 	}
 	

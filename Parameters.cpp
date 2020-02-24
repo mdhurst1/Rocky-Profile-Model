@@ -68,7 +68,7 @@ void Parameters::Initialise()
 
 void Parameters::Initialise(string Folder, string ParameterFilename)
 {
-    printf("\nParameters.Initialise: Initialised parameters from:\n\tfolder: %s\n\tfile%s\n", 
+    printf("\nParameters.Initialise: Initialised parameters from:\n\tfolder: %s\n\tfile: %s\n", 
             Folder.c_str(), ParameterFilename.c_str());
 
     // set filename
@@ -85,7 +85,7 @@ void Parameters::Initialise(string Folder, string ParameterFilename)
 void Parameters::SetDefaultValues()
 {
     // Cosmogenic Isotopes
-	bool_Params["CRN_predictions"] = true;
+	bool_Params["CRN_Predictions"] = true;
 	bool_Params["Berylium"] = true;
 	bool_Params["Carbon"] = true;
 	bool_Params["Aluminium"] = true;
@@ -93,10 +93,15 @@ void Parameters::SetDefaultValues()
 	// Hydrodynamics
 	float_Params["SeaLevelRise"] = 0.001;
 	float_Params["TidalRange"] = 2.;
-	float_Params["WaveHeight"] = 2.;
+    float_Params["TidalPeriod"] = 12.42;
+	float_Params["WaveHeight_Mean"] = 2.;
+    float_Params["WaveHeight_StD"] = 0.;
+    float_Params["WavePeriod_Mean"] = 6.;
+    float_Params["WavePeriod_StD"] = 0.;
 	float_Params["StandingWaveCoef"] = 0.1;
 	float_Params["BreakingWaveCoef"] = 10.;
 	float_Params["BrokenWaveCoef"] = 0.01;
+    float_Params["WaveAttenuationConst"] = 0.01;
 
 	// geology
 	float_Params["InitialGradient"] = 1.;
@@ -108,14 +113,17 @@ void Parameters::SetDefaultValues()
 	float_Params["CliffFailureDepth"] = 0.1;
 
 	// time control
-	int_Params["StartTime"] = -8000;
+	int_Params["StartTime"] = 8000;
 	int_Params["EndTime"] = 0;
 	int_Params["TimeStep"] = 1;
 	int_Params["PrintInterval"] = 100;
 
 	// output files
-	string_Params["OutputProfileFilename"] = "RPM_ShoreProfile.xz";
-	string_Params["OutputConcentrationFilename"] = "RPM_Concentrations.xn";
+    string_Params["Folder"] = Folder;
+    string_Params["ProjectName"] = "RPM_CRN";
+    string_Params["SeaLevelFilename"] = "NULL";
+	string_Params["ProfileOutFilename"] = ProjectName + "_ShoreProfile.xz";
+	string_Params["ConcentrationsOutFilename"] = ProjectName + "RPM_Concentrations.xn";
 }
 
 void Parameters::ParseValuesFromFile()
@@ -125,7 +133,7 @@ void Parameters::ParseValuesFromFile()
     string Parameter, value, lower, lower_val;
     string bc;
     int ValuePosition;
-    bool GotParameter = false;
+    bool GotParameter, GotValue;
     
     // file stream to read contents
     ifstream infile;
@@ -136,6 +144,8 @@ void Parameters::ParseValuesFromFile()
     {
         // read the line
         getline(infile,Line);
+        GotParameter = false;
+        GotValue = false;
 
         for (unsigned int i = 0; i<Line.length(); i++)
         {
@@ -153,18 +163,25 @@ void Parameters::ParseValuesFromFile()
                     ValuePosition = i+1;
                     GotParameter = true;
                 }
-                else
+                else if (!GotValue)
                 {
                     ValuePosition = i+1;
                 }
+                else
+                {
+                    break;
+                }
             }
 
-            else if (Character == "\n")
+            else if (Character == "\r" || Character == "\n")
             {
-                Value = Line.substr(ValuePosition,i);
+                if (GotParameter) Value = Line.substr(ValuePosition, i-ValuePosition);
                 break;
             }
+            else if (GotParameter && !GotValue) GotValue = true;
         }
+
+        if (!GotParameter) continue;
 
         // check if parameter can be found as a key in parameter maps and if so update with value 
         if (bool_Params.find(Parameter) != bool_Params.end())
@@ -172,16 +189,71 @@ void Parameters::ParseValuesFromFile()
             bool boolValue;
             istringstream is(Value);
             is >> std::boolalpha >> boolValue;
-            bool_Params[Parameter];
+            bool_Params[Parameter] = boolValue;
         } 
-        else if (float_Params.find(Parameter) != float_Params.end()) float_Params[Parameter] = stof(Value);
-        else if (int_Params.find(Parameter) != int_Params.end()) int_Params[Parameter] = stoi(Value);
-        else if (string_Params.find(Parameter) != string_Params.end()) string_Params[Parameter] = Value;
+        else if (float_Params.find(Parameter) != float_Params.end()) 
+        {
+            float_Params[Parameter] = stof(Value);
+        }
+        else if (int_Params.find(Parameter) != int_Params.end()) 
+        {
+            int_Params[Parameter] = stoi(Value);
+        }
+        else if (string_Params.find(Parameter) != string_Params.end()) 
+        {
+            string_Params[Parameter] = Value;
+        }
         else printf("Parameter %s not found, ignoring value\n", Parameter.c_str());
     }
 
+    // assign all values from variable maps to variables
+    
+    // Cosmogenic Isotopes
+	CRN_Predictions = bool_Params["CRN_Predictions"];
+    Berylium = bool_Params["Berylium"];
+    Carbon = bool_Params["Carbon"];
+    Aluminium = bool_Params["Aluminium"];
+    ReadSeaLevelFromFile = bool_Params["ReadSeaLevelFromFile"];
+		
+    // Hydrodynamics
+    SeaLevelRise = float_Params["SeaLevelRise"];
+    TidalRange = float_Params["TidalRange"];
+    TidalPeriod = float_Params["TidalPeriod"];
+    WaveHeight_Mean = float_Params["WaveHeight_Mean"];
+    WaveHeight_StD = float_Params["WaveHeight_StD"];
+    WavePeriod_Mean = float_Params["WavePeriod_Mean"];
+    WavePeriod_StD = float_Params["WavePeriod_StD"];
+    StandingWaveCoef = float_Params["StandingWaveCoef"];
+    BreakingWaveCoef = float_Params["BreakingWaveCoef"];
+    BrokenWaveCoef = float_Params["BrokenWaveCoef"];
+    WaveAttenuationConst = float_Params["WaveAttenuationConst"];
+
+    // geology
+    InitialGradient = float_Params["InitialGradient"];
+    CliffHeight = float_Params["CliffHeight"];
+    MinElevation = float_Params["MinElevation"];
+    Resistance = float_Params["Resistance"];
+    WeatheringRate = float_Params["WeatheringRate"];
+    SubtidalEfficacy = float_Params["SubtidalEfficacy"];
+    CliffFailureDepth = float_Params["CliffFailureDepth"];
+
+    // time control
+    StartTime = int_Params["StartTime"];
+    EndTime = int_Params["EndTime"];
+    TimeStep = int_Params["TimeStep"];
+    PrintInterval = int_Params["PrintInterval"];
+
+    // output files
+    Folder = string_Params["Folder"];
+    Filename = string_Params["Filename"];
+    ProjectName = string_Params["ProjectName"];
+    SeaLevelFilename = string_Params["SeaLevelFilename"];
+    ProfileOutFilename = string_Params["ProfileOutFilename"];
+    ConcentrationsOutFilename = string_Params["ConcentrationsOutFilename"];
+    ParameterOutFilename = string_Params["ParameterOutFilename"];
+
     // check if reading sea level from file
-    if (SeaLevelFile != "NULL") ReadSeaLevelFromFile = true;
+    if (SeaLevelFilename != "NULL" && SeaLevelFilename != "") ReadSeaLevelFromFile = true;
 }
 
 void Parameters::WriteToFile()
