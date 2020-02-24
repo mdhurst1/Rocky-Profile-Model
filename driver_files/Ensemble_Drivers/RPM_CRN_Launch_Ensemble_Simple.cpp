@@ -83,22 +83,18 @@ int main(int nNumberofArgs,char *argv[])
 	//Test for correct input arguments
 	if (nNumberofArgs!=4)
 	{
-		cout << "Error: This program requires two inputs: " << endl;
-		cout << " * First a path to the folder where the model will be run" << endl;
-		cout << " * The name of the project/model run" << endl;
-		cout << " * A Flag to run with CRNs (1 = True)" << endl;
+		cout << "Error: This program requires one input: " << endl;
+		cout << " * A path to the folder where the model will be run" << endl;
 		cout << "-----------------------------------------------------------" << endl;
 		cout << "Then the command line argument will be: " << endl;
 		cout << "In linux:" << endl;
-		cout << "  ./RPM_Driver.out /ProjectFolder/ Waipapa" << endl;
+		cout << "  ./RPM_Driver.out /ProjectFolder/" << endl;
 		cout << "-----------------------------------------------------------" << endl;
 		exit(EXIT_SUCCESS);
 	}
 
 	string Folder = argv[1];
-	string Project = argv[2];
-	int CRNFlag = atoi(argv[3]);
-	
+		
 	// Changing parameters for exploratory iterarions
     //Initial Gradient
 	vector<double> Gradient;
@@ -155,7 +151,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%i.sh", Run);
+        sprintf(sh_name, Folder + "RPM_CRN_%i.sh", Run);
         write_sh.open(sh_name);
         write_sh << "#!/bin/bash" << endl;
         write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;

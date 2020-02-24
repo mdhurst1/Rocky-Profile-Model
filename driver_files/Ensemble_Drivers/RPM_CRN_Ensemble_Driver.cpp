@@ -178,7 +178,7 @@ int main(int nNumberofArgs,char *argv[])
 	{
 		//Which Nuclides to track 10Be, 14C, 26Al, 36Cl?
 		vector<int> Nuclides;
-		Nuclides.push_back(10);
+		Nuclides.push_back(10, 14, 26);
 		
 		//initialise RockyCoastCRN friend object
 		PlatformCRN = RockyCoastCRN(PlatformModel, Nuclides);
