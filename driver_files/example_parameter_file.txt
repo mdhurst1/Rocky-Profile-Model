@@ -1,0 +1,37 @@
+# parameter file for RPM_CRN model
+
+# File Structure
+Folder: /home/mhurst/RPM_CRN/
+ProjectName: Waipapa
+
+# Cosmogenic Isotopes
+CRN_Predictions: false
+Berylium: true
+Carbon: false
+Aluminium: false
+
+# Hydrodynamics
+SeaLevelFilename: NULL
+SeaLevelRise: 0.001
+TidalRange: 2.
+TidalPeriod: 12.42
+WaveHeight_Mean: 2.
+WaveHeight_StD: 0.
+WavePeriod_Mean: 6. 
+WavePeriod_StD: 0.
+StandingWaveCoef: 0.1
+BreakingWaveCoef: 10.
+BrokenWaveCoef: 0.01
+WaveAttenuationConst: 0.01
+
+# geology
+Resistance: 0.002
+WeatheringRate: 0.0001
+SubtidalEfficacy: 0.1
+CliffFailureDepth = 0.1
+
+# time control
+StartTime: 8000
+EndTime: 0
+TimeStep: 1
+PrintInterval: 100

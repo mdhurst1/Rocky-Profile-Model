@@ -67,6 +67,7 @@
 #include <fstream>
 #include <sstream>
 #include <cstdlib>
+#include <map>
 //#include <omp.h>
 #include <unistd.h>
 #include "../RPM.hpp"
@@ -97,44 +98,40 @@ int main(int nNumberofArgs,char *argv[])
 		cout << "Error: This program requires two inputs: " << endl;
 		cout << " * First a path to the folder where the model will be run" << endl;
 		cout << " * The name of the project/model run" << endl;
-		cout << " * A Flag to run with CRNs (1 = True)" << endl;
+		cout << " * The name of the input parameter file" << endl;
 		cout << "------------------------------------------------------" << endl;
 		cout << "Then the command line argument will be: " << endl;
 		cout << "In linux:" << endl;
-		cout << "  ./RPM_Driver.out /ProjectFolder/ Waipapa 1" << endl;
+		cout << "  ./RPM_Driver.out /ProjectFolder/ Waipapa" << endl;
 		cout << "------------------------------------------------------" << endl;
 		exit(EXIT_SUCCESS);
 	}
 
 	string Folder = argv[1];
-	string Project = argv[2];
-	int CRNFlag = atoi(argv[3]);
 	
-	//initialisation parameters
+	// set up default parameters
+
+	//initialisation parameters, these are currently not 
 	double dZ = 0.1;
 	double dX = 0.1;
-	double Gradient = 1.;
-	double CliffHeight = 15.;
-	double MinElevation = -15.;
-
+	
 	//Time control parameters
 	//Time runs in yrs bp
 	double EndTime = 0;
-	double Time = 10000.;
+	double Time = -10000.;
 	double TimeInterval = 1;
 
 	//Print Control
 	double PrintInterval = 10;
 	double PrintTime = Time-PrintInterval;
-	string OutputFileName = Folder+Project+"_ShoreProfile.xz";
-	string OutputConcentrationFileName = Folder+Project+"_Concentrations.xn";
-
+	
 	//initialise RPM Model
 	RPM PlatformModel = RPM(dZ, dX, Gradient, CliffHeight, MinElevation);
 	
 	//initialise RockyCoastCRN friend object
 	RockyCoastCRN PlatformCRN = RockyCoastCRN();
 
+	// THIS SHOULD BE IN PARAMETER FILE
 	if (CRNFlag)
 	{
 		//Which Nuclides to track 10Be, 14C, 26Al, 36Cl?
@@ -150,7 +147,7 @@ int main(int nNumberofArgs,char *argv[])
 	//SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
 	
 	// initialise sea level using rate of change
-	double SLR = -0.0005; //(m/yr)
+	double SLR = 0.0005; //(m/yr)
 	SeaLevel RelativeSeaLevel = SeaLevel(SLR);
 	
 	// Get initial sea level
@@ -165,7 +162,7 @@ int main(int nNumberofArgs,char *argv[])
 		
 	//Initialise Waves
 	//Single Wave for now but could use the waveclimate object from COVE!?
-	double WaveHeight_Mean = 3.;
+	double WaveHeight_Mean = 1.;
 	double WaveHeight_StD = 0.;
 	double WavePeriod_Mean = 6.;
 	double WavePeriod_StD = 0;
@@ -197,13 +194,13 @@ int main(int nNumberofArgs,char *argv[])
 	if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
 
 	//Loop through time
-	while (Time >= EndTime)
+	while (Time <= EndTime)
 	{
 		//Do an earthquake?
 		//if (Time < UpliftTime)
-		{
-			string ArrayFile1 = "MorphArray1.data";
-			string ArrayFile2 = "MorphArray2.data";
+		//{
+			//string ArrayFile1 = "MorphArray1.data";
+			//string ArrayFile2 = "MorphArray2.data";
 
 			//PlatformModel.WriteMorphologyArray(ArrayFile1, Time);
 			//PlatformModel.TectonicUplift(UpliftMagnitude);
@@ -212,7 +209,7 @@ int main(int nNumberofArgs,char *argv[])
 
 			//Update the Morphology 
 			//PlatformModel.UpdateMorphology();
-		}		
+		//}		
 		
 		//Update Sea Level
 		InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
@@ -255,7 +252,7 @@ int main(int nNumberofArgs,char *argv[])
 		}
 		
 		//update time
-		Time -= TimeInterval;
+		Time += TimeInterval;
 		
 	}
 	

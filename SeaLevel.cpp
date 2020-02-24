@@ -80,7 +80,7 @@ void SeaLevel::Initialise()
 		MeanSeaLevels[t] += (Eccentricity_Amp/M_PI)*atan(1./tan(M_PI*(Times[t]+Eccentricity_Offset)/Eccentricity_Period));
 	}
 	// break here and check
-	cout << "SeaLevel.Initialise: Sea Level History Created." << endl;
+	// cout << "SeaLevel.Initialise: Sea Level History Created." << endl;
 }
 
 void SeaLevel::Initialise(string SeaLevelDataFile)
@@ -139,6 +139,8 @@ void SeaLevel::Initialise(double SLR)
 		// sea level as a function of sea level rise rate
 		MeanSeaLevels[t] = MeanSeaLevel + SeaLevelRise*(MaxTime-Times[t]);
 	}
+
+	printf("SeaLevel.Initialise: Sea level history created based on a constant rate of sea level change\n");
 }
 
 double SeaLevel::get_SeaLevel(double Time)
