@@ -142,26 +142,20 @@ int main(int nNumberofArgs,char *argv[])
 	}
 	
 	// Initialise Sea level from datafile
-	if (Params.SeaLevelFile) SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
-	else SeaLevel RelativeSeaLevel = SeaLevel(Params.SeaLevelRise);
+	SeaLevel RelativeSeaLevel;
+	if (Params.ReadSeaLevelFromFile) RelativeSeaLevel = SeaLevel(Params.SeaLevelFilename);
+	else RelativeSeaLevel = SeaLevel(Params.SeaLevelRise);
 	
 	// Get initial sea level
 	float InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
 	PlatformModel.UpdateSeaLevel(InstantSeaLevel);
 
 	//Initialise Tides
-	double TidalRange = 1.5;
-    double TidalPeriod = 12.42;
 	PlatformModel.InitialiseTides(Params.TidalRange);
     if (Params.CRN_Predictions) PlatformCRN.InitialiseTides(Params.TidalRange/2.,Params.TidalPeriod);
 		
 	//Initialise Waves
-	//Single Wave for now but could use the waveclimate object from COVE!?
-	double WaveHeight_Mean = 1.;
-	double WaveHeight_StD = 0.;
-	double WavePeriod_Mean = 6.;
-	double WavePeriod_StD = 0;
-	PlatformModel.InitialiseWaves(WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD);
+	PlatformModel.InitialiseWaves(Params.WaveHeight_Mean, Params.WaveHeight_StD, Params.WavePeriod_Mean, Params.WavePeriod_StD);
 	
 	//Tectonic Events
 	//double UpliftFrequency = 1000.;
@@ -169,27 +163,20 @@ int main(int nNumberofArgs,char *argv[])
 	//double UpliftMagnitude = 6.5;
 
 	// Wave coefficient constant
-	double StandingCoefficient = 0.1;
-	double BreakingCoefficient = 10.;
-	double BrokenCoefficient = 1.;
-	double WaveAttenuationConst = 0.01;
-	PlatformModel.Set_WaveCoefficients(StandingCoefficient, BreakingCoefficient, BrokenCoefficient, WaveAttenuationConst);
+	PlatformModel.Set_WaveCoefficients(Params.StandingWaveCoef, Params.BreakingWaveCoef, 
+										Params.BrokenWaveCoef, Params.WaveAttenuationConst);
 
 	//reset the geology
-	double CliffFailureDepth = 0.1;
-	double Resistance = 0.002; //kg m^2 yr^-1 ? NOT CURRENTLY
-	double WeatheringRate = 0.01; //kg m^2 yr-1 ? NOT CURRENTLY
-	double SubtidalEfficacy=0.02; //sets relative efficacy of subtidal weathering
-
-	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);	
+	PlatformModel.InitialiseGeology(Params.CliffHeight, Params.CliffFailureDepth, Params.Resistance, 
+									Params.WeatheringRate, Params.SubtidalEfficacy);	
 
 	// print initial condition to file
 	double TempTime = -9999;
-	PlatformModel.WriteProfile(OutputFileName, TempTime);			
-	if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
+	PlatformModel.WriteProfile(Params.ProfileOutFilename, TempTime);			
+	if (Params.CRN_Predictions) PlatformCRN.WriteCRNProfile(Params.ConcentrationsOutFilename, TempTime);
 
 	//Loop through time
-	while (Time <= EndTime)
+	while (Time <= Params.EndTime)
 	{
 		//Do an earthquake?
 		//if (Time < UpliftTime)
@@ -232,28 +219,26 @@ int main(int nNumberofArgs,char *argv[])
 		PlatformModel.UpdateMorphology();
 
         //Update the morphology inside RockyCoastCRN
-		if (CRNFlag) PlatformCRN.UpdateMorphology(PlatformModel);
-
-		//Update the CRN concentrations
-		if (CRNFlag) PlatformCRN.UpdateCRNs();
+		if (Params.CRN_Predictions) 
+		{
+			PlatformCRN.UpdateMorphology(PlatformModel);
+			PlatformCRN.UpdateCRNs();
+		}
         	
 		//print?
 		if (Time <= PrintTime)
 		{
-			PlatformModel.WriteProfile(OutputFileName, Time);
-			if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
-			PrintTime -= PrintInterval;
-			//cout << endl;
+			PlatformModel.WriteProfile(Params.ProfileOutFilename, Time);
+			if (Params.CRN_Predictions) PlatformCRN.WriteCRNProfile(Params.ConcentrationsOutFilename, Time);
+			PrintTime -= Params.PrintInterval;
 		}
 		
 		//update time
-		Time += TimeInterval;
+		Time += Params.TimeStep;
 		
 	}
 	
 	//a few blank lines to finish
-	//cout << UpliftMagnitude << endl << endl;
-	
+	cout << endl << "Done" << endl << endl;
+
 }
-
-

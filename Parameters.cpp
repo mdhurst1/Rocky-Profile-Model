@@ -42,6 +42,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
+#include <sstream>
 #include <vector>
 #include <iostream>
 #include <iomanip>
@@ -52,6 +53,7 @@
 #include "RPM.hpp"
 #include "SeaLevel.hpp"
 #include "FastExp.hpp"
+#include "Parameters.hpp"
 
 using namespace std;
 
@@ -59,17 +61,18 @@ void Parameters::Initialise()
 {
     /* initialise an empty RPM object as default */
     printf("\nParameters.Initialise: Initialised an empty Parameters object\n");
-    printf("\tAll Parameters will be set to default values\n")
+    printf("\tAll Parameters will be set to default values\n");
 
     SetDefaultValues();
 }
 
 void Parameters::Initialise(string Folder, string ParameterFilename)
 {
-    printf("\nParameters.Initialise: Initialised parameters from:\n\tfolder: %s\n\tfile%s\n", Folder, ParameterFilename);
+    printf("\nParameters.Initialise: Initialised parameters from:\n\tfolder: %s\n\tfile%s\n", 
+            Folder.c_str(), ParameterFilename.c_str());
 
     // set filename
-    WorkingFolder = Folder;
+    Folder = Folder;
     Filename = ParameterFilename;
 
     // initialise with default values
@@ -98,32 +101,32 @@ void Parameters::SetDefaultValues()
 	// geology
 	float_Params["InitialGradient"] = 1.;
 	float_Params["CliffHeight"] = 15.;
-	float_Parmas["MinElevation"] = -15.;
+	float_Params["MinElevation"] = -15.;
 	float_Params["Resistance"] = 0.002;
 	float_Params["WeatheringRate"] = 0.0001;
 	float_Params["SubtidalEfficacy"] = 0.1;
 	float_Params["CliffFailureDepth"] = 0.1;
 
 	// time control
-	int_Parmas["StartTime"] = -8000;
-	int_Parmas["EndTime"] = 0;
+	int_Params["StartTime"] = -8000;
+	int_Params["EndTime"] = 0;
 	int_Params["TimeStep"] = 1;
-	int_Parmas["PrintInterval"] = 100;
+	int_Params["PrintInterval"] = 100;
 
 	// output files
-	string_DefaultParams["OutputProfileFilename"] = "RPM_ShoreProfile.xz";
-	string_DefaultParams["OutputConcentrationFilename"] = "RPM_Concentrations.xn";
+	string_Params["OutputProfileFilename"] = "RPM_ShoreProfile.xz";
+	string_Params["OutputConcentrationFilename"] = "RPM_Concentrations.xn";
 }
 
 void Parameters::ParseValuesFromFile()
 {
     // temp variables to hold values read from file
-    string Line, ParameterName, Value;
+    string Line, Character, ParameterName, Value;
     string Parameter, value, lower, lower_val;
     string bc;
     int ValuePosition;
     bool GotParameter = false;
-
+    
     // file stream to read contents
     ifstream infile;
     infile.open(Filename.c_str());
@@ -131,20 +134,20 @@ void Parameters::ParseValuesFromFile()
     // now ingest parameters
     while (infile.good())
     {
-        Line = infile.getline();
+        // read the line
+        getline(infile,Line);
 
-        
-        for (int i = 0; i<Line.length(); i++)
+        for (unsigned int i = 0; i<Line.length(); i++)
         {
             // ignore if commented out
-            if (Line[i] == "#"):
-                break;
+            Character = Line[i];
+            if (Character == "#") break;
             
             // find whitespace characters and colon
-            else if (Line[i] == ":" || Line[i] == "\t" || Line[i] == " " || Line[i] == ",")
+            else if (Character == ":" || Character == "\t" || Character == " " || Character == ",")
             {
                 // split to get parameter name and value and overwrite default
-                if !(GotParameter)
+                if (!GotParameter)
                 {
                     Parameter = Line.substr(0,i);
                     ValuePosition = i+1;
@@ -156,26 +159,35 @@ void Parameters::ParseValuesFromFile()
                 }
             }
 
-            else if (Line[i] == "\n")
+            else if (Character == "\n")
             {
                 Value = Line.substr(ValuePosition,i);
-                GotValue = true;
+                break;
             }
         }
 
-        //if in default map overwite
-        if (Parameter in bool_Params) bool_Params[Parameter] = Value;
-        else if (Parameter in float_Params) float_Params[Parameter] = Value;
-        else if (Parameter in int_Params) int_Parmas[Parameter] = Value;
-        else if (Parameter in string_DefaultParams) string_DefaultParams[Parameter] = Value;
-        else printf("Parameter %s not found, ignoring value Value\n");
+        // check if parameter can be found as a key in parameter maps and if so update with value 
+        if (bool_Params.find(Parameter) != bool_Params.end())
+        {
+            bool boolValue;
+            istringstream is(Value);
+            is >> std::boolalpha >> boolValue;
+            bool_Params[Parameter];
+        } 
+        else if (float_Params.find(Parameter) != float_Params.end()) float_Params[Parameter] = stof(Value);
+        else if (int_Params.find(Parameter) != int_Params.end()) int_Params[Parameter] = stoi(Value);
+        else if (string_Params.find(Parameter) != string_Params.end()) string_Params[Parameter] = Value;
+        else printf("Parameter %s not found, ignoring value\n", Parameter.c_str());
     }
+
+    // check if reading sea level from file
+    if (SeaLevelFile != "NULL") ReadSeaLevelFromFile = true;
 }
 
 void Parameters::WriteToFile()
 {
     ofstream ParamsOut;
-    ParamsOut.open(ParameterOutFile.c_str());
+    ParamsOut.open(ParameterOutFilename.c_str());
 
     ParamsOut << "# Here are the parameters used by RPM_CRN:" << endl;
     ParamsOut << "# The folder and file names are: " << endl;
@@ -186,20 +198,24 @@ void Parameters::WriteToFile()
     ParamsOut << "# _________________________________________"  << endl;
     ParamsOut << "# Here are the parameters used in your run" << endl;
     
-    for (int i=0; i<int(bool_Params); ++i)
+    for (auto it: bool_Params)
     {
-        ParamsOut << bool_Params[i] << endl;
+        ParamsOut << it.first << ": " << it.second << endl;
     }
 
-    for (int i=0; i<int(bool_Params); ++i)
+    /*
+    temp comment out until tested above
+    
+    for (unsigned int i=0; i<int_Params.size(); ++i)
     {
         ParamsOut << int_Params[i] << endl;
     }
 
-    for (int i=0; i<int(bool_Params); ++i)
+    for (unsigned int i=0; i<float_Params.size(); ++i)
     {
         ParamsOut << float_Params[i] << endl;
     }
+    */
 }
 
 void Parameters::PrintToScreen()
@@ -213,10 +229,13 @@ void Parameters::PrintToScreen()
     cout << "# _________________________________________"  << endl;
     cout << "# Here are the parameters used in your run" << endl;
     
-    for (int i=0; i<int(bool_Params); ++i)
+    for (auto it: bool_Params)
     {
-        cout << bool_Params[i] << endl;
+        cout << it.first << ": " << it.second << endl;
     }
+
+    /*
+    temp comment
 
     for (int i=0; i<int(bool_Params); ++i)
     {
@@ -227,4 +246,7 @@ void Parameters::PrintToScreen()
     {
         cout << float_Params[i] << endl;
     }
+    */
 }
+
+#endif

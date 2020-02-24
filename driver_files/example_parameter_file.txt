@@ -8,13 +8,18 @@ CRNpredictions: true
 Nuclides: 10 14 26
 
 # Hydrodynamics
+SeaLevelFilename: NULL
 SeaLevelRise: 0.001
-SeaLevelFile: NULL
 TidalRange: 2.
-WaveHeight: 2.
+TidalPeriod: 12.42
+WaveHeight_Mean: 2.
+WaveHeight_StD: 0.
+WavePeriod_Mean: 6. 
+WavePeriod_StD: 0.
 StandingWaveCoef: 0.1
 BreakingWaveCoef: 10.
 BrokenWaveCoef: 0.01
+WaveAttenuationConst: 0.01
 
 # geology
 Resistance: 0.002

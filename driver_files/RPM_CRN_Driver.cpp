@@ -102,25 +102,14 @@ int main(int nNumberofArgs,char *argv[])
 		cout << "------------------------------------------------------" << endl;
 		cout << "Then the command line argument will be: " << endl;
 		cout << "In linux:" << endl;
-		cout << "  ./RPM_Driver.out /ProjectFolder/ Waipapa.in" << endl;
+		cout << "  ./RPM_Driver.out /ProjectFolder/ Waipapa" << endl;
 		cout << "------------------------------------------------------" << endl;
 		exit(EXIT_SUCCESS);
 	}
 
 	string Folder = argv[1];
-	string InputParamFilename = argv[2];
 	
-	// load parameter parser object
-  	//LSDParameterParser LSDPP(Folder,InputParamFilename);
-
 	// set up default parameters
-
-	// get parameters from the parameter file
-	LSDPP.parse_all_parameters(float_DefaultParams, int_DefaultParmas, bool_DefaultParams, string_DefaultParams);
-	map<string,float> float_Params = LSDPP.get_float_parameters();
-	map<string,int> int_Params = LSDPP.get_int_parameters();
-	map<string,bool> bool_Params = LSDPP.get_bool_parameters();
-	map<string,string> string_Params = LSDPP.get_string_parameters();
 
 	//initialisation parameters, these are currently not 
 	double dZ = 0.1;

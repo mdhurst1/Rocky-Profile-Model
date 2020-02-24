@@ -45,21 +45,27 @@ class Parameters
 {
 	private:
 
-		// filename
-		string Filename;
-		
 		// maps for setting default parameters
- 		map<string,int> int_DefaultParams;
- 		map<string,float> float_DefaultParams;
-  		map<string,bool> bool_DefaultParams;
-  		map<string,string> string_DefaultParams;
+ 		map<string,int> int_Params;
+ 		map<string,float> float_Params;
+  		map<string,bool> bool_Params;
+  		map<string,string> string_Params;
+
+		void Initialise();	
+		void Initialise(string Folder, string ParameterFilename);
+		void SetDefaultValues();
+		void ParseValuesFromFile();
+		void WriteToFile();
+		void PrintToScreen();
+	
+	public:
 
 		// actual parameter holders
 		// Cosmogenic Isotopes
-		bool CRN_Predictions, Berylium, Carbon, Aluminium;
+		bool CRN_Predictions, Berylium, Carbon, Aluminium, ReadSeaLevelFromFile;
 		
 		// Hydrodynamics
-		float SeaLevelRise, TidalRange, WaveHeight, StandingWaveCoef, BreakingWaveCoef;
+		float SeaLevelRise, TidalRange, TidalPeriod, WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD, StandingWaveCoef, BreakingWaveCoef, BrokenWaveCoef, WaveAttenuationConst;
 
 		// geology
 		float InitialGradient, CliffHeight, MinElevation, Resistance, 
@@ -70,24 +76,19 @@ class Parameters
 
 		// output files
 		string Folder, Filename;
+		string SeaLevelFilename;
 		string ProfileOutFilename, ConcentrationsOutFilename;
 		string ParameterOutFilename;
 
-		void Initialise();	
-		void Initialise(string ParameterFilename);
-		void SetDefaultValues();
-		void ParseValuesFromFile();
-		void WriteToFile();
-		void PrintToScreen();
-	
-	public:
 		Parameters()
 		{
 			Initialise();
 		}
 
-		Parameters(string ParameterFilename)
+		Parameters(string Folder, string ParameterFilename)
 		{
-			Initialise(string ParameterFilename);
+			Initialise(Folder, ParameterFilename);
 		}
-}
+};
+
+#endif
