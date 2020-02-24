@@ -607,7 +607,7 @@ int main(int nNumberofArgs,char *argv[])
    double CRN_RMSE_N;
    long double Likelihood_N = 1.L;
    long double Neg_Log_Likelihood = 1.L;
-   long double Neg_Log_Likelihood_N = 1.L;
+   //long double Neg_Log_Likelihood_N = 1.L;
 
    //RMSE calculations 
 
@@ -628,7 +628,7 @@ int main(int nNumberofArgs,char *argv[])
    Neg_Log_Likelihood = -log(Likelihood);
 
    //normalised neegative log likelihood 
-   Neg_Log_Likelihood_N = Neg_Log_Likelihood/TidalRange;
+   //Neg_Log_Likelihood_N = Neg_Log_Likelihood/TidalRange;
 
 
    cout << " RMSE = " << RMSE << endl;
