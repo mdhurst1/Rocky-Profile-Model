@@ -1,31 +1,10 @@
 /*------------------------------------------------------------------------
-	RPM_CRN_Driver.cpp
+	RPM_CRN_Launch_Ensemble.cpp
 	
-	Driver file for running the shore platform model of Matsumoto et al. (2016)
-	Updated following improvements by Matsumoto et al. (2018)
+	function to build and launch slurm scripts for running multiple simulations
+    of the coupled RPM_CRN model with varying parameters in a one-at-a-time fashion
 	
-	C++ implementation of Hiro Matsumoto's Shore Platform Model with coupling to Cosmogenic Isotope production by RockCoastCRN/RoBoCoP.
-	Matsumoto, H., Dickson, M. E., & Kench, P. S. (2016a)
-	An exploratory numerical model of rocky shore profile evolution. 
-	Geomorphology http://doi.org/10.1016/j.geomorph.2016.05.017
-	
-	Matsumoto, H., Dickson, M.E., and Kench, P.S. (2016b)
-	Modelling the Development of Varied Shore Profile Geometry on Rocky Coasts.
-	Journal of Coastal Research http://dx.doi.org/10.2112/SI75-120.1
-	Matsumoto, H., Dickson, M. E., Kench, P. S., (2018)
-	Modelling the relative dominance of wave erosion and weathering processes in shore platform development in micro- to mega-tidal settings
-	Earth Surface Processes and Landforms  http://dx.doi.org/10.1002/esp.4422
-	
-    Hurst, M.D., Rood, D.H., Ellis, M.A., Anderson, R.S., and Dornbusch, U. (2016) Recent acceleration in coastal cliff retreat rates on the south coast of Great Britain. Proceedings of the National Academy of Sciences, http://dx.doi.org/10.1073/PNAS.1613044113
-	Hurst, M.D., Rood, D.H., and Ellis, M.A. (2017)
-	Controls on the distribution of cosmogenic 10 Be across shore platforms
-	Earth Surface Dynamics http://dx.doi.org/10.5194/esurf-5-67-2017
-	Martin D. Hurst, University of Glasgow
-	Hironori Matsumoto, University of Auckland
-	Mark Dickson, University of Auckland
-	
-	March 2017
-	
+    Martin Hurst, February 2020
 	Copyright (C) 2017, Hiro Matsumoto, Martin Hurst
 	
 	Developer can be contacted
