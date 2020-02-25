@@ -133,7 +133,8 @@ int main(int nNumberofArgs,char *argv[])
 	double WeatheringRate = atof(argv[7]);
     double SubtidalEfficacy = atof(argv[8]);
     double Resistance = atof(argv[9]);
-    double WaveAttenuationConst = atof(argv[10]);
+    double WaveHeight = atof(argv[10]);
+	double WaveAttenuationConst = atof(argv[11]);
 
 	//initialisation parameters
 	double dZ = 0.1;
@@ -158,6 +159,7 @@ int main(int nNumberofArgs,char *argv[])
                                                 +"_W_"+tostr(WeatheringRate)
                                                 +"_Ws_"+tostr(SubtidalEfficacy)
                                                 +"_R_"+tostr(Resistance)
+												+"_H_"+tostr(WaveHeight)
                                                 +"_A_"+tostr(WaveAttenuationConst)+".xz";
                                         
     string OutputConcentrationFileName = Folder+Project+"Concentrations_G"+tostr(Gradient)
@@ -166,6 +168,7 @@ int main(int nNumberofArgs,char *argv[])
                                                 +"_W_"+tostr(WeatheringRate)
                                                 +"_Ws_"+tostr(SubtidalEfficacy)
                                                 +"_R_"+tostr(Resistance)
+												+"_H_"+tostr(WaveHeight)
                                                 +"_A_"+tostr(WaveAttenuationConst)+".xn";
                                                 
 	//initialise RPM Model
@@ -202,7 +205,7 @@ int main(int nNumberofArgs,char *argv[])
 		
 	//Initialise Waves
 	//Single Wave for now but could use the waveclimate object from COVE!?
-	double WaveHeight_Mean = 3.;
+	double WaveHeight_Mean = WaveHeight;
 	double WaveHeight_StD = 0.;
 	double WavePeriod_Mean = 6.;
 	double WavePeriod_StD = 0;
@@ -280,7 +283,6 @@ int main(int nNumberofArgs,char *argv[])
 		Time += TimeInterval;
 	}
 
-	// DO MODEL/DATA COMPARISON HERE IF WE'RE DOING IT
 }
 
 
