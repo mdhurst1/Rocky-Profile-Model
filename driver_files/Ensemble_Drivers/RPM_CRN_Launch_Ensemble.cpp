@@ -138,7 +138,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, Folder.c_str());
+        sprintf(sh_name, "%s", Folder.c_str());
         sprintf(sh_name+strlen(sh_name), "RPM_CRN_%d.sh", Run);
         
         write_sh.open(sh_name);
@@ -175,7 +175,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, Folder.c_str());
+        sprintf(sh_name, "%s", Folder.c_str());
         sprintf(sh_name+strlen(sh_name), "RPM_CRN_%d.sh", Run);
         
         write_sh.open(sh_name);
@@ -212,7 +212,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, Folder.c_str());
+        sprintf(sh_name, "%s", Folder.c_str());
         sprintf(sh_name+strlen(sh_name), "RPM_CRN_%d.sh", Run);
         
         write_sh.open(sh_name);
@@ -249,7 +249,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, Folder.c_str());
+        sprintf(sh_name, "%s", Folder.c_str());
         sprintf(sh_name+strlen(sh_name), "RPM_CRN_%d.sh", Run);
         
         write_sh.open(sh_name);
@@ -286,7 +286,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, Folder.c_str());
+        sprintf(sh_name, "%s", Folder.c_str());
         sprintf(sh_name+strlen(sh_name), "RPM_CRN_%d.sh", Run);
         
         write_sh.open(sh_name);
@@ -323,7 +323,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, Folder.c_str());
+        sprintf(sh_name, "%s", Folder.c_str());
         sprintf(sh_name+strlen(sh_name), "RPM_CRN_%d.sh", Run);
 
         write_sh.open(sh_name);
@@ -360,7 +360,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, Folder.c_str());
+        sprintf(sh_name, "%s", Folder.c_str());
         sprintf(sh_name+strlen(sh_name), "RPM_CRN_%d.sh", Run);
 
         write_sh.open(sh_name);
@@ -397,7 +397,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, Folder.c_str());
+        sprintf(sh_name, "%s", Folder.c_str());
         sprintf(sh_name+strlen(sh_name), "RPM_CRN_%d.sh", Run);
         
         write_sh.open(sh_name);
