@@ -73,6 +73,8 @@ int main(int nNumberofArgs,char *argv[])
 	}
 
 	string Folder = argv[1];
+
+    int CRNFlag = 1;
 		
 	// Changing parameters for exploratory iterarions
     //Initial Gradient
@@ -136,7 +138,9 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, Folder + "RPM_CRN_%i.sh", Run);
+        sprintf(sh_name, Folder.c_str());
+        sprintf(sh_name+strlen(sh_name), "RPM_CRN_%d.sh", Run);
+        
         write_sh.open(sh_name);
         write_sh << "#!/bin/bash" << endl;
         write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
@@ -151,7 +155,7 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "" << endl;
 
         // set up command to launch the model
-        write_sh << "/export/home/mh322u/Rocky-Profile-Model/driver_files/RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        write_sh << "./RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
                     << CRNFlag << " "
                     << Gradient[i] << " "
                     << SLR[1] << " "
@@ -159,7 +163,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WeatheringRates[1] << " "
                     << SubtidalEfficacy[1] << " "
                     << Resistances[1] << " "
-                    << Height[1] << " "
+                    << WaveHeight[1] << " "
                     << WaveAttenuationConst[1] << endl;
     }
 
@@ -171,7 +175,9 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%i.sh", Run);
+        sprintf(sh_name, Folder.c_str());
+        sprintf(sh_name+strlen(sh_name), "RPM_CRN_%d.sh", Run);
+        
         write_sh.open(sh_name);
         write_sh << "#!/bin/bash" << endl;
         write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
@@ -186,7 +192,7 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "" << endl;
 
         // set up command to launch the model
-        write_sh << "/export/home/mh322u/Rocky-Profile-Model/driver_files/RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        write_sh << "./RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[j] << " "
@@ -194,7 +200,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WeatheringRates[1] << " "
                     << SubtidalEfficacy[1] << " "
                     << Resistances[1] << " "
-                    << Height[1] << " "
+                    << WaveHeight[1] << " "
                     << WaveAttenuationConst[1] << endl;
     }
 
@@ -206,7 +212,9 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%i.sh", Run);
+        sprintf(sh_name, Folder.c_str());
+        sprintf(sh_name+strlen(sh_name), "RPM_CRN_%d.sh", Run);
+        
         write_sh.open(sh_name);
         write_sh << "#!/bin/bash" << endl;
         write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
@@ -221,7 +229,7 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "" << endl;
 
         // set up command to launch the model
-        write_sh << "/export/home/mh322u/Rocky-Profile-Model/driver_files/RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        write_sh << "./RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
@@ -229,7 +237,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WeatheringRates[1] << " "
                     << SubtidalEfficacy[1] << " "
                     << Resistances[1] << " "
-                    << Height[1] << " "
+                    << WaveHeight[1] << " "
                     << WaveAttenuationConst[1] << endl;
     }
 
@@ -241,7 +249,9 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%i.sh", Run);
+        sprintf(sh_name, Folder.c_str());
+        sprintf(sh_name+strlen(sh_name), "RPM_CRN_%d.sh", Run);
+        
         write_sh.open(sh_name);
         write_sh << "#!/bin/bash" << endl;
         write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
@@ -256,7 +266,7 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "" << endl;
 
         // set up command to launch the model
-        write_sh << "/export/home/mh322u/Rocky-Profile-Model/driver_files/RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        write_sh << "./RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
@@ -264,7 +274,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WeatheringRates[l] << " "
                     << SubtidalEfficacy[1] << " "
                     << Resistances[1] << " "
-                    << Height[1] << " "
+                    << WaveHeight[1] << " "
                     << WaveAttenuationConst[1] << endl;
     }
 
@@ -276,7 +286,9 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%i.sh", Run);
+        sprintf(sh_name, Folder.c_str());
+        sprintf(sh_name+strlen(sh_name), "RPM_CRN_%d.sh", Run);
+        
         write_sh.open(sh_name);
         write_sh << "#!/bin/bash" << endl;
         write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
@@ -291,7 +303,7 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "" << endl;
 
         // set up command to launch the model
-        write_sh << "/export/home/mh322u/Rocky-Profile-Model/driver_files/RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        write_sh << "./RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
@@ -299,7 +311,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WeatheringRates[1] << " "
                     << SubtidalEfficacy[m] << " "
                     << Resistances[1] << " "
-                    << Height[1] << " "
+                    << WaveHeight[1] << " "
                     << WaveAttenuationConst[1] << endl;
     }
 
@@ -311,7 +323,9 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%i.sh", Run);
+        sprintf(sh_name, Folder.c_str());
+        sprintf(sh_name+strlen(sh_name), "RPM_CRN_%d.sh", Run);
+
         write_sh.open(sh_name);
         write_sh << "#!/bin/bash" << endl;
         write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
@@ -326,7 +340,7 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "" << endl;
 
         // set up command to launch the model
-        write_sh << "/export/home/mh322u/Rocky-Profile-Model/driver_files/RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        write_sh << "./RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
@@ -334,7 +348,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WeatheringRates[1] << " "
                     << SubtidalEfficacy[1] << " "
                     << Resistances[n] << " "
-                    << Height[1] << " "
+                    << WaveHeight[1] << " "
                     << WaveAttenuationConst[1] << endl;
     }
 
@@ -346,7 +360,9 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%i.sh", Run);
+        sprintf(sh_name, Folder.c_str());
+        sprintf(sh_name+strlen(sh_name), "RPM_CRN_%d.sh", Run);
+
         write_sh.open(sh_name);
         write_sh << "#!/bin/bash" << endl;
         write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
@@ -361,7 +377,7 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "" << endl;
 
         // set up command to launch the model
-        write_sh << "/export/home/mh322u/Rocky-Profile-Model/driver_files/RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        write_sh << "./RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
@@ -369,11 +385,11 @@ int main(int nNumberofArgs,char *argv[])
                     << WeatheringRates[1] << " "
                     << SubtidalEfficacy[1] << " "
                     << Resistances[1] << " "
-                    << Height[o] << " "
+                    << WaveHeight[o] << " "
                     << WaveAttenuationConst[1] << endl;
     }
 
-    for(int p=0, No = WaveAttenuationConst.size(); p<Np; ++p)
+    for(int p=0, Np = WaveAttenuationConst.size(); p<Np; ++p)
     {
         // Track run number
         ++Run;
@@ -381,7 +397,9 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%i.sh", Run);
+        sprintf(sh_name, Folder.c_str());
+        sprintf(sh_name+strlen(sh_name), "RPM_CRN_%d.sh", Run);
+        
         write_sh.open(sh_name);
         write_sh << "#!/bin/bash" << endl;
         write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
@@ -396,7 +414,7 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "" << endl;
 
         // set up command to launch the model
-        write_sh << "/export/home/mh322u/Rocky-Profile-Model/driver_files/RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
+        write_sh << "./RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
@@ -404,7 +422,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WeatheringRates[1] << " "
                     << SubtidalEfficacy[1] << " "
                     << Resistances[1] << " "
-                    << Height[1] << " "
+                    << WaveHeight[1] << " "
                     << WaveAttenuationConst[p] << endl;
     }
 
