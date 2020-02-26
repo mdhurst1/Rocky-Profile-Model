@@ -1,36 +1,10 @@
 /*------------------------------------------------------------------------
-
-	RPM_CRN_Driver.cpp
+	RPM_CRN_Launch_Ensemble.cpp
 	
-	Driver file for running the shore platform model of Matsumoto et al. (2016)
-	Updated following improvements by Matsumoto et al. (2018)
+	function to build and launch slurm scripts for running multiple simulations
+    of the coupled RPM_CRN model with varying parameters in a one-at-a-time fashion
 	
-	C++ implementation of Hiro Matsumoto's Shore Platform Model with coupling to Cosmogenic Isotope production by RockCoastCRN/RoBoCoP.
-
-	Matsumoto, H., Dickson, M. E., & Kench, P. S. (2016a)
-	An exploratory numerical model of rocky shore profile evolution. 
-	Geomorphology http://doi.org/10.1016/j.geomorph.2016.05.017
-	
-	Matsumoto, H., Dickson, M.E., and Kench, P.S. (2016b)
-	Modelling the Development of Varied Shore Profile Geometry on Rocky Coasts.
-	Journal of Coastal Research http://dx.doi.org/10.2112/SI75-120.1
-
-	Matsumoto, H., Dickson, M. E., Kench, P. S., (2018)
-	Modelling the relative dominance of wave erosion and weathering processes in shore platform development in micro- to mega-tidal settings
-	Earth Surface Processes and Landforms  http://dx.doi.org/10.1002/esp.4422
-	
-    Hurst, M.D., Rood, D.H., Ellis, M.A., Anderson, R.S., and Dornbusch, U. (2016) Recent acceleration in coastal cliff retreat rates on the south coast of Great Britain. Proceedings of the National Academy of Sciences, http://dx.doi.org/10.1073/PNAS.1613044113
-
-	Hurst, M.D., Rood, D.H., and Ellis, M.A. (2017)
-	Controls on the distribution of cosmogenic 10 Be across shore platforms
-	Earth Surface Dynamics http://dx.doi.org/10.5194/esurf-5-67-2017
-
-	Martin D. Hurst, University of Glasgow
-	Hironori Matsumoto, University of Auckland
-	Mark Dickson, University of Auckland
-	
-	March 2017
-	
+    Martin Hurst, February 2020
 	Copyright (C) 2017, Hiro Matsumoto, Martin Hurst
 	
 	Developer can be contacted
@@ -47,15 +21,12 @@
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
-
 	This program is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
-
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 ------------------------------------------------------------------------*/
 
 #include <cmath>
@@ -89,24 +60,22 @@ int main(int nNumberofArgs,char *argv[])
 	cout << endl;
 
 	//Test for correct input arguments
-	if (nNumberofArgs!=4)
+	if (nNumberofArgs!=3)
 	{
-		cout << "Error: This program requires two inputs: " << endl;
-		cout << " * First a path to the folder where the model will be run" << endl;
-		cout << " * The name of the project/model run" << endl;
-		cout << " * A Flag to run with CRNs (1 = True)" << endl;
+		cout << "Error: This program requires one input: " << endl;
+		cout << " * A path to the folder where the model will be run" << endl;
 		cout << "-----------------------------------------------------------" << endl;
 		cout << "Then the command line argument will be: " << endl;
 		cout << "In linux:" << endl;
-		cout << "  ./RPM_Driver.out /ProjectFolder/ Waipapa" << endl;
+		cout << "  ./RPM_Driver.out /ProjectFolder/" << endl;
 		cout << "-----------------------------------------------------------" << endl;
 		exit(EXIT_SUCCESS);
 	}
 
 	string Folder = argv[1];
-	string Project = argv[2];
-	int CRNFlag = atoi(argv[3]);
-	
+
+    int CRNFlag = 1;
+		
 	// Changing parameters for exploratory iterarions
     //Initial Gradient
 	vector<double> Gradient;
@@ -145,6 +114,12 @@ int main(int nNumberofArgs,char *argv[])
 	Resistances.push_back(100.);
 	Resistances.push_back(1000.);
 
+    // Wave height
+    vector<double> WaveHeight;
+    WaveHeight.push_back(0.5);
+    WaveHeight.push_back(1.);
+    WaveHeight.push_back(2.);
+
 	//Wave decay rate (Attenuation constant)
 	vector<double> WaveAttenuationConst;
 	WaveAttenuationConst.push_back(0.01);
@@ -154,64 +129,303 @@ int main(int nNumberofArgs,char *argv[])
 	// set up a number to track runs
 	int Run = 0;
 
-	//loop across parameter space
+	//loop across parameter space varying one-at-a-time
 	for (int i=0, Ni = Gradient.size(); i<Ni; ++i)
 	{
-		for (int j=0, Nj = SLR.size(); j<Nj; ++j)
-		{
-			for(int k=0, Nk = TidalRanges.size(); k<Nk; ++k)
-			{
-				for(int l=0, Nl = WeatheringRates.size(); l<Nl; ++l)
-				{
-					for(int m=0, Nm = SubtidalEfficacy.size(); m<Nm; ++m)
-					{
-						for(int n=0, Nn = Resistances.size(); n<Nn; ++n)
-						{
-							for(int o=0, No = WaveAttenuationConst.size(); o<No; ++o)
-					        {
-								// Track run number
-								++Run;
+		// Track run number
+        ++Run;
 
-								// setup the script
-								ofstream write_sh;
-								char sh_name[128];
-								sprintf(sh_name, "RPM_CRN_%i.sh", Run);
-								write_sh.open(sh_name);
-								write_sh << "#!/bin/bash" << endl;
-								write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
-								write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
-								write_sh << "#PBS -m abe" << endl;
-								write_sh << "#PBS -N Run" << Run << endl;
-								write_sh << "#PBS -l cput=02:00:00" << endl;
-								write_sh << "#PBS -l walltime=24:00:00" << endl;
-								write_sh << "#PBS -e ./" << endl;
-								write_sh << "#PBS -o ./" << endl;
-								
-								write_sh << "" << endl;
+        // setup the script
+        ofstream write_sh;
+        char sh_name[128];
+        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%d.sh", Run);
+        
+        write_sh.open(sh_name);
+        write_sh << "#!/bin/bash" << endl;
+        write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
+        write_sh << "#PBS -m abe" << endl;
+        write_sh << "#PBS -N Run" << Run << endl;
+        write_sh << "#PBS -l cput=02:00:00" << endl;
+        write_sh << "#PBS -l walltime=24:00:00" << endl;
+        write_sh << "#PBS -e /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        write_sh << "#PBS -o /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        
+        write_sh << "" << endl;
 
-								// set up command to launch the model
-								write_sh << "RPM_CRN_Ensemble.out /export/home/mh322u/RPM_CRN_Ensembles/ Ensemble "
-										 << CRNFlag << " "
-                                         << Gradient[i] << " "
-										 << SLR[j] << " "
-										 << TidalRanges[k] << " "
-										 << WeatheringRates[l] << " "
-										 << SubtidalEfficacy[m] << " "
-										 << Resistances[n] << " "
-										 << WaveAttenuationConst[o] << endl;
-										 								
-								// setup the shell script command and launch
-								//char launch[128];
-		  						//sprintf(launch,"qsub RPM_CRN_%i.sh", Run);
-		  						//system(launch);
-								
-							}
-						}
-					}
-				}
-			}	
-		}
-	}
+        // set up command to launch the model
+        write_sh << "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
+                    << CRNFlag << " "
+                    << Gradient[i] << " "
+                    << SLR[1] << " "
+                    << TidalRanges[1] << " "
+                    << WeatheringRates[1] << " "
+                    << SubtidalEfficacy[1] << " "
+                    << Resistances[1] << " "
+                    << WaveHeight[1] << " "
+                    << WaveAttenuationConst[1] << endl;
+    }
+
+    for (int j=0, Nj = SLR.size(); j<Nj; ++j)
+	{
+        // Track run number
+        ++Run;
+
+        // setup the script
+        ofstream write_sh;
+        char sh_name[128];
+        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%d.sh", Run);
+        
+        write_sh.open(sh_name);
+        write_sh << "#!/bin/bash" << endl;
+        write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
+        write_sh << "#PBS -m abe" << endl;
+        write_sh << "#PBS -N Run" << Run << endl;
+        write_sh << "#PBS -l cput=02:00:00" << endl;
+        write_sh << "#PBS -l walltime=24:00:00" << endl;
+        write_sh << "#PBS -e /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        write_sh << "#PBS -o /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        
+        write_sh << "" << endl;
+
+        // set up command to launch the model
+        write_sh << "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
+                    << CRNFlag << " "
+                    << Gradient[1] << " "
+                    << SLR[j] << " "
+                    << TidalRanges[1] << " "
+                    << WeatheringRates[1] << " "
+                    << SubtidalEfficacy[1] << " "
+                    << Resistances[1] << " "
+                    << WaveHeight[1] << " "
+                    << WaveAttenuationConst[1] << endl;
+    }
+
+    for(int k=0, Nk = TidalRanges.size(); k<Nk; ++k)
+    {
+        // Track run number
+        ++Run;
+
+        // setup the script
+        ofstream write_sh;
+        char sh_name[128];
+        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%d.sh", Run);
+        
+        write_sh.open(sh_name);
+        write_sh << "#!/bin/bash" << endl;
+        write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
+        write_sh << "#PBS -m abe" << endl;
+        write_sh << "#PBS -N Run" << Run << endl;
+        write_sh << "#PBS -l cput=02:00:00" << endl;
+        write_sh << "#PBS -l walltime=24:00:00" << endl;
+        write_sh << "#PBS -e /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        write_sh << "#PBS -o /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        
+        write_sh << "" << endl;
+
+        // set up command to launch the model
+        write_sh << "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
+                    << CRNFlag << " "
+                    << Gradient[1] << " "
+                    << SLR[1] << " "
+                    << TidalRanges[k] << " "
+                    << WeatheringRates[1] << " "
+                    << SubtidalEfficacy[1] << " "
+                    << Resistances[1] << " "
+                    << WaveHeight[1] << " "
+                    << WaveAttenuationConst[1] << endl;
+    }
+
+    for(int l=0, Nl = WeatheringRates.size(); l<Nl; ++l)
+    {
+        // Track run number
+        ++Run;
+
+        // setup the script
+        ofstream write_sh;
+        char sh_name[128];
+        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%d.sh", Run);
+        
+        write_sh.open(sh_name);
+        write_sh << "#!/bin/bash" << endl;
+        write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
+        write_sh << "#PBS -m abe" << endl;
+        write_sh << "#PBS -N Run" << Run << endl;
+        write_sh << "#PBS -l cput=02:00:00" << endl;
+        write_sh << "#PBS -l walltime=24:00:00" << endl;
+        write_sh << "#PBS -e /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        write_sh << "#PBS -o /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        
+        write_sh << "" << endl;
+
+        // set up command to launch the model
+        write_sh << "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
+                    << CRNFlag << " "
+                    << Gradient[1] << " "
+                    << SLR[1] << " "
+                    << TidalRanges[1] << " "
+                    << WeatheringRates[l] << " "
+                    << SubtidalEfficacy[1] << " "
+                    << Resistances[1] << " "
+                    << WaveHeight[1] << " "
+                    << WaveAttenuationConst[1] << endl;
+    }
+
+    for(int m=0, Nm = SubtidalEfficacy.size(); m<Nm; ++m)
+    {
+        // Track run number
+        ++Run;
+
+        // setup the script
+        ofstream write_sh;
+        char sh_name[128];
+        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%d.sh", Run);
+        
+        write_sh.open(sh_name);
+        write_sh << "#!/bin/bash" << endl;
+        write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
+        write_sh << "#PBS -m abe" << endl;
+        write_sh << "#PBS -N Run" << Run << endl;
+        write_sh << "#PBS -l cput=02:00:00" << endl;
+        write_sh << "#PBS -l walltime=24:00:00" << endl;
+        write_sh << "#PBS -e /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        write_sh << "#PBS -o /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        
+        write_sh << "" << endl;
+
+        // set up command to launch the model
+        write_sh << "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
+                    << CRNFlag << " "
+                    << Gradient[1] << " "
+                    << SLR[1] << " "
+                    << TidalRanges[1] << " "
+                    << WeatheringRates[1] << " "
+                    << SubtidalEfficacy[m] << " "
+                    << Resistances[1] << " "
+                    << WaveHeight[1] << " "
+                    << WaveAttenuationConst[1] << endl;
+    }
+
+    for(int n=0, Nn = Resistances.size(); n<Nn; ++n)
+    {
+        // Track run number
+        ++Run;
+
+        // setup the script
+        ofstream write_sh;
+        char sh_name[128];
+        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%d.sh", Run);
+
+        write_sh.open(sh_name);
+        write_sh << "#!/bin/bash" << endl;
+        write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
+        write_sh << "#PBS -m abe" << endl;
+        write_sh << "#PBS -N Run" << Run << endl;
+        write_sh << "#PBS -l cput=02:00:00" << endl;
+        write_sh << "#PBS -l walltime=24:00:00" << endl;
+        write_sh << "#PBS -e /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        write_sh << "#PBS -o /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        
+        write_sh << "" << endl;
+
+        // set up command to launch the model
+        write_sh << "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
+                    << CRNFlag << " "
+                    << Gradient[1] << " "
+                    << SLR[1] << " "
+                    << TidalRanges[1] << " "
+                    << WeatheringRates[1] << " "
+                    << SubtidalEfficacy[1] << " "
+                    << Resistances[n] << " "
+                    << WaveHeight[1] << " "
+                    << WaveAttenuationConst[1] << endl;
+    }
+
+    for(int o=0, No = WaveHeight.size(); o<No; ++o)
+    {
+        // Track run number
+        ++Run;
+
+        // setup the script
+        ofstream write_sh;
+        char sh_name[128];
+        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%d.sh", Run);
+
+        write_sh.open(sh_name);
+        write_sh << "#!/bin/bash" << endl;
+        write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
+        write_sh << "#PBS -m abe" << endl;
+        write_sh << "#PBS -N Run" << Run << endl;
+        write_sh << "#PBS -l cput=02:00:00" << endl;
+        write_sh << "#PBS -l walltime=24:00:00" << endl;
+        write_sh << "#PBS -e /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        write_sh << "#PBS -o /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        
+        write_sh << "" << endl;
+
+        // set up command to launch the model
+        write_sh << "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
+                    << CRNFlag << " "
+                    << Gradient[1] << " "
+                    << SLR[1] << " "
+                    << TidalRanges[1] << " "
+                    << WeatheringRates[1] << " "
+                    << SubtidalEfficacy[1] << " "
+                    << Resistances[1] << " "
+                    << WaveHeight[o] << " "
+                    << WaveAttenuationConst[1] << endl;
+    }
+
+    for(int p=0, Np = WaveAttenuationConst.size(); p<Np; ++p)
+    {
+        // Track run number
+        ++Run;
+
+        // setup the script
+        ofstream write_sh;
+        char sh_name[128];
+        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%d.sh", Run);
+        
+        write_sh.open(sh_name);
+        write_sh << "#!/bin/bash" << endl;
+        write_sh << "#PBS -wd /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
+        write_sh << "#PBS -m abe" << endl;
+        write_sh << "#PBS -N Run" << Run << endl;
+        write_sh << "#PBS -l cput=02:00:00" << endl;
+        write_sh << "#PBS -l walltime=24:00:00" << endl;
+        write_sh << "#PBS -e /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        write_sh << "#PBS -o /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
+        
+        write_sh << "" << endl;
+
+        // set up command to launch the model
+        write_sh << "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
+                    << CRNFlag << " "
+                    << Gradient[1] << " "
+                    << SLR[1] << " "
+                    << TidalRanges[1] << " "
+                    << WeatheringRates[1] << " "
+                    << SubtidalEfficacy[1] << " "
+                    << Resistances[1] << " "
+                    << WaveHeight[1] << " "
+                    << WaveAttenuationConst[p] << endl;
+    }
+
+    for (int job=1; job<=Run; ++job)
+    {
+        // loop through jobs and launch them all
+        char launch[128];
+        sprintf(launch,"qsub /export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%i.sh", job);
+        system(launch);
+    }
+
 	//a few blank lines to finish
-	cout << endl << endl;
+	cout << "All jobs launched" << endl << endl;
 }
