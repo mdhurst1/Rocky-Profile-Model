@@ -60,7 +60,7 @@ int main(int nNumberofArgs,char *argv[])
 	cout << endl;
 
 	//Test for correct input arguments
-	if (nNumberofArgs!=4)
+	if (nNumberofArgs!=3)
 	{
 		cout << "Error: This program requires one input: " << endl;
 		cout << " * A path to the folder where the model will be run" << endl;
@@ -138,8 +138,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, "%s", Folder.c_str());
-        sprintf(sh_name+strlen(sh_name), "RPM_CRN_%d.sh", Run);
+        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%d.sh", Run);
         
         write_sh.open(sh_name);
         write_sh << "#!/bin/bash" << endl;
@@ -155,7 +154,7 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "" << endl;
 
         // set up command to launch the model
-        write_sh << "./RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
+        write_sh << "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
                     << CRNFlag << " "
                     << Gradient[i] << " "
                     << SLR[1] << " "
@@ -175,8 +174,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, "%s", Folder.c_str());
-        sprintf(sh_name+strlen(sh_name), "RPM_CRN_%d.sh", Run);
+        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%d.sh", Run);
         
         write_sh.open(sh_name);
         write_sh << "#!/bin/bash" << endl;
@@ -192,7 +190,7 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "" << endl;
 
         // set up command to launch the model
-        write_sh << "./RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
+        write_sh << "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[j] << " "
@@ -212,8 +210,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, "%s", Folder.c_str());
-        sprintf(sh_name+strlen(sh_name), "RPM_CRN_%d.sh", Run);
+        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%d.sh", Run);
         
         write_sh.open(sh_name);
         write_sh << "#!/bin/bash" << endl;
@@ -229,7 +226,7 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "" << endl;
 
         // set up command to launch the model
-        write_sh << "./RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
+        write_sh << "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
@@ -249,8 +246,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, "%s", Folder.c_str());
-        sprintf(sh_name+strlen(sh_name), "RPM_CRN_%d.sh", Run);
+        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%d.sh", Run);
         
         write_sh.open(sh_name);
         write_sh << "#!/bin/bash" << endl;
@@ -266,7 +262,7 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "" << endl;
 
         // set up command to launch the model
-        write_sh << "./RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
+        write_sh << "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
@@ -286,8 +282,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, "%s", Folder.c_str());
-        sprintf(sh_name+strlen(sh_name), "RPM_CRN_%d.sh", Run);
+        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%d.sh", Run);
         
         write_sh.open(sh_name);
         write_sh << "#!/bin/bash" << endl;
@@ -303,7 +298,7 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "" << endl;
 
         // set up command to launch the model
-        write_sh << "./RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
+        write_sh << "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
@@ -323,8 +318,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, "%s", Folder.c_str());
-        sprintf(sh_name+strlen(sh_name), "RPM_CRN_%d.sh", Run);
+        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%d.sh", Run);
 
         write_sh.open(sh_name);
         write_sh << "#!/bin/bash" << endl;
@@ -340,7 +334,7 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "" << endl;
 
         // set up command to launch the model
-        write_sh << "./RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
+        write_sh << "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
@@ -360,8 +354,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, "%s", Folder.c_str());
-        sprintf(sh_name+strlen(sh_name), "RPM_CRN_%d.sh", Run);
+        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%d.sh", Run);
 
         write_sh.open(sh_name);
         write_sh << "#!/bin/bash" << endl;
@@ -377,7 +370,7 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "" << endl;
 
         // set up command to launch the model
-        write_sh << "./RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
+        write_sh << "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
@@ -397,8 +390,7 @@ int main(int nNumberofArgs,char *argv[])
         // setup the script
         ofstream write_sh;
         char sh_name[128];
-        sprintf(sh_name, "%s", Folder.c_str());
-        sprintf(sh_name+strlen(sh_name), "RPM_CRN_%d.sh", Run);
+        sprintf(sh_name, "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_%d.sh", Run);
         
         write_sh.open(sh_name);
         write_sh << "#!/bin/bash" << endl;
@@ -414,7 +406,7 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "" << endl;
 
         // set up command to launch the model
-        write_sh << "./RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
+        write_sh << "/export/home/mh322u/RPM_CRN_Ensembles/RPM_CRN_Ensemble.out " << Folder << " "  << "Ensemble "
                     << CRNFlag << " "
                     << Gradient[1] << " "
                     << SLR[1] << " "
