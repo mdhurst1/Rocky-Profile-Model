@@ -10,7 +10,7 @@ method,
 	 bayes_calibration queso 
      delayed_rejection
 	 proposal_covariance prior                          
-     chain_samples = 1000 seed = 348
+     chain_samples = 3000 seed = 348
 	 #burn_in_samples = 100
 	 chain_diagnostics confidence_intervals
 	 export_chain_points_file  'posterior.dat'
@@ -21,8 +21,8 @@ variables,
 	 normal_uncertain = 3
 	 lower_bounds  0.005 -8 -5
      upper_bounds  0.12 -3 -1
-	 means 0.05 -5.2 -3.7
-	 std_deviations 0.015 1.56 1.11
+	 means 0.09 -2.5 -4.5
+	 std_deviations 0.02 0.4 0.4
 	 descriptor "FR" "K" "Y"
 
 
