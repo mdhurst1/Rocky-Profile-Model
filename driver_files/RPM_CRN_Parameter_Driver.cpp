@@ -108,7 +108,8 @@ int main(int nNumberofArgs,char *argv[])
 	}
 
 	string Folder = argv[1];
-	string InputParamFilename = argv[2];
+	string TempParamFilename = argv[2];
+	string InputParamFilename = Folder+TempParamFilename;
 	
 	// load parameter parser object
   	Parameters Params(Folder,InputParamFilename);
