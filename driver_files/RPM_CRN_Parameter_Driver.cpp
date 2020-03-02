@@ -172,11 +172,9 @@ int main(int nNumberofArgs,char *argv[])
 									Params.WeatheringRate, Params.SubtidalEfficacy);	
 
 	// print initial condition to file
-	double TempTime = 0;
-	PlatformModel.WriteProfile(Params.ProfileOutFilename, TempTime);			
-	if (Params.CRN_Predictions) PlatformCRN.WriteCRNProfile(Params.ConcentrationsOutFilename, TempTime);
-	PrintTime -= Params.PrintInterval;
-
+	PlatformModel.WriteProfile(Params.ProfileOutFilename, Params.StartTime);			
+	if (Params.CRN_Predictions) PlatformCRN.WriteCRNProfile(Params.ConcentrationsOutFilename, Params.StartTime);
+	
 	//Loop through time
 	while (Time >= Params.EndTime)
 	{

@@ -41,7 +41,15 @@ class RPM_CRN_Run:
         self.Z = None
         self.X = None
 
+        self.Nuclides = None
+        self.NNuclides = None
+        self.N10 = None
+        self.N14 = None
+        self.N26 = None
+
+
         self.ReadShoreProfile()
+        self.ReadConcentrationData()
 
 
     def ReadShoreProfile(self):
@@ -56,13 +64,9 @@ class RPM_CRN_Run:
         # load the profile file
         f = open(self.ProfileName,'r')
         Lines = f.readlines()
+        f.close()
 
         self.StartTime = float(Lines[1].strip().split(" ")[0])
-        i=2
-        while self.StartTime == -9999:
-            self.StartTime = float(Lines[i].strip().split(" ")[0])
-            i += 1
-
         self.EndTime = float(Lines[-1].strip().split(" ")[0])
 
         # Get info on vertical from header
@@ -89,8 +93,6 @@ class RPM_CRN_Run:
             else:
                 self.X = np.vstack((self.X,np.array(SplitLine[2:],dtype="float64")))
 
-        # clean up
-        f.close()
 
     def ReadConcentrationData(self):
         
@@ -101,6 +103,63 @@ class RPM_CRN_Run:
         
         """
 
+        # load the profile file
+        f = open(self.ConcentrationsName,'r')
+        Lines = f.readlines()
+        f.close()
+
+        # get which nuclides
+        self.Nuclides = Lines[0].strip().split(" ")
+        self.NNuclides = len(self.Nuclides)
+        
+        self.dX = float(Lines[1].strip().split(" ")[0])
+        self.StartTime = float(Lines[2].strip().split(" ")[0])
+        self.EndTime = float(Lines[-1].strip().split(" ")[0])
+
+        #Get header info and setup X coord
+        self.Times = np.zeros(self.NTimes)
+        
+        # loop through lines and append N data to arrays of vectors
+        Lines = Lines[2:]
+
+        for i in range(0, len(Lines), self.NNuclides):
+            
+            print(i)
+
+            # get chunk of lines for nuclides
+            NuclideLines = Lines[i:i+self.NNuclides]
+            NuclidesBool = False*self.NNuclides
+
+            # loop through each nuclide line 
+            for Line in NuclideLines:
+                
+                SplitLine = Line.strip().split(" ")
+                self.Times[i] = float(SplitLine[0])
+
+                Nuclide = SplitLine[1]
+
+                if Nuclide == "10":
+                    if i == 0:
+                        self.N10 = np.array(SplitLine[2:],dtype="float64")
+                    else:
+                        self.N10 = np.vstack((self.N10, np.array(SplitLine[2:],dtype="float64")))
+                
+                elif Nuclide == "14":
+                    if i == 0:
+                        self.N14 = np.array(SplitLine[2:],dtype="float64")
+                    else:
+                        self.N14 = np.vstack((self.N14, np.array(SplitLine[2:],dtype="float64")))
+                
+                elif Nuclide == "26":
+                    if i == 0:
+                        self.N26 = np.array(SplitLine[2:],dtype="float64")
+                    else:
+                        self.N26 = np.vstack((self.N14, np.array(SplitLine[2:],dtype="float64")))
+                
+                else:
+                    sys.exit("Nuclide " + Nuclide + " not recognised!")
+
+        
     def Save(self, PickleFile):
         """
         Function to save RPM_CRN_Run object
@@ -175,11 +234,40 @@ class RPM_CRN_Run:
         
         plt.savefig('RPM_CRN_plotting_test.png',dpi=300)
 
-    def PlotCRNConcentrations(self, Time):
+    def PlotCRNConcentrations(self):
 
         """
-        Function to plot concentrations evolving through time goes here
+        Function to plot final concentrations
+
         """
+
+        #create blank figure
+        fig = plt.figure(1,figsize=(6.6,3.3))
+        ax1 = plt.subplot(111)
+        
+        if "10" in self.Nuclides:
+            TempX = np.arange(0,len(self.N10[-1],self.dX))
+            ax1.plot(TempX,self.N10[-1],'k-',label="$^{10}$Be")
+        
+        if "14" in self.Nuclides:
+            TempX = np.arange(0,len(self.N14[-1],self.dX))
+            ax1.plot(TempX,self.N14[-1],'r-',label="$^{14}$C")
+
+        if "26" in self.Nuclides:
+            TempX = np.arange(0,len(self.N26[-1],self.dX))
+            ax1.plot(TempX,self.N26[-1],'b-',label="$^{26}$C")
+
+        # tweak the plot
+        plt.xlabel("Distance (m)")
+        plt.ylabel(r"Concentration (atoms g\textsuperscript{-1})")
+        plt.xlim(np.min(TempX[-1]),np.max(TempX[-1]))
+        
+        # add the legend
+        ax1.legend(loc='upper right')
+
+        plt.tight_layout()
+        
+        plt.savefig('RPM_CRN_plotting_test.png',dpi=300)
 
     def Animation(self):
         """
