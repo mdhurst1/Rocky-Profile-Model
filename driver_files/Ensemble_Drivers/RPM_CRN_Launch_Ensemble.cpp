@@ -60,7 +60,7 @@ int main(int nNumberofArgs,char *argv[])
 	cout << endl;
 
 	//Test for correct input arguments
-	if (nNumberofArgs!=3)
+	if (nNumberofArgs!=2)
 	{
 		cout << "Error: This program requires one input: " << endl;
 		cout << " * A path to the folder where the model will be run" << endl;

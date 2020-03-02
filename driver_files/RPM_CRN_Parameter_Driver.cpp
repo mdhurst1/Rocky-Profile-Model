@@ -108,7 +108,8 @@ int main(int nNumberofArgs,char *argv[])
 	}
 
 	string Folder = argv[1];
-	string InputParamFilename = argv[2];
+	string TempParamFilename = argv[2];
+	string InputParamFilename = Folder+TempParamFilename;
 	
 	// load parameter parser object
   	Parameters Params(Folder,InputParamFilename);
@@ -171,10 +172,9 @@ int main(int nNumberofArgs,char *argv[])
 									Params.WeatheringRate, Params.SubtidalEfficacy);	
 
 	// print initial condition to file
-	double TempTime = -9999;
-	PlatformModel.WriteProfile(Params.ProfileOutFilename, TempTime);			
-	if (Params.CRN_Predictions) PlatformCRN.WriteCRNProfile(Params.ConcentrationsOutFilename, TempTime);
-
+	PlatformModel.WriteProfile(Params.ProfileOutFilename, Params.StartTime);			
+	if (Params.CRN_Predictions) PlatformCRN.WriteCRNProfile(Params.ConcentrationsOutFilename, Params.StartTime);
+	
 	//Loop through time
 	while (Time >= Params.EndTime)
 	{

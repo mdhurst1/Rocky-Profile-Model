@@ -100,7 +100,7 @@ int main(int nNumberofArgs,char *argv[])
 	cout << endl;
 
 	//Test for correct input arguments
-	if (nNumberofArgs!=11)
+	if (nNumberofArgs!=12)
 	{
 		cout << "Error: This program requires 10 (YES TEN, one-zero) command line inputs: " << endl;
 		cout << " * First a path to the folder where the model will be run" << endl;
@@ -112,12 +112,13 @@ int main(int nNumberofArgs,char *argv[])
         cout << " * The Maximum weathering rate (kg/m2/yr)" << endl;
         cout << " * The subtidal weathering efficacy (multiplier)" << endl;
         cout << " * The rock resistance (kg/m2)" << endl;
+		cout << " * The wave height (m)" << endl;
         cout << " * The wave attenuation constant" << endl;
         cout << " * " << endl;
 		cout << "-----------------------------------------------------------------------------" << endl;
 		cout << "Then the command line argument will be: " << endl;
 		cout << "In linux:" << endl;
-		cout << "  ./RPM_Driver.out /ProjectFolder/ Waipapa 1 1. 0.001 4. 0.005 0.01 1000. 10." << endl;
+		cout << "  ./RPM_Driver.out /ProjectFolder/ Waipapa 1 1. 0.001 4. 0.005 0.01 100 1. 0.1" << endl;
 		cout << "-----------------------------------------------------------------------------" << endl;
         cout << endl;
 		exit(EXIT_SUCCESS);

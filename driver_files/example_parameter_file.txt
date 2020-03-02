@@ -2,7 +2,7 @@
 
 # File Structure
 Folder: /home/mhurst/RPM_CRN/
-ProjectName: Waipapa
+ProjectName: TestProject
 
 # Cosmogenic Isotopes
 CRN_Predictions: false
