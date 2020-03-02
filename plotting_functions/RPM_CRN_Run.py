@@ -43,9 +43,9 @@ class RPM_CRN_Run:
 
         self.Nuclides = None
         self.NNuclides = None
-        self.N10 = None
-        self.N14 = None
-        self.N26 = None
+        self.N10 = []
+        self.N14 = []
+        self.N26 = []
 
 
         self.ReadShoreProfile()
@@ -124,8 +124,6 @@ class RPM_CRN_Run:
 
         for i in range(0, len(Lines), self.NNuclides):
             
-            print(i)
-
             # get chunk of lines for nuclides
             NuclideLines = Lines[i:i+self.NNuclides]
             NuclidesBool = False*self.NNuclides
@@ -140,21 +138,21 @@ class RPM_CRN_Run:
 
                 if Nuclide == "10":
                     if i == 0:
-                        self.N10 = np.array(SplitLine[2:],dtype="float64")
+                        self.N10 = [np.array(SplitLine[2:],dtype="float64"),]
                     else:
-                        self.N10 = np.vstack((self.N10, np.array(SplitLine[2:],dtype="float64")))
+                        self.N10.append(np.array(SplitLine[2:],dtype="float64"))
                 
                 elif Nuclide == "14":
                     if i == 0:
-                        self.N14 = np.array(SplitLine[2:],dtype="float64")
+                        self.N14 = [np.array(SplitLine[2:],dtype="float64"),]
                     else:
-                        self.N14 = np.vstack((self.N14, np.array(SplitLine[2:],dtype="float64")))
+                        self.N14.append(np.array(SplitLine[2:],dtype="float64"))
                 
                 elif Nuclide == "26":
                     if i == 0:
-                        self.N26 = np.array(SplitLine[2:],dtype="float64")
+                        self.N26 = [np.array(SplitLine[2:],dtype="float64"),]
                     else:
-                        self.N26 = np.vstack((self.N14, np.array(SplitLine[2:],dtype="float64")))
+                        self.N26.append(np.array(SplitLine[2:],dtype="float64"))
                 
                 else:
                     sys.exit("Nuclide " + Nuclide + " not recognised!")
@@ -200,8 +198,6 @@ class RPM_CRN_Run:
         #Loop through times and plot at time interval
         while PlotTime >= self.EndTime:
             
-            print(PlotTime)
-
             # get index
             Index = np.argmin(np.abs(self.Times-PlotTime))
             
@@ -242,28 +238,33 @@ class RPM_CRN_Run:
         """
 
         #create blank figure
-        fig = plt.figure(1,figsize=(6.6,3.3))
-        ax1 = plt.subplot(111)
+        fig2 = plt.figure(1,figsize=(6.6,3.3))
+        ax = fig2.add_subplot(111)
         
+        print(self.dX)
+
         if "10" in self.Nuclides:
-            TempX = np.arange(0,len(self.N10[-1],self.dX))
-            ax1.plot(TempX,self.N10[-1],'k-',label="$^{10}$Be")
+            TempX = np.arange(0,len(self.N10[-1]))*self.dX
+            print(TempX)
+            print(self.N10[-1])
+            ax.plot(TempX,self.N10[-1],'k-',label="$^{10}$Be")
         
         if "14" in self.Nuclides:
-            TempX = np.arange(0,len(self.N14[-1],self.dX))
-            ax1.plot(TempX,self.N14[-1],'r-',label="$^{14}$C")
+            TempX = np.arange(0,len(self.N14[-1]))*self.dX
+            ax.plot(TempX,self.N14[-1],'r-',label="$^{14}$C")
 
         if "26" in self.Nuclides:
-            TempX = np.arange(0,len(self.N26[-1],self.dX))
-            ax1.plot(TempX,self.N26[-1],'b-',label="$^{26}$C")
+            TempX = np.arange(0,len(self.N26[-1]))*self.dX
+            ax.plot(TempX,self.N26[-1],'b-',label="$^{26}$Al")
 
         # tweak the plot
         plt.xlabel("Distance (m)")
-        plt.ylabel(r"Concentration (atoms g\textsuperscript{-1})")
-        plt.xlim(np.min(TempX[-1]),np.max(TempX[-1]))
+        plt.ylabel(r"Concentration (atoms g$^{-1}$)")
+        plt.xlim(np.min(TempX[0]),np.max(TempX[-1]))
+        ax.set_yscale("log")
         
         # add the legend
-        ax1.legend(loc='upper right')
+        ax.legend(loc='upper right')
 
         plt.tight_layout()
         
