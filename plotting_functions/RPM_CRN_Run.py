@@ -74,15 +74,14 @@ class RPM_CRN_Run:
         self.MaxZ = Header[0]
         self.MinZ = Header[1]
         self.dz = Header[2]
-        Line = (Lines[2].strip().split(" "))
-        self.NTimes = len(np.array(Line[2:],dtype="float64")) 
+        self.NTimes = len(Lines)-1
         self.Z = np.arange(self.MaxZ,self.MinZ-self.dz,-self.dz)        
     
         #Get header info and setup X coord
         self.Times = np.zeros(self.NTimes)
         
         # loop through lines and append X data to array of vectors
-        for i, Line in enumerate(Lines[2:]):
+        for i, Line in enumerate(Lines[1:]):
         
             SplitLine = Line.strip().split(" ")
             
@@ -92,7 +91,6 @@ class RPM_CRN_Run:
                 self.X = np.array(SplitLine[2:],dtype="float64")
             else:
                 self.X = np.vstack((self.X,np.array(SplitLine[2:],dtype="float64")))
-
 
     def ReadConcentrationData(self):
         
@@ -116,9 +114,6 @@ class RPM_CRN_Run:
         self.StartTime = float(Lines[2].strip().split(" ")[0])
         self.EndTime = float(Lines[-1].strip().split(" ")[0])
 
-        #Get header info and setup X coord
-        self.Times = np.zeros(self.NTimes)
-        
         # loop through lines and append N data to arrays of vectors
         Lines = Lines[2:]
 
@@ -132,8 +127,6 @@ class RPM_CRN_Run:
             for Line in NuclideLines:
                 
                 SplitLine = Line.strip().split(" ")
-                self.Times[i] = float(SplitLine[0])
-
                 Nuclide = SplitLine[1]
 
                 if Nuclide == "10":
@@ -200,7 +193,7 @@ class RPM_CRN_Run:
             
             # get index
             Index = np.argmin(np.abs(self.Times-PlotTime))
-            
+                        
             if (PlotTime == self.StartTime):
                 ax1.plot(self.X[Index], self.Z, 'k--', lw=1., zorder=10, label="Initial Profile")
                 
