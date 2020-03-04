@@ -600,11 +600,11 @@ int main(int nNumberofArgs,char *argv[])
    outfile.open(DakotaFilename);
 
    //Weightings - eqaul to 1
-   double TopoWeighting = 0.5;
-   double CRNWeighting = 0.5;
+   //double TopoWeighting = 0.5;
+   //double CRNWeighting = 0.5;
    //double WeightedRMSE;
    double RMSE_N;
-   double CRN_RMSE_N;
+   //double CRN_RMSE_N;
    long double Likelihood_N = 1.L;
    long double Neg_Log_Likelihood = 1.L;
    long double Neg_Log_Likelihood_N = 1.L;
@@ -616,7 +616,7 @@ int main(int nNumberofArgs,char *argv[])
 
    //Normalise RMSE
    RMSE_N = RMSE/TidalRange;  // min-max rather than tidal range?
-   CRN_RMSE_N = CRN_RMSE/MaxCRNCB;
+   //CRN_RMSE_N = CRN_RMSE/MaxCRNCB;
 
    //WeightedRMSE = (RMSE_N*TopoWeighting)+(CRN_RMSE_N*CRNWeighting);
 
