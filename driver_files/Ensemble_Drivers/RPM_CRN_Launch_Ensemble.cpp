@@ -362,7 +362,7 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
         write_sh << "#PBS -m abe" << endl;
         write_sh << "#PBS -N Run" << Run << endl;
-        write_sh << "#PBS -l cput=02:00:00" << endl;
+        write_sh << "#PBS -l cput=12:00:00" << endl;
         write_sh << "#PBS -l walltime=24:00:00" << endl;
         write_sh << "#PBS -e /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
         write_sh << "#PBS -o /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
