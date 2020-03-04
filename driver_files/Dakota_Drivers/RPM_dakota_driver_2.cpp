@@ -670,7 +670,7 @@ int main(int nNumberofArgs,char *argv[])
 	}
 	else
 	{
-	    outfile << WeightedRMSE << endl;
+	    outfile << Neg_Log_Likelihood_N << endl;
 	}
 
 
