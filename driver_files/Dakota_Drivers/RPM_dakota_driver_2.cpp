@@ -519,7 +519,7 @@ int main(int nNumberofArgs,char *argv[])
    vector<double> XPosCRN(NData);
    vector<double> NModel(NData);
    double ScaleCRN;
-   double CRN_RMSE;
+   //double CRN_RMSE;
    //long double LikelihoodCRN = 1.L;  
 
 
@@ -612,7 +612,7 @@ int main(int nNumberofArgs,char *argv[])
    //RMSE calculations 
 
    RMSE = sqrt(TotalResiduals/NProfileData);
-   CRN_RMSE = sqrt(TotalResidualsCRN/NData);
+   //CRN_RMSE = sqrt(TotalResidualsCRN/NData);
 
    //Normalise RMSE
    RMSE_N = RMSE/TidalRange;  // min-max rather than tidal range?
