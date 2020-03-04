@@ -138,15 +138,15 @@ int main(int nNumberofArgs,char *argv[])
 
 	//Free parameters
 
-    //double WaveAttenuationConst = (atof(argv[9]));
-	double WaveAttenuationConst = pow(10,(atof(argv[9])));
+    double WaveAttenuationConst = (atof(argv[9]));
+	//double WaveAttenuationConst = pow(10,(atof(argv[9])));
 
-    double Resistance = pow(10,(atof(argv[10])));          //dakota varies FR on log scale
-	//double Resistance = atof(argv[10]);
+    //double Resistance = pow(10,(atof(argv[10])));          //dakota varies FR on log scale
+	double Resistance = atof(argv[10]);
 
     //double WeatheringRate = Resistance * pow(10,(atof(argv[11])));      //dakota varies K proportional to FR 0 - 0.5 range 
-	double WeatheringRate = pow(10,(atof(argv[11]))); 
-	//double WeatheringRate = atof(argv[11]);
+	//double WeatheringRate = pow(10,(atof(argv[11]))); 
+	double WeatheringRate = atof(argv[11]);
 
 	cout << "Resistance = " << Resistance << endl;
 	cout << "WeatheringRate = " << WeatheringRate << endl;
@@ -602,7 +602,7 @@ int main(int nNumberofArgs,char *argv[])
    //Weightings - eqaul to 1
    double TopoWeighting = 0.5;
    double CRNWeighting = 0.5;
-   double WeightedRMSE;
+   //double WeightedRMSE;
    double RMSE_N;
    double CRN_RMSE_N;
    long double Likelihood_N = 1.L;
@@ -618,7 +618,7 @@ int main(int nNumberofArgs,char *argv[])
    RMSE_N = RMSE/TidalRange;  // min-max rather than tidal range?
    CRN_RMSE_N = CRN_RMSE/MaxCRNCB;
 
-   WeightedRMSE = (RMSE_N*TopoWeighting)+(CRN_RMSE_N*CRNWeighting);
+   //WeightedRMSE = (RMSE_N*TopoWeighting)+(CRN_RMSE_N*CRNWeighting);
 
    //Normalise Likelihood
    Likelihood_N = Likelihood/TidalRange;
