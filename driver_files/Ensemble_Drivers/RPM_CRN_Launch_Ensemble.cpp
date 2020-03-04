@@ -166,7 +166,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
     }
 
-    for (int j=0, Nj = SLR.size(); j<Nj; ++j)
+    for (int j=0, Nj = SLR.size(); j<Nj; j+=2)
 	{
         // Track run number
         ++Run;
@@ -202,7 +202,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
     }
 
-    for(int k=0, Nk = TidalRanges.size(); k<Nk; ++k)
+    for(int k=0, Nk = TidalRanges.size(); k<Nk; k+=2)
     {
         // Track run number
         ++Run;
@@ -238,7 +238,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
     }
 
-    for(int l=0, Nl = WeatheringRates.size(); l<Nl; ++l)
+    for(int l=0, Nl = WeatheringRates.size(); l<Nl; l+=2)
     {
         // Track run number
         ++Run;
@@ -274,7 +274,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
     }
 
-    for(int m=0, Nm = SubtidalEfficacy.size(); m<Nm; ++m)
+    for(int m=0, Nm = SubtidalEfficacy.size(); m<Nm; m+=2)
     {
         // Track run number
         ++Run;
@@ -310,7 +310,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
     }
 
-    for(int n=0, Nn = Resistances.size(); n<Nn; ++n)
+    for(int n=0, Nn = Resistances.size(); n<Nn; n+=2)
     {
         // Track run number
         ++Run;
@@ -346,7 +346,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
     }
 
-    for(int o=0, No = WaveHeight.size(); o<No; ++o)
+    for(int o=0, No = WaveHeight.size(); o<No; o+=2)
     {
         // Track run number
         ++Run;
@@ -382,7 +382,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
     }
 
-    for(int p=0, Np = WaveAttenuationConst.size(); p<Np; ++p)
+    for(int p=0, Np = WaveAttenuationConst.size(); p<Np; p+=2)
     {
         // Track run number
         ++Run;
