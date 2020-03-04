@@ -138,15 +138,15 @@ int main(int nNumberofArgs,char *argv[])
 
 	//Free parameters
 
-    //double WaveAttenuationConst = (atof(argv[9]));
-	double WaveAttenuationConst = pow(10,(atof(argv[9])));
+    double WaveAttenuationConst = (atof(argv[9]));
+	//double WaveAttenuationConst = pow(10,(atof(argv[9])));
 
-    double Resistance = pow(10,(atof(argv[10])));          //dakota varies FR on log scale
-	//double Resistance = atof(argv[10]);
+    //double Resistance = pow(10,(atof(argv[10])));          //dakota varies FR on log scale
+	double Resistance = atof(argv[10]);
 
     //double WeatheringRate = Resistance * pow(10,(atof(argv[11])));      //dakota varies K proportional to FR 0 - 0.5 range 
-	double WeatheringRate = pow(10,(atof(argv[11]))); 
-	//double WeatheringRate = atof(argv[11]);
+	//double WeatheringRate = pow(10,(atof(argv[11]))); 
+	double WeatheringRate = atof(argv[11]);
 
 	cout << "Resistance = " << Resistance << endl;
 	cout << "WeatheringRate = " << WeatheringRate << endl;
@@ -238,9 +238,9 @@ int main(int nNumberofArgs,char *argv[])
 	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);
 
     // print initial condition to file - this is for testing - remove
-	//double TempTime = -9999;
-    //PlatformModel.WriteProfile(OutputFileName, TempTime);			
-	//if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
+	double TempTime = -9999;
+    PlatformModel.WriteProfile(OutputFileName, TempTime);			
+	if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
 
     //Loop through time
 	while (Time >= EndTime)
@@ -287,8 +287,8 @@ int main(int nNumberofArgs,char *argv[])
 		{
 			cout.flush();
 			cout << "RPM: Time " << setprecision(2) << fixed << Time << " years\r";
-			//PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
-            //if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
+			PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
+            if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
 			PrintTime -= PrintInterval;
 		}
 
@@ -453,7 +453,7 @@ int main(int nNumberofArgs,char *argv[])
    vector<double> NResiduals(NProfileData);
    vector<double> LResiduals(NProfileData);
    long double Likelihood = 1.L;
-   //double ZStd = 0.3;
+   double ZStd = 0.1;
    //double MaxTopo = Residuals[0];
    //double MinTopo = Residuals[0];
    
@@ -480,7 +480,7 @@ int main(int nNumberofArgs,char *argv[])
 	{
 		//Residuals calc for Likelihood
 	   LResiduals[i] = (ProfileZData[i]-TopoData[i])*(ProfileZData[i]-TopoData[i]);
-	   Likelihood *= fastexp(-(fabs(LResiduals[i])));     //(ZStd*ZStd));
+	   Likelihood *= fastexp(-(fabs(LResiduals[i])/(ZStd*ZStd)));     //(ZStd*ZStd));
 	}
 	//return Likelihood;
 
@@ -519,7 +519,7 @@ int main(int nNumberofArgs,char *argv[])
    vector<double> XPosCRN(NData);
    vector<double> NModel(NData);
    double ScaleCRN;
-   double CRN_RMSE;
+   //double CRN_RMSE;
    //long double LikelihoodCRN = 1.L;  
 
 
@@ -600,11 +600,11 @@ int main(int nNumberofArgs,char *argv[])
    outfile.open(DakotaFilename);
 
    //Weightings - eqaul to 1
-   double TopoWeighting = 0.5;
-   double CRNWeighting = 0.5;
-   double WeightedRMSE;
+   //double TopoWeighting = 0.5;
+   //double CRNWeighting = 0.5;
+   //double WeightedRMSE;
    double RMSE_N;
-   double CRN_RMSE_N;
+   //double CRN_RMSE_N;
    long double Likelihood_N = 1.L;
    long double Neg_Log_Likelihood = 1.L;
    long double Neg_Log_Likelihood_N = 1.L;
@@ -612,13 +612,13 @@ int main(int nNumberofArgs,char *argv[])
    //RMSE calculations 
 
    RMSE = sqrt(TotalResiduals/NProfileData);
-   CRN_RMSE = sqrt(TotalResidualsCRN/NData);
+   //CRN_RMSE = sqrt(TotalResidualsCRN/NData);
 
    //Normalise RMSE
    RMSE_N = RMSE/TidalRange;  // min-max rather than tidal range?
-   CRN_RMSE_N = CRN_RMSE/MaxCRNCB;
+   //CRN_RMSE_N = CRN_RMSE/MaxCRNCB;
 
-   WeightedRMSE = (RMSE_N*TopoWeighting)+(CRN_RMSE_N*CRNWeighting);
+   //WeightedRMSE = (RMSE_N*TopoWeighting)+(CRN_RMSE_N*CRNWeighting);
 
    //Normalise Likelihood
    Likelihood_N = Likelihood/TidalRange;
@@ -639,6 +639,7 @@ int main(int nNumberofArgs,char *argv[])
    //cout << " Likelihood = " << setprecision(10) << Likelihood << endl;
    cout << " Normalised Likelihood = " << scientific << Likelihood_N << endl;
    cout << " -ve log likelihood = " << scientific << Neg_Log_Likelihood << endl;
+   cout << " Normalised -log likelihood = " << scientific << Neg_Log_Likelihood_N << endl;
 
    if (isinf(Neg_Log_Likelihood))
 	   {
@@ -670,7 +671,7 @@ int main(int nNumberofArgs,char *argv[])
 	}
 	else
 	{
-	    outfile << WeightedRMSE << endl;
+	    outfile << Neg_Log_Likelihood_N << endl;
 	}
 
 
