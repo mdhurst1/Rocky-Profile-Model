@@ -639,6 +639,7 @@ int main(int nNumberofArgs,char *argv[])
    //cout << " Likelihood = " << setprecision(10) << Likelihood << endl;
    cout << " Normalised Likelihood = " << scientific << Likelihood_N << endl;
    cout << " -ve log likelihood = " << scientific << Neg_Log_Likelihood << endl;
+   cout << " Normalised -log likelihood = " << scientific << Neg_Log_Likelihood_N << endl;
 
    if (isinf(Neg_Log_Likelihood))
 	   {
