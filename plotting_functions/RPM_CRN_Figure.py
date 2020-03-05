@@ -1,13 +1,14 @@
 # import plotting tools
 from pathlib import Path
-import matplotlib
 import numpy as np
 from matplotlib import rcParams
+from matplotlib.lines import Line2D
 import matplotlib.pyplot as plt
+from RPM_CRN_Plotting_Functions import *
 
 class RPM_CRN_Figure:
 
-    def __init__(FigSizeFormat="EPSL", FigWidth_Inches=0., AspectRatio=16./9.):
+    def __init__(self, FigSizeFormat="EPSL", FigWidth_Inches=0., AspectRatio=16./9.):
 
         """
         This function creates a default matplotlib figure object
@@ -27,11 +28,10 @@ class RPM_CRN_Figure:
         """
         self.Figure = None
         self.Axes = None
-        self.Legends = None
-
-        CreateFigure(FigSizeFormat, FigWidth_Inches, AspectRatio)
         
-    def CreateFigure(FigSizeFormat="EPSL", FigWidth_Inches=0., AspectRatio=16./9.):
+        self.CreateFigure(FigSizeFormat, FigWidth_Inches, AspectRatio)
+        
+    def CreateFigure(self, FigSizeFormat="EPSL", FigWidth_Inches=0., AspectRatio=16./9.):
     
         """
         This function creates a default matplotlib figure object
@@ -78,84 +78,92 @@ class RPM_CRN_Figure:
         rcParams['font.size'] = 10
         rcParams['text.usetex'] = True
             
-        self.Fig = plt.figure(figsize=(FigWidth_Inches,FigWidth_Inches/AspectRatio),facecolor=None)
+        self.Figure = plt.figure(figsize=(FigWidth_Inches,FigWidth_Inches/AspectRatio),facecolor=None)
 
     def PlotProfileAndConcentrationFigure(self, ProfileFile, ConcentrationsFile, Colour="k", Symbol="-", Legend=False, Label=None):
 
         # if no figure make the default
-        if not Figure:
+        if not self.Figure:
+            print(self.Figure)
             self.CreateFigure()
 
         # if axes not created yet add axes as list for subplots and organise labels
-        if not Axes:
+        if not self.Axes:
             
             # ax1 for profiles, no x axis, y axis on the left
-            ax1 = Figure.add_subplot(211)
+            ax1 = self.Figure.add_subplot(211)
             ax1.set_ylabel("Elevation (m)")
             ax1.xaxis.set_visible(False)
             ax1.spines['right'].set_visible(False)
             ax1.spines['top'].set_visible(False)
+            ax1.spines['bottom'].set_visible(False)
 
             # ax2 for concentrations, y axis on the right
-            ax2 = Figure.add_subplot(212)
+            ax2 = self.Figure.add_subplot(212)
             ax2.set_yscale("log")
             ax2.set_xlabel("Distance (m)")
             ax2.set_ylabel("Concentration (at g${-1}$)")
             ax2.yaxis.set_ticks_position('right')
             ax2.yaxis.set_label_position('right')
+            ax2.spines['left'].set_visible(False)
+            ax2.spines['top'].set_visible(False)
 
             self.Axes = [ax1, ax2]
 
         # read the profile file
         Times, Z, X = ReadShoreProfile(ProfileFile)
-
+        
         # plot final result on ax1
-        ax1.plot(X[-1], Z, ls=Symbol, color=Colour, label=Label)
+        self.Axes[0].plot(X[-1], Z, ls=Symbol, color=Colour, label=Label)
 
         # read the concentrations
-        Times2, dX, Concentrations = ReadConcentrationData(ConcentrationsName)
+        Times2, dX, Concentrations = ReadConcentrationData(ConcentrationsFile)
         
         # populate lines for legend
         LegendLines = []
         LegendLabels = []
-
-        if "10Be" in Concentrations.keys():
-            N10Be = Concentrations["10Be"][-1]
-            X = np.arange(0,len(N10Be))*dX
-            ax2.plot(X, N10Be, "-", color=Colour)
-            LegendLines.append(Line2D([0], [0], color="grey", ls="-"))
-            LegendLabels.append("$^{10}$Be")
+        
+        print(Concentrations.keys())
 
         if "14C" in Concentrations.keys():
+            print("14C")
             N14C = Concentrations["14C"][-1]
             X = np.arange(0,len(N14C))*dX
-            ax2.plot(X, N14C, "--", color=Colour)
+            self.Axes[1].plot(X, N14C, "--", color=Colour)
             LegendLines.append(Line2D([0], [0], color="grey", ls="--"))
             LegendLabels.append("$^{14}$C")
 
         if "26Al" in Concentrations.keys():
+            print("26Al")
             N26Al = Concentrations["26Al"][-1]
             X = np.arange(0,len(N26Al))*dX
-            ax2.plot(X, N26Al, ":", color=Colour)
+            self.Axes[1].plot(X, N26Al, ":", color=Colour)
             LegendLines.append(Line2D([0], [0], color="grey", ls=":"))
             LegendLabels.append("$^{26}$Al")
+        
+        if "10Be" in Concentrations.keys():
+            print("10Be")
+            N10Be = Concentrations["10Be"][-1]
+            X = np.arange(0,len(N10Be))*dX
+            self.Axes[1].plot(X, N10Be, "-", color=Colour)
+            LegendLines.append(Line2D([0], [0], color="grey", ls="-"))
+            LegendLabels.append("$^{10}$Be")
 
         # create or update legends
         if Legend:
-            ax1.legend()
-            ax2.legend(LegendLines,LegendLabels)
+            self.Axes[0].legend()
+            self.Axes[1].legend(LegendLines,LegendLabels)
 
     def SaveFig(self, Outputfilename):
-        Figure.savefig(Outputfilename)
+        self.Figure.savefig(Outputfilename)
 
 
 if __name__ == "__main__":
-    Folder = Path("C:\Users\Martin Hurst\OneDrive - University of Glasgow\Projects\RockCoastCosmo\CoupledModelling\Results")
-    ProfileFile = Folder / "EnsembleConcentrations_G0.1_S_0_T_4_W_0.05_Ws_0.01_R_100_H_1_A_0.1.xz"
-    ConcentrationsFile = Folder / "EnsembleConcentrations_G0.1_S_0_T_4_W_0.05_Ws_0.01_R_100_H_1_A_0.1.xn"
+    Folder = Path(r"C:\Users\Martin Hurst\OneDrive - University of Glasgow\Projects\RockCoastCosmo\CoupledModelling\Results")
+    ProfileFile = Folder / "EnsembleShoreProfile_G0.1_S_0_T_4_W_0.5_Ws_0.01_R_100_H_1_A_0.1.xz"
+    ConcentrationsFile = Folder / "EnsembleConcentrations_G0.1_S_0_T_4_W_0.5_Ws_0.01_R_100_H_1_A_0.1.xn"
     FigureFile = Folder / "test.png"
     
-    RPM_CRN_Figure(FigWidth_Inches=11.)
-    RPM_CRN_Figure.PlotProfileAndConcentrationFigure(ProfileFile, ConcentrationsFile, Label="test", Legend=True)
-    RPM_CRN_Figure.SaveFig(FigureFile)
-)
+    MyFigure = RPM_CRN_Figure(FigWidth_Inches=11.)
+    MyFigure.PlotProfileAndConcentrationFigure(ProfileFile, ConcentrationsFile, Label="test", Legend=True)
+    MyFigure.SaveFig(FigureFile)

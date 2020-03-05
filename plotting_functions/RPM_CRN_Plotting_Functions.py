@@ -106,11 +106,11 @@ def ReadConcentrationData(ConcentrationsName):
                 sys.exit("Nuclide " + Nuclide + " not recognised!")
 
     ConcentrationsDict = {}
-    if Nuclide == "10":
+    if "10" in Nuclides:
         ConcentrationsDict["10Be"] = N10
-    if Nuclide == "14":
+    if "14" in Nuclides:
         ConcentrationsDict["14C"] = N14
-    if Nuclide == "26":
+    if "26" in Nuclides:
         ConcentrationsDict["26Al"] = N26
     
     return Times, dX, ConcentrationsDict
