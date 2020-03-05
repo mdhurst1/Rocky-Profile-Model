@@ -138,15 +138,15 @@ int main(int nNumberofArgs,char *argv[])
 
 	//Free parameters
 
-    double WaveAttenuationConst = (atof(argv[9]));
-	//double WaveAttenuationConst = pow(10,(atof(argv[9])));
+    //double WaveAttenuationConst = (atof(argv[9]));
+	double WaveAttenuationConst = pow(10,(atof(argv[9])));
 
-    //double Resistance = pow(10,(atof(argv[10])));          //dakota varies FR on log scale
-	double Resistance = atof(argv[10]);
+    double Resistance = pow(10,(atof(argv[10])));          //dakota varies FR on log scale
+	//double Resistance = atof(argv[10]);
 
     //double WeatheringRate = Resistance * pow(10,(atof(argv[11])));      //dakota varies K proportional to FR 0 - 0.5 range 
-	//double WeatheringRate = pow(10,(atof(argv[11]))); 
-	double WeatheringRate = atof(argv[11]);
+	double WeatheringRate = pow(10,(atof(argv[11]))); 
+	//double WeatheringRate = atof(argv[11]);
 
 	cout << "Resistance = " << Resistance << endl;
 	cout << "WeatheringRate = " << WeatheringRate << endl;
