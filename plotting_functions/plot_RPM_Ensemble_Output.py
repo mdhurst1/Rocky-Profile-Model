@@ -14,6 +14,7 @@ September 2nd 2019
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
+import RPM_CRN_Plotting_Functions
 from matplotlib import cm
 from matplotlib import rc
 
@@ -94,15 +95,49 @@ if __name__ == "__main__":
     Resistances = [10., 100., 1000.]
     WaveAttenuationConst = [0.01, 0.1, 1.]
 
+    # create figure
+    Fig = RPM_CRN_Figure.CreateFigure()
+
     #Loop across parameter space
     for a in range(0,len(Gradients)):
-        for b in range(0,len(TidalRanges)):
-            for c in range(0,len(WaveHeights)):
-                for d in range(0,len(WeatheringRates)):
-                    for e in range(0,len(Resistances)):
-                        for f in range(0,len(BreakingCoefficients)):
-                            for g in range(0,len(BrokenCoefficients)):
-                                Parameters = [Gradients[a],TidalRanges[b],WaveHeights[c],WeatheringRates[d],Resistances[e],BreakingCoefficients[f],BrokenCoefficients[g]]
+
+        # makes plots
+        FileName = Path + ("ShoreProfile_G" + str(Gradients[a])
+                                            + "_T_" + str(TidalRanges[b])
+                                            + "_H_" + str(WaveHeights[c])
+                                            + "_W_" + str(WeatheringRates[d])
+                                            + "_R_" + str(Resistances[e])
+                                            + "_Br_" + str(BreakingCoefficients[f])
+                                            + "_Bo_" + str(BrokenCoefficients[g])
+                                            + ".xz")
+        
+        # Load profile and concentration data
+
+        # add final results to existing plot
+        RPM_CRN_Figure.AddFinalProfile(FileName, Parameters)
+        RPM_CRN_Figure.AddFinalConcentrations(FileName, Parameters)
+        
+    
+    for b in range(0,len(TidalRanges)):
+    
+    
+    for c in range(0,len(WaveHeights)):
+    
+    
+    
+    for d in range(0,len(WeatheringRates)):
+    
+    
+    for e in range(0,len(Resistances)):
+    
+    
+    for f in range(0,len(BreakingCoefficients)):
+    
+    
+    for g in range(0,len(BrokenCoefficients)):
+    
+    
+    Parameters = [Gradients[a],TidalRanges[b],WaveHeights[c],WeatheringRates[d],Resistances[e],BreakingCoefficients[f],BrokenCoefficients[g]]
                                 FileName    = Path + ("ShoreProfile_G" + str(Gradients[a])
                                             + "_T_" + str(TidalRanges[b])
                                             + "_H_" + str(WaveHeights[c])

@@ -79,8 +79,8 @@ int main(int nNumberofArgs,char *argv[])
 	// Changing parameters for exploratory iterarions
     //Initial Gradient
 	vector<double> Gradient;
-	Gradient.push_back(1.);
 	Gradient.push_back(0.1);
+	Gradient.push_back(1.);
 	Gradient.push_back(0);   
 	// 0 Gradient sets horizontal slope of cliff top: inital array of 1's(rock) vertical cliff
 
@@ -98,8 +98,8 @@ int main(int nNumberofArgs,char *argv[])
 	
 	//Initialise WeatheringRate   (kg m^2 yr^-1)
 	vector<double> WeatheringRates;
-	WeatheringRates.push_back(0.005);
-	WeatheringRates.push_back(0.05);
+	WeatheringRates.push_back(0.01);
+	WeatheringRates.push_back(0.1);
 	WeatheringRates.push_back(0.5);
 
 	// sets relative efficacy of subtidal weathering	
@@ -110,9 +110,9 @@ int main(int nNumberofArgs,char *argv[])
 
 	//Initialise Resistance       (kg m^2 yr^-1)
 	vector<double> Resistances;
+	Resistances.push_back(0.1);
+	Resistances.push_back(1.);
 	Resistances.push_back(10.);
-	Resistances.push_back(100.);
-	Resistances.push_back(1000.);
 
     // Wave height
     vector<double> WaveHeight;
@@ -146,7 +146,7 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
         write_sh << "#PBS -m abe" << endl;
         write_sh << "#PBS -N Run" << Run << endl;
-        write_sh << "#PBS -l cput=02:00:00" << endl;
+        write_sh << "#PBS -l cput=12:00:00" << endl;
         write_sh << "#PBS -l walltime=24:00:00" << endl;
         write_sh << "#PBS -e /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
         write_sh << "#PBS -o /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
@@ -166,7 +166,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
     }
 
-    for (int j=0, Nj = SLR.size(); j<Nj; ++j)
+    for (int j=0, Nj = SLR.size(); j<Nj; j+=2)
 	{
         // Track run number
         ++Run;
@@ -182,7 +182,7 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
         write_sh << "#PBS -m abe" << endl;
         write_sh << "#PBS -N Run" << Run << endl;
-        write_sh << "#PBS -l cput=02:00:00" << endl;
+        write_sh << "#PBS -l cput=12:00:00" << endl;
         write_sh << "#PBS -l walltime=24:00:00" << endl;
         write_sh << "#PBS -e /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
         write_sh << "#PBS -o /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
@@ -202,7 +202,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
     }
 
-    for(int k=0, Nk = TidalRanges.size(); k<Nk; ++k)
+    for(int k=0, Nk = TidalRanges.size(); k<Nk; k+=2)
     {
         // Track run number
         ++Run;
@@ -218,7 +218,7 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
         write_sh << "#PBS -m abe" << endl;
         write_sh << "#PBS -N Run" << Run << endl;
-        write_sh << "#PBS -l cput=02:00:00" << endl;
+        write_sh << "#PBS -l cput=12:00:00" << endl;
         write_sh << "#PBS -l walltime=24:00:00" << endl;
         write_sh << "#PBS -e /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
         write_sh << "#PBS -o /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
@@ -238,7 +238,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
     }
 
-    for(int l=0, Nl = WeatheringRates.size(); l<Nl; ++l)
+    for(int l=0, Nl = WeatheringRates.size(); l<Nl; l+=2)
     {
         // Track run number
         ++Run;
@@ -254,7 +254,7 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
         write_sh << "#PBS -m abe" << endl;
         write_sh << "#PBS -N Run" << Run << endl;
-        write_sh << "#PBS -l cput=02:00:00" << endl;
+        write_sh << "#PBS -l cput=12:00:00" << endl;
         write_sh << "#PBS -l walltime=24:00:00" << endl;
         write_sh << "#PBS -e /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
         write_sh << "#PBS -o /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
@@ -274,7 +274,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
     }
 
-    for(int m=0, Nm = SubtidalEfficacy.size(); m<Nm; ++m)
+    for(int m=0, Nm = SubtidalEfficacy.size(); m<Nm; m+=2)
     {
         // Track run number
         ++Run;
@@ -290,7 +290,7 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
         write_sh << "#PBS -m abe" << endl;
         write_sh << "#PBS -N Run" << Run << endl;
-        write_sh << "#PBS -l cput=02:00:00" << endl;
+        write_sh << "#PBS -l cput=12:00:00" << endl;
         write_sh << "#PBS -l walltime=24:00:00" << endl;
         write_sh << "#PBS -e /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
         write_sh << "#PBS -o /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
@@ -310,7 +310,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
     }
 
-    for(int n=0, Nn = Resistances.size(); n<Nn; ++n)
+    for(int n=0, Nn = Resistances.size(); n<Nn; n+=2)
     {
         // Track run number
         ++Run;
@@ -326,7 +326,7 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
         write_sh << "#PBS -m abe" << endl;
         write_sh << "#PBS -N Run" << Run << endl;
-        write_sh << "#PBS -l cput=02:00:00" << endl;
+        write_sh << "#PBS -l cput=12:00:00" << endl;
         write_sh << "#PBS -l walltime=24:00:00" << endl;
         write_sh << "#PBS -e /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
         write_sh << "#PBS -o /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
@@ -346,7 +346,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
     }
 
-    for(int o=0, No = WaveHeight.size(); o<No; ++o)
+    for(int o=0, No = WaveHeight.size(); o<No; o+=2)
     {
         // Track run number
         ++Run;
@@ -382,7 +382,7 @@ int main(int nNumberofArgs,char *argv[])
                     << WaveAttenuationConst[1] << endl;
     }
 
-    for(int p=0, Np = WaveAttenuationConst.size(); p<Np; ++p)
+    for(int p=0, Np = WaveAttenuationConst.size(); p<Np; p+=2)
     {
         // Track run number
         ++Run;
@@ -398,7 +398,7 @@ int main(int nNumberofArgs,char *argv[])
         write_sh << "#PBS -M martin.hurst@glasgow.ac.uk" << endl;
         write_sh << "#PBS -m abe" << endl;
         write_sh << "#PBS -N Run" << Run << endl;
-        write_sh << "#PBS -l cput=02:00:00" << endl;
+        write_sh << "#PBS -l cput=12:00:00" << endl;
         write_sh << "#PBS -l walltime=24:00:00" << endl;
         write_sh << "#PBS -e /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
         write_sh << "#PBS -o /export/home/mh322u/RPM_CRN_Ensembles/" << endl;
