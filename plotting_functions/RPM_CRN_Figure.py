@@ -125,14 +125,6 @@ class RPM_CRN_Figure:
         
         print(Concentrations.keys())
 
-        if "14C" in Concentrations.keys():
-            print("14C")
-            N14C = Concentrations["14C"][-1]
-            X = np.arange(0,len(N14C))*dX
-            self.Axes[1].plot(X, N14C, "--", color=Colour)
-            LegendLines.append(Line2D([0], [0], color="grey", ls="--"))
-            LegendLabels.append("$^{14}$C")
-
         if "26Al" in Concentrations.keys():
             print("26Al")
             N26Al = Concentrations["26Al"][-1]
@@ -141,6 +133,14 @@ class RPM_CRN_Figure:
             LegendLines.append(Line2D([0], [0], color="grey", ls=":"))
             LegendLabels.append("$^{26}$Al")
         
+        if "14C" in Concentrations.keys():
+            print("14C")
+            N14C = Concentrations["14C"][-1]
+            X = np.arange(0,len(N14C))*dX
+            self.Axes[1].plot(X, N14C, "--", color=Colour)
+            LegendLines.append(Line2D([0], [0], color="grey", ls="--"))
+            LegendLabels.append("$^{14}$C")
+            
         if "10Be" in Concentrations.keys():
             print("10Be")
             N10Be = Concentrations["10Be"][-1]
@@ -149,6 +149,10 @@ class RPM_CRN_Figure:
             LegendLines.append(Line2D([0], [0], color="grey", ls="-"))
             LegendLabels.append("$^{10}$Be")
 
+        # make sure axes line up
+        xmin,xmax = self.Axes[0].get_xlim()
+        self.Axes[1].set_xlim(xmin, xmax)
+        
         # create or update legends
         if Legend:
             self.Axes[0].legend()
@@ -160,8 +164,8 @@ class RPM_CRN_Figure:
 
 if __name__ == "__main__":
     Folder = Path(r"C:\Users\Martin Hurst\OneDrive - University of Glasgow\Projects\RockCoastCosmo\CoupledModelling\Results")
-    ProfileFile = Folder / "EnsembleShoreProfile_G0.1_S_0_T_4_W_0.5_Ws_0.01_R_100_H_1_A_0.1.xz"
-    ConcentrationsFile = Folder / "EnsembleConcentrations_G0.1_S_0_T_4_W_0.5_Ws_0.01_R_100_H_1_A_0.1.xn"
+    ProfileFile = Folder / "EnsembleShoreProfile_G0_S_0_T_4_W_0.05_Ws_0.01_R_1_H_1_A_0.1.xz"
+    ConcentrationsFile = Folder / "EnsembleConcentrations_G0_S_0_T_4_W_0.05_Ws_0.01_R_1_H_1_A_0.1.xn"
     FigureFile = Folder / "test.png"
     
     MyFigure = RPM_CRN_Figure(FigWidth_Inches=11.)
