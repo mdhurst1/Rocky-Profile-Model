@@ -410,7 +410,7 @@ int main(int nNumberofArgs,char *argv[])
    //declarations
    vector<double> XPos(NProfileData);
    vector<double> TopoData(NProfileData);
-   vector<double> DiffX(NProfileData);
+   double DiffX;
    double RMSE;
    double Scale;
    bool FailFlag = false;
@@ -433,8 +433,8 @@ int main(int nNumberofArgs,char *argv[])
        int j=0;
        while ((XModel[j]- XPos[i]) <0) ++j; //XPos starts at point nearest cliff and works offshore - starts at 40m from cliff so will never =0
 	   
-       DiffX[i] = XModel[j] - XPos[i];
-       Scale = DiffX[i]/(XModel[j]-XModel[j-1]);
+       DiffX = XModel[j] - XPos[i];
+       Scale = DiffX/(XModel[j]-XModel[j-1]);
 
        //Get Interpolated Z value
        TopoData[i] = ZModel[j]-Scale*(ZModel[j]-ZModel[j-1]);
