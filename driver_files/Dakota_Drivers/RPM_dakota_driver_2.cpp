@@ -428,11 +428,11 @@ int main(int nNumberofArgs,char *argv[])
 		   FailFlag = true;
 		   break;
 	   }
+       //set up as 2 seperate loops
 
        //Take X value of extracted morph position and interpolate to get model results at this point
        int j=0;
        while ((XModel[j]- XPos[i]) <0) ++j; //XPos starts at point nearest cliff and works offshore - starts at 40m from cliff so will never =0
-	   
        DiffX = XModel[j] - XPos[i];
        Scale = DiffX/(XModel[j]-XModel[j-1]);
 
@@ -465,13 +465,11 @@ int main(int nNumberofArgs,char *argv[])
 	   TotalResiduals += pow(ProfileZData[i]-TopoData[i],2);
 	   
 	   //Fail Flag
-
 	   if (isinf(TotalResiduals))
 	   {
 		   FailFlag = true;
 		   break;
 	   }
-
 	   //MinTopo = *min_element(begin(Residuals), end(Residuals));
 	   //MaxTopo = *max_element(begin(Residuals), end(Residuals));  
     }
@@ -479,8 +477,8 @@ int main(int nNumberofArgs,char *argv[])
 	for (int i=0; i<NProfileData; ++i)
 	{
 		//Residuals calc for Likelihood
-	   LResiduals[i] = pow(ProfileZData[i]-TopoData[i],2);
-	   Likelihood *= exp(-(fabs(LResiduals[i])/(ZStd*ZStd)));     //(ZStd*ZStd));
+	   LResiduals[i] = fabs((ProfileZData[i]-TopoData[i])*(ProfileZData[i]-TopoData[i]));
+	   Likelihood *= exp(-((LResiduals[i])/(ZStd*ZStd))); 
 	}
 	//return Likelihood;
 
@@ -490,21 +488,13 @@ int main(int nNumberofArgs,char *argv[])
 	   //NResiduals[i] = (Residuals[i]-MinTopo)/(MaxTopo-MinTopo);
 
 	   //normalise topo to tidalrange 
-	   NResiduals[i] = (Residuals[i]/TidalRange);
-
-	   //Likelihood *= exp(-(fabs(LResiduals[i]))/(ZStd*ZStd));
-	   
+	   NResiduals[i] = (Residuals[i]/TidalRange);	   
 	   TotalNResiduals += pow(NResiduals[i],2);
-	   //Likelihood *= exp(-(fabs(Residuals[i]))/(ZStd*ZStd));    //ZStd read in from parameter file?
 	}
 
    
-   //cout << " MaxTopo = " << setprecision(10) << MaxTopo << endl;
-   //cout << " MinTopo = " << setprecision(10) << MinTopo << endl;
    cout << " Total residuals Topo = " << TotalResiduals << endl;
    //cout << " TotalNResiduals = " << TotalNResiduals << endl;
-   
-
    cout << " Likelihood = " << scientific << Likelihood << endl;
    
 
