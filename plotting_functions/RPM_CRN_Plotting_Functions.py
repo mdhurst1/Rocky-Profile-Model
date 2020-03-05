@@ -43,7 +43,7 @@ def ReadShoreProfile(ProfileName):
 
     return Times, Z, X
 
-def ReadConcentrationData(self):
+def ReadConcentrationData(ConcentrationsName):
         
     """
     Function to read CRN concentration data from file
@@ -113,6 +113,6 @@ def ReadConcentrationData(self):
     if Nuclide == "26":
         ConcentrationsDict["26Al"] = N26
     
-    return Times, ConcentrationsDict
+    return Times, dX, ConcentrationsDict
 
     
