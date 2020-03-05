@@ -478,7 +478,7 @@ int main(int nNumberofArgs,char *argv[])
 	{
 		//Residuals calc for Likelihood
 	   LResiduals[i] = (ProfileZData[i]-TopoData[i])*(ProfileZData[i]-TopoData[i]);
-	   Likelihood *= fastexp(-(fabs(LResiduals[i]))/(ZStd*ZStd)); 
+	   Likelihood += fastexp(-(fabs(LResiduals[i]))/(ZStd*ZStd)); 
 	}
 	//return Likelihood;
 
