@@ -99,7 +99,7 @@ int main(int nNumberofArgs,char *argv[])
 	//Initialise WeatheringRate   (kg m^2 yr^-1)
 	vector<double> WeatheringRates;
 	WeatheringRates.push_back(0.01);
-	WeatheringRates.push_back(0.1);
+	WeatheringRates.push_back(0.1); 
 	WeatheringRates.push_back(0.5);
 
 	// sets relative efficacy of subtidal weathering	
