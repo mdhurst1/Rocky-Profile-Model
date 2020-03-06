@@ -79,7 +79,7 @@ int main(int nNumberofArgs,char *argv[])
 	// Changing parameters for exploratory iterarions
     //Initial Gradient
 	vector<double> Gradient;
-	Gradient.push_back(0.1);
+	Gradient.push_back(0.5);
 	Gradient.push_back(1.);
 	Gradient.push_back(0);   
 	// 0 Gradient sets horizontal slope of cliff top: inital array of 1's(rock) vertical cliff
@@ -116,9 +116,9 @@ int main(int nNumberofArgs,char *argv[])
 
     // Wave height
     vector<double> WaveHeight;
-    WaveHeight.push_back(0.5);
     WaveHeight.push_back(1.);
     WaveHeight.push_back(2.);
+    WaveHeight.push_back(3.);
 
 	//Wave decay rate (Attenuation constant)
 	vector<double> WaveAttenuationConst;
