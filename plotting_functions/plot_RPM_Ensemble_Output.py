@@ -10,9 +10,6 @@ September 2nd 2019
 
 #import modules
 from pathlib import Path
-import sys
-import numpy as np
-import matplotlib.pyplot as plt
 from RPM_CRN_Figure import *
 
 # define workspace
@@ -24,8 +21,8 @@ Gradients = [0.5, 1, 0]
 SLRs = [-0.001, 0, 0.001]
 TidalRanges = [1, 4, 8]
 WeatheringRates = [0.01, 0.1, 0.5]
-SubtifalEfficacies = [0.001, 0.01, 0.1]
-Resistances = [0.1, 1, 10.]
+SubtidalEfficacies = [0.001, 0.01, 0.1]
+Resistances = [0.1, 1, 10]
 WaveHeights = [1, 2, 3]
 WaveAttenuationConst = [0.01, 0.1, 1]
 
@@ -40,7 +37,7 @@ for i in range(0,len(Gradients)):
                             + "_S_" + str(SLRs[1])
                             + "_T_" + str(TidalRanges[1])
                             + "_W_" + str(WeatheringRates[1])
-                            + "_Ws_" + str(SubtifalEfficacies[1])
+                            + "_Ws_" + str(SubtidalEfficacies[1])
                             + "_R_" + str(Resistances[1])
                             + "_H_" + str(WaveHeights[1])
                             + "_A_" + str(WaveAttenuationConst[1])
@@ -57,7 +54,7 @@ for i in range(0,len(Gradients)):
                                                       Label=Label, Legend=True)
 
 # save results
-FigureFile = PlotsFolder / "Gradients.png
+FigureFile = PlotsFolder / "Gradients.png"
 GradientsFigure.SaveFig(FigureFile)
 
 
@@ -72,7 +69,7 @@ for i in range(0,len(SLRs)):
                             + "_S_" + str(SLRs[i])
                             + "_T_" + str(TidalRanges[1])
                             + "_W_" + str(WeatheringRates[1])
-                            + "_Ws_" + str(SubtifalEfficacies[1])
+                            + "_Ws_" + str(SubtidalEfficacies[1])
                             + "_R_" + str(Resistances[1])
                             + "_H_" + str(WaveHeights[1])
                             + "_A_" + str(WaveAttenuationConst[1])
@@ -81,7 +78,7 @@ for i in range(0,len(SLRs)):
     ConcentrationsName = "EnsembleConcentrations_"+ProfileName.lstrip("EnsembleShoreProfile_").rstrip("xz")+"xn"
     
     # label
-    Label = "Sea level change " + str(SLRs[i]) "m yr$^{-1}$"
+    Label = "Sea level change " + str(SLRs[i]) + "m yr$^{-1}$"
     
     # add final results to existing plot
     SLRFigure.PlotProfileAndConcentrationFigure(ResultsFolder / ProfileName, 
@@ -89,7 +86,7 @@ for i in range(0,len(SLRs)):
                                                       Label=Label, Legend=True)
 
 # save results
-FigureFile = PlotsFolder / "SLRs.png
+FigureFile = PlotsFolder / "SLRs.png"
 SLRFigure.SaveFig(FigureFile)
 
 
@@ -104,7 +101,7 @@ for i in range(0,len(TidalRanges)):
                             + "_S_" + str(SLRs[1])
                             + "_T_" + str(TidalRanges[i])
                             + "_W_" + str(WeatheringRates[1])
-                            + "_Ws_" + str(SubtifalEfficacies[1])
+                            + "_Ws_" + str(SubtidalEfficacies[1])
                             + "_R_" + str(Resistances[1])
                             + "_H_" + str(WaveHeights[1])
                             + "_A_" + str(WaveAttenuationConst[1])
@@ -138,7 +135,7 @@ for i in range(0,len(WeatheringRates)):
                             + "_S_" + str(SLRs[1])
                             + "_T_" + str(TidalRanges[1])
                             + "_W_" + str(WeatheringRates[i])
-                            + "_Ws_" + str(SubtifalEfficacies[1])
+                            + "_Ws_" + str(SubtidalEfficacies[1])
                             + "_R_" + str(Resistances[1])
                             + "_H_" + str(WaveHeights[1])
                             + "_A_" + str(WaveAttenuationConst[1])
@@ -284,7 +281,7 @@ for i in range(0,len(WaveHeights)):
     
     
     # label
-    Label = "Wave Height " + str(WaveAttenuationConst[i]) + " m"
+    Label = "Wave Attenuation Const " + str(WaveAttenuationConst[i])
     
     # add final results to existing plot
     WaveAttenuationFigure.PlotProfileAndConcentrationFigure(ResultsFolder / ProfileName, 
@@ -292,7 +289,7 @@ for i in range(0,len(WaveHeights)):
                                                       Label=Label, Legend=True)
 
 # save results
-FigureFile = PlotsFolder / "WaveHeights.png"
+FigureFile = PlotsFolder / "WaveAttenuation.png"
 WaveAttenuationFigure.SaveFig(FigureFile)    
     
     
