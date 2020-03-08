@@ -1,6 +1,7 @@
 # import plotting tools
 from pathlib import Path
 import numpy as np
+from scipy.stats import mode
 from matplotlib import rcParams
 from matplotlib.lines import Line2D
 import matplotlib.pyplot as plt
@@ -113,6 +114,12 @@ class RPM_CRN_Figure:
         # read the profile file
         Times, Z, X = ReadShoreProfile(ProfileFile)
         
+        # find cliff and normalise
+        CliffPosition = mode(X[X > 0])
+        X -= CliffPosition
+        X *= -1
+        self.Axes[0].set_xlim(-CliffPosition, 0)
+
         # plot final result on ax1
         self.Axes[0].plot(X[-1], Z, ls=Symbol, color=Colour, label=Label)
 
@@ -129,6 +136,8 @@ class RPM_CRN_Figure:
             print("26Al")
             N26Al = Concentrations["26Al"][-1]
             X = np.arange(0,len(N26Al))*dX
+            X -= CliffPosition
+            X *= -1
             self.Axes[1].plot(X, N26Al, ":", color=Colour)
             LegendLines.append(Line2D([0], [0], color="grey", ls=":"))
             LegendLabels.append("$^{26}$Al")
@@ -137,6 +146,8 @@ class RPM_CRN_Figure:
             print("14C")
             N14C = Concentrations["14C"][-1]
             X = np.arange(0,len(N14C))*dX
+            X -= CliffPosition
+            X *= -1
             self.Axes[1].plot(X, N14C, "--", color=Colour)
             LegendLines.append(Line2D([0], [0], color="grey", ls="--"))
             LegendLabels.append("$^{14}$C")
@@ -145,12 +156,14 @@ class RPM_CRN_Figure:
             print("10Be")
             N10Be = Concentrations["10Be"][-1]
             X = np.arange(0,len(N10Be))*dX
+            X -= CliffPosition
+            X *= -1
             self.Axes[1].plot(X, N10Be, "-", color=Colour)
             LegendLines.append(Line2D([0], [0], color="grey", ls="-"))
             LegendLabels.append("$^{10}$Be")
 
         # make sure axes line up
-        xmin,xmax = self.Axes[0].get_xlim()
+        xmin, xmax = self.Axes[0].get_xlim()
         self.Axes[1].set_xlim(xmin, xmax)
         
         # create or update legends
@@ -161,7 +174,6 @@ class RPM_CRN_Figure:
     def SaveFig(self, Outputfilename):
         self.Figure.savefig(Outputfilename)
 
-
 if __name__ == "__main__":
     Folder = Path(r"C:\Users\Martin Hurst\OneDrive - University of Glasgow\Projects\RockCoastCosmo\CoupledModelling\Results")
     ProfileFile = Folder / "EnsembleShoreProfile_G0_S_0_T_4_W_0.05_Ws_0.01_R_1_H_1_A_0.1.xz"
@@ -169,5 +181,6 @@ if __name__ == "__main__":
     FigureFile = Folder / "test.png"
     
     MyFigure = RPM_CRN_Figure(FigWidth_Inches=11.)
+
     MyFigure.PlotProfileAndConcentrationFigure(ProfileFile, ConcentrationsFile, Label="test", Legend=True)
     MyFigure.SaveFig(FigureFile)
