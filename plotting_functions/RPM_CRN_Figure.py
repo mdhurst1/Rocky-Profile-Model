@@ -183,6 +183,61 @@ class RPM_CRN_Figure:
             self.Axes[0].legend()
             self.Axes[1].legend(LegendLines,LegendLabels)
 
+    def PlotProfileEvolutionFigure(self, ProfileFile, ConcentrationsFile, Symbol="-", TimeInterval=1000.):
+
+        """
+        """
+        # if no figure make the default
+        if not self.Figure:
+            print(self.Figure)
+            self.CreateFigure()
+
+        # if axes not created yet add axes as list for subplots and organise labels
+        if not self.Axes:
+            
+            # set up the gridspec
+            #GridSpec = gridspec.GridSpec(ncols=2, nrows=2, width_ratios=[2, 1], height_ratios=[1,1])
+
+            # ax1 for profiles, no x axis, y axis on the left
+            ax1 = self.Figure.add_subplot(111) #GridSpec[0,0])
+            ax1.set_ylabel("Elevation (m)")
+            #ax1.xaxis.set_visible(False)
+            ax1.spines['right'].set_visible(False)
+            ax1.spines['top'].set_visible(False)
+            #ax1.spines['bottom'].set_visible(False)
+
+            self.Axes = [ax1]
+
+        # read the profile file
+        Times, Z, X = ReadShoreProfile(ProfileFile)
+        StartTime = Times[0]
+        EndTime = Times[-1]
+        Time = StartTime
+
+        # read the concentrations
+        Times2, dX, Concentrations = ReadConcentrationData(ConcentrationsFile)
+        # populate lines for legend
+        # LegendLines = []
+        # LegendLabels = []
+            
+        # set colour map
+        ColourMap = cm.bone_r
+
+        while Time <= EndTime:
+            
+            # Find time
+            Index = np.argmin(np.abs(Time-Times))
+
+            # plot final result on ax1
+            Label = str(Time)
+            Colour = ColourMap(Time/EndTime)
+            self.Axes[0].plot(X[Index], Z, ls=Symbol, color=Colour, label=Label)
+            Time += TimeInterval
+        
+        # create or update legends
+        if Legend:
+            self.Axes[0].legend()            
+
     def SaveFig(self, Outputfilename):
         self.Figure.savefig(Outputfilename)
 
