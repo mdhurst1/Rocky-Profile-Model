@@ -127,7 +127,7 @@ FigureFile = PlotsFolder / "TidalRanges.png"
 TidalRangesFigure.SaveFig(FigureFile)
 
 
-# now for tidal range
+# now for weathering rate
 WeatheringRatesFigure = RPM_CRN_Figure(FigWidth_Inches=11.)
 
 # make plot for gradient variation
@@ -157,31 +157,143 @@ for i in range(0,len(WeatheringRates)):
                                                       Label=Label, Legend=True)
 
 # save results
-FigureFile = PlotsFolder / "TidalRanges.png"
+FigureFile = PlotsFolder / "WeatheringRates.png"
 WeatheringRatesFigure.SaveFig(FigureFile)
     
+
+# now for subtidal efficacy
+SubtidalFigure = RPM_CRN_Figure(FigWidth_Inches=11.)
+
+# make plot for subtidal variation
+for i in range(0,len(SubtidalEfficacies)):
+
+    # makes plots
+    ProfileName = ("EnsembleShoreProfile_G" + str(Gradients[1])
+                            + "_S_" + str(SLRs[1])
+                            + "_T_" + str(TidalRanges[1])
+                            + "_W_" + str(WeatheringRates[1])
+                            + "_Ws_" + str(SubtidalEfficacies[i])
+                            + "_R_" + str(Resistances[1])
+                            + "_H_" + str(WaveHeights[1])
+                            + "_A_" + str(WaveAttenuationConst[1])
+                            + ".xz")
+
+    ConcentrationsName = "EnsembleConcentrations_"+ProfileName.lstrip("EnsembleShoreProfile_").rstrip("xz")+"xn"
     
-    for d in range(0,len(WeatheringRates)):
     
     
-    for e in range(0,len(Resistances)):
+    # label
+    Label = "Subtidal efficacy " + str(SubtidalEfficacies[i])
+    
+    # add final results to existing plot
+    SubtidalFigure.PlotProfileAndConcentrationFigure(ResultsFolder / ProfileName, 
+                                                      ResultsFolder / ConcentrationsName, 
+                                                      Label=Label, Legend=True)
+
+# save results
+FigureFile = PlotsFolder / "Subtidal.png"
+SubtidalFigure.SaveFig(FigureFile)
+  
+
+# now for resistances
+ResistancesFigure = RPM_CRN_Figure(FigWidth_Inches=11.)
+
+# make plot for subtidal variation
+for i in range(0,len(Resistances)):
+
+    # makes plots
+    ProfileName = ("EnsembleShoreProfile_G" + str(Gradients[1])
+                            + "_S_" + str(SLRs[1])
+                            + "_T_" + str(TidalRanges[1])
+                            + "_W_" + str(WeatheringRates[1])
+                            + "_Ws_" + str(SubtidalEfficacies[1])
+                            + "_R_" + str(Resistances[i])
+                            + "_H_" + str(WaveHeights[1])
+                            + "_A_" + str(WaveAttenuationConst[1])
+                            + ".xz")
+
+    ConcentrationsName = "EnsembleConcentrations_"+ProfileName.lstrip("EnsembleShoreProfile_").rstrip("xz")+"xn"
     
     
-    for f in range(0,len(BreakingCoefficients)):
+    
+    # label
+    Label = "Resistance " + str(Resistances[i]) + " units"
+    
+    # add final results to existing plot
+    ResistancesFigure.PlotProfileAndConcentrationFigure(ResultsFolder / ProfileName, 
+                                                      ResultsFolder / ConcentrationsName, 
+                                                      Label=Label, Legend=True)
+
+# save results
+FigureFile = PlotsFolder / "Resistances.png"
+ResistancesFigure.SaveFig(FigureFile)
+
+
+# now for wave heights
+WaveHeightsFigure = RPM_CRN_Figure(FigWidth_Inches=11.)
+
+# make plot for subtidal variation
+for i in range(0,len(WaveHeights)):
+
+    # makes plots
+    ProfileName = ("EnsembleShoreProfile_G" + str(Gradients[1])
+                            + "_S_" + str(SLRs[1])
+                            + "_T_" + str(TidalRanges[1])
+                            + "_W_" + str(WeatheringRates[1])
+                            + "_Ws_" + str(SubtidalEfficacies[1])
+                            + "_R_" + str(Resistances[1])
+                            + "_H_" + str(WaveHeights[i])
+                            + "_A_" + str(WaveAttenuationConst[1])
+                            + ".xz")
+
+    ConcentrationsName = "EnsembleConcentrations_"+ProfileName.lstrip("EnsembleShoreProfile_").rstrip("xz")+"xn"
     
     
-    for g in range(0,len(BrokenCoefficients)):
+    
+    # label
+    Label = "Wave Height " + str(WaveHeights[i]) + " m"
+    
+    # add final results to existing plot
+    WaveHeightsFigure.PlotProfileAndConcentrationFigure(ResultsFolder / ProfileName, 
+                                                      ResultsFolder / ConcentrationsName, 
+                                                      Label=Label, Legend=True)
+
+# save results
+FigureFile = PlotsFolder / "WaveHeights.png"
+WaveHeightsFigure.SaveFig(FigureFile)    
+
+# now for wave attenuation
+WaveAttenuationFigure = RPM_CRN_Figure(FigWidth_Inches=11.)
+
+# make plot for subtidal variation
+for i in range(0,len(WaveHeights)):
+
+    # makes plots
+    ProfileName = ("EnsembleShoreProfile_G" + str(Gradients[1])
+                            + "_S_" + str(SLRs[1])
+                            + "_T_" + str(TidalRanges[1])
+                            + "_W_" + str(WeatheringRates[1])
+                            + "_Ws_" + str(SubtidalEfficacies[1])
+                            + "_R_" + str(Resistances[1])
+                            + "_H_" + str(WaveHeights[1])
+                            + "_A_" + str(WaveAttenuationConst[i])
+                            + ".xz")
+
+    ConcentrationsName = "EnsembleConcentrations_"+ProfileName.lstrip("EnsembleShoreProfile_").rstrip("xz")+"xn"
     
     
-    Parameters = [Gradients[a],TidalRanges[b],WaveHeights[c],WeatheringRates[d],Resistances[e],BreakingCoefficients[f],BrokenCoefficients[g]]
-                                FileName    = Path + ("ShoreProfile_G" + str(Gradients[a])
-                                            + "_T_" + str(TidalRanges[b])
-                                            + "_H_" + str(WaveHeights[c])
-                                            + "_W_" + str(WeatheringRates[d])
-                                            + "_R_" + str(Resistances[e])
-                                            + "_Br_" + str(BreakingCoefficients[f])
-                                            + "_Bo_" + str(BrokenCoefficients[g])
-                                            + ".xz")
-                                make_plot(FileName, Parameters)
-                                #sys.exit("Temp break")
-"""
+    
+    # label
+    Label = "Wave Height " + str(WaveAttenuationConst[i]) + " m"
+    
+    # add final results to existing plot
+    WaveAttenuationFigure.PlotProfileAndConcentrationFigure(ResultsFolder / ProfileName, 
+                                                      ResultsFolder / ConcentrationsName, 
+                                                      Label=Label, Legend=True)
+
+# save results
+FigureFile = PlotsFolder / "WaveHeights.png"
+WaveAttenuationFigure.SaveFig(FigureFile)    
+    
+    
+    

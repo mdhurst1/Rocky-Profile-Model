@@ -130,7 +130,7 @@ class RPM_CRN_Figure:
 
         Mode = mode(LastX[LastX > 1])
         CliffPosition = Mode[0]
-        print(CliffPosition)
+        
         LastX -= CliffPosition
         #self.Axes[0].set_xlim(0, CliffPosition)
 
@@ -147,10 +147,7 @@ class RPM_CRN_Figure:
         LegendLines = []
         LegendLabels = []
         
-        print(Concentrations.keys())
-
         if "26Al" in Concentrations.keys():
-            print("26Al")
             N26Al = Concentrations["26Al"][-1]
             X = np.arange(0,len(N26Al))*dX
             CliffIndex = np.argmin(np.abs(X-CliffPosition))
@@ -160,7 +157,6 @@ class RPM_CRN_Figure:
             LegendLabels.append("$^{26}$Al")
         
         if "14C" in Concentrations.keys():
-            print("14C")
             N14C = Concentrations["14C"][-1]
             X = np.arange(0,len(N14C))*dX
             CliffIndex = np.argmin(np.abs(X-CliffPosition))
@@ -170,7 +166,6 @@ class RPM_CRN_Figure:
             LegendLabels.append("$^{14}$C")
             
         if "10Be" in Concentrations.keys():
-            print("10Be")
             N10Be = Concentrations["10Be"][-1]
             X = np.arange(0,len(N10Be))*dX
             CliffIndex = np.argmin(np.abs(X-CliffPosition))
