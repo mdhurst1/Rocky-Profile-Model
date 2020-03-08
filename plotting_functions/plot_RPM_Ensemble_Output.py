@@ -48,9 +48,6 @@ for i in range(0,len(Gradients)):
 
     ConcentrationsName = "EnsembleConcentrations_"+ProfileName.lstrip("EnsembleShoreProfile_").rstrip("xz")+"xn"
     
-    # Load profile and concentration data
-    FigureFile = PlotsFolder / "Gradients.png"
-    
     # label
     Label="Initial Gradient " + str(Gradients[i])
     
@@ -60,14 +57,108 @@ for i in range(0,len(Gradients)):
                                                       Label=Label, Legend=True)
 
 # save results
+FigureFile = PlotsFolder / "Gradients.png
 GradientsFigure.SaveFig(FigureFile)
 
-"""
-for b in range(0,len(TidalRanges)):
+
+# set up a figure
+SLRFigure = RPM_CRN_Figure(FigWidth_Inches=11.)
+
+# make plot for gradient variation
+for i in range(0,len(SLRs)):
+
+    # makes plots
+    ProfileName = ("EnsembleShoreProfile_G" + str(Gradients[1])
+                            + "_S_" + str(SLRs[i])
+                            + "_T_" + str(TidalRanges[1])
+                            + "_W_" + str(WeatheringRates[1])
+                            + "_Ws_" + str(SubtifalEfficacies[1])
+                            + "_R_" + str(Resistances[1])
+                            + "_H_" + str(WaveHeights[1])
+                            + "_A_" + str(WaveAttenuationConst[1])
+                            + ".xz")
+
+    ConcentrationsName = "EnsembleConcentrations_"+ProfileName.lstrip("EnsembleShoreProfile_").rstrip("xz")+"xn"
+    
+    # label
+    Label = "Sea level change " + str(SLRs[i]) "m yr$^{-1}$"
+    
+    # add final results to existing plot
+    SLRFigure.PlotProfileAndConcentrationFigure(ResultsFolder / ProfileName, 
+                                                      ResultsFolder / ConcentrationsName, 
+                                                      Label=Label, Legend=True)
+
+# save results
+FigureFile = PlotsFolder / "SLRs.png
+SLRFigure.SaveFig(FigureFile)
+
+
+# now for tidal range
+TidalRangesFigure = RPM_CRN_Figure(FigWidth_Inches=11.)
+
+# make plot for gradient variation
+for i in range(0,len(TidalRanges)):
+
+    # makes plots
+    ProfileName = ("EnsembleShoreProfile_G" + str(Gradients[1])
+                            + "_S_" + str(SLRs[1])
+                            + "_T_" + str(TidalRanges[i])
+                            + "_W_" + str(WeatheringRates[1])
+                            + "_Ws_" + str(SubtifalEfficacies[1])
+                            + "_R_" + str(Resistances[1])
+                            + "_H_" + str(WaveHeights[1])
+                            + "_A_" + str(WaveAttenuationConst[1])
+                            + ".xz")
+
+    ConcentrationsName = "EnsembleConcentrations_"+ProfileName.lstrip("EnsembleShoreProfile_").rstrip("xz")+"xn"
     
     
-    for c in range(0,len(WaveHeights)):
     
+    # label
+    Label="Tidal Range " + str(TidalRanges[i]) + " m"
+    
+    # add final results to existing plot
+    TidalRangesFigure.PlotProfileAndConcentrationFigure(ResultsFolder / ProfileName, 
+                                                      ResultsFolder / ConcentrationsName, 
+                                                      Label=Label, Legend=True)
+
+# save results
+FigureFile = PlotsFolder / "TidalRanges.png"
+TidalRangesFigure.SaveFig(FigureFile)
+
+
+# now for tidal range
+WeatheringRatesFigure = RPM_CRN_Figure(FigWidth_Inches=11.)
+
+# make plot for gradient variation
+for i in range(0,len(WeatheringRates)):
+
+    # makes plots
+    ProfileName = ("EnsembleShoreProfile_G" + str(Gradients[1])
+                            + "_S_" + str(SLRs[1])
+                            + "_T_" + str(TidalRanges[1])
+                            + "_W_" + str(WeatheringRates[i])
+                            + "_Ws_" + str(SubtifalEfficacies[1])
+                            + "_R_" + str(Resistances[1])
+                            + "_H_" + str(WaveHeights[1])
+                            + "_A_" + str(WaveAttenuationConst[1])
+                            + ".xz")
+
+    ConcentrationsName = "EnsembleConcentrations_"+ProfileName.lstrip("EnsembleShoreProfile_").rstrip("xz")+"xn"
+    
+    
+    
+    # label
+    Label="Weathering Rate " + str(WeatheringRates[i]) + " units"
+    
+    # add final results to existing plot
+    WeatheringRatesFigure.PlotProfileAndConcentrationFigure(ResultsFolder / ProfileName, 
+                                                      ResultsFolder / ConcentrationsName, 
+                                                      Label=Label, Legend=True)
+
+# save results
+FigureFile = PlotsFolder / "TidalRanges.png"
+WeatheringRatesFigure.SaveFig(FigureFile)
     
     
     for d in range(0,len(WeatheringRates)):

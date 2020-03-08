@@ -2,7 +2,7 @@
 from pathlib import Path
 import numpy as np
 from scipy.stats import mode
-from matplotlib import rcParams, cm
+from matplotlib import rcParams, cm, gridspec
 from matplotlib.lines import Line2D
 from cycler import cycler
 import matplotlib.pyplot as plt
@@ -95,8 +95,11 @@ class RPM_CRN_Figure:
         # if axes not created yet add axes as list for subplots and organise labels
         if not self.Axes:
             
+            # set up the gridspec
+            #GridSpec = gridspec.GridSpec(ncols=2, nrows=2, width_ratios=[2, 1], height_ratios=[1,1])
+
             # ax1 for profiles, no x axis, y axis on the left
-            ax1 = self.Figure.add_subplot(211)
+            ax1 = self.Figure.add_subplot(211) #GridSpec[0,0])
             ax1.set_ylabel("Elevation (m)")
             #ax1.xaxis.set_visible(False)
             ax1.spines['right'].set_visible(False)
@@ -104,7 +107,7 @@ class RPM_CRN_Figure:
             #ax1.spines['bottom'].set_visible(False)
 
             # ax2 for concentrations, y axis on the right
-            ax2 = self.Figure.add_subplot(212)
+            ax2 = self.Figure.add_subplot(212) #GridSpec[1,0])
             ax2.set_yscale("log")
             ax2.set_xlabel("Distance (m)")
             ax2.set_ylabel("Concentration (at g${-1}$)")
@@ -113,7 +116,11 @@ class RPM_CRN_Figure:
             ax2.spines['left'].set_visible(False)
             ax2.spines['top'].set_visible(False)
 
-            self.Axes = [ax1, ax2]
+            #ax3 = self.Figure.add_subplot((GridSpec[0,1]))
+
+            #ax4 = self.Figure.add_subplot((GridSpec[1,1]))
+
+            self.Axes = [ax1, ax2] #, ax3, ax4]
 
         # read the profile file
         Times, Z, X = ReadShoreProfile(ProfileFile)
@@ -128,7 +135,10 @@ class RPM_CRN_Figure:
         #self.Axes[0].set_xlim(0, CliffPosition)
 
         # plot final result on ax1
-        self.Axes[0].plot(LastX, Z, ls=Symbol, color=Colour, label=Label)
+        Line, = self.Axes[0].plot(LastX, Z, ls=Symbol, color=Colour, label=Label)
+
+        # copy the colour for other plots
+        Colour = Line.get_color()
 
         # read the concentrations
         Times2, dX, Concentrations = ReadConcentrationData(ConcentrationsFile)
