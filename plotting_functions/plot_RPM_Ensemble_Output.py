@@ -14,8 +14,6 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 from RPM_CRN_Figure import *
-from matplotlib import cm
-from matplotlib import rc
 
 # define workspace
 ResultsFolder = Path(r'C:\Users\Martin Hurst\OneDrive - University of Glasgow\Projects\RockCoastCosmo\CoupledModelling\Results\ModelOutput')
@@ -35,7 +33,7 @@ WaveAttenuationConst = [0.01, 0.1, 1]
 GradientsFigure = RPM_CRN_Figure(FigWidth_Inches=11.)
 
 # make plot for gradient variation
-for i in range(1,len(Gradients)):
+for i in range(0,len(Gradients)):
 
     # makes plots
     ProfileName = ("EnsembleShoreProfile_G" + str(Gradients[i])
@@ -51,12 +49,15 @@ for i in range(1,len(Gradients)):
     ConcentrationsName = "EnsembleConcentrations_"+ProfileName.lstrip("EnsembleShoreProfile_").rstrip("xz")+"xn"
     
     # Load profile and concentration data
-    FigureFile = PlotsFolder / "test.png"
+    FigureFile = PlotsFolder / "Gradients.png"
+    
+    # label
+    Label="Initial Gradient " + str(Gradients[i])
     
     # add final results to existing plot
     GradientsFigure.PlotProfileAndConcentrationFigure(ResultsFolder / ProfileName, 
                                                       ResultsFolder / ConcentrationsName, 
-                                                      Label="test", Legend=True)
+                                                      Label=Label, Legend=True)
 
 # save results
 GradientsFigure.SaveFig(FigureFile)

@@ -2,8 +2,9 @@
 from pathlib import Path
 import numpy as np
 from scipy.stats import mode
-from matplotlib import rcParams
+from matplotlib import rcParams, cm
 from matplotlib.lines import Line2D
+from cycler import cycler
 import matplotlib.pyplot as plt
 from RPM_CRN_Plotting_Functions import *
 
@@ -78,10 +79,13 @@ class RPM_CRN_Figure:
         rcParams['font.sans-serif'] = ['arial']
         rcParams['font.size'] = 10
         rcParams['text.usetex'] = True
+        
+        # customise the colorcycle for plotting
+        rcParams['axes.prop_cycle'] = cycler(color=cm.Dark2.colors)
             
         self.Figure = plt.figure(figsize=(FigWidth_Inches,FigWidth_Inches/AspectRatio),facecolor=None)
 
-    def PlotProfileAndConcentrationFigure(self, ProfileFile, ConcentrationsFile, Colour="k", Symbol="-", Legend=False, Label=None):
+    def PlotProfileAndConcentrationFigure(self, ProfileFile, ConcentrationsFile, Colour=None, Symbol="-", Legend=False, Label=None):
 
         # if no figure make the default
         if not self.Figure:
@@ -94,10 +98,10 @@ class RPM_CRN_Figure:
             # ax1 for profiles, no x axis, y axis on the left
             ax1 = self.Figure.add_subplot(211)
             ax1.set_ylabel("Elevation (m)")
-            ax1.xaxis.set_visible(False)
+            #ax1.xaxis.set_visible(False)
             ax1.spines['right'].set_visible(False)
             ax1.spines['top'].set_visible(False)
-            ax1.spines['bottom'].set_visible(False)
+            #ax1.spines['bottom'].set_visible(False)
 
             # ax2 for concentrations, y axis on the right
             ax2 = self.Figure.add_subplot(212)
@@ -113,15 +117,18 @@ class RPM_CRN_Figure:
 
         # read the profile file
         Times, Z, X = ReadShoreProfile(ProfileFile)
-        
+        LastX = X[-1]
+
         # find cliff and normalise
-        CliffPosition = mode(X[X > 0])
-        X -= CliffPosition
-        X *= -1
-        self.Axes[0].set_xlim(-CliffPosition, 0)
+
+        Mode = mode(LastX[LastX > 1])
+        CliffPosition = Mode[0]
+        print(CliffPosition)
+        LastX -= CliffPosition
+        #self.Axes[0].set_xlim(0, CliffPosition)
 
         # plot final result on ax1
-        self.Axes[0].plot(X[-1], Z, ls=Symbol, color=Colour, label=Label)
+        self.Axes[0].plot(LastX, Z, ls=Symbol, color=Colour, label=Label)
 
         # read the concentrations
         Times2, dX, Concentrations = ReadConcentrationData(ConcentrationsFile)
@@ -136,9 +143,9 @@ class RPM_CRN_Figure:
             print("26Al")
             N26Al = Concentrations["26Al"][-1]
             X = np.arange(0,len(N26Al))*dX
+            CliffIndex = np.argmin(np.abs(X-CliffPosition))
             X -= CliffPosition
-            X *= -1
-            self.Axes[1].plot(X, N26Al, ":", color=Colour)
+            self.Axes[1].plot(X[0:CliffIndex], N26Al[0:CliffIndex], ":", color=Colour)
             LegendLines.append(Line2D([0], [0], color="grey", ls=":"))
             LegendLabels.append("$^{26}$Al")
         
@@ -146,9 +153,9 @@ class RPM_CRN_Figure:
             print("14C")
             N14C = Concentrations["14C"][-1]
             X = np.arange(0,len(N14C))*dX
+            CliffIndex = np.argmin(np.abs(X-CliffPosition))
             X -= CliffPosition
-            X *= -1
-            self.Axes[1].plot(X, N14C, "--", color=Colour)
+            self.Axes[1].plot(X[0:CliffIndex], N14C[0:CliffIndex], "--", color=Colour)
             LegendLines.append(Line2D([0], [0], color="grey", ls="--"))
             LegendLabels.append("$^{14}$C")
             
@@ -156,9 +163,9 @@ class RPM_CRN_Figure:
             print("10Be")
             N10Be = Concentrations["10Be"][-1]
             X = np.arange(0,len(N10Be))*dX
+            CliffIndex = np.argmin(np.abs(X-CliffPosition))
             X -= CliffPosition
-            X *= -1
-            self.Axes[1].plot(X, N10Be, "-", color=Colour)
+            self.Axes[1].plot(X[0:CliffIndex], N10Be[0:CliffIndex], "-", color=Colour)
             LegendLines.append(Line2D([0], [0], color="grey", ls="-"))
             LegendLabels.append("$^{10}$Be")
 
