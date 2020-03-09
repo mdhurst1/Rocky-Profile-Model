@@ -14,7 +14,7 @@ method,
 	 #burn_in_samples = 100
 	 chain_diagnostics confidence_intervals
 	 export_chain_points_file  'posterior.dat'
-	 #logit_transform
+	 logit_transform
 	 output debug
 
 variables,
