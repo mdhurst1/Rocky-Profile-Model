@@ -505,10 +505,9 @@ int main(int nNumberofArgs,char *argv[])
    ///////////////////////////////////////
 
    //declarations CRN
-   vector<double> DiffCRNX(NData);
    vector<double> XPosCRN(NData);
    vector<double> NModel(NData);
-   double ScaleCRN;
+   double ScaleCRN, DiffCRNX;
    //double CRN_RMSE;
    //long double LikelihoodCRN = 1.L;  
 
@@ -522,9 +521,8 @@ int main(int nNumberofArgs,char *argv[])
         //Take X value of sample and interpolate to get model results at this point
 	    int j=0;
 	    while ((XDataModel[j]-XPosCRN[i]) < 0) ++j;
-
-	    DiffCRNX[i] = XDataModel[j]-XPosCRN[i];
-        ScaleCRN = DiffCRNX[i]/(XDataModel[j]-XDataModel[j-1]);
+	    DiffCRNX = XDataModel[j]-XPosCRN[i];
+        ScaleCRN = DiffCRNX/(XDataModel[j]-XDataModel[j-1]);
   
         //Get Interpolated N value
         NModel[i] = CRNConcModel[j]-ScaleCRN*(CRNConcModel[j]-CRNConcModel[j-1]);
@@ -535,12 +533,14 @@ int main(int nNumberofArgs,char *argv[])
 	vector<double> ResidualsCRN(NData); 
 	//double MaxCRN = ResidualsCRN[0];
 	//double MinCRN = ResidualsCRN[0];
-
     //Declarations for normalised Residuals 
     vector<double> NResidualsCRN(NData);
+	vector<double> LResidualsCRN(NData);
+	long double LikelihoodCRN = 1.L;
     double TotalNResidualsCRN = 0;
 	double TotalResidualsCRN = 0;
 	double MaxCRNCB = 16162;
+
 
 	//Standardise CRN residuals
 	for (int i=0; i<NData; ++i)
@@ -559,6 +559,14 @@ int main(int nNumberofArgs,char *argv[])
 	   //MaxCRN = *max_element(begin(ResidualsCRN), end(ResidualsCRN)); 
    }
 
+   //Calculate CRN Likelihood
+   for (int i=0; i<NData; i++)
+   {
+	   LResidualsCRN[i] = pow(CRNConcData[i]-NModel[i],2);
+	   LikelihoodCRN *= exp(-(fabs(ResidualsCRN[i]))/(CRNConcErrorData[i]*CRNConcErrorData[i]));
+
+   }
+
    for (int i=0; i<NData; ++i)
    { 
 	   //Feature scaling - min-max normalisation (distribution between 0 and 1)
@@ -566,11 +574,7 @@ int main(int nNumberofArgs,char *argv[])
 
 	   //Normalise CRN to max measured CRN conc
 	   NResidualsCRN[i] = (ResidualsCRN[i]/MaxCRNCB);
-
 	   TotalNResidualsCRN += pow(NResidualsCRN[i],2);    
-
-	   //TotalResidualsCRN += pow(CRNConcData[i]-NModel[i],2);
-	   //LikelihoodCRN *= exp(-(fabs(ResidualsCRN[i]))/(CRNConcErrorData[i]*CRNConcErrorData[i]));
    }
 	
     
@@ -596,8 +600,11 @@ int main(int nNumberofArgs,char *argv[])
    double RMSE_N;
    //double CRN_RMSE_N;
    long double Likelihood_N = 1.L;
+   long double LikelihoodCRN_N = 1.L;
    long double Neg_Log_Likelihood = 1.L;
+   long double Neg_Log_LikelihoodCRN = 1.L;
    long double Neg_Log_Likelihood_N = 1.L;
+   long double Neg_Log_LikelihoodCRN_N = 1.L;
 
    //RMSE calculations 
 
@@ -610,22 +617,22 @@ int main(int nNumberofArgs,char *argv[])
 
    //WeightedRMSE = (RMSE_N*TopoWeighting)+(CRN_RMSE_N*CRNWeighting);
 
-   //Normalise Likelihood
+   //Normalise Likelihoods
    Likelihood_N = Likelihood/TidalRange;
+   LikelihoodCRN_N = LikelihoodCRN/MaxCRNCB;
 
    //negative log likelihood
    //if normalised correct, take -ve log of normalised likelihood
-   Neg_Log_Likelihood = -log(Likelihood);
+   Neg_Log_Likelihood = -log(Likelihood_N);
+   Neg_Log_LikelihoodCRN = -log(LikelihoodCRN);
 
    //normalised neegative log likelihood 
    Neg_Log_Likelihood_N = Neg_Log_Likelihood/TidalRange;
+   Neg_Log_LikelihoodCRN_N = Neg_Log_LikelihoodCRN/MaxCRNCB;
 
 
    cout << " RMSE = " << RMSE << endl;
    //cout << " CRN RMSE = " << CRN_RMSE << endl;
-   cout << " Normalised RMSE = " << RMSE_N << endl;
-   //cout << " Normalised RMSE CRN = " << CRN_RMSE_N << endl;
-   //cout << " Weighted RMSE = " << WeightedRMSE << endl; 
    //cout << " Likelihood = " << setprecision(10) << Likelihood << endl;
    cout << " Normalised Likelihood = " << scientific << Likelihood_N << endl;
    cout << " -ve log likelihood = " << scientific << Neg_Log_Likelihood << endl;
@@ -635,8 +642,6 @@ int main(int nNumberofArgs,char *argv[])
 	   {
 		   FailFlag = true;
 	   }
-
-   //add another fail flag for nan?
    
    //Check outfile is open
 
@@ -657,11 +662,11 @@ int main(int nNumberofArgs,char *argv[])
 	}
 	else if (!CRNFlag)
 	{
-		outfile << Neg_Log_Likelihood_N << endl;
+		outfile << Neg_Log_Likelihood << endl;
 	}
 	else
 	{
-	    outfile << Neg_Log_Likelihood_N << endl;
+	    outfile << Neg_Log_Likelihood << endl;
 	}
 
 
