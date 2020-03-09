@@ -599,8 +599,6 @@ int main(int nNumberofArgs,char *argv[])
    //double WeightedRMSE;
    //double RMSE_N;
    //double CRN_RMSE_N;
-   long double Likelihood_N = 1.L;
-   long double LikelihoodCRN_N = 1.L;
    long double Neg_Log_Likelihood = 1.L;
    long double Neg_Log_LikelihoodCRN = 1.L;
    long double Neg_Log_Likelihood_N = 1.L;
@@ -617,24 +615,18 @@ int main(int nNumberofArgs,char *argv[])
 
    //WeightedRMSE = (RMSE_N*TopoWeighting)+(CRN_RMSE_N*CRNWeighting);
 
-   //Normalise Likelihoods
-   Likelihood_N = Likelihood/TidalRange;
-   LikelihoodCRN_N = LikelihoodCRN/MaxCRNCB;
-
    //negative log likelihood
    //if normalised correct, take -ve log of normalised likelihood
    Neg_Log_Likelihood = -log(Likelihood);
-   Neg_Log_LikelihoodCRN = -log(LikelihoodCRN_N);
+   Neg_Log_LikelihoodCRN = -log(LikelihoodCRN);
 
-   //normalised neegative log likelihood 
+   //normalised negative log likelihood 
    Neg_Log_Likelihood_N = Neg_Log_Likelihood/TidalRange;
    //Neg_Log_LikelihoodCRN_N = Neg_Log_LikelihoodCRN/MaxCRNCB;
 
 
    cout << " RMSE = " << RMSE << endl;
    //cout << " CRN RMSE = " << CRN_RMSE << endl;
-   //cout << " Likelihood = " << setprecision(10) << Likelihood << endl;
-   cout << " Normalised Likelihood = " << scientific << Likelihood_N << endl;
    cout << " -ve log likelihood = " << scientific << Neg_Log_Likelihood << endl;
    cout << " Normalised -log likelihood = " << scientific << Neg_Log_Likelihood_N << endl;
 
