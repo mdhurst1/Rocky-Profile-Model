@@ -630,10 +630,10 @@ int main(int nNumberofArgs,char *argv[])
    cout << " -ve log likelihood = " << scientific << Neg_Log_Likelihood << endl;
    cout << " Normalised -log likelihood = " << scientific << Neg_Log_Likelihood_N << endl;
 
-   if (isinf(Neg_Log_Likelihood))
-	   {
-		   FailFlag = true;
-	   }
+   //if (isinf(Neg_Log_Likelihood))
+	 //  {
+		//   FailFlag = true;
+	   //}
    
    //Check outfile is open
 
