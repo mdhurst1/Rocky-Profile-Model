@@ -597,14 +597,14 @@ int main(int nNumberofArgs,char *argv[])
    //double TopoWeighting = 0.5;
    //double CRNWeighting = 0.5;
    //double WeightedRMSE;
-   double RMSE_N;
+   //double RMSE_N;
    //double CRN_RMSE_N;
    long double Likelihood_N = 1.L;
    long double LikelihoodCRN_N = 1.L;
    long double Neg_Log_Likelihood = 1.L;
    long double Neg_Log_LikelihoodCRN = 1.L;
    long double Neg_Log_Likelihood_N = 1.L;
-   long double Neg_Log_LikelihoodCRN_N = 1.L;
+   //long double Neg_Log_LikelihoodCRN_N = 1.L;
 
    //RMSE calculations 
 
@@ -612,7 +612,7 @@ int main(int nNumberofArgs,char *argv[])
    //CRN_RMSE = sqrt(TotalResidualsCRN/NData);
 
    //Normalise RMSE
-   RMSE_N = RMSE/TidalRange;  // min-max rather than tidal range?
+   //RMSE_N = RMSE/TidalRange;  // min-max rather than tidal range?
    //CRN_RMSE_N = CRN_RMSE/MaxCRNCB;
 
    //WeightedRMSE = (RMSE_N*TopoWeighting)+(CRN_RMSE_N*CRNWeighting);
@@ -624,11 +624,11 @@ int main(int nNumberofArgs,char *argv[])
    //negative log likelihood
    //if normalised correct, take -ve log of normalised likelihood
    Neg_Log_Likelihood = -log(Likelihood_N);
-   Neg_Log_LikelihoodCRN = -log(LikelihoodCRN);
+   Neg_Log_LikelihoodCRN = -log(LikelihoodCRN_N);
 
    //normalised neegative log likelihood 
    Neg_Log_Likelihood_N = Neg_Log_Likelihood/TidalRange;
-   Neg_Log_LikelihoodCRN_N = Neg_Log_LikelihoodCRN/MaxCRNCB;
+   //Neg_Log_LikelihoodCRN_N = Neg_Log_LikelihoodCRN/MaxCRNCB;
 
 
    cout << " RMSE = " << RMSE << endl;
@@ -666,7 +666,7 @@ int main(int nNumberofArgs,char *argv[])
 	}
 	else
 	{
-	    outfile << Neg_Log_Likelihood << endl;
+	    outfile << Neg_Log_LikelihoodCRN << endl;
 	}
 
 
