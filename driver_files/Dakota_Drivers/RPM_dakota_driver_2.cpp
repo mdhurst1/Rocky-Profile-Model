@@ -599,7 +599,7 @@ int main(int nNumberofArgs,char *argv[])
    //double WeightedRMSE;
    //double RMSE_N;
    //double CRN_RMSE_N;
-   //long double Likelihood_N = 1.L;
+   long double Likelihood_N = 1.L;
    long double LikelihoodCRN_N = 1.L;
    long double Neg_Log_Likelihood = 1.L;
    long double Neg_Log_LikelihoodCRN = 1.L;
@@ -618,7 +618,7 @@ int main(int nNumberofArgs,char *argv[])
    //WeightedRMSE = (RMSE_N*TopoWeighting)+(CRN_RMSE_N*CRNWeighting);
 
    //Normalise Likelihoods
-   //Likelihood_N = Likelihood/TidalRange;
+   Likelihood_N = Likelihood/TidalRange;
    LikelihoodCRN_N = LikelihoodCRN/MaxCRNCB;
 
    //negative log likelihood
