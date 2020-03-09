@@ -235,8 +235,7 @@ class RPM_CRN_Figure:
             Time += TimeInterval
         
         # create or update legends
-        if Legend:
-            self.Axes[0].legend()            
+        self.Axes[0].legend()            
 
     def SaveFig(self, Outputfilename):
         self.Figure.savefig(Outputfilename)
