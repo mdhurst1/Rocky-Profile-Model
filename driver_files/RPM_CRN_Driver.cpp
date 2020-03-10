@@ -110,6 +110,7 @@ int main(int nNumberofArgs,char *argv[])
 	string Folder = argv[1];
 	
 	// set up default parameters
+	bool CRNFlag = true;
 
 	//initialisation parameters, these are currently not 
 	double dZ = 0.1;
