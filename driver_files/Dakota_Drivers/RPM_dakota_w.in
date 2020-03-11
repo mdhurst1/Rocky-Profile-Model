@@ -22,7 +22,7 @@ variables,
 	 #lower_bounds  0.005 -8 -5
      #upper_bounds  -0.9 -1 -1
 	 means -1.15 -2.9 -4.9
-	 std_deviations 0.05 0.1 0.1
+	 std_deviations 0.05 0.05 0.05
 	 descriptor "FR" "K" "Y"
 
 
