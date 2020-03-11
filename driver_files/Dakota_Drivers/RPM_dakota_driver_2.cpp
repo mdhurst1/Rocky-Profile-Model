@@ -453,7 +453,7 @@ int main(int nNumberofArgs,char *argv[])
    vector<double> NResiduals(NProfileData);
    vector<double> LResiduals(NProfileData);
    long double Likelihood = 1.L;
-   double ZStd = 2;
+   double ZStd = 1;
    //double MaxTopo = Residuals[0];
    //double MinTopo = Residuals[0];
    
