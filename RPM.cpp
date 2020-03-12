@@ -347,9 +347,9 @@ void RPM::InitialiseWeathering()
 	// declare control parameters for distribution
 	//double sigma = 0.5;sv
 	//double Theta = 0;
-	MaxWeatheringEfficacy = 1;
+	MaxWeatheringEfficacy = 1.;
 	
-	""" need a check here the MinWeatheringRate has been set. InitialiseGeology must have been run before InitialiseWeathering/InitialiseTides """
+	/* need a check here the MinWeatheringRate has been set. InitialiseGeology must have been run before InitialiseWeathering/InitialiseTides */
 
 	//MinWeatheringEfficacy = SubtidalEfficacy;
 
