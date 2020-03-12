@@ -452,7 +452,7 @@ int main(int nNumberofArgs,char *argv[])
    vector<double> NResiduals(NProfileData);
    vector<double> LResiduals(NProfileData);
    long double Likelihood = 1.L;
-   //double ZStd = 1;
+   double ZStd = 2;
    //double MaxTopo = Residuals[0];
    //double MinTopo = Residuals[0];
    
@@ -477,7 +477,7 @@ int main(int nNumberofArgs,char *argv[])
 	{
 		//Residuals calc for Likelihood
 	   LResiduals[i] = (ProfileZData[i]-TopoData[i])*(ProfileZData[i]-TopoData[i]);
-	   Likelihood *= fastexp(-(fabs(LResiduals[i])));    ///(ZStd*ZStd)); 
+	   Likelihood *= fastexp(-(fabs(LResiduals[i]))/(ZStd*ZStd)); 
 	}
 	//return Likelihood;
 
@@ -653,11 +653,11 @@ int main(int nNumberofArgs,char *argv[])
 	}
 	else if (!CRNFlag)
 	{
-		outfile << Neg_Log_Likelihood << endl;
+		outfile << Neg_Log_Likelihood_N << endl;
 	}
 	else
 	{
-	    outfile << Neg_Log_LikelihoodCRN << endl;
+	    outfile << Neg_Log_Likelihood_N << endl;
 	}
 
 
