@@ -317,7 +317,6 @@ int main(int nNumberofArgs,char *argv[])
     int NProfileData;
     vector<double> ProfileXData;
     vector<double> ProfileZData;
-    //double ZStd = 1.;   //where define ZStd?
 
     //Vectors to hold CRN concentration data
     int NData;
@@ -453,7 +452,7 @@ int main(int nNumberofArgs,char *argv[])
    vector<double> NResiduals(NProfileData);
    vector<double> LResiduals(NProfileData);
    long double Likelihood = 1.L;
-   double ZStd = 2;
+   //double ZStd = 1;
    //double MaxTopo = Residuals[0];
    //double MinTopo = Residuals[0];
    
@@ -478,7 +477,7 @@ int main(int nNumberofArgs,char *argv[])
 	{
 		//Residuals calc for Likelihood
 	   LResiduals[i] = (ProfileZData[i]-TopoData[i])*(ProfileZData[i]-TopoData[i]);
-	   Likelihood *= fastexp(-(fabs(LResiduals[i]))/(ZStd*ZStd)); 
+	   Likelihood *= fastexp(-(fabs(LResiduals[i])));    ///(ZStd*ZStd)); 
 	}
 	//return Likelihood;
 
