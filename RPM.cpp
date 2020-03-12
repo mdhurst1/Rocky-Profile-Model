@@ -335,6 +335,8 @@ void RPM::InitialiseGeology(double CliffHeightNew, double CliffFailureDepthNew, 
 			ResistanceArray[i][j] = RockResistance;
 		}
 	}
+
+	InitialiseWeathering();
 }
 
 void RPM::InitialiseWeathering()
@@ -343,10 +345,13 @@ void RPM::InitialiseWeathering()
 	using a log-normal distribution across the tidal range */
 
 	// declare control parameters for distribution
-	//double sigma = 0.5;
+	//double sigma = 0.5;sv
 	//double Theta = 0;
 	MaxWeatheringEfficacy = 1;
-	MinWeatheringEfficacy = 0.1;
+	
+	""" need a check here the MinWeatheringRate has been set. InitialiseGeology must have been run before InitialiseWeathering/InitialiseTides """
+
+	//MinWeatheringEfficacy = SubtidalEfficacy;
 
 	// This m value is tailored to cause a distribution peak at 3/4 of the tidal range
 	// as in Matsumoto et al. (2016)
