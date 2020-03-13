@@ -320,7 +320,7 @@ class RPM
 		/// @details This function writes the rock Resistance at the current time to
 		///   a file.
 		/// @author Martin D. Hurst
-		/// @date 09/03/2017
+		
 		void WriteResistanceArray(string OutputFileName, double Time);
 		void WriteMorphologyArray(string OutputFileName, double Time);
 
