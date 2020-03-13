@@ -25,6 +25,8 @@ padding = 5
 
 def make_plot(FileName,ColourMap):
     
+    """ some comments about what the function does """
+    
     #create blank figure
     plt.figure(1,figsize=(8,4))
 
