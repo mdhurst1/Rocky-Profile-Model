@@ -96,45 +96,64 @@ class RPM_CRN_Figure:
         if not self.Axes:
             
             # set up the gridspec
-            #GridSpec = gridspec.GridSpec(ncols=2, nrows=2, width_ratios=[2, 1], height_ratios=[1,1])
+            GridSpec = gridspec.GridSpec(ncols=2, nrows=2, width_ratios=[2, 1], height_ratios=[1,1])
 
-            # ax1 for profiles, no x axis, y axis on the left
-            ax1 = self.Figure.add_subplot(211) #GridSpec[0,0])
-            ax1.set_ylabel("Elevation (m)")
-            #ax1.xaxis.set_visible(False)
+            # ax0 for profiles, no x axis, y axis on the left
+            ax0 = self.Figure.add_subplot(GridSpec[0,0])
+            ax0.set_ylabel("Elevation (m)")
+            ax0.xaxis.set_visible(False)
+            ax0.spines['right'].set_visible(False)
+            ax0.spines['top'].set_visible(False)
+            ax0.spines['bottom'].set_visible(False)
+
+            # ax1 for concentrations, y axis on the right
+            ax1 = self.Figure.add_subplot(GridSpec[1,0])
+            ax1.set_yscale("log")
+            ax1.set_xlabel("Distance (m)")
+            ax1.set_ylabel("Concentration (at g${-1}$)")
             ax1.spines['right'].set_visible(False)
             ax1.spines['top'].set_visible(False)
-            #ax1.spines['bottom'].set_visible(False)
 
-            # ax2 for concentrations, y axis on the right
-            ax2 = self.Figure.add_subplot(212) #GridSpec[1,0])
+            # ax2 axis for time series of retreat rates
+            ax2 = self.Figure.add_subplot((GridSpec[0,1]))
             ax2.set_yscale("log")
-            ax2.set_xlabel("Distance (m)")
-            ax2.set_ylabel("Concentration (at g${-1}$)")
-            ax2.yaxis.set_ticks_position('right')
-            ax2.yaxis.set_label_position('right')
+            ax2.xaxis.set_visible(False)
             ax2.spines['left'].set_visible(False)
             ax2.spines['top'].set_visible(False)
+            ax2.yaxis.set_ticks_position('right')
+            ax2.yaxis.set_label_position('right')
+            ax2.set_ylabel("Cliff Retreat Rate (m yr$^{-1}$)")
+            ax2.spines['bottom'].set_visible(False)
+            
+            # ax3 for time series of maximum concentrations
+            ax3 = self.Figure.add_subplot((GridSpec[1,1]))
+            ax3.set_xlabel("Time (k yrs)")
+            ax3.set_ylabel("Max Intertidal Concentration (at g$^{-1}$)")
+            ax3.spines['left'].set_visible(False)
+            ax3.spines['top'].set_visible(False)
+            ax3.yaxis.set_ticks_position('right')
+            ax3.yaxis.set_label_position('right')
+            
 
-            #ax3 = self.Figure.add_subplot((GridSpec[0,1]))
-
-            #ax4 = self.Figure.add_subplot((GridSpec[1,1]))
-
-            self.Axes = [ax1, ax2] #, ax3, ax4]
+            self.Axes = [ax0, ax1, ax2, ax3]
 
         # read the profile file
         Times, Z, X = ReadShoreProfile(ProfileFile)
         LastX = X[-1]
 
         # find cliff and normalise
-
-        Mode = mode(LastX[LastX > 1])
-        CliffPosition = Mode[0]
+        CliffPositions = np.array([mode(EachX[EachX > 1])[0] for EachX in X])
+        CliffPositions = np.array([Element for Each in CliffPositions for Element in Each])
+        print(np.shape(X.T))
+        print(np.shape(CliffPositions))
+        CliffIndices = np.argmin(np.abs(X.T-CliffPositions),axis=0)
+        print(CliffIndices)
+        print(len(CliffIndices))
         
-        LastX -= CliffPosition
+        LastX -= CliffPositions[-1]
         #self.Axes[0].set_xlim(0, CliffPosition)
 
-        # plot final result on ax1
+        # plot final result on ax0
         Line, = self.Axes[0].plot(LastX, Z, ls=Symbol, color=Colour, label=Label)
 
         # copy the colour for other plots
@@ -150,33 +169,43 @@ class RPM_CRN_Figure:
         if "26Al" in Concentrations.keys():
             N26Al = Concentrations["26Al"][-1]
             X = np.arange(0,len(N26Al))*dX
-            CliffIndex = np.argmin(np.abs(X-CliffPosition))
-            X -= CliffPosition
-            self.Axes[1].plot(X[0:CliffIndex], N26Al[0:CliffIndex], ":", color=Colour)
+            CliffIndex = np.argmin(np.abs(X-CliffPositions[-1]))
+            X -= CliffPositions[-1]
+            self.Axes[1].plot(X[0:CliffIndices[-1]], N26Al[0:CliffIndices[-1]], ":", color=Colour)
             LegendLines.append(Line2D([0], [0], color="grey", ls=":"))
             LegendLabels.append("$^{26}$Al")
         
         if "14C" in Concentrations.keys():
             N14C = Concentrations["14C"][-1]
             X = np.arange(0,len(N14C))*dX
-            CliffIndex = np.argmin(np.abs(X-CliffPosition))
-            X -= CliffPosition
-            self.Axes[1].plot(X[0:CliffIndex], N14C[0:CliffIndex], "--", color=Colour)
+            CliffIndex = np.argmin(np.abs(X-CliffPositions[-1]))
+            X -= CliffPositions[-1]
+            self.Axes[1].plot(X[0:CliffIndices[-1]], N14C[0:CliffIndices[-1]], "--", color=Colour)
             LegendLines.append(Line2D([0], [0], color="grey", ls="--"))
             LegendLabels.append("$^{14}$C")
             
         if "10Be" in Concentrations.keys():
             N10Be = Concentrations["10Be"][-1]
             X = np.arange(0,len(N10Be))*dX
-            CliffIndex = np.argmin(np.abs(X-CliffPosition))
-            X -= CliffPosition
+            CliffIndex = np.argmin(np.abs(X-CliffPositions[-1]))
+            X -= CliffPositions[-1]
             self.Axes[1].plot(X[0:CliffIndex], N10Be[0:CliffIndex], "-", color=Colour)
             LegendLines.append(Line2D([0], [0], color="grey", ls="-"))
             LegendLabels.append("$^{10}$Be")
 
+        # calculate cliff retreat rates
+        RetreatRates = np.diff(CliffPositions)/np.diff(Times)
+        self.Axes[2].plot(Times[1:]/1000,RetreatRates,'k-')
+        
+        # calculate max concentrations
+        
         # make sure axes line up
         xmin, xmax = self.Axes[0].get_xlim()
         self.Axes[1].set_xlim(xmin, xmax)
+        
+        # make sure axes line up
+        xmin, xmax = self.Axes[2].get_xlim()
+        self.Axes[3].set_xlim(xmin, xmax)
         
         # create or update legends
         if Legend:
@@ -198,15 +227,15 @@ class RPM_CRN_Figure:
             # set up the gridspec
             #GridSpec = gridspec.GridSpec(ncols=2, nrows=2, width_ratios=[2, 1], height_ratios=[1,1])
 
-            # ax1 for profiles, no x axis, y axis on the left
-            ax1 = self.Figure.add_subplot(111) #GridSpec[0,0])
-            ax1.set_ylabel("Elevation (m)")
-            #ax1.xaxis.set_visible(False)
-            ax1.spines['right'].set_visible(False)
-            ax1.spines['top'].set_visible(False)
-            #ax1.spines['bottom'].set_visible(False)
+            # ax0 for profiles, no x axis, y axis on the left
+            ax0 = self.Figure.add_subplot(111) #GridSpec[0,0])
+            ax0.set_ylabel("Elevation (m)")
+            #ax0.xaxis.set_visible(False)
+            ax0.spines['right'].set_visible(False)
+            ax0.spines['top'].set_visible(False)
+            #ax0.spines['bottom'].set_visible(False)
 
-            self.Axes = [ax1]
+            self.Axes = [ax0]
 
         # read the profile file
         Times, Z, X = ReadShoreProfile(ProfileFile)
@@ -228,7 +257,7 @@ class RPM_CRN_Figure:
             # Find time
             Index = np.argmin(np.abs(Time-Times))
 
-            # plot final result on ax1
+            # plot final result on ax0
             Label = str(Time)
             Colour = ColourMap(Time/EndTime)
             self.Axes[0].plot(X[Index], Z, ls=Symbol, color=Colour, label=Label)
@@ -241,9 +270,9 @@ class RPM_CRN_Figure:
         self.Figure.savefig(Outputfilename)
 
 if __name__ == "__main__":
-    Folder = Path(r"C:\Users\Martin Hurst\OneDrive - University of Glasgow\Projects\RockCoastCosmo\CoupledModelling\Results")
-    ProfileFile = Folder / "EnsembleShoreProfile_G0_S_0_T_4_W_0.05_Ws_0.01_R_1_H_1_A_0.1.xz"
-    ConcentrationsFile = Folder / "EnsembleConcentrations_G0_S_0_T_4_W_0.05_Ws_0.01_R_1_H_1_A_0.1.xn"
+    Folder = Path(r"C:\Users\Martin Hurst\OneDrive - University of Glasgow\Projects\RockCoastCosmo\CoupledModelling\Results\ModelOutput")
+    ProfileFile = Folder / "EnsembleShoreProfile_G1_S_0_T_4_W_0.1_Ws_0.01_R_1_H_2_A_0.1.xz"
+    ConcentrationsFile = Folder / "EnsembleConcentrations_G1_S_0_T_4_W_0.1_Ws_0.01_R_1_H_2_A_0.1.xn"
     FigureFile = Folder / "test.png"
     
     MyFigure = RPM_CRN_Figure(FigWidth_Inches=11.)
