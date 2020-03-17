@@ -1,6 +1,7 @@
 # import plotting tools
 from pathlib import Path
 import numpy as np
+import re
 from scipy.stats import mode
 from matplotlib import rcParams, cm, gridspec
 from matplotlib.lines import Line2D
@@ -127,6 +128,7 @@ class RPM_CRN_Figure:
             
             # ax3 for time series of maximum concentrations
             ax3 = self.Figure.add_subplot((GridSpec[1,1]))
+            ax3.set_yscale("log")
             ax3.set_xlabel("Time (k yrs)")
             ax3.set_ylabel("Max Intertidal Concentration (at g$^{-1}$)")
             ax3.spines['left'].set_visible(False)
@@ -144,11 +146,7 @@ class RPM_CRN_Figure:
         # find cliff and normalise
         CliffPositions = np.array([mode(EachX[EachX > 1])[0] for EachX in X])
         CliffPositions = np.array([Element for Each in CliffPositions for Element in Each])
-        print(np.shape(X.T))
-        print(np.shape(CliffPositions))
         CliffIndices = np.argmin(np.abs(X.T-CliffPositions),axis=0)
-        print(CliffIndices)
-        print(len(CliffIndices))
         
         LastX -= CliffPositions[-1]
         #self.Axes[0].set_xlim(0, CliffPosition)
@@ -158,7 +156,8 @@ class RPM_CRN_Figure:
 
         # copy the colour for other plots
         Colour = Line.get_color()
-
+        LineStyles = ['-', '--', ':','-.']
+        
         # read the concentrations
         Times2, dX, Concentrations = ReadConcentrationData(ConcentrationsFile)
         
@@ -166,38 +165,30 @@ class RPM_CRN_Figure:
         LegendLines = []
         LegendLabels = []
         
-        if "26Al" in Concentrations.keys():
-            N26Al = Concentrations["26Al"][-1]
-            X = np.arange(0,len(N26Al))*dX
-            CliffIndex = np.argmin(np.abs(X-CliffPositions[-1]))
-            X -= CliffPositions[-1]
-            self.Axes[1].plot(X[0:CliffIndices[-1]], N26Al[0:CliffIndices[-1]], ":", color=Colour)
-            LegendLines.append(Line2D([0], [0], color="grey", ls=":"))
-            LegendLabels.append("$^{26}$Al")
-        
-        if "14C" in Concentrations.keys():
-            N14C = Concentrations["14C"][-1]
-            X = np.arange(0,len(N14C))*dX
-            CliffIndex = np.argmin(np.abs(X-CliffPositions[-1]))
-            X -= CliffPositions[-1]
-            self.Axes[1].plot(X[0:CliffIndices[-1]], N14C[0:CliffIndices[-1]], "--", color=Colour)
-            LegendLines.append(Line2D([0], [0], color="grey", ls="--"))
-            LegendLabels.append("$^{14}$C")
+        for i, key in enumerate(Concentrations.keys()):
             
-        if "10Be" in Concentrations.keys():
-            N10Be = Concentrations["10Be"][-1]
-            X = np.arange(0,len(N10Be))*dX
-            CliffIndex = np.argmin(np.abs(X-CliffPositions[-1]))
-            X -= CliffPositions[-1]
-            self.Axes[1].plot(X[0:CliffIndex], N10Be[0:CliffIndex], "-", color=Colour)
-            LegendLines.append(Line2D([0], [0], color="grey", ls="-"))
-            LegendLabels.append("$^{10}$Be")
-
+            N = Concentrations[key][-1]
+            XConc = np.arange(0,len(N))*dX
+            CliffIndex = np.argmin(np.abs(XConc-CliffPositions[-1]))
+            XConc -= XConc[CliffIndex]
+            self.Axes[1].plot(XConc[0:CliffIndex], N[0:CliffIndex], color=Colour, ls=LineStyles[i])
+            LegendLines.append(Line2D([0], [0], color="grey", ls=LineStyles[i]))
+            result = [split for split in re.split('([0-9]+)', key) if split != ""] #lstrip('0123456789')
+            Mass = result[0]
+            Element = result[1]
+            LegendLabels.append("$^{"+Mass+"}$"+Element)
+            
+            # calculate max concentrations
+            MaxN = []
+            for Time, CliffPosition, N in zip(Times, CliffPositions, Concentrations[key]):
+                XConc = np.arange(0,len(N))*dX
+                CliffIndex = np.argmin(np.abs(XConc-CliffPosition))
+                MaxN.append(np.max(N[0:CliffIndex]))
+            self.Axes[3].plot(Times/1000., MaxN, ls=LineStyles[i], color=Colour)
+        
         # calculate cliff retreat rates
         RetreatRates = np.diff(CliffPositions)/np.diff(Times)
-        self.Axes[2].plot(Times[1:]/1000,RetreatRates,'k-')
-        
-        # calculate max concentrations
+        self.Axes[2].plot(Times[1:]/1000,RetreatRates,'-', color=Colour)
         
         # make sure axes line up
         xmin, xmax = self.Axes[0].get_xlim()
@@ -206,6 +197,10 @@ class RPM_CRN_Figure:
         # make sure axes line up
         xmin, xmax = self.Axes[2].get_xlim()
         self.Axes[3].set_xlim(xmin, xmax)
+        
+        # make sure axes line up
+        ymin, ymax = self.Axes[1].get_ylim()
+        self.Axes[3].set_ylim(ymin, ymax)
         
         # create or update legends
         if Legend:
