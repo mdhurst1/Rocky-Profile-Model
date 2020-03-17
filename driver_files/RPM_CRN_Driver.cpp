@@ -119,8 +119,9 @@ int main(int nNumberofArgs,char *argv[])
 	//Time control parameters
 	//Time runs in yrs bp
 	double EndTime = 0;
-	double Time = -10000.;
-	double TimeInterval = 1;
+	double StartTime = -10000.;
+	double Time = StartTime;
+	double TimeStep = 1;
 
 	//Print Control
 	double PrintInterval = 10;
@@ -149,7 +150,7 @@ int main(int nNumberofArgs,char *argv[])
 	
 	// initialise sea level using rate of change
 	double SLR = 0.0005; //(m/yr)
-	SeaLevel RelativeSeaLevel = SeaLevel(SLR);
+	SeaLevel RelativeSeaLevel = SeaLevel(SLR, StartTime, EndTime, TimeStep);
 	
 	// Get initial sea level
 	double InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
