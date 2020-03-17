@@ -113,10 +113,10 @@ void Parameters::SetDefaultValues()
 	float_Params["CliffFailureDepth"] = 0.1;
 
 	// time control
-	int_Params["StartTime"] = 8000;
-	int_Params["EndTime"] = 0;
-	int_Params["TimeStep"] = 1;
-	int_Params["PrintInterval"] = 100;
+	float_Params["StartTime"] = 8000.;
+	float_Params["EndTime"] = 0.;
+	float_Params["TimeStep"] = 1.;
+	float_Params["PrintInterval"] = 100.;
 
 	// output files
     string_Params["Folder"] = Folder;
@@ -195,10 +195,11 @@ void Parameters::ParseValuesFromFile()
         {
             float_Params[Parameter] = stof(Value);
         }
-        else if (int_Params.find(Parameter) != int_Params.end()) 
-        {
-            int_Params[Parameter] = stoi(Value);
-        }
+        // currently no integer parameters
+        //else if (int_Params.find(Parameter) != int_Params.end()) 
+        //{
+        //    int_Params[Parameter] = stoi(Value);
+        //}
         else if (string_Params.find(Parameter) != string_Params.end()) 
         {
             string_Params[Parameter] = Value;
@@ -238,10 +239,10 @@ void Parameters::ParseValuesFromFile()
     CliffFailureDepth = float_Params["CliffFailureDepth"];
 
     // time control
-    StartTime = int_Params["StartTime"];
-    EndTime = int_Params["EndTime"];
-    TimeStep = int_Params["TimeStep"];
-    PrintInterval = int_Params["PrintInterval"];
+    StartTime = float_Params["StartTime"];
+    EndTime = float_Params["EndTime"];
+    TimeStep = float_Params["TimeStep"];
+    PrintInterval = float_Params["PrintInterval"];
 
     // output files
     Folder = string_Params["Folder"];
