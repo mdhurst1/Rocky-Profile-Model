@@ -109,8 +109,9 @@ int main(int nNumberofArgs,char *argv[])
 	//Time control parameters
 	//Time runs in yrs bp
 	double EndTime = 0;
-	double Time = 9000.;
-	double TimeInterval = 1;
+	double StartTime = 9000.;
+	double Time = StartTime;
+	double TimeInterval = -1;
 
 	//Print Control
 	double PrintInterval = 100;
@@ -122,7 +123,8 @@ int main(int nNumberofArgs,char *argv[])
 	
 	//Sea level rise?
 	double SLR = 0;
-	PlatformModel.InitialiseSeaLevel(SLR);
+	PlatformModel.InitialiseSeaLevel(SLR, StartTime, EndTime, TimeInterval);
+	
 	//Initialise Tides
 	double TidalRange = 1.5;
 	PlatformModel.InitialiseTides(TidalRange);
