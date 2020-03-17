@@ -163,14 +163,6 @@ void RPM::Initialise(double dZ_in, double dX_in, double Gradient, double CliffHe
 	WeatheringConst = 0.005;
 	RockResistance = 0.5;
 
-	//Wave pressure parameters, check these with Hiro at some point
-	StandingWavePressure_Bw = 0.1;
-	BreakingWavePressure_Bw = 0.1;
-	BrokenWavePressure_Bw = 0.1;
-	StandingWavePressure_Dw = 0.1;
-	BreakingWavePressure_Dw = 0.1;
-	BrokenWavePressure_Dw = 0.1;
-
 	//Cliff control params
 	CliffFailureDepth = 1.;
 	MinimumElevation = MinElevation;
@@ -727,7 +719,7 @@ void RPM::CalculateDownwearing()
 		//Breaking Waves
 		else if (Xz[i]<(Xz[BreakingPointZInd]+BreakingWaveDist))
 		{
-			WaveForce = BreakingWaveConst_New[i-MaxTideZInd]*g*rho_w*WaveHeight*ErosionShapeFunction[i-MaxTideZInd]*BreakingWavePressure_Dw*fastexp(-WaveAttenuConst*(Xz[i]-Xz[BreakingPointZInd]));
+			WaveForce = BreakingWaveConst_New[i-MaxTideZInd]*g*rho_w*WaveHeight*ErosionShapeFunction[i-MaxTideZInd]*fastexp(-WaveAttenuConst*(Xz[i]-Xz[BreakingPointZInd]));
 			DepthDecay = -log(SubmarineDecayConst)/(WaveHeight*fastexp(-BreakingWaveDecay*(Xz[i]-Xz[BreakingPointZInd])));
 		}
 		//Broken Waves
@@ -745,7 +737,6 @@ void RPM::CalculateDownwearing()
 		}
 	}
 }
-
 
 void RPM::SupratidalWeathering()
 {
