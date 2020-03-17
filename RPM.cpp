@@ -93,14 +93,6 @@ void RPM::Initialise(double dZ_in, double dX_in)
 	WeatheringConst = 0.005;
 	RockResistance = 0.5;
 
-	//Wave pressure parameters, check these with RPM at some point
-	StandingWavePressure_Bw = 0.1;
-	BreakingWavePressure_Bw = 0.1;
-	BrokenWavePressure_Bw = 0.1;
-	StandingWavePressure_Dw = 0.1;
-	BreakingWavePressure_Dw = 0.1;
-	BrokenWavePressure_Dw = 0.1;
-
 	//Cliff control params
 	CliffHeight = 10.;
 	CliffFailureDepth = 1.;
@@ -170,14 +162,6 @@ void RPM::Initialise(double dZ_in, double dX_in, double Gradient, double CliffHe
 	BrokenWaveDecay = 0.01;
 	WeatheringConst = 0.005;
 	RockResistance = 0.5;
-
-	//Wave pressure parameters, check these with Hiro at some point
-	StandingWavePressure_Bw = 0.1;
-	BreakingWavePressure_Bw = 0.1;
-	BrokenWavePressure_Bw = 0.1;
-	StandingWavePressure_Dw = 0.1;
-	BreakingWavePressure_Dw = 0.1;
-	BrokenWavePressure_Dw = 0.1;
 
 	//Cliff control params
 	CliffFailureDepth = 1.;
@@ -675,7 +659,7 @@ void RPM::CalculateBackwearing()
 			for (int ii=i+PressureDistMinInd; ii<=i+PressureDistMaxInd; ++ii)
 			{
 				// Calculate wave force and update backwear at each elevation
-				WaveForce = StandingWaveConst*WaveHeight*ErosionShapeFunction[i-MaxTideZInd]*StandingWavePressure_Bw;
+				WaveForce = StandingWaveConst*g*rho_w*WaveHeight*ErosionShapeFunction[i-MaxTideZInd];
 				Bw_Erosion[ii] += WaveForce;
 			}
 		}
@@ -691,18 +675,18 @@ void RPM::CalculateBackwearing()
 				//need to add for condition where changes to broken wave above water level in pressure distribution function
 				if (Xz[ii] < Xz[BreakingPointZInd])
 				{
-					WaveForce = StandingWaveConst*WaveHeight*ErosionShapeFunction[i-MaxTideZInd]*StandingWavePressure_Bw;
+					WaveForce = StandingWaveConst*g*rho_w*WaveHeight*ErosionShapeFunction[i-MaxTideZInd];
 
 				}
 				else if (Xz[ii] <= (Xz[BreakingPointZInd]+BreakingWaveDist))
 				{
 					BreakingWaveHeight = WaveHeight*fastexp(-WaveAttenuConst*(Xz[ii]-Xz[BreakingPointZInd]));
-					WaveForce = BreakingWaveConst_New[i-MaxTideZInd]*BreakingWaveHeight*ErosionShapeFunction[i-MaxTideZInd]*BreakingWavePressure_Bw;
+					WaveForce = BreakingWaveConst_New[i-MaxTideZInd]*g*rho_w*BreakingWaveHeight*ErosionShapeFunction[i-MaxTideZInd];
 				}
 				else
 				{
 					BrokenWaveHeight = WaveHeight*fastexp(-WaveAttenuConst*BreakingWaveDist)*fastexp(-WaveAttenuConst*(Xz[ii]-(Xz[BreakingPointZInd]+BreakingWaveDist)));
-					WaveForce = BrokenWaveConst*BrokenWaveHeight*ErosionShapeFunction[i-MaxTideZInd]*BrokenWavePressure_Bw;
+					WaveForce = BrokenWaveConst*g*rho_w*BrokenWaveHeight*ErosionShapeFunction[i-MaxTideZInd];
 				}
 				Bw_Erosion[ii] += WaveForce;
 			}
@@ -729,19 +713,19 @@ void RPM::CalculateDownwearing()
 		//Standing Waves
 		if (Xz[i] < Xz[BreakingPointZInd])
 		{
-			WaveForce = StandingWaveConst*WaveHeight*ErosionShapeFunction[i-MaxTideZInd]*StandingWavePressure_Dw;
+			WaveForce = StandingWaveConst*g*rho_w*WaveHeight*ErosionShapeFunction[i-MaxTideZInd];
 			DepthDecay = -log(SubmarineDecayConst)/WaveHeight;
 		}
 		//Breaking Waves
 		else if (Xz[i]<(Xz[BreakingPointZInd]+BreakingWaveDist))
 		{
-			WaveForce = BreakingWaveConst_New[i-MaxTideZInd]*WaveHeight*ErosionShapeFunction[i-MaxTideZInd]*BreakingWavePressure_Dw*fastexp(-WaveAttenuConst*(Xz[i]-Xz[BreakingPointZInd]));
+			WaveForce = BreakingWaveConst_New[i-MaxTideZInd]*g*rho_w*WaveHeight*ErosionShapeFunction[i-MaxTideZInd]*fastexp(-WaveAttenuConst*(Xz[i]-Xz[BreakingPointZInd]));
 			DepthDecay = -log(SubmarineDecayConst)/(WaveHeight*fastexp(-BreakingWaveDecay*(Xz[i]-Xz[BreakingPointZInd])));
 		}
 		//Broken Waves
 		else
 		{
-			WaveForce = BrokenWaveConst*WaveHeight*fastexp(-WaveAttenuConst*BreakingWaveDist)*ErosionShapeFunction[i-MaxTideZInd]*BrokenWavePressure_Dw*fastexp(-WaveAttenuConst*(Xz[i]-(Xz[BreakingPointZInd]+BreakingWaveDist)));
+			WaveForce = BrokenWaveConst*g*rho_w*WaveHeight*fastexp(-WaveAttenuConst*BreakingWaveDist)*ErosionShapeFunction[i-MaxTideZInd]*fastexp(-WaveAttenuConst*(Xz[i]-(Xz[BreakingPointZInd]+BreakingWaveDist)));
 			DepthDecay = -log(SubmarineDecayConst)/(WaveHeight*fastexp(-BrokenWaveDecay*(Xz[i]-(Xz[BreakingPointZInd]+BreakingWaveDist))));
 		}
 		//Loop from water level down and determine force
@@ -753,7 +737,6 @@ void RPM::CalculateDownwearing()
 		}
 	}
 }
-
 
 void RPM::SupratidalWeathering()
 {

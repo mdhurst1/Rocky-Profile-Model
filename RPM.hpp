@@ -183,10 +183,6 @@ class RPM
 		double MinWeatheringEfficacy;
 		double RockResistance;
 
-		//Wave pressure parameters, check these with Hiro at some point
-		double StandingWavePressure_Bw, BreakingWavePressure_Bw, BrokenWavePressure_Bw;
-		double StandingWavePressure_Dw, BreakingWavePressure_Dw, BrokenWavePressure_Dw;
-
 		//Wave height attenuation constant
 		double WaveAttenuConst;
 

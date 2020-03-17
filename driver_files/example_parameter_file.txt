@@ -25,8 +25,8 @@ BrokenWaveCoef: 0.01
 WaveAttenuationConst: 0.01
 
 # geology
-Resistance: 0.002
-WeatheringRate: 0.0001
+Resistance: 100
+WeatheringRate: 1.
 SubtidalEfficacy: 0.1
 CliffFailureDepth = 0.1
 
