@@ -132,8 +132,8 @@ void SeaLevel::Initialise(double SLR, double StartTime, double EndTime, double T
 	MeanSeaLevels = Empty;
 
 	// check timestep has the correct sign
-	if (StartTime < EndTime) && (TimeStep < 0) TimeStep *= -1;
-	else if (EndTime < StartTime) && (TimeStep > 0) TimeStep *= -1:
+	if ((StartTime < EndTime) && (TimeStep < 0)) TimeStep *= -1;
+	else if ((EndTime < StartTime) && (TimeStep > 0)) TimeStep *= -1;
 	
 	// loop through times and calculate sea level
 	for (int t=0, T=Times.size(); t<T; ++t)

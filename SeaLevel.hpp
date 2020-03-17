@@ -69,7 +69,7 @@ class SeaLevel
 		
 		SeaLevel(double SLR, double StartTime, double EndTime, double TimeStep)
 		{
-			Initialise(SLR);
+			Initialise(SLR, StartTime, EndTime, TimeStep);
 		}
 		
 		SeaLevel(string SeaLevelDataFileIn)
