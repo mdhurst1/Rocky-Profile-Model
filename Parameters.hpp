@@ -46,7 +46,7 @@ class Parameters
 	private:
 
 		// maps for setting default parameters
- 		map<string,int> int_Params;
+ 		// map<string,int> int_Params; there currently aren't any
  		map<string,float> float_Params;
   		map<string,bool> bool_Params;
   		map<string,string> string_Params;
@@ -72,7 +72,7 @@ class Parameters
 				WeatheringRate, SubtidalEfficacy, CliffFailureDepth;
 
 		// time control
-		int StartTime, EndTime, TimeStep, PrintInterval;
+		double StartTime, EndTime, TimeStep, PrintInterval;
 
 		// output files
 		string Folder, Filename, ProjectName;
