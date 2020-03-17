@@ -119,25 +119,30 @@ void SeaLevel::Initialise(string SeaLevelDataFile)
 	}
 }
 
-void SeaLevel::Initialise(double SLR)
+void SeaLevel::Initialise(double SLR, double StartTime, double EndTime, double TimeStep)
 {
 	// Initialising Sea Level at zero and set sea level rise rate
 	MeanSeaLevel = 0;
 	SeaLevelRise = SLR;
-
+	
 	// initialise an empty vector
-	int MaxTime = 10000;
-	vector<double> Empty(MaxTime,0);
+	NTimes = fabs((int)((EndTime-StartTime)/TimeStep));
+	vector<double> Empty(NTimes,0);
 	Times = Empty;
 	MeanSeaLevels = Empty;
+
+	// check timestep has the correct sign
+	if (StartTime < EndTime) && (TimeStep < 0) TimeStep *= -1;
+	else if (EndTime < StartTime) && (TimeStep > 0) TimeStep *= -1:
 	
+	// loop through times and calculate sea level
 	for (int t=0, T=Times.size(); t<T; ++t)
 	{
 		// Calculate the time 
-		Times[t] = MaxTime-t;
+		Times[t] = StartTime+t*TimeStep;
 
 		// sea level as a function of sea level rise rate
-		MeanSeaLevels[t] = MeanSeaLevel + SeaLevelRise*(MaxTime-Times[t]);
+		MeanSeaLevels[t] = MeanSeaLevel + SeaLevelRise*fabs(StartTime-Times[t]);
 	}
 
 	printf("SeaLevel.Initialise: Sea level history created based on a constant rate of sea level change\n");
