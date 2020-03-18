@@ -238,6 +238,9 @@ int main(int nNumberofArgs,char *argv[])
 		
 	}
 	
+	// print parameters used to file
+	Params.WriteToFile();
+	
 	//a few blank lines to finish
 	cout << endl << "Done" << endl << endl;
 
