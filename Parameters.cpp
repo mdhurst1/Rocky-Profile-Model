@@ -249,10 +249,11 @@ void Parameters::ParseValuesFromFile()
     Filename = string_Params["Filename"];
     ProjectName = string_Params["ProjectName"];
     SeaLevelFilename = string_Params["SeaLevelFilename"];
-    ProfileOutFilename = string_Params["ProfileOutFilename"];
-    ConcentrationsOutFilename = string_Params["ConcentrationsOutFilename"];
-    ParameterOutFilename = string_Params["ParameterOutFilename"];
 
+    ProfileOutFilename = ProjectName + "_ShoreProfile.xz";
+	ConcentrationsOutFilename = ProjectName + "_Concentrations.xn";
+    ParamaterOutFilename = ProjectName + ".params";
+    
     // check if reading sea level from file
     if (SeaLevelFilename != "NULL" && SeaLevelFilename != "") ReadSeaLevelFromFile = true;
 }
