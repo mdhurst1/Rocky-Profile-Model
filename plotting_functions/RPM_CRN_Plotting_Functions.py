@@ -28,6 +28,7 @@ def ReadShoreProfile(ProfileName):
 
     #Get header info and setup X coord
     Times = np.zeros(NTimes)
+    SeaLevels = np.zeros(NTimes)
     
     # loop through lines and append X data to array of vectors
     for i, Line in enumerate(Lines[1:]):
@@ -35,13 +36,14 @@ def ReadShoreProfile(ProfileName):
         SplitLine = Line.strip().split(" ")
         
         Times[i] = float(SplitLine[0])
+        SeaLevels[i] = float(SplitLine[1])
 
         if i == 0:
             X = np.array(SplitLine[2:],dtype="float64")
         else:
             X = np.vstack((X,np.array(SplitLine[2:],dtype="float64")))
 
-    return Times, Z, X
+    return Times, SeaLevels, Z, X
 
 def ReadConcentrationData(ConcentrationsName):
         

@@ -140,7 +140,7 @@ class RPM_CRN_Figure:
             self.Axes = [ax0, ax1, ax2, ax3]
 
         # read the profile file
-        Times, Z, X = ReadShoreProfile(ProfileFile)
+        Times, SeaLevels, Z, X = ReadShoreProfile(ProfileFile)
         LastX = X[-1]
 
         # find cliff and normalise
@@ -229,7 +229,7 @@ class RPM_CRN_Figure:
             self.Axes = [ax0]
 
         # read the profile file
-        Times, Z, X = ReadShoreProfile(ProfileFile)
+        Times, SeaLevels, Z, X = ReadShoreProfile(ProfileFile)
         StartTime = Times[0]
         EndTime = Times[-1]
         Time = StartTime
