@@ -207,7 +207,7 @@ class RPM_CRN_Figure:
             self.Axes[0].legend()
             self.Axes[1].legend(LegendLines,LegendLabels)
 
-    def PlotProfileEvolutionFigure(self, ProfileFile, ConcentrationsFile, Symbol="-", TimeInterval=1000.):
+    def PlotProfileEvolutionFigure(self, ProfileFile, Symbol="-", TimeInterval=1000.):
 
         """
         """
@@ -219,9 +219,6 @@ class RPM_CRN_Figure:
         # if axes not created yet add axes as list for subplots and organise labels
         if not self.Axes:
             
-            # set up the gridspec
-            #GridSpec = gridspec.GridSpec(ncols=2, nrows=2, width_ratios=[2, 1], height_ratios=[1,1])
-
             # ax0 for profiles, no x axis, y axis on the left
             ax0 = self.Figure.add_subplot(111) #GridSpec[0,0])
             ax0.set_ylabel("Elevation (m)")
@@ -229,7 +226,6 @@ class RPM_CRN_Figure:
             ax0.spines['right'].set_visible(False)
             ax0.spines['top'].set_visible(False)
             #ax0.spines['bottom'].set_visible(False)
-
             self.Axes = [ax0]
 
         # read the profile file
@@ -237,24 +233,29 @@ class RPM_CRN_Figure:
         StartTime = Times[0]
         EndTime = Times[-1]
         Time = StartTime
+        OldIndex = -9999
 
-        # read the concentrations
-        Times2, dX, Concentrations = ReadConcentrationData(ConcentrationsFile)
-        # populate lines for legend
-        # LegendLines = []
-        # LegendLabels = []
-            
+        if StartTime > EndTime:
+            TimeInterval *= -1
+        
         # set colour map
-        ColourMap = cm.bone_r
+        ColourMap = cm.bone
 
-        while Time <= EndTime:
+        while Time >= 0:
+            
+            print(Time)
             
             # Find time
             Index = np.argmin(np.abs(Time-Times))
+            
+            if Index == OldIndex:
+                break
+            
+            OldIndex = Index
 
             # plot final result on ax0
-            Label = str(Time)
-            Colour = ColourMap(Time/EndTime)
+            Label = str(int(Time)) + " years"
+            Colour = ColourMap(Time/np.max([StartTime,EndTime]))
             self.Axes[0].plot(X[Index], Z, ls=Symbol, color=Colour, label=Label)
             Time += TimeInterval
         
