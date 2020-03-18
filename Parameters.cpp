@@ -279,7 +279,7 @@ void Parameters::WriteToFile()
 
     for (auto it: bool_Params) ParamsOut << "\t" << it.first << ": " << it.second << endl;
     
-    for (auto it: int_Params) ParamsOut << "\t" << it.first << ": " << it.second << endl;
+    //for (auto it: int_Params) ParamsOut << "\t" << it.first << ": " << it.second << endl;
     
     for (auto it: float_Params) ParamsOut << "\t" << it.first << ": " << it.second << endl;
 }
@@ -292,7 +292,7 @@ void Parameters::PrintToScreen()
 
     for (auto it: bool_Params) cout << "\t" << it.first << ": " << it.second << endl;
     
-    for (auto it: int_Params) cout << "\t" << it.first << ": " << it.second << endl;
+    //for (auto it: int_Params) cout << "\t" << it.first << ": " << it.second << endl;
     
     for (auto it: float_Params) cout << "\t" << it.first << ": " << it.second << endl;
 
