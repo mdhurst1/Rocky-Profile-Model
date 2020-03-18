@@ -252,10 +252,13 @@ void Parameters::ParseValuesFromFile()
 
     ProfileOutFilename = ProjectName + "_ShoreProfile.xz";
 	ConcentrationsOutFilename = ProjectName + "_Concentrations.xn";
-    ParamaterOutFilename = ProjectName + ".params";
+    ParameterOutFilename = ProjectName + ".params";
     
     // check if reading sea level from file
     if (SeaLevelFilename != "NULL" && SeaLevelFilename != "") ReadSeaLevelFromFile = true;
+
+    WriteToFile();
+    PrintToScreen();
 }
 
 void Parameters::WriteToFile()
