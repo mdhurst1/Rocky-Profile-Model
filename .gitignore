@@ -10,4 +10,5 @@
 *.png
 *.avi
 *.pyc
+*.params
 core
