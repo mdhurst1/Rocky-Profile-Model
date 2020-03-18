@@ -68,7 +68,7 @@ void Parameters::Initialise()
 
 void Parameters::Initialise(string Folder, string ParameterFilename)
 {
-    printf("\nParameters.Initialise: Initialised parameters from:\n\tfolder: %s\n\tfile: %s\n", 
+    printf("\nParameters.Initialise: Initialised parameters from:\n\tfolder: %s\n\tfile: %s\n\n", 
             Folder.c_str(), ParameterFilename.c_str());
 
     // set filename
@@ -275,55 +275,27 @@ void Parameters::WriteToFile()
     ParamsOut << "# _________________________________________"  << endl;
     ParamsOut << "# Here are the parameters used in your run" << endl;
     
-    for (auto it: bool_Params)
-    {
-        ParamsOut << it.first << ": " << it.second << endl;
-    }
+    for (auto it: string_Params) ParamsOut << "\t" << it.first << ": " << it.second << endl;
 
-    /*
-    temp comment out until tested above
+    for (auto it: bool_Params) ParamsOut << "\t" << it.first << ": " << it.second << endl;
     
-    for (unsigned int i=0; i<int_Params.size(); ++i)
-    {
-        ParamsOut << int_Params[i] << endl;
-    }
-
-    for (unsigned int i=0; i<float_Params.size(); ++i)
-    {
-        ParamsOut << float_Params[i] << endl;
-    }
-    */
+    for (auto it: int_Params) ParamsOut << "\t" << it.first << ": " << it.second << endl;
+    
+    for (auto it: float_Params) ParamsOut << "\t" << it.first << ": " << it.second << endl;
 }
 
 void Parameters::PrintToScreen()
 {
-    cout << "# Here are the parameters used by RPM_CRN:" << endl;
-    cout << "# The folder and file names are: " << endl;
-    cout << "Folder: " << Folder << endl;
-    cout << "ParameterFile: " << Filename << endl;
-    cout << "ProfileOutFilename: " << ProfileOutFilename << endl;
-    cout << "ConcentrationsOutFilename: " << ConcentrationsOutFilename << endl;
-    cout << "# _________________________________________"  << endl;
-    cout << "# Here are the parameters used in your run" << endl;
+    cout << "Parameters: Here are the parameters used by RPM_CRN:" << endl;
     
-    for (auto it: bool_Params)
-    {
-        cout << it.first << ": " << it.second << endl;
-    }
+    for (auto it: string_Params) cout << "\t" << it.first << ": " << it.second << endl;
 
-    /*
-    temp comment
+    for (auto it: bool_Params) cout << "\t" << it.first << ": " << it.second << endl;
+    
+    for (auto it: int_Params) cout << "\t" << it.first << ": " << it.second << endl;
+    
+    for (auto it: float_Params) cout << "\t" << it.first << ": " << it.second << endl;
 
-    for (int i=0; i<int(bool_Params); ++i)
-    {
-        cout << int_Params[i] << endl;
-    }
-
-    for (int i=0; i<int(bool_Params); ++i)
-    {
-        cout << float_Params[i] << endl;
-    }
-    */
 }
 
 #endif
