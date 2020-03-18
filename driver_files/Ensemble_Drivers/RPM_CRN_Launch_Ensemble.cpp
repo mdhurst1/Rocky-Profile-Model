@@ -98,9 +98,9 @@ int main(int nNumberofArgs,char *argv[])
 	
 	//Initialise WeatheringRate   (kg m^2 yr^-1)
 	vector<double> WeatheringRates;
-	WeatheringRates.push_back(0.01);
-	WeatheringRates.push_back(0.1); 
-	WeatheringRates.push_back(0.5);
+	WeatheringRates.push_back(0.1);
+	WeatheringRates.push_back(1.); 
+	WeatheringRates.push_back(10.);
 
 	// sets relative efficacy of subtidal weathering	
 	vector<double> SubtidalEfficacy;
@@ -110,9 +110,9 @@ int main(int nNumberofArgs,char *argv[])
 
 	//Initialise Resistance       (kg m^2 yr^-1)
 	vector<double> Resistances;
-	Resistances.push_back(0.1);
-	Resistances.push_back(1.);
 	Resistances.push_back(10.);
+	Resistances.push_back(100.);
+	Resistances.push_back(1000.);
 
     // Wave height
     vector<double> WaveHeight;
