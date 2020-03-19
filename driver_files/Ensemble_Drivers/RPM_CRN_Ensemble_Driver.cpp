@@ -152,7 +152,7 @@ int main(int nNumberofArgs,char *argv[])
 
 	//Print Control
 	double PrintInterval = 100;
-	double PrintTime = Time-PrintInterval;
+	double PrintTime = Time+PrintInterval;
 	
     //setup the output file                  
     string OutputMorphologyFileName = Folder+Project+"ShoreProfile_G"+tostr(Gradient)
@@ -231,9 +231,8 @@ int main(int nNumberofArgs,char *argv[])
 	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);	
 
 	// print initial condition to file
-	double TempTime = -9999;
-	PlatformModel.WriteProfile(OutputMorphologyFileName, TempTime);			
-	if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
+	PlatformModel.WriteProfile(OutputMorphologyFileName, Time);			
+	if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
 
 	//Loop through time
 	while (Time <= EndTime)
