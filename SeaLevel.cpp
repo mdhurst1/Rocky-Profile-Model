@@ -79,7 +79,7 @@ void SeaLevel::Initialise()
 		// Eccentricity signal
 		MeanSeaLevels[t] += (Eccentricity_Amp/M_PI)*atan(1./tan(M_PI*(Times[t]+Eccentricity_Offset)/Eccentricity_Period));
 	}
-	TimesAscending = true;
+	TimeAscending = true;
 	// break here and check
 	// cout << "SeaLevel.Initialise: Sea Level History Created." << endl;
 }
@@ -164,8 +164,8 @@ double SeaLevel::get_SeaLevel(double Time)
 	while (TimeCondition == 0)
 	{
 		if (Time == Times[ind]) TimeCondition = 1;
-		else if (Time < Times[ind]) && (!TimeAscending) ++ind;
-		else if (Time > Times[ind] && (TimeAscending)) ++ ind;
+		else if ((Time < Times[ind]) && (!TimeAscending)) ++ind;
+		else if ((Time > Times[ind]) && (TimeAscending)) ++ ind;
 		else TimeCondition = 1;
 	}
 	Factor = (Time-Times[ind-1])/(Times[ind]-Times[ind-1]);
