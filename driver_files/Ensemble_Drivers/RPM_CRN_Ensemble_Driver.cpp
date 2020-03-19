@@ -118,7 +118,7 @@ int main(int nNumberofArgs,char *argv[])
 		cout << "-----------------------------------------------------------------------------" << endl;
 		cout << "Then the command line argument will be: " << endl;
 		cout << "In linux:" << endl;
-		cout << "  ./RPM_Driver.out /ProjectFolder/ Waipapa 1 1. 0.001 4. 0.005 0.01 100 1. 0.1" << endl;
+		cout << "  ./RPM_CRN_Ensemble_Driver.out /ProjectFolder/ ProjectName 1 1. 0.001 4. 0.5 0.01 100 1. 0.1" << endl;
 		cout << "-----------------------------------------------------------------------------" << endl;
         cout << endl;
 		exit(EXIT_SUCCESS);
