@@ -118,7 +118,7 @@ int main(int nNumberofArgs,char *argv[])
 		cout << "-----------------------------------------------------------------------------" << endl;
 		cout << "Then the command line argument will be: " << endl;
 		cout << "In linux:" << endl;
-		cout << "  ./RPM_Driver.out /ProjectFolder/ Waipapa 1 1. 0.001 4. 0.005 0.01 100 1. 0.1" << endl;
+		cout << "  ./RPM_CRN_Ensemble_Driver.out /ProjectFolder/ ProjectName 1 1. 0.001 4. 0.5 0.01 100 1. 0.1" << endl;
 		cout << "-----------------------------------------------------------------------------" << endl;
         cout << endl;
 		exit(EXIT_SUCCESS);
@@ -152,7 +152,7 @@ int main(int nNumberofArgs,char *argv[])
 
 	//Print Control
 	double PrintInterval = 100;
-	double PrintTime = Time-PrintInterval;
+	double PrintTime = Time+PrintInterval;
 	
     //setup the output file                  
     string OutputMorphologyFileName = Folder+Project+"ShoreProfile_G"+tostr(Gradient)
@@ -231,9 +231,8 @@ int main(int nNumberofArgs,char *argv[])
 	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);	
 
 	// print initial condition to file
-	double TempTime = -9999;
-	PlatformModel.WriteProfile(OutputMorphologyFileName, TempTime);			
-	if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
+	PlatformModel.WriteProfile(OutputMorphologyFileName, Time);			
+	if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
 
 	//Loop through time
 	while (Time <= EndTime)

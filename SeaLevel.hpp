@@ -50,6 +50,7 @@ class SeaLevel
   		double MeanSeaLevel;
 		double SeaLevelRise;
   		int NTimes;
+		bool TimeAscending;
 
   		vector<double> Times;
   		vector<double> MeanSeaLevels;
