@@ -79,7 +79,7 @@ int main(int nNumberofArgs,char *argv[])
 	// Changing parameters for exploratory iterarions
     //Initial Gradient
 	vector<double> Gradient;
-	Gradient.push_back(0.5);
+	Gradient.push_back(0.175);
 	Gradient.push_back(1.);
 	Gradient.push_back(0);   
 	// 0 Gradient sets horizontal slope of cliff top: inital array of 1's(rock) vertical cliff
@@ -96,11 +96,11 @@ int main(int nNumberofArgs,char *argv[])
 	TidalRanges.push_back(4.);
 	TidalRanges.push_back(8.);
 	
-	//Initialise WeatheringRate   (kg m^2 yr^-1)
+	//Initialise WeatheringRate as a factor of resistance?
 	vector<double> WeatheringRates;
+	WeatheringRates.push_back(0.001);
+	WeatheringRates.push_back(0.01); 
 	WeatheringRates.push_back(0.1);
-	WeatheringRates.push_back(1.); 
-	WeatheringRates.push_back(10.);
 
 	// sets relative efficacy of subtidal weathering	
 	vector<double> SubtidalEfficacy;
