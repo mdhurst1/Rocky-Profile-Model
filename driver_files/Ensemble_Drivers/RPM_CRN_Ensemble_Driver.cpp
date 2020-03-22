@@ -235,7 +235,7 @@ int main(int nNumberofArgs,char *argv[])
 	if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
 
 	//Loop through time
-	while (Time <= EndTime)
+	while (Time < EndTime)
 	{
 		//Update Sea Level
 		InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
@@ -285,6 +285,9 @@ int main(int nNumberofArgs,char *argv[])
 		//update time
 		Time += TimeInterval;
 	}
+
+	// write final condition to file
+	
 
 }
 
