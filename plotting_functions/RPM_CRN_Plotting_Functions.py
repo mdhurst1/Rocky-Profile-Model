@@ -29,6 +29,8 @@ def ReadShoreProfile(ProfileName):
     #Get header info and setup X coord
     Times = np.zeros(NTimes)
     SeaLevels = np.zeros(NTimes)
+
+    X=[]
     
     # loop through lines and append X data to array of vectors
     for i, Line in enumerate(Lines[1:]):
@@ -39,9 +41,9 @@ def ReadShoreProfile(ProfileName):
         SeaLevels[i] = float(SplitLine[1])
 
         if i == 0:
-            X = np.array(SplitLine[2:],dtype="float64")
+            X.append(np.array(SplitLine[2:],dtype="float64"))
         else:
-            X = np.vstack((X,np.array(SplitLine[2:],dtype="float64")))
+            X.append(np.array(SplitLine[2:],dtype="float64"))
 
     return Times, SeaLevels, Z, X
 

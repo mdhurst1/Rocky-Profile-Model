@@ -17,12 +17,12 @@ ResultsFolder = Path(r'C:\Users\Martin Hurst\OneDrive - University of Glasgow\Pr
 PlotsFolder = Path(r'C:\Users\Martin Hurst\OneDrive - University of Glasgow\Projects\RockCoastCosmo\CoupledModelling\Results\Plots')
     
 #set parameter values explored
-Gradients = [0.5, 1, 0]
+Gradients = [0.175, 1, 0]
 SLRs = [-0.001, 0, 0.001]
 TidalRanges = [1, 4, 8]
-WeatheringRates = [0.01, 0.1, 0.5]
+WeatheringRates = [0.001, 0.01, 0.1]
 SubtidalEfficacies = [0.001, 0.01, 0.1]
-Resistances = [0.1, 1, 10]
+Resistances = [10, 100, 1000]
 WaveHeights = [1, 2, 3]
 WaveAttenuationConst = [0.01, 0.1, 1]
 

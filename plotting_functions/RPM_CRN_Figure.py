@@ -142,7 +142,10 @@ class RPM_CRN_Figure:
         # read the profile file
         Times, SeaLevels, Z, X = ReadShoreProfile(ProfileFile)
         LastX = X[-1]
-
+        
+        print(X)
+        print(len(X))
+        
         # find cliff and normalise
         CliffPositions = np.array([mode(EachX[EachX > 1])[0] for EachX in X])
         CliffPositions = np.array([Element for Each in CliffPositions for Element in Each])
