@@ -17,22 +17,22 @@ ResultsFolder = Path(r'C:\Users\Martin Hurst\OneDrive - University of Glasgow\Pr
 PlotsFolder = Path(r'C:\Users\Martin Hurst\OneDrive - University of Glasgow\Projects\RockCoastCosmo\CoupledModelling\Results\Plots')
     
 #set parameter values explored
-Gradients = [0.5, 1, 0]
+Gradients = [0.175, 1, 0]
 SLRs = [-0.001, 0, 0.001]
 TidalRanges = [1, 4, 8]
-WeatheringRates = [0.01, 0.1, 0.5]
+WeatheringRates = [0.001, 0.01, 0.1]
 SubtidalEfficacies = [0.001, 0.01, 0.1]
-Resistances = [0.1, 1, 10]
+Resistances = [10, 100, 1000]
 WaveHeights = [1, 2, 3]
 WaveAttenuationConst = [0.01, 0.1, 1]
 
-for i in range(0,len(SLRs)):
+for i in range(0,len(Gradients)):
     
     # set up a figure
     SLRFigure = RPM_CRN_Figure(FigWidth_Inches=11.)
     
     # makes plots
-    ProfileName = ("EnsembleShoreProfile_G" + str(Gradients[1])
+    ProfileName = ("EnsembleShoreProfile_G" + str(Gradients[i])
                             + "_S_" + str(SLRs[1])
                             + "_T_" + str(TidalRanges[1])
                             + "_W_" + str(WeatheringRates[1])
@@ -45,11 +45,10 @@ for i in range(0,len(SLRs)):
     ConcentrationsName = "EnsembleConcentrations_"+ProfileName.lstrip("EnsembleShoreProfile_").rstrip("xz")+"xn"
     
     # add final results to existing plot
-    SLRFigure.PlotProfileEvolutionFigure(ResultsFolder / ProfileName, 
-                                                      ResultsFolder / ConcentrationsName )
+    SLRFigure.PlotProfileEvolutionFigure(ResultsFolder / ProfileName)
     
     # save results
-    FigureFile = PlotsFolder / "SLR" + str(SLRs[i]) + ".png"
+    FigureFile = PlotsFolder / "Gradients" + str(SLRs[i]) + ".png"
     SLRFigure.SaveFig(FigureFile)
 
 

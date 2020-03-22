@@ -143,13 +143,14 @@ class RPM_CRN_Figure:
         Times, SeaLevels, Z, X = ReadShoreProfile(ProfileFile)
         LastX = X[-1]
         
-        print(X)
-        print(len(X))
-        
         # find cliff and normalise
         CliffPositions = np.array([mode(EachX[EachX > 1])[0] for EachX in X])
         CliffPositions = np.array([Element for Each in CliffPositions for Element in Each])
-        CliffIndices = np.argmin(np.abs(X.T-CliffPositions),axis=0)
+        CliffIndices = [np.argmin(np.abs(ThisX-CliffPosition)) for ThisX, CliffPosition in zip(X,CliffPositions)]
+        
+        # check for condition where initial condition doesnt have a cliff
+        if len(CliffPositions) == len(Times)-1:
+            Times = Times[1:]
         
         LastX -= CliffPositions[-1]
         #self.Axes[0].set_xlim(0, CliffPosition)
@@ -183,10 +184,13 @@ class RPM_CRN_Figure:
             
             # calculate max concentrations
             MaxN = []
+            
             for Time, CliffPosition, N in zip(Times, CliffPositions, Concentrations[key]):
+                #print(Time)
                 XConc = np.arange(0,len(N))*dX
                 CliffIndex = np.argmin(np.abs(XConc-CliffPosition))
                 MaxN.append(np.max(N[0:CliffIndex]))
+                
             self.Axes[3].plot(Times/1000., MaxN, ls=LineStyles[i], color=Colour)
         
         # calculate cliff retreat rates
@@ -244,7 +248,7 @@ class RPM_CRN_Figure:
         # set colour map
         ColourMap = cm.bone
 
-        while Time >= 0:
+        while Time <= EndTime:
             
             print(Time)
             
@@ -270,8 +274,8 @@ class RPM_CRN_Figure:
 
 if __name__ == "__main__":
     Folder = Path(r"C:\Users\Martin Hurst\OneDrive - University of Glasgow\Projects\RockCoastCosmo\CoupledModelling\Results\ModelOutput")
-    ProfileFile = Folder / "EnsembleShoreProfile_G1_S_0_T_4_W_0.1_Ws_0.01_R_1_H_2_A_0.1.xz"
-    ConcentrationsFile = Folder / "EnsembleConcentrations_G1_S_0_T_4_W_0.1_Ws_0.01_R_1_H_2_A_0.1.xn"
+    ProfileFile = Folder / "EnsembleShoreProfile_G1_S_0_T_4_W_0.1_Ws_0.01_R_100_H_2_A_0.1.xz"
+    ConcentrationsFile = Folder / "EnsembleConcentrations_G1_S_0_T_4_W_0.1_Ws_0.01_R_100_H_2_A_0.1.xn"
     FigureFile = Folder / "test.png"
     
     MyFigure = RPM_CRN_Figure(FigWidth_Inches=11.)
