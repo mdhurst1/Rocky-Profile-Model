@@ -12,11 +12,11 @@ LD=g++
 # -O3 is an optimisation flag, not good for debugging
 # -fopenmp is a flag for openmp directives
 # -ffast-math is a flag for optimisation of maths functions e.g. exp()
-CFLAGS= -c -Wall -Werror -Wextra -pedantic -O3 -fopenmp -ffast-math $(INCDIR)
-LDFLAGS= -Wall -O3 -fopenmp -ffast-math
+CFLAGS= -g -c -Wall -Werror -Wextra -pedantic -fopenmp -ffast-math $(INCDIR)
+LDFLAGS= -g -Wall -fopenmp -ffast-math
 
 # SOURCE FILES MACROS IN DEPENDENCY ORDER? SHOULDNT MATTER THANKS TO HEADERS
-SOURCES = ../FastExp.cpp ../RoBoCoP_CRN/RockyCoastCRN.cpp ../SeaLevel.cpp ../RPM.cpp ./RPM_CRN_Driver.cpp
+SOURCES = ../FastExp.cpp ../RoBoCoP_CRN/RockyCoastCRN.cpp ../SeaLevel.cpp ../RPM.cpp ../Parameters.cpp ./RPM_CRN_Driver.cpp
 
 # LIBRARIES MACRO
 LIBS   = -lm -lstdc++ 
@@ -25,7 +25,7 @@ LIBS   = -lm -lstdc++
 OBJECTS=$(SOURCES:.cpp=.o)
 
 # EXECUTABLE MACRO
-EXECUTABLE=RPM.out
+EXECUTABLE=RPM_CRN.out
 
 all: $(SOURCES) $(EXECUTABLE)
 
