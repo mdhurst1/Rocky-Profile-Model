@@ -13,8 +13,7 @@ from pathlib import Path
 from RPM_CRN_Figure import *
 
 # define workspace
-ResultsFolder = Path(r'C:\Users\Martin Hurst\OneDrive - University of Glasgow\Projects\RockCoastCosmo\CoupledModelling\Results\ModelOutput')
-PlotsFolder = Path(r'C:\Users\Martin Hurst\OneDrive - University of Glasgow\Projects\RockCoastCosmo\CoupledModelling\Results\Plots')
+ResultsFolder = Path(r'C:\Users\Martin Hurst\OneDrive - University of Glasgow\Projects\RockCoastCosmo\CoupledModelling\Rocky-Profile-Model\driver_files\Ensemble_Drivers')
     
 #set parameter values explored
 Gradients = [0.175, 1, 0]
@@ -26,30 +25,25 @@ Resistances = [10, 100, 1000]
 WaveHeights = [1, 2, 3]
 WaveAttenuationConst = [0.01, 0.1, 1]
 
-for i in range(0,len(Gradients)):
+Figure = RPM_CRN_Figure(FigWidth_Inches=11.)
     
-    # set up a figure
-    SLRFigure = RPM_CRN_Figure(FigWidth_Inches=11.)
-    
-    # makes plots
-    ProfileName = ("EnsembleShoreProfile_G" + str(Gradients[i])
-                            + "_S_" + str(SLRs[1])
-                            + "_T_" + str(TidalRanges[1])
-                            + "_W_" + str(WeatheringRates[1])
-                            + "_Ws_" + str(SubtidalEfficacies[1])
-                            + "_R_" + str(Resistances[1])
-                            + "_H_" + str(WaveHeights[1])
-                            + "_A_" + str(WaveAttenuationConst[1])
-                            + ".xz")
-    
-    ConcentrationsName = "EnsembleConcentrations_"+ProfileName.lstrip("EnsembleShoreProfile_").rstrip("xz")+"xn"
-    
-    # add final results to existing plot
-    SLRFigure.PlotProfileEvolutionFigure(ResultsFolder / ProfileName)
-    
-    # save results
-    FigureFile = PlotsFolder / "Gradients" + str(SLRs[i]) + ".png"
-    SLRFigure.SaveFig(FigureFile)
+# makes plots
+ProfileName = ("TESTShoreProfile_G" + str(Gradients[0])
+                        + "_S_" + str(SLRs[1])
+                        + "_T_" + str(TidalRanges[1])
+                        + "_W_" + str(WeatheringRates[1])
+                        + "_Ws_" + str(SubtidalEfficacies[1])
+                        + "_R_" + str(Resistances[1])
+                        + "_H_" + str(WaveHeights[1])
+                        + "_A_" + str(WaveAttenuationConst[1])
+                        + ".xz")
+
+# add final results to existing plot
+Figure.PlotProfileEvolutionFigure(ResultsFolder / ProfileName, TimeInterval=1000)
+
+# save results
+FigureFile = (ResultsFolder / ("Profile.png"))
+Figure.SaveFig(FigureFile)
 
 
     

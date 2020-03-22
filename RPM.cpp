@@ -171,9 +171,12 @@ void RPM::Initialise(double dZ_in, double dX_in, double Gradient, double CliffHe
 	dZ = dZ_in;
 	dX = dX_in;
 	InitialGradient = Gradient;
-	NXNodes = 1000;
+	
+	// figure out initial domain size
 	NZNodes = (int)(round((CliffHeight-MinElevation)/dZ)+1);
-
+	if (InitialGradient > 0) NXNodes = NZNodes/InitialGradient;
+	else NXNodes = 1000.;
+	
 	//declare an array of zeros for assignment of Z vector
 	vector<double> TempZ(NZNodes,0);
 	Z = TempZ;
@@ -1096,12 +1099,13 @@ void RPM::UpdateMorphology()
 void RPM::MassFailure()
 {
 	//simple implementation for now, talk to Hiro about this
-	//Cliff position taken from Highest elevation.
+	//Cliff position taken from Highest elevation. <- this could be the problem
 
 	//Find X position of notch and cliff
 	double XMax = 0;
 	int XMaxZInd = 0;
 
+	// find most landward point in intertidal zone
 	for (int i=MinTideZInd+PressureDistMaxInd; i>=MaxTideZInd+PressureDistMinInd; --i)
 	{
 		if (Xz[i] > XMax)
@@ -1111,13 +1115,15 @@ void RPM::MassFailure()
 		}
 	}
 
+	// find most seaward point above this notch
 	double XMin = XMax;
-	for (int i=XMaxZInd;i>0; --i)
+	for (int i=XMaxZInd; i>0; --i)
 	{
 		if (Xz[i] < XMin)
 		{
 			XMin = Xz[i];
 		}
+		else if (Xz[i] > XMax) break;
 	}
 
 
@@ -1134,6 +1140,7 @@ void RPM::MassFailure()
 		}
 	}
 
+	// check rest of the intertidal for overhangs and delete to make steps as appropriate
 	XMax = 0;
 	for (int i=MinTideZInd+PressureDistMaxInd; i>XMaxZInd; --i)
 	{

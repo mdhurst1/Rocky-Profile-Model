@@ -248,6 +248,7 @@ class RPM_CRN_Figure:
         # set colour map
         ColourMap = cm.bone
 
+        print(StartTime)
         while Time <= EndTime:
             
             print(Time)
