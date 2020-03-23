@@ -110,9 +110,9 @@ int main(int nNumberofArgs,char *argv[])
 
 	//Initialise Resistance       (kg m^2 yr^-1)
 	vector<double> Resistances;
-	Resistances.push_back(10.);
+	Resistances.push_back(50.);
 	Resistances.push_back(100.);
-	Resistances.push_back(1000.);
+	Resistances.push_back(1000.);   
 
     // Wave height
     vector<double> WaveHeight;

@@ -109,7 +109,7 @@ int main(int nNumberofArgs,char *argv[])
         cout << " * The initial topographic gradient" << endl;
         cout << " * A rate of sea level rise/fall (positive/negative respectively) (m/yr)" << endl;
         cout << " * The tidal range (m)" << endl;
-        cout << " * The Maximum weathering rate (kg/m2/yr)" << endl;
+        cout << " * The Maximum weathering rate as a fraction of resistance" << endl;
         cout << " * The subtidal weathering efficacy (multiplier)" << endl;
         cout << " * The rock resistance (kg/m2)" << endl;
 		cout << " * The wave height (m)" << endl;
@@ -228,7 +228,7 @@ int main(int nNumberofArgs,char *argv[])
 
 	//reset the geology
 	double CliffFailureDepth = 0.1;
-	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);	
+	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate*Resistance, SubtidalEfficacy);	
 
 	// print initial condition to file
 	PlatformModel.WriteProfile(OutputMorphologyFileName, Time);			
