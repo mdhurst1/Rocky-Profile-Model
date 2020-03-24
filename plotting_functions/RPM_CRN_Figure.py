@@ -248,13 +248,7 @@ class RPM_CRN_Figure:
         # set colour map
         ColourMap = cm.bone
 
-<<<<<<< HEAD
-=======
-        print(StartTime)
->>>>>>> 0dbf16eb1fb6e1aa8bbd3478f6f3269efb5f7e6c
         while Time <= EndTime:
-            
-            print(Time)
             
             # Find time
             Index = np.argmin(np.abs(Time-Times))
