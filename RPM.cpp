@@ -211,12 +211,16 @@ void RPM::Initialise(double dZ_in, double dX_in, double Gradient, double CliffHe
 			for (int j=0;j<NXNodes;++j)
 			{
 				// need an Epsilon on this check?
-				if (X[j] < Xz[i]+0.00001)
+				if (j == NXNodes-1)
+				{
+					Zx[j-1] = Z[i];
+				}
+				else if (X[j] < Xz[i]+0.00001)
 				{
 					MorphologyArray[i][j]=0;
 					ResistanceArray[i][j]=0;
 				}
-				else
+				else 
 				{
 					Zx[j-1] = Z[i];
 					break;
