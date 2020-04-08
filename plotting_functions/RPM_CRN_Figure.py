@@ -1,3 +1,4 @@
+
 # import plotting tools
 from pathlib import Path
 import numpy as np
@@ -15,19 +16,15 @@ class RPM_CRN_Figure:
 
         """
         This function creates a default matplotlib figure object
-
         Args:
             FigSizeFormat: the figure size format according to journal for which the figure is intended
                 values are geomorphology,ESURF, ESPL, EPSL, JGR, big
                 default is ESURF
             
             AspectRatio: The shape of the figure determined by the aspect ratio, default is 16./9.
-
         Returns:
             matplotlib figure object
-
         Author: MDH
-
         """
         self.Figure = None
         self.Axes = None
@@ -38,19 +35,15 @@ class RPM_CRN_Figure:
     
         """
         This function creates a default matplotlib figure object
-
         Args:
             FigSizeFormat: the figure size format according to journal for which the figure is intended
                 values are geomorphology,ESURF, ESPL, EPSL, JGR, big
                 default is ESURF
             
             AspectRatio: The shape of the figure determined by the aspect ratio, default is 16./9.
-
         Returns:
             matplotlib figure object
-
         Author: MDH
-
         """
 
         # set figure sizes (in inches) based on format
@@ -76,13 +69,13 @@ class RPM_CRN_Figure:
             FigWidth_Inches = 4.92126
             
         # Set up fonts for plots
-        rcParams['font.family'] = 'sans-serif'
-        rcParams['font.sans-serif'] = ['arial']
-        rcParams['font.size'] = 10
-        rcParams['text.usetex'] = True
+        #rcParams['font.family'] = 'sans-serif'
+        #rcParams['font.sans-serif'] = ['arial']
+        #rcParams['font.size'] = 10
+        #rcParams['text.usetex'] = True
         
         # customise the colorcycle for plotting
-        rcParams['axes.prop_cycle'] = cycler(color=cm.Dark2.colors)
+        #rcParams['axes.prop_cycle'] = cycler(color=cm.Dark2.colors)
             
         self.Figure = plt.figure(figsize=(FigWidth_Inches,FigWidth_Inches/AspectRatio),facecolor=None)
 
@@ -111,7 +104,7 @@ class RPM_CRN_Figure:
             ax1 = self.Figure.add_subplot(GridSpec[1,0])
             ax1.set_yscale("log")
             ax1.set_xlabel("Distance (m)")
-            ax1.set_ylabel("Concentration (at g${-1}$)")
+            #ax1.set_ylabel("Concentration (at g${-1}$)")
             ax1.spines['right'].set_visible(False)
             ax1.spines['top'].set_visible(False)
 
@@ -123,14 +116,14 @@ class RPM_CRN_Figure:
             ax2.spines['top'].set_visible(False)
             ax2.yaxis.set_ticks_position('right')
             ax2.yaxis.set_label_position('right')
-            ax2.set_ylabel("Cliff Retreat Rate (m yr$^{-1}$)")
+            #ax2.set_ylabel("Cliff Retreat Rate (m yr$^{-1}$)")
             ax2.spines['bottom'].set_visible(False)
             
             # ax3 for time series of maximum concentrations
             ax3 = self.Figure.add_subplot((GridSpec[1,1]))
             ax3.set_yscale("log")
             ax3.set_xlabel("Time (k yrs)")
-            ax3.set_ylabel("Max Intertidal Concentration (at g$^{-1}$)")
+            #ax3.set_ylabel("Max Intertidal Concentration (at g$^{-1}$)")
             ax3.spines['left'].set_visible(False)
             ax3.spines['top'].set_visible(False)
             ax3.yaxis.set_ticks_position('right')
@@ -153,6 +146,7 @@ class RPM_CRN_Figure:
             Times = Times[1:]
         
         LastX -= CliffPositions[-1]
+        
         #self.Axes[0].set_xlim(0, CliffPosition)
 
         # plot final result on ax0
@@ -180,7 +174,7 @@ class RPM_CRN_Figure:
             result = [split for split in re.split('([0-9]+)', key) if split != ""] #lstrip('0123456789')
             Mass = result[0]
             Element = result[1]
-            LegendLabels.append("$^{"+Mass+"}$"+Element)
+           # LegendLabels.append("$^{"+Mass+"}$"+Element)
             
             # calculate max concentrations
             MaxN = []
@@ -194,7 +188,7 @@ class RPM_CRN_Figure:
             self.Axes[3].plot(Times/1000., MaxN, ls=LineStyles[i], color=Colour)
         
         # calculate cliff retreat rates
-        RetreatRates = np.diff(CliffPositions)/np.diff(Times)
+        RetreatRates = np.abs (np.diff(CliffPositions)/np.diff(Times))
         self.Axes[2].plot(Times[1:]/1000,RetreatRates,'-', color=Colour)
         
         # make sure axes line up
@@ -248,13 +242,7 @@ class RPM_CRN_Figure:
         # set colour map
         ColourMap = cm.bone
 
-<<<<<<< HEAD
-=======
-        print(StartTime)
->>>>>>> 0dbf16eb1fb6e1aa8bbd3478f6f3269efb5f7e6c
         while Time <= EndTime:
-            
-            print(Time)
             
             # Find time
             Index = np.argmin(np.abs(Time-Times))
@@ -277,12 +265,15 @@ class RPM_CRN_Figure:
         self.Figure.savefig(Outputfilename)
 
 if __name__ == "__main__":
-    Folder = Path(r"C:\Users\Martin Hurst\OneDrive - University of Glasgow\Projects\RockCoastCosmo\CoupledModelling\Results\ModelOutput")
-    ProfileFile = Folder / "EnsembleShoreProfile_G1_S_0_T_4_W_0.1_Ws_0.01_R_100_H_2_A_0.1.xz"
-    ConcentrationsFile = Folder / "EnsembleConcentrations_G1_S_0_T_4_W_0.1_Ws_0.01_R_100_H_2_A_0.1.xn"
+    Folder = Path(r"C:\Users\lcho823\Desktop\Rocky-Profile-Model\driver_files")
+    ProfileFile = Folder / "TestProject_ShoreProfile.xz"
+    ConcentrationsFile = Folder / "TestProject_Concentrations.xn"
     FigureFile = Folder / "test.png"
     
     MyFigure = RPM_CRN_Figure(FigWidth_Inches=11.)
 
     MyFigure.PlotProfileAndConcentrationFigure(ProfileFile, ConcentrationsFile, Label="test", Legend=True)
-    MyFigure.SaveFig(FigureFile)
+    #MyFigure.SaveFig(FigureFile)
+    
+    
+    

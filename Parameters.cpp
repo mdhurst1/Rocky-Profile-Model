@@ -132,7 +132,7 @@ void Parameters::ParseValuesFromFile()
     string Line, Character, ParameterName, Value;
     string Parameter, value, lower, lower_val;
     string bc;
-    int ValuePosition;
+    int ValuePosition = 0;
     bool GotParameter, GotValue;
     
     // file stream to read contents

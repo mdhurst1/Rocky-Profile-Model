@@ -1,6 +1,5 @@
 # import modules
 import numpy as np
-import sys
 
 def ReadShoreProfile(ProfileName):
 
@@ -119,5 +118,4 @@ def ReadConcentrationData(ConcentrationsName):
         ConcentrationsDict["26Al"] = N26
     
     return Times, dX, ConcentrationsDict
-
-    
+	
