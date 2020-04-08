@@ -5,16 +5,16 @@ Folder: /home/mhurst/RPM_CRN/
 ProjectName: TestProject
 
 # Cosmogenic Isotopes
-CRN_Predictions: false
+CRN_Predictions: true
 Berylium: true
 Carbon: false
 Aluminium: false
 
 # Hydrodynamics
-SeaLevelFilename: NULL
-SeaLevelRise: 0.001
-TidalRange: 2.
-TidalPeriod: 12.42
+SeaLevelFilename: TestProjectNZ_RSL.data
+#SeaLevelRise: NULL
+TidalRange: 1.5
+TidalPeriod: 12.25
 WaveHeight_Mean: 2.
 WaveHeight_StD: 0.
 WavePeriod_Mean: 6. 
@@ -25,13 +25,13 @@ BrokenWaveCoef: 0.01
 WaveAttenuationConst: 0.01
 
 # geology
-Resistance: 100
-WeatheringRate: 1.
-SubtidalEfficacy: 0.1
+Resistance: 0.7
+WeatheringRate: 0.1
+SubtidalEfficacy: 0.001
 CliffFailureDepth = 0.1
 
 # time control
 StartTime: 8000
 EndTime: 0
 TimeStep: 1
-PrintInterval: 100
+PrintInterval: 10

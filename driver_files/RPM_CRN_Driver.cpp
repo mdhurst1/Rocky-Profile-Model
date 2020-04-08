@@ -111,6 +111,7 @@ int main(int nNumberofArgs,char *argv[])
 	string TempParamFilename = argv[2];
 	string InputParamFilename = Folder+TempParamFilename;
 	
+	
 	// load parameter parser object
   	Parameters Params(Folder,InputParamFilename);
 
@@ -146,6 +147,7 @@ int main(int nNumberofArgs,char *argv[])
 	SeaLevel RelativeSeaLevel;
 	if (Params.ReadSeaLevelFromFile) RelativeSeaLevel = SeaLevel(Params.SeaLevelFilename);
 	else RelativeSeaLevel = SeaLevel(Params.SeaLevelRise, Params.StartTime, Params.EndTime, Params.TimeStep);
+	
 	
 	// Get initial sea level
 	float InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);

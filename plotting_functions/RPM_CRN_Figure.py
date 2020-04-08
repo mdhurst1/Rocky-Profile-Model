@@ -245,13 +245,16 @@ class RPM_CRN_Figure:
         if StartTime > EndTime:
             TimeInterval *= -1
         
-        print(Time)
-        print(EndTime)
-        
         # set colour map
         ColourMap = cm.bone
 
-        while Time != EndTime:
+<<<<<<< HEAD
+=======
+        print(StartTime)
+>>>>>>> 0dbf16eb1fb6e1aa8bbd3478f6f3269efb5f7e6c
+        while Time <= EndTime:
+            
+            print(Time)
             
             # Find time
             Index = np.argmin(np.abs(Time-Times))
@@ -274,12 +277,12 @@ class RPM_CRN_Figure:
         self.Figure.savefig(Outputfilename)
 
 if __name__ == "__main__":
-    Folder = Path(r"C:\Users\Martin Hurst\OneDrive - University of Glasgow\Projects\RockCoastCosmo\CoupledModelling\Rocky-Profile-Model\driver_files")
-    ProfileFile = Folder / "TestProject_ShoreProfile.xz"
-    ConcentrationsFile = Folder / "TestProject_Concentrations.xn"
+    Folder = Path(r"C:\Users\Martin Hurst\OneDrive - University of Glasgow\Projects\RockCoastCosmo\CoupledModelling\Results\ModelOutput")
+    ProfileFile = Folder / "EnsembleShoreProfile_G1_S_0_T_4_W_0.1_Ws_0.01_R_100_H_2_A_0.1.xz"
+    ConcentrationsFile = Folder / "EnsembleConcentrations_G1_S_0_T_4_W_0.1_Ws_0.01_R_100_H_2_A_0.1.xn"
     FigureFile = Folder / "test.png"
     
     MyFigure = RPM_CRN_Figure(FigWidth_Inches=11.)
 
-    MyFigure.PlotProfileEvolutionFigure(ProfileFile)
+    MyFigure.PlotProfileAndConcentrationFigure(ProfileFile, ConcentrationsFile, Label="test", Legend=True)
     MyFigure.SaveFig(FigureFile)
