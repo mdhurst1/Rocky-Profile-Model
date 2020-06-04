@@ -8,21 +8,24 @@ environment
 
 method,
 	 bayes_calibration queso 
-     delayed_rejection
-	 proposal_covariance prior                          
-     chain_samples = 500 seed = 348
+     metropolis_hastings
+     proposal_covariance
+     diagonal values 0.001 0.01 0.01
+     scaling
+
+     #multiplier 0.00001                         
+     chain_samples = 1000 seed = 348
 	 #burn_in_samples = 100
 	 chain_diagnostics confidence_intervals
 	 export_chain_points_file  'posterior.dat'
-	 logit_transform
 	 output debug
 
 variables,
-	 normal_uncertain = 3
-	 #lower_bounds  0.005 -8 -5
-     #upper_bounds  -0.9 -1 -1
-	 means -1.15 -2.9 -4.9
-	 std_deviations 0.2 0.2 0.2
+	 uniform_uncertain = 3
+	 lower_bounds  -2 -10 -8
+     upper_bounds  -0.9 -1 0
+	 #means -1.2 -2 -2
+	 #std_deviations 10 10 10
 	 descriptor "FR" "K" "Y"
 
 
@@ -31,7 +34,7 @@ interface,
 	  asynchronous
 	  evaluation_concurrency 1
 
-	  failure_capture recover 99999999
+	  failure_capture recover 999999 999999
 	  
 	  parameters_file = "params.in"
 	  results_file    = "results.out"
@@ -48,7 +51,10 @@ interface,
       file_save
 
 responses,
-	num_response_functions = 1
-    response_descriptors "rmse"  #/likelihood
+	calibration_terms = 2
+    response_descriptors "rmse" "CRNrmse"
+    primary_scale_types = "value" "value"
+    primary_scales = 0.28 932
+    weights = 0.5 0.5
 	no_gradients
 	no_hessians
