@@ -125,7 +125,7 @@ int main(int nNumberofArgs,char *argv[])
 	int PrintTime = Time-Params.PrintInterval;
 	
 	//initialise RPM Model
-	RPM PlatformModel = RPM(dZ, dX, Params.InitialGradient, Params.CliffHeight, Params.MinElevation);
+	RPM PlatformModel = RPM(dZ, dX, Params.InitialGradient, Params.CliffElevation, Params.MaxElevation, Params.MinElevation);
 	
 	//initialise RockyCoastCRN friend object
 	RockyCoastCRN PlatformCRN;
@@ -170,7 +170,7 @@ int main(int nNumberofArgs,char *argv[])
 										Params.BrokenWaveCoef, Params.WaveAttenuationConst);
 
 	//reset the geology
-	PlatformModel.InitialiseGeology(Params.CliffHeight, Params.CliffFailureDepth, Params.Resistance, 
+	PlatformModel.InitialiseGeology(Params.CliffElevation, Params.CliffFailureDepth, Params.Resistance, 
 									Params.WeatheringRate, Params.SubtidalEfficacy);	
 
 	// print initial condition to file

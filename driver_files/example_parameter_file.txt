@@ -25,10 +25,15 @@ BrokenWaveCoef: 0.01
 WaveAttenuationConst: 0.01
 
 # geology
-Resistance: 0.7
+Resistance: 100.
 WeatheringRate: 0.1
 SubtidalEfficacy: 0.001
-CliffFailureDepth = 0.1
+CliffFailureDepth: 0.1
+CliffElevation: 30
+
+# space domain
+MinElevation: -20
+MaxElevation: 10
 
 # time control
 StartTime: 8000

@@ -159,7 +159,8 @@ int main(int nNumberofArgs,char *argv[])
     //initialisation parameters
 	double dZ = 0.1;
 	double dX = 0.1;
-	double CliffHeight = 15.;
+	double CliffElevation = 15.;
+	double MaxElevation = 15.;
 	double MinElevation = -15.;
 
 	//Time control parameters
@@ -195,7 +196,7 @@ int main(int nNumberofArgs,char *argv[])
 	 }
 
     //initialise RPM Model
-	RPM PlatformModel = RPM(dZ, dX, Gradient, CliffHeight, MinElevation);
+	RPM PlatformModel = RPM(dZ, dX, Gradient, CliffElevation, MaxElevation, MinElevation);
 
     // Initialise sea level
 	PlatformModel.UpdateSeaLevel(InstantSeaLevel);
@@ -235,7 +236,7 @@ int main(int nNumberofArgs,char *argv[])
 
 	//reset the geology
 	double CliffFailureDepth = 0.1;
-	PlatformModel.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);
+	PlatformModel.InitialiseGeology(CliffElevation, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);
 
     // print initial condition to file - this is for testing - remove
 	//double TempTime = -9999;

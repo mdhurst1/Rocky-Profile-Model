@@ -191,8 +191,9 @@ class RPM
 		double DepthDecay;
 		double CliffWeatheringRate;
 		double CliffFailureDepth;
-		double CliffHeight;
-		double MinimumElevation;
+		double CliffElevation;
+		double MaxElevation;
+		double MinElevation;
 
 		//This will need to be populated in the initialise tides function
 		vector<double> WeatheringEfficacy;
@@ -212,7 +213,7 @@ class RPM
 		//Initialise Functions
 		void Initialise();
 		void Initialise(double dZ, double dX);
-		void Initialise(double dZ_in, double dX_in, double Gradient, double CliffHeight, double MinElevation);
+		void Initialise(double dZ_in, double dX_in, double Gradient, double CliffElevation, double MaxElevation, double MinElevation);
 
 	protected:
 
@@ -233,14 +234,14 @@ class RPM
 			Initialise(dZ, dX);
 		}
 
-		RPM(double dZ, double dX, double Gradient, double CliffHeight, double MinElevation)
+		RPM(double dZ, double dX, double Gradient, double CliffElevation, double MaxElevation, double MinElevation)
 		{
-			Initialise(dZ, dX, Gradient, CliffHeight, MinElevation);
+			Initialise(dZ, dX, Gradient, CliffElevation, MaxElevation, MinElevation);
 		}
 
 		void ResetModel()
 		{
-			Initialise(dZ,dX, InitialGradient, CliffHeight, MinimumElevation);
+			Initialise(dZ,dX, InitialGradient, CliffElevation, MaxElevation, MinElevation);
 		}
 
 		//Initialise Tides
@@ -262,7 +263,7 @@ class RPM
 		void GetWave();
 
 		// Function to modify the geological parameters
-		void InitialiseGeology(double CliffHeightNew, double CliffFailureDepthNew, double RockResistanceNew, double WeatheringConstNew, double SubtidalEfficacy);
+		void InitialiseGeology(double CliffElevationNew, double CliffFailureDepthNew, double RockResistanceNew, double WeatheringConstNew, double SubtidalEfficacy);
 
 		// Function to initialise weathering shape function
 		void InitialiseWeathering();

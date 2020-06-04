@@ -105,10 +105,11 @@ void Parameters::SetDefaultValues()
 
 	// geology
 	float_Params["InitialGradient"] = 1.;
-	float_Params["CliffHeight"] = 15.;
+	float_Params["CliffElevation"] = 15.;
+    float_Params["MaxElevation"] = 15.;
 	float_Params["MinElevation"] = -15.;
-	float_Params["Resistance"] = 0.002;
-	float_Params["WeatheringRate"] = 0.0001;
+	float_Params["Resistance"] = 20.;
+	float_Params["WeatheringRate"] = 0.1;
 	float_Params["SubtidalEfficacy"] = 0.1;
 	float_Params["CliffFailureDepth"] = 0.1;
 
@@ -231,7 +232,8 @@ void Parameters::ParseValuesFromFile()
 
     // geology
     InitialGradient = float_Params["InitialGradient"];
-    CliffHeight = float_Params["CliffHeight"];
+    CliffElevation = float_Params["CliffElevation"];
+    MaxElevation = float_Params["MaxElevation"];
     MinElevation = float_Params["MinElevation"];
     Resistance = float_Params["Resistance"];
     WeatheringRate = float_Params["WeatheringRate"];

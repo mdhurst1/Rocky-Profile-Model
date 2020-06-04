@@ -68,7 +68,7 @@ class Parameters
 		float SeaLevelRise, TidalRange, TidalPeriod, WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD, StandingWaveCoef, BreakingWaveCoef, BrokenWaveCoef, WaveAttenuationConst;
 
 		// geology
-		float InitialGradient, CliffHeight, MinElevation, Resistance, 
+		float InitialGradient, CliffElevation, MaxElevation, MinElevation, Resistance, 
 				WeatheringRate, SubtidalEfficacy, CliffFailureDepth;
 
 		// time control

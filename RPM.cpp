@@ -94,14 +94,16 @@ void RPM::Initialise(double dZ_in, double dX_in)
 	RockResistance = 0.5;
 
 	//Cliff control params
-	CliffHeight = 10.;
+	CliffElevation = 10.;
+	MaxElevation = CliffElevation;
+	MinElevation = -CliffElevation;
 	CliffFailureDepth = 1.;
 
 	//Declare spatial stuff
 	dZ = dZ_in;
 	dX = dX_in;
 	NXNodes = 1000;
-	NZNodes = (int)(round(2.*CliffHeight/dZ)+1);
+	NZNodes = (int)(round(2.*CliffElevation/dZ)+1);
 
 	//declare an array of zeros for assignment of Z vector
 	Z = vector<double>(NZNodes,0.0);
@@ -143,7 +145,7 @@ void RPM::Initialise(double dZ_in, double dX_in)
 }
 
 
-void RPM::Initialise(double dZ_in, double dX_in, double Gradient, double CliffHeight, double MinElevation)
+void RPM::Initialise(double dZ_in, double dX_in, double Gradient, double CliffElevation, double MaxElevation, double MinElevation)
 {
 	/* initialise a sloping cliff RPM object */
 	printf("\nRPM.Initialise: Initialised a RPM as a slope\n");
@@ -165,7 +167,14 @@ void RPM::Initialise(double dZ_in, double dX_in, double Gradient, double CliffHe
 
 	//Cliff control params
 	CliffFailureDepth = 1.;
-	MinimumElevation = MinElevation;
+	CliffElevation = CliffElevation;
+	MaxElevation = MaxElevation;
+	MinElevation = MinElevation;
+
+	if (MaxElevation < CliffElevation)
+	{
+		 printf("\n\tWarning: MaxElevation is less than the CliffElevation\n");
+	}
 
 	//Declare spatial stuff
 	dZ = dZ_in;
@@ -173,14 +182,14 @@ void RPM::Initialise(double dZ_in, double dX_in, double Gradient, double CliffHe
 	InitialGradient = Gradient;
 	
 	// figure out initial domain size
-	NZNodes = (int)(round((CliffHeight-MinElevation)/dZ)+1);
+	NZNodes = (int)(round((MaxElevation-MinElevation)/dZ)+1);
 	if (InitialGradient > 0) NXNodes = NZNodes/InitialGradient;
 	else NXNodes = 1000.;
 	
 	//declare an array of zeros for assignment of Z vector
 	vector<double> TempZ(NZNodes,0);
 	Z = TempZ;
-	for (int i=0; i<NZNodes; ++i)   Z[i] = CliffHeight-i*dZ;
+	for (int i=0; i<NZNodes; ++i)   Z[i] = MaxElevation-i*dZ;
 
 	//declare arrays of zeros to initalise various other vectors
 	vector<double> ZZeros(NZNodes,0);
@@ -307,12 +316,12 @@ void RPM::InitialiseTides(double TideRange)
 }
 
 
-void RPM::InitialiseGeology(double CliffHeightNew, double CliffFailureDepthNew, double RockResistanceNew, double WeatheringConstNew, double SubtidalEfficacy)
+void RPM::InitialiseGeology(double CliffElevationNew, double CliffFailureDepthNew, double RockResistanceNew, double WeatheringConstNew, double SubtidalEfficacy)
 {
 	/* Function to set the cliff height, failure depth, rock resistance and
 		weathering rate constant */
 
-	CliffHeight = CliffHeightNew;
+	CliffElevation = CliffElevationNew;
 	CliffFailureDepth = CliffFailureDepthNew;
 	RockResistance = RockResistanceNew;
 	WeatheringConst = WeatheringConstNew;
@@ -1246,7 +1255,7 @@ void RPM::WriteProfile(string OutputFileName, double Time, bool Print2Screen)
 	if (FileExists == 0 || Time < 0)
 	{
 		WriteCoastFile.open(OutputFileName.c_str());
-		if (WriteCoastFile.is_open()) WriteCoastFile << CliffHeight << " " << MinimumElevation << " " << dZ << endl;
+		if (WriteCoastFile.is_open()) WriteCoastFile << MaxElevation << " " << MinElevation << " " << dZ << endl;
 	}
 	WriteCoastFile.close();
 
