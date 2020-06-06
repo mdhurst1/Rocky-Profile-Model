@@ -10,10 +10,8 @@ method,
 	 bayes_calibration queso 
      metropolis_hastings
      proposal_covariance
-     diagonal values 0.001 0.01 0.01
-     scaling
-
-     #multiplier 0.00001                         
+     diagonal values 0.01 0.01 0.01
+     scaling                         
      chain_samples = 1000 seed = 348
 	 #burn_in_samples = 100
 	 chain_diagnostics confidence_intervals
@@ -22,10 +20,8 @@ method,
 
 variables,
 	 uniform_uncertain = 3
-	 lower_bounds  -2 -10 -8
-     upper_bounds  -0.9 -1 0
-	 #means -1.2 -2 -2
-	 #std_deviations 10 10 10
+	 lower_bounds  1 -7 -5
+     upper_bounds  2.1 2 3
 	 descriptor "FR" "K" "Y"
 
 
@@ -34,7 +30,7 @@ interface,
 	  asynchronous
 	  evaluation_concurrency 1
 
-	  failure_capture recover 999999 999999
+	  failure_capture recover 999999 #999999
 	  
 	  parameters_file = "params.in"
 	  results_file    = "results.out"
@@ -51,10 +47,10 @@ interface,
       file_save
 
 responses,
-	calibration_terms = 2
-    response_descriptors "rmse" "CRNrmse"
-    primary_scale_types = "value" "value"
-    primary_scales = 0.28 932
-    weights = 0.5 0.5
+	calibration_terms = 1
+    response_descriptors "rmse" #"CRNrmse"
+    primary_scale_types = "value" #"value"
+    primary_scales = 0.28 #932
+    #weights = 0.5 0.5
 	no_gradients
 	no_hessians
