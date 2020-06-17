@@ -145,7 +145,7 @@ void RPM::Initialise(double dZ_in, double dX_in)
 }
 
 
-void RPM::Initialise(double dZ_in, double dX_in, double Gradient, double CliffElevation, double MaxElevation, double MinElevation)
+void RPM::Initialise(double dZ_in, double dX_in, double Gradient, double CliffsElevation, double MaximumElevation, double MinimumElevation)
 {
 	/* initialise a sloping cliff RPM object */
 	printf("\nRPM.Initialise: Initialised a RPM as a slope\n");
@@ -167,9 +167,9 @@ void RPM::Initialise(double dZ_in, double dX_in, double Gradient, double CliffEl
 
 	//Cliff control params
 	CliffFailureDepth = 1.;
-	CliffElevation = CliffElevation;
-	MaxElevation = MaxElevation;
-	MinElevation = MinElevation;
+	CliffElevation = CliffsElevation;
+	MaxElevation = MaximumElevation;
+	MinElevation = MinimumElevation;
 
 	if (MaxElevation < CliffElevation)
 	{

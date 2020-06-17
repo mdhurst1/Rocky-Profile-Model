@@ -234,9 +234,9 @@ class RPM
 			Initialise(dZ, dX);
 		}
 
-		RPM(double dZ, double dX, double Gradient, double CliffElevation, double MaxElevation, double MinElevation)
+		RPM(double dZ, double dX, double Gradient, double CliffsElevation, double MaximumElevation, double MinimumElevation)
 		{
-			Initialise(dZ, dX, Gradient, CliffElevation, MaxElevation, MinElevation);
+			Initialise(dZ, dX, Gradient, CliffsElevation, MaximumElevation, MinimumElevation);
 		}
 
 		void ResetModel()
