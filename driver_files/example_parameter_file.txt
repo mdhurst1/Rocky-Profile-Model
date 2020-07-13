@@ -11,11 +11,11 @@ Carbon: false
 Aluminium: false
 
 # Hydrodynamics
-SeaLevelFilename: TestProjectNZ_RSL.data
-#SeaLevelRise: NULL
+SeaLevelFilename: NULL
+SeaLevelRise: 0.001
 TidalRange: 1.5
 TidalPeriod: 12.25
-WaveHeight_Mean: 2.
+WaveHeight_Mean: 1.
 WaveHeight_StD: 0.
 WavePeriod_Mean: 6. 
 WavePeriod_StD: 0.
@@ -26,7 +26,7 @@ WaveAttenuationConst: 0.01
 
 # geology
 Resistance: 10.
-WeatheringRate: 0.1
+WeatheringRate: 1.
 SubtidalEfficacy: 0.001
 CliffFailureDepth: 0.1
 CliffElevation: 30

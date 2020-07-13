@@ -52,7 +52,7 @@ def make_plot(FileName,ColourMap):
     # Only plot every so many years
     StartTime = 10000
     PlotTime = StartTime
-    PlotInterval = -1000
+    PlotInterval = -100
     EndTime = 0
     
     ax1 = plt.subplot(111)
@@ -103,7 +103,7 @@ def make_plot(FileName,ColourMap):
     plt.savefig('dakota_test.png',dpi=300)
 
 if __name__ == "__main__":
-    FileName = "../driver_files/Dakota_Drivers/Wave_Test_4" # /Users/jennyshadrick/RPM_JRS
+    FileName = "../driver_files/TestProject"
     ColourMap = cm.RdBu
     make_plot(FileName,ColourMap)
         
