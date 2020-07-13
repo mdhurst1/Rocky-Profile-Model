@@ -1,7 +1,7 @@
 from RPM_CRN_Run import *
 
-Folder = "../../RPM_CRN_test/"
-Project = "RPM_CRN"
+Folder = "../driver_files/"
+Project = "TestProject"
 ThisRun = RPM_CRN_Run(Folder,Project)
 #ThisRun.PlotProfiles(1000.)
 ThisRun.PlotCRNConcentrations()

@@ -102,14 +102,14 @@ class RPM_CRN_Figure:
             # ax0 for profiles, no x axis, y axis on the left
             ax0 = self.Figure.add_subplot(GridSpec[0,0])
             ax0.set_ylabel("Elevation (m)")
-            ax0.xaxis.set_visible(False)
+            #ax0.xaxis.set_visible(False)
             ax0.spines['right'].set_visible(False)
             ax0.spines['top'].set_visible(False)
-            ax0.spines['bottom'].set_visible(False)
+            #ax0.spines['bottom'].set_visible(False)
 
             # ax1 for concentrations, y axis on the right
             ax1 = self.Figure.add_subplot(GridSpec[1,0])
-            ax1.set_yscale("log")
+            #ax1.set_yscale("log")
             ax1.set_xlabel("Distance (m)")
             ax1.set_ylabel("Concentration (at g${-1}$)")
             ax1.spines['right'].set_visible(False)
@@ -172,6 +172,7 @@ class RPM_CRN_Figure:
         for i, key in enumerate(Concentrations.keys()):
             
             N = Concentrations[key][-1]
+            print(len(N))
             XConc = np.arange(0,len(N))*dX
             CliffIndex = np.argmin(np.abs(XConc-CliffPositions[-1]))
             XConc -= XConc[CliffIndex]
@@ -241,6 +242,8 @@ class RPM_CRN_Figure:
         EndTime = Times[-1]
         Time = StartTime
         OldIndex = -9999
+        
+        print(StartTime, EndTime)
 
         if StartTime > EndTime:
             TimeInterval *= -1
@@ -248,11 +251,7 @@ class RPM_CRN_Figure:
         # set colour map
         ColourMap = cm.bone
 
-<<<<<<< HEAD
-=======
-        print(StartTime)
->>>>>>> 0dbf16eb1fb6e1aa8bbd3478f6f3269efb5f7e6c
-        while Time <= EndTime:
+        while Time >= EndTime:
             
             print(Time)
             
@@ -277,12 +276,14 @@ class RPM_CRN_Figure:
         self.Figure.savefig(Outputfilename)
 
 if __name__ == "__main__":
-    Folder = Path(r"C:\Users\Martin Hurst\OneDrive - University of Glasgow\Projects\RockCoastCosmo\CoupledModelling\Results\ModelOutput")
-    ProfileFile = Folder / "EnsembleShoreProfile_G1_S_0_T_4_W_0.1_Ws_0.01_R_100_H_2_A_0.1.xz"
-    ConcentrationsFile = Folder / "EnsembleConcentrations_G1_S_0_T_4_W_0.1_Ws_0.01_R_100_H_2_A_0.1.xn"
+    Folder = Path("../driver_files/")
+    Project = "TestProject"
+    ProfileFile = Folder / (Project+"_ShoreProfile.xz")
+    ConcentrationsFile = Folder / (Project+"_Concentrations.xn")
     FigureFile = Folder / "test.png"
-    
-    MyFigure = RPM_CRN_Figure(FigWidth_Inches=11.)
 
+    EvolutionFigure = RPM_CRN_Figure()
+    EvolutionFigure.PlotProfileEvolutionFigure(ProfileFile)    
+    MyFigure = RPM_CRN_Figure(FigWidth_Inches=11.)
     MyFigure.PlotProfileAndConcentrationFigure(ProfileFile, ConcentrationsFile, Label="test", Legend=True)
     MyFigure.SaveFig(FigureFile)

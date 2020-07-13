@@ -91,7 +91,7 @@ void Parameters::SetDefaultValues()
 	bool_Params["Aluminium"] = true;
 	
 	// Hydrodynamics
-	float_Params["SeaLevelRise"] = 0.001;
+	float_Params["SeaLevelRise"] = 0.;
 	float_Params["TidalRange"] = 2.;
     float_Params["TidalPeriod"] = 12.42;
 	float_Params["WaveHeight_Mean"] = 2.;
