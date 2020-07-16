@@ -72,6 +72,8 @@
 #include <cstdlib>
 #include <unistd.h>
 #include <algorithm>
+#include <stdio.h>
+#include <time.h>
 #include "../../RPM.hpp"
 #include "../../RoBoCoP_CRN/RockyCoastCRN.hpp"
 #include "../../SeaLevel.hpp"
@@ -89,6 +91,13 @@ template <typename T> string tostr(const T& t)
 
 int main(int nNumberofArgs,char *argv[])
 {
+
+	//clock 
+	time_t begin, end;
+	time(&begin);
+	
+	
+
 	cout << endl;
 	cout << "----------------------------------------------------------------------------------" << endl;
 	cout << "|  Rocky Profile Model (RPM)                                                     |" << endl;
@@ -239,9 +248,9 @@ int main(int nNumberofArgs,char *argv[])
 	PlatformModel.InitialiseGeology(CliffElevation, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);
 
     // print initial condition to file - this is for testing - remove
-	//double TempTime = -9999;
-    //PlatformModel.WriteProfile(OutputFileName, TempTime);			
-	//if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
+	double TempTime = -9999;
+    PlatformModel.WriteProfile(OutputFileName, TempTime);			
+	if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
 
     //Loop through time
 	while (Time >= EndTime)
@@ -288,8 +297,8 @@ int main(int nNumberofArgs,char *argv[])
 		{
 			cout.flush();
 			cout << "RPM: Time " << setprecision(2) << fixed << Time << " years\r";
-			//PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
-            //if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
+			PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
+            		if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
 			PrintTime -= PrintInterval;
 		}
 
@@ -493,9 +502,9 @@ int main(int nNumberofArgs,char *argv[])
 	}
 
    
-   cout << " Total residuals Topo = " << TotalResiduals << endl;
+   //cout << " Total residuals Topo = " << TotalResiduals << endl;
    //cout << " TotalNResiduals = " << TotalNResiduals << endl;
-   cout << " Likelihood = " << scientific << Likelihood << endl;
+   //cout << " Likelihood = " << scientific << Likelihood << endl;
    
 
    ///////////////////////////////////////                                
@@ -580,8 +589,8 @@ int main(int nNumberofArgs,char *argv[])
     
    //cout << " MaxCRN = " << setprecision(10) << MaxCRN << endl;
    //cout << " MinCRN = " << setprecision(10) << MinCRN << endl;
-   cout << " Total Residuals CRN = " << TotalResidualsCRN << endl;
-   cout << " TotalNResidualsCRN = " << TotalNResidualsCRN << endl;
+   //cout << " Total Residuals CRN = " << TotalResidualsCRN << endl;
+   //cout << " TotalNResidualsCRN = " << TotalNResidualsCRN << endl;
 
     ////////////////////////////////////
     //                                //
@@ -599,9 +608,9 @@ int main(int nNumberofArgs,char *argv[])
    //double WeightedRMSE;
    //double RMSE_N;
    //double CRN_RMSE_N;
-   long double Neg_Log_Likelihood = 1.L;
+   //long double Neg_Log_Likelihood = 1.L;
    //long double Neg_Log_LikelihoodCRN = 1.L;
-   long double Neg_Log_Likelihood_N = 1.L;
+   //long double Neg_Log_Likelihood_N = 1.L;
    //long double Neg_Log_LikelihoodCRN_N = 1.L;
 
    //RMSE calculations 
@@ -617,18 +626,18 @@ int main(int nNumberofArgs,char *argv[])
 
    //negative log likelihood
    //if normalised correct, take -ve log of normalised likelihood
-   Neg_Log_Likelihood = -log(Likelihood);
+   //Neg_Log_Likelihood = -log(Likelihood);
    //Neg_Log_LikelihoodCRN = -log(LikelihoodCRN);
 
    //normalised negative log likelihood 
-   Neg_Log_Likelihood_N = Neg_Log_Likelihood/TidalRange;
+   //Neg_Log_Likelihood_N = Neg_Log_Likelihood/TidalRange;
    //Neg_Log_LikelihoodCRN_N = Neg_Log_LikelihoodCRN/MaxCRNCB;
 
 
-   //cout << " RMSE = " << RMSE << endl;
+   cout << " RMSE = " << RMSE << endl;
    cout << " CRN RMSE = " << CRN_RMSE << endl;
-   cout << " -ve log likelihood = " << scientific << Neg_Log_Likelihood << endl;
-   cout << " Normalised -log likelihood = " << scientific << Neg_Log_Likelihood_N << endl;
+   //cout << " -ve log likelihood = " << scientific << Neg_Log_Likelihood << endl;
+   //cout << " Normalised -log likelihood = " << scientific << Neg_Log_Likelihood_N << endl;
 
    //if (isinf(Neg_Log_Likelihood))
 	 //  {
@@ -663,6 +672,12 @@ int main(int nNumberofArgs,char *argv[])
 
 
 	outfile.close();
+
+	//clock end 
+	time(&end);
+	time_t elapsed = end - begin;
+
+	printf("Time measured: %ld seconds.\n", elapsed);
 
 	cout << endl << "Done!" << endl << endl;
 
