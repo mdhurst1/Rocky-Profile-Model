@@ -10,9 +10,9 @@ method,
 	 bayes_calibration queso 
      metropolis_hastings
      proposal_covariance
-     diagonal values 0.05 0.05 0.05
+     diagonal values 0.1 0.5 0.05
      scaling                         
-     chain_samples = 500 seed = 348
+     chain_samples = 100 seed = 348
 	 #burn_in_samples = 100
 	 chain_diagnostics confidence_intervals
 	 export_chain_points_file  'posterior.dat'
@@ -20,8 +20,8 @@ method,
 
 variables,
 	 uniform_uncertain = 3
-	 lower_bounds  1 -5 -3
-     upper_bounds  2 2 0
+	 lower_bounds  0 -7 -2
+     upper_bounds  3 -1 -0.8
 	 descriptor "FR" "K" "Y"
 
 
@@ -50,7 +50,7 @@ responses,
 	calibration_terms = 2
     response_descriptors "rmse" "CRNrmse"
     primary_scale_types = "value" "value"
-    primary_scales = 0.28 932
+    primary_scales = 0.58 932
     weights = 0.5 0.5
 	no_gradients
 	no_hessians
