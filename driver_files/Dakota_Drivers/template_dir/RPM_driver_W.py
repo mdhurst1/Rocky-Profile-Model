@@ -25,6 +25,9 @@ TidalRange = 8
 SubtidalEfficacy = 0.005
 #WaveAttenuationConst = 0.01
 
+#set folder location 
+Folder = "/home/jrs17/Rocky-Profile-Model/driver_files/"
+
 #########################################
 #                                       #
 #    Step 1: Use Dakota created         #
@@ -52,8 +55,11 @@ with open(inputs, "r") as f:
     WaveAttenuationConst = params["WaveAttenuationConst"]
   
 # set up command to run model 
+
+Launchstr = "../RPM_dakota.exe "+ Folder+'Dakota_Drivers/' +" "+ sys.argv[2] +" "+ Folder+'Data/Swath_Profile_SY.txt' +" "+ Folder+'Data/SY_CRN.data' +" 1 "+ str(Gradient) +" "+str(TidalRange) +" "+ str(SubtidalEfficacy) +" "+ str(WaveAttenuationConst) +" "+ str(Resistance) +" "+ str(WeatheringRate) 
   
-Launchstr = "../RPM_dakota.exe /home/jrs17/Rocky-Profile-Model/driver_files/Dakota_Drivers/ "+ sys.argv[2] +" /home/jrs17/Rocky-Profile-Model/driver_files/Data/CB_profile.txt /home/jrs17/Rocky-Profile-Model/driver_files/Data/CB_CRN.data 1 "+ str(Gradient) +" "+ str(TidalRange) +" "+ str(SubtidalEfficacy) +" "+ str(WaveAttenuationConst) +" "+ str(Resistance) +" "+ str(WeatheringRate)
+#Launchstr = "../RPM_dakota.exe /home/jrs17/Rocky-Profile-Model/driver_files/Dakota_Drivers/ "+ sys.argv[2] +" /home/jrs17/Rocky-Profile-Model/driver_files/Data/CB_profile.txt /home/jrs17/Rocky-Profile-Model/driver_files/Data/CB_CRN.data 1 "+ str(Gradient) +" "+ str(TidalRange) +" "+ str(SubtidalEfficacy) +" "+ str(WaveAttenuationConst) +" "+ str(Resistance) +" "+ str(WeatheringRate)
+  
 subprocess.call(Launchstr,shell=True)
 print(Launchstr) 
 

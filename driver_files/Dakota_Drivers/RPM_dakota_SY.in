@@ -50,7 +50,7 @@ responses,
 	calibration_terms = 2
     response_descriptors "rmse" "CRNrmse"
     primary_scale_types = "value" "value"
-    primary_scales = 0.58 932
+    primary_scales = 0.73 455
     weights = 0.5 0.5
 	no_gradients
 	no_hessians
