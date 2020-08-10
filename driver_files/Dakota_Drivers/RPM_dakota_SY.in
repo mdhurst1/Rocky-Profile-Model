@@ -10,9 +10,9 @@ method,
 	 bayes_calibration queso 
      metropolis_hastings
      proposal_covariance
-     diagonal values 0.1 0.5 0.1
+     diagonal values 0.5 2 0.5
      scaling                         
-     chain_samples = 500 seed = 348
+     chain_samples = 10000 seed = 348
 	 #burn_in_samples = 100
 	 chain_diagnostics confidence_intervals
 	 export_chain_points_file  'posterior.dat'
@@ -20,7 +20,7 @@ method,
 
 variables,
 	 uniform_uncertain = 3
-	 lower_bounds  1 -7 -2
+	 lower_bounds  1 -5 -1
      upper_bounds  3 -1 -0.8
 	 descriptor "FR" "K" "Y"
 
@@ -37,7 +37,7 @@ interface,
 	
 	  copy_files "template_dir/*"
 
-	  analysis_driver = "python ./RPM_driver_W.py"
+	  analysis_driver = "python ./RPM_driver_SY.py"
 
 
       work_directory
