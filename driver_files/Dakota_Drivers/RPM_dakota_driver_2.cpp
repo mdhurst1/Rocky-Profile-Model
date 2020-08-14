@@ -138,24 +138,26 @@ int main(int nNumberofArgs,char *argv[])
     // read parameters from command line arguments
 	string Folder = argv[1];
 	char* DakotaFilename = argv[2];
-    char* ProfileDatafile = argv[3];
-    char* CRNDatafile = argv[4];
+    	char* ProfileDatafile = argv[3];
+    	char* CRNDatafile = argv[4];
 	int CRNFlag = atoi(argv[5]);
 	double Gradient = atof(argv[6]);
 	double TidalRange = atof(argv[7]);
-    double SubtidalEfficacy = atof(argv[8]);
+    	double SubtidalEfficacy = atof(argv[8]);
 
 	//Free parameters
-
-    //double WaveAttenuationConst = (atof(argv[9]));
+	//double WaveAttenuationConst = (atof(argv[9]));
 	double WaveAttenuationConst = pow(10,(atof(argv[9])));
 
-    double Resistance = pow(10,(atof(argv[10])));          //dakota varies FR on log scale
+    	double Resistance = pow(10,(atof(argv[10])));          //dakota varies FR on log scale
 	//double Resistance = atof(argv[10]);
 
         double WeatheringRate = Resistance * pow(5,(atof(argv[11])));      //dakota varies K proportional to FR 0 - 0.5 range 
 	//double WeatheringRate = pow(10,(atof(argv[11]))); 
 	//double WeatheringRate = atof(argv[11]);
+
+        //Added RSL file as arguement 
+	//char* RelativeSeaLevelFile = argv[12];   //"CB_RSL.data";
 
 	cout << "Resistance = " << Resistance << endl;
 	cout << "WeatheringRate = " << WeatheringRate << endl;

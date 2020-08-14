@@ -4,7 +4,7 @@
 
 environment
      tabular_data
-     tabular_data_file "RPM_dakota_w.dat"
+     tabular_data_file "RPM_dakota_SY_3.dat"
 
 method,
 	 bayes_calibration queso 

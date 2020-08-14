@@ -26,7 +26,7 @@ SubtidalEfficacy = 0.005
 #WaveAttenuationConst = 0.01
 
 #set folder location 
-Folder = "/home/jrs17/Rocky-Profile-Model/driver_files/"
+Folder = "/home/jrs17/Main_RPM/Rocky-Profile-Model/driver_files/"
 
 #########################################
 #                                       #
@@ -57,6 +57,8 @@ with open(inputs, "r") as f:
 # set up command to run model 
 
 Launchstr = "../RPM_dakota.exe "+ Folder+'Dakota_Drivers/' +" "+ sys.argv[2] +" "+ Folder+'Data/CB_profile.txt' +" "+ Folder+'Data/CB_CRN.data' +" 1 "+ str(Gradient) +" "+str(TidalRange) +" "+ str(SubtidalEfficacy) +" "+ str(WaveAttenuationConst) +" "+ str(Resistance) +" "+ str(WeatheringRate) 
+
+#+" "+ Folder+'Data/CB_RSL.data'
   
 #Launchstr = "../RPM_dakota.exe /home/jrs17/Rocky-Profile-Model/driver_files/Dakota_Drivers/ "+ sys.argv[2] +" /home/jrs17/Rocky-Profile-Model/driver_files/Data/CB_profile.txt /home/jrs17/Rocky-Profile-Model/driver_files/Data/CB_CRN.data 1 "+ str(Gradient) +" "+ str(TidalRange) +" "+ str(SubtidalEfficacy) +" "+ str(WaveAttenuationConst) +" "+ str(Resistance) +" "+ str(WeatheringRate)
   

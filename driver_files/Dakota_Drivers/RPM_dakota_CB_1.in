@@ -4,7 +4,7 @@
 
 environment
      tabular_data
-     tabular_data_file "RPM_dakota_w.dat"
+     tabular_data_file "RPM_dakota_CB_1.dat"
 
 method,
 	 bayes_calibration queso 
@@ -37,7 +37,7 @@ interface,
 	
 	  copy_files "template_dir/*"
 
-	  analysis_driver = "python ./RPM_driver_W.py"
+	  analysis_driver = "python ./RPM_driver_CB.py"
 
 
       work_directory
