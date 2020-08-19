@@ -1,0 +1,10 @@
+#PBS -l walltime=72:00:00
+#PBS -l select=1:ncpus=4:mem=6gb
+ompthreads=4
+
+module load anaconda3/personal
+module load gcc
+module load dakota
+
+cd $PBS_O_WORKDIR
+dakota -i RPM_dakota_SY_2.in -r -o RPM_dakota_SY_2.out 
