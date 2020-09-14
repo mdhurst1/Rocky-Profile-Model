@@ -10,7 +10,7 @@ method,
 	 bayes_calibration queso 
      metropolis_hastings
      proposal_covariance
-     diagonal values 0.5 2 0.5
+     diagonal values 0.1 0.1 0.1
      scaling                         
      chain_samples = 10000 seed = 348
 	 #burn_in_samples = 100

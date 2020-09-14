@@ -4,13 +4,13 @@
 
 environment
      tabular_data
-     tabular_data_file "RPM_dakota_SY_3.dat"
+     tabular_data_file "RPM_dakota_CB_1.dat"
 
 method,
 	 bayes_calibration queso 
      metropolis_hastings
      proposal_covariance
-     diagonal values 0.5 0.5 0.5
+     diagonal values 0.1 0.1 0.1
      scaling                         
      chain_samples = 10000 seed = 348
 	 #burn_in_samples = 100
@@ -37,7 +37,7 @@ interface,
 	
 	  copy_files "template_dir/*"
 
-	  analysis_driver = "python ./RPM_driver_SY.py"
+	  analysis_driver = "python ./RPM_driver_CB.py"
 
 
       work_directory
@@ -50,7 +50,7 @@ responses,
 	calibration_terms = 2
     response_descriptors "rmse" "CRNrmse"
     primary_scale_types = "value" "value"
-    primary_scales = 0.73 455
-    weights = 0.75 0.25
+    primary_scales = 0.58 932
+    weights = 0.95 0.05
 	no_gradients
 	no_hessians

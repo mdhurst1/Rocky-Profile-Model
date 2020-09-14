@@ -4,7 +4,7 @@
 
 environment
      tabular_data
-     tabular_data_file "RPM_dakota_SY_3.dat"
+     tabular_data_file "RPM_dakota_SY_2.dat"
 
 method,
 	 bayes_calibration queso 
@@ -51,6 +51,6 @@ responses,
     response_descriptors "rmse" "CRNrmse"
     primary_scale_types = "value" "value"
     primary_scales = 0.73 455
-    weights = 0.75 0.25
+    weights = 0.05 0.95
 	no_gradients
 	no_hessians

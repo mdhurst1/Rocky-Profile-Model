@@ -10,7 +10,7 @@ method,
 	 bayes_calibration queso 
      metropolis_hastings
      proposal_covariance
-     diagonal values 0.5 2 0.5
+     diagonal values 0.5 0.5 0.5
      scaling                         
      chain_samples = 10000 seed = 348
 	 #burn_in_samples = 100
@@ -20,7 +20,7 @@ method,
 
 variables,
 	 uniform_uncertain = 3
-	 lower_bounds  1 -5 -1
+	 lower_bounds  1 -5 -2
      upper_bounds  3 -1 -0.8
 	 descriptor "FR" "K" "Y"
 

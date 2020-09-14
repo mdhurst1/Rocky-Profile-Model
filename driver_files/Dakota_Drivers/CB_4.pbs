@@ -7,4 +7,4 @@ module load gcc
 module load dakota/6.11
 
 cd $PBS_O_WORKDIR
-dakota -i RPM_dakota_CB_3.in -o RPM_dakota_CB_3.out 
+dakota -i RPM_dakota_CB_4.in -o RPM_dakota_CB_4.out 
