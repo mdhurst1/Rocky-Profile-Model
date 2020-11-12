@@ -192,7 +192,7 @@ int main(int nNumberofArgs,char *argv[])
 
     // initialise sea level here and calculate MinElevation based on lowest sea level
 	// Initialise Sea level from datafile
-	string RelativeSeaLevelFile = "CB_RSL.data";
+	string RelativeSeaLevelFile = "SY_RSL.data";
 	SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
 	
 	// Get initial sea level
@@ -250,9 +250,9 @@ int main(int nNumberofArgs,char *argv[])
 	PlatformModel.InitialiseGeology(CliffElevation, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);
 
     // print initial condition to file - this is for testing - remove
-	//double TempTime = -9999;
-    //PlatformModel.WriteProfile(OutputFileName, TempTime);			
-	//if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
+	double TempTime = -9999;
+    PlatformModel.WriteProfile(OutputFileName, TempTime);			
+	if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
 
     //Loop through time
 	while (Time >= EndTime)
@@ -299,8 +299,8 @@ int main(int nNumberofArgs,char *argv[])
 		{
 			cout.flush();
 			cout << "RPM: Time " << setprecision(2) << fixed << Time << " years\r";
-			//PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
-            		//if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
+			PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
+            		if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
 			PrintTime -= PrintInterval;
 		}
 
@@ -573,8 +573,8 @@ int main(int nNumberofArgs,char *argv[])
    //Calculate CRN Likelihood
    for (int i=0; i<NData; i++)
    {
-	   LResidualsCRN[i] = pow(CRNConcData[i]-NModel[i],2);
-	   LikelihoodCRN *= exp(-(fabs(ResidualsCRN[i]))/(CRNConcErrorData[i]*CRNConcErrorData[i]));
+	   LResidualsCRN[i] = (CRNConcData[i]-NModel[i])*(CRNConcData[i]-NModel[i]);
+	   LikelihoodCRN *= fastexp(-(fabs(LResidualsCRN[i]))/(CRNConcErrorData[i]*CRNConcErrorData[i]));
 
    }
 
@@ -604,6 +604,7 @@ int main(int nNumberofArgs,char *argv[])
    ofstream outfile;
    outfile.open(DakotaFilename);
 
+  
    //Weightings - eqaul to 1
    //double TopoWeighting = 0.5;
    //double CRNWeighting = 0.5;
@@ -638,6 +639,9 @@ int main(int nNumberofArgs,char *argv[])
 
    cout << " RMSE = " << RMSE << endl;
    cout << " CRN RMSE = " << CRN_RMSE << endl;
+   cout << " NDATA = " << NData << endl;
+
+
    //cout << " -ve log likelihood = " << scientific << Neg_Log_Likelihood << endl;
    //cout << " Normalised -log likelihood = " << scientific << Neg_Log_Likelihood_N << endl;
 
@@ -646,7 +650,13 @@ int main(int nNumberofArgs,char *argv[])
 		//   FailFlag = true;
 	   //}
    
-   //Check outfile is open
+   //Declare likelihood oututfile
+   //char* Likelihoodfile = Likelihood.txt;
+
+   //outfile.open("Likelihood.txt", std::ios_base::app);  //appends to file instead of overwrite
+   //outfile << RMSE << endl << CRN_RMSE << endl;
+
+   //Check dakota outfile is open
 
 	if (outfile)
 	{
@@ -674,6 +684,27 @@ int main(int nNumberofArgs,char *argv[])
 
 
 	outfile.close();
+
+	//Declare likelihood oututfile
+        //char* Likelihoodfile = Likelihood.txt;
+        //ofstream osLikelihood;
+        //osLikelihood.open("Likelihood.txt", std::ios_base::app);  //appends to file instead of overwrite
+        //osLikelihood << RMSE << " " << CRN_RMSE << endl;
+	//osLikelihood.close();
+        
+        ofstream myfile;
+        myfile.open("/home/jrs17/Main_RPM/Rocky-Profile-Model/driver_files/Dakota_Drivers/Likelihood.txt",std::ios_base::app);
+	myfile << Likelihood << " " << LikelihoodCRN << endl;
+        myfile.close();
+
+        //const char *path="/home/user/file.txt";
+        //ofstream myfile ("/home/jrs17/Main_RPM/Rocky-Profile-Model/driver_files/Dakota_Drivers/Likelihood.txt");
+        //if (myfile.is_open(),std::ios_base::app)
+        //{
+        //  myfile << RMSE << " " << CRN_RMSE << endl;
+         // myfile.close();
+        // }
+        //else cout << "Unable to open file";
 
 	//clock end 
 	time(&end);
