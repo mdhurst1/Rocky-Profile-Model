@@ -192,7 +192,7 @@ int main(int nNumberofArgs,char *argv[])
 
     // initialise sea level here and calculate MinElevation based on lowest sea level
 	// Initialise Sea level from datafile
-	string RelativeSeaLevelFile = "SY_RSL.data";
+	string RelativeSeaLevelFile = "CB_RSL.data";
 	SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
 	
 	// Get initial sea level
@@ -328,7 +328,7 @@ int main(int nNumberofArgs,char *argv[])
     //Vectors to hold extracted profile data
     int NProfileData;
     vector<double> ProfileXData;
-    vector<double> ProfileZData;
+    vector<long double> ProfileZData;
 
     //Vectors to hold CRN concentration data
     int NData;
@@ -384,8 +384,6 @@ int main(int nNumberofArgs,char *argv[])
    float TempXData, TempCRNConcData, TempCRNConcErrorData;
   
    //Generate input filestream and read data into vectors
-
-   
 	ifstream ReadCRNDataFile(CRNDatafile);
 	if (!ReadCRNDataFile)
 	{
@@ -420,7 +418,7 @@ int main(int nNumberofArgs,char *argv[])
 
    //declarations
    vector<double> XPos(NProfileData);
-   vector<double> TopoData(NProfileData);
+   vector<long double> TopoData(NProfileData);
    double DiffX;
    double RMSE;
    double Scale;
@@ -453,61 +451,36 @@ int main(int nNumberofArgs,char *argv[])
    }
 
    //Calculate Residuals and likelihood
-   //Fail flag for inf numbers (topo profile)
-   //Calculating max and min Residual for topo data 
-   //Declarations for normalised residuals 
-
-   
+   //Fail flag for inf numbers (topo profile) 
    double TotalResiduals = 0;
-   double TotalNResiduals = 0;
-   vector<double> Residuals(NProfileData); 
-   vector<double> NResiduals(NProfileData);
-   vector<double> LResiduals(NProfileData);
-   long double Likelihood = 1.L;
-   //double ZStd = 1;
-   //double MaxTopo = Residuals[0];
-   //double MinTopo = Residuals[0];
+   vector<double> Residuals(NProfileData);
+   //vector<long double> LResiduals(NProfileData);
+   //long double Likelihood = 1.L;
+   //double ZStd = 8;
    
+   //likelihood calculations - commented out, used to test
+   //for (int i=0; i<NProfileData; ++i)
+   //{
+    ////Residuals calc for Likelihood
+    //LResiduals[i] = (ProfileZData[i]-TopoData[i])*(ProfileZData[i]-TopoData[i]);
+    //Likelihood *= fastexp(-(fabs(LResiduals[i]))/(ZStd*ZStd)); 
+   //}
+	//return Likelihood;
 
-   //standardise topo residuals
+   //calculate topo residuals
    for (int i=0; i<NProfileData; ++i)
    {
        Residuals[i] = fabs(ProfileZData[i]-TopoData[i]);
-	   TotalResiduals += pow(ProfileZData[i]-TopoData[i],2);
+       TotalResiduals += pow(ProfileZData[i]-TopoData[i],2);
 	   
 	   //Fail Flag
 	   if (isinf(TotalResiduals))
 	   {
 		   FailFlag = true;
 		   break;
-	   }
-	   //MinTopo = *min_element(begin(Residuals), end(Residuals));
-	   //MaxTopo = *max_element(begin(Residuals), end(Residuals));  
+	   }   
     }
 	
-	for (int i=0; i<NProfileData; ++i)
-	{
-		//Residuals calc for Likelihood
-	   LResiduals[i] = (ProfileZData[i]-TopoData[i])*(ProfileZData[i]-TopoData[i]);
-	   Likelihood *= fastexp(-(fabs(LResiduals[i])));    ///(ZStd*ZStd)); 
-	}
-	//return Likelihood;
-
-	for (int i=0; i<NProfileData; ++i)
-	{
-	   //Feature scaling - min-max normalisation (distribution between 0 and 1)
-	   //NResiduals[i] = (Residuals[i]-MinTopo)/(MaxTopo-MinTopo);
-
-	   //normalise topo to tidalrange 
-	   NResiduals[i] = (Residuals[i]/TidalRange);	   
-	   TotalNResiduals += pow(NResiduals[i],2);
-	}
-
-   
-   //cout << " Total residuals Topo = " << TotalResiduals << endl;
-   //cout << " TotalNResiduals = " << TotalNResiduals << endl;
-   //cout << " Likelihood = " << scientific << Likelihood << endl;
-   
 
    ///////////////////////////////////////                                
    //                                   //
@@ -520,7 +493,11 @@ int main(int nNumberofArgs,char *argv[])
    vector<double> NModel(NData);
    double ScaleCRN, DiffCRNX;
    double CRN_RMSE;
-   //long double LikelihoodCRN = 1.L;  
+   //long double LikelihoodCRN = 1.L; 
+   vector<double> ResidualsCRN(NData); 
+   //vector<double> LResidualsCRN(NData);
+   //long double LikelihoodCRN = 1.L;
+   double TotalResidualsCRN = 0; 
 
 
    //Interpolate to sample locations
@@ -539,21 +516,8 @@ int main(int nNumberofArgs,char *argv[])
         NModel[i] = CRNConcModel[j]-ScaleCRN*(CRNConcModel[j]-CRNConcModel[j-1]);
 	}
 	
-	//Calculate likelihood
-    //double TotalResidualsCRN = 0;
-	vector<double> ResidualsCRN(NData); 
-	//double MaxCRN = ResidualsCRN[0];
-	//double MinCRN = ResidualsCRN[0];
-    //Declarations for normalised Residuals 
-    vector<double> NResidualsCRN(NData);
-	vector<double> LResidualsCRN(NData);
-	long double LikelihoodCRN = 1.L;
-    double TotalNResidualsCRN = 0;
-	double TotalResidualsCRN = 0;
-	double MaxCRNCB = 16162;
 
-
-	//Standardise CRN residuals
+	//calculate CRN residuals
 	for (int i=0; i<NData; ++i)
    {
        ResidualsCRN[i] = fabs(CRNConcData[i]-NModel[i]);
@@ -566,34 +530,17 @@ int main(int nNumberofArgs,char *argv[])
 		   break;
 	   }
 
-	   //MinCRN = *min_element(begin(ResidualsCRN), end(ResidualsCRN));
-	   //MaxCRN = *max_element(begin(ResidualsCRN), end(ResidualsCRN)); 
+	   
    }
 
-   //Calculate CRN Likelihood
-   for (int i=0; i<NData; i++)
-   {
-	   LResidualsCRN[i] = (CRNConcData[i]-NModel[i])*(CRNConcData[i]-NModel[i]);
-	   LikelihoodCRN *= fastexp(-(fabs(LResidualsCRN[i]))/(CRNConcErrorData[i]*CRNConcErrorData[i]));
+   //Calculate CRN Likelihood - commented out, used to test
+   //for (int i=0; i<NData; i++)
+   //{
+	   //LResidualsCRN[i] = (CRNConcData[i]-NModel[i])*(CRNConcData[i]-NModel[i]);
+	   //LikelihoodCRN *= fastexp(-(fabs(LResidualsCRN[i]))/((CRNConcErrorData[i]*CRNConcErrorData[i])*5));
 
-   }
-
-   for (int i=0; i<NData; ++i)
-   { 
-	   //Feature scaling - min-max normalisation (distribution between 0 and 1)
-	   //NResidualsCRN[i] = (ResidualsCRN[i]-MinCRN)/(MaxCRN-MinCRN);
-
-	   //Normalise CRN to max measured CRN conc
-	   NResidualsCRN[i] = (ResidualsCRN[i]/MaxCRNCB);
-	   TotalNResidualsCRN += pow(NResidualsCRN[i],2);    
-   }
+   //}
 	
-    
-   //cout << " MaxCRN = " << setprecision(10) << MaxCRN << endl;
-   //cout << " MinCRN = " << setprecision(10) << MinCRN << endl;
-   //cout << " Total Residuals CRN = " << TotalResidualsCRN << endl;
-   //cout << " TotalNResidualsCRN = " << TotalNResidualsCRN << endl;
-
     ////////////////////////////////////
     //                                //
     //Write results to file for dakota//
@@ -604,57 +551,15 @@ int main(int nNumberofArgs,char *argv[])
    ofstream outfile;
    outfile.open(DakotaFilename);
 
-  
-   //Weightings - eqaul to 1
-   //double TopoWeighting = 0.5;
-   //double CRNWeighting = 0.5;
-   //double WeightedRMSE;
-   //double RMSE_N;
-   //double CRN_RMSE_N;
-   //long double Neg_Log_Likelihood = 1.L;
-   //long double Neg_Log_LikelihoodCRN = 1.L;
-   //long double Neg_Log_Likelihood_N = 1.L;
-   //long double Neg_Log_LikelihoodCRN_N = 1.L;
-
    //RMSE calculations 
-
    RMSE = sqrt(TotalResiduals/NProfileData);
    CRN_RMSE = sqrt(TotalResidualsCRN/NData);
-
-   //Normalise RMSE
-   //RMSE_N = RMSE/TidalRange;  // min-max rather than tidal range?
-   //CRN_RMSE_N = CRN_RMSE/MaxCRNCB;
-
-   //WeightedRMSE = (RMSE_N*TopoWeighting)+(CRN_RMSE_N*CRNWeighting);
-
-   //negative log likelihood
-   //if normalised correct, take -ve log of normalised likelihood
-   //Neg_Log_Likelihood = -log(Likelihood);
-   //Neg_Log_LikelihoodCRN = -log(LikelihoodCRN);
-
-   //normalised negative log likelihood 
-   //Neg_Log_Likelihood_N = Neg_Log_Likelihood/TidalRange;
-   //Neg_Log_LikelihoodCRN_N = Neg_Log_LikelihoodCRN/MaxCRNCB;
 
 
    cout << " RMSE = " << RMSE << endl;
    cout << " CRN RMSE = " << CRN_RMSE << endl;
    cout << " NDATA = " << NData << endl;
 
-
-   //cout << " -ve log likelihood = " << scientific << Neg_Log_Likelihood << endl;
-   //cout << " Normalised -log likelihood = " << scientific << Neg_Log_Likelihood_N << endl;
-
-   //if (isinf(Neg_Log_Likelihood))
-	 //  {
-		//   FailFlag = true;
-	   //}
-   
-   //Declare likelihood oututfile
-   //char* Likelihoodfile = Likelihood.txt;
-
-   //outfile.open("Likelihood.txt", std::ios_base::app);  //appends to file instead of overwrite
-   //outfile << RMSE << endl << CRN_RMSE << endl;
 
    //Check dakota outfile is open
 
@@ -685,26 +590,6 @@ int main(int nNumberofArgs,char *argv[])
 
 	outfile.close();
 
-	//Declare likelihood oututfile
-        //char* Likelihoodfile = Likelihood.txt;
-        //ofstream osLikelihood;
-        //osLikelihood.open("Likelihood.txt", std::ios_base::app);  //appends to file instead of overwrite
-        //osLikelihood << RMSE << " " << CRN_RMSE << endl;
-	//osLikelihood.close();
-        
-        ofstream myfile;
-        myfile.open("/home/jrs17/Main_RPM/Rocky-Profile-Model/driver_files/Dakota_Drivers/Likelihood.txt",std::ios_base::app);
-	myfile << Likelihood << " " << LikelihoodCRN << endl;
-        myfile.close();
-
-        //const char *path="/home/user/file.txt";
-        //ofstream myfile ("/home/jrs17/Main_RPM/Rocky-Profile-Model/driver_files/Dakota_Drivers/Likelihood.txt");
-        //if (myfile.is_open(),std::ios_base::app)
-        //{
-        //  myfile << RMSE << " " << CRN_RMSE << endl;
-         // myfile.close();
-        // }
-        //else cout << "Unable to open file";
 
 	//clock end 
 	time(&end);
