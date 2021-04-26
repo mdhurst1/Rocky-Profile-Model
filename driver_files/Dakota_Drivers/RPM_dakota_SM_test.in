@@ -1,0 +1,56 @@
+#  DAKOTA INPUT FILE - RPM_test.in
+#  Usage:
+#  dakota -i RPM_dakota_w.in -o RPM_dakota_w.out > RPM_dakota.stdout
+
+environment
+     tabular_data
+     tabular_data_file "RPM_dakota_SM.dat"
+
+method,
+	 bayes_calibration queso 
+     metropolis_hastings
+     proposal_covariance
+     diagonal values 1 1 1
+     scaling                         
+     chain_samples = 100 seed = 348
+	 #burn_in_samples = 100
+	 chain_diagnostics confidence_intervals
+	 export_chain_points_file  'posterior.dat'
+	 output debug
+
+variables,
+	 uniform_uncertain = 3
+	 lower_bounds  1 -7 -2
+     upper_bounds  3 0 -0.8
+	 descriptor "FR" "K" "Y"
+
+
+interface,
+	fork
+	  asynchronous
+	  evaluation_concurrency 1
+
+	  failure_capture recover 999999 999999
+	  
+	  parameters_file = "params.in"
+	  results_file    = "results.out"
+	
+	  copy_files "template_dir/*"
+
+	  analysis_driver = "python ./RPM_driver_SM.py"
+
+
+      work_directory
+      named "run"
+	  directory_tag
+      directory_save
+      file_save
+
+responses,
+	calibration_terms = 2
+    response_descriptors "rmse" "CRNrmse"
+    primary_scale_types = "value" "value"
+    primary_scales = 0.47 877
+    weights = 0.5 0.5
+	no_gradients
+	no_hessians

@@ -15,30 +15,30 @@ from yaml import safe_load
 # Set physical constants as used by RPM - these are values read in command line
 CRNFlag = 1
 Gradient = 1
-TidalRanges = 4
+TidalRanges = 5.82
 SubtidalEfficacy = 0.005
 WaveHeight = 3
 
 #Wave decay rate (Attenuation constant)
-WaveAttenuationConst = [-1.92]
-#WaveAttenuationConst = []
-#WaveAttenuationConst.append(-1.614)
-#WaveAttenuationConst.append(-1.423)
-#WaveAttenuationConst.append(-1.255)
+#WaveAttenuationConst = [-1.333]
+WaveAttenuationConst = []
+WaveAttenuationConst.append(-1.537)
+WaveAttenuationConst.append(-1.333)
+WaveAttenuationConst.append(-1.152)
 
 #Initialise Resistance       (kg m^2 yr^-1)
-Resistances = [1.59]
+Resistances = [1.985]
 #Resistances = []
-#Resistances.append(1.397)
-#Resistances.append(2.007)
-#Resistances.append(2.626)
+#Resistances.append(1.360)
+#Resistances.append(1.985)
+#Resistances.append(2.631)
   
 #Initialise WeatheringRate as a factor of resistance?
+WeatheringRates = [-2.644]
 #WeatheringRates = []
-WeatheringRates = [-4.97]
-#WeatheringRates.append(-9.193)
-#WeatheringRates.append(-7.557)
-#WeatheringRates.append(-6.051)
+#WeatheringRates.append(-3.078)
+#WeatheringRates.append(-2.644)
+#WeatheringRates.append(-2.226)
 
 #set folder location 
 Folder = "/home/jrs17/Main_RPM/Rocky-Profile-Model/driver_files/"
