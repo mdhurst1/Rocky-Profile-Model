@@ -1257,7 +1257,7 @@ void RPM::WriteProfile(string OutputFileName, double Time, bool Print2Screen)
 
 	//open the output filestream and write headers
 	ofstream WriteCoastFile;
-	if (FileExists == 0 || Time < 0)
+	if (FileExists == 0)
 	{
 		WriteCoastFile.open(OutputFileName.c_str());
 		if (WriteCoastFile.is_open()) WriteCoastFile << MaxElevation << " " << MinElevation << " " << dZ << endl;
