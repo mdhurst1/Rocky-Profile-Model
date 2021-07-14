@@ -102,20 +102,21 @@ int main(int nNumberofArgs,char *argv[])
 	cout << endl;
 
 	//Test for correct input arguments
-	if (nNumberofArgs!=12)
+	if (nNumberofArgs!=13)
 	{
-		cout << "Error: This program requires 10 (YES TEN, one-zero) command line inputs: " << endl;
+		cout << "Error: This program requires 12 (YES TWELVE) command line inputs: " << endl;
 		cout << " * First a path to the folder where the model will be run" << endl;
 		cout << " * The name of the project/model run" << endl;
         cout << " * The name of the topo profile data file" << endl;
         cout << " * The name of the CRN conc data file" << endl;
+		cout << " * The name of the Relative Sea Level data file" << endl;
 		cout << " * A Flag to run with CRNs (1 = True)" << endl;
         cout << " * The initial topographic gradient" << endl;
         cout << " * The tidal range (m)" << endl;
         cout << " * The subtidal weathering efficacy (multiplier)" << endl;
         cout << " * The wave attenuation constant" << endl;
-        cout << " * The rock resistance (kg/m2)" << endl;
-        cout << " * The Maximum weathering rate (kg/m2/yr)" << endl;
+        cout << " * Exponent of the rock resistance (kg/m2)" << endl;
+        cout << " * Exponent of the Maximum weathering rate (kg/m2/yr)" << endl;
         cout << " * " << endl;
 		cout << "-----------------------------------------------------------------------------" << endl;
 		cout << "Then the command line argument will be: " << endl;
@@ -131,21 +132,22 @@ int main(int nNumberofArgs,char *argv[])
 	char* DakotaFilename = argv[2];
     char* ProfileDatafile = argv[3];
     char* CRNDatafile = argv[4];
-	int CRNFlag = atoi(argv[5]);
-	double Gradient = atof(argv[6]);
-	double TidalRange = atof(argv[7]);
-    double SubtidalEfficacy = atof(argv[8]);
+	char* RSLFile = argv[5];
+	int CRNFlag = atoi(argv[6]);
+	double Gradient = atof(argv[7]);
+	double TidalRange = atof(argv[8]);
+    double SubtidalEfficacy = atof(argv[9]);
 
 	//Free parameters
 
     //double WaveAttenuationConst = (atof(argv[9]));
-	double WaveAttenuationConst = pow(10,(atof(argv[9])));
+	double WaveAttenuationConst = pow(10,(atof(argv[10])));
 
-    double Resistance = pow(10,(atof(argv[10])));          //dakota varies FR on log scale
+    double Resistance = pow(10,(atof(argv[11])));          //dakota varies FR on log scale
 	//double Resistance = atof(argv[10]);
 
     //double WeatheringRate = Resistance * pow(10,(atof(argv[11])));      //dakota varies K proportional to FR 0 - 0.5 range 
-	double WeatheringRate = pow(10,(atof(argv[11]))); 
+	double WeatheringRate = pow(10,(atof(argv[12]))); 
 	//double WeatheringRate = atof(argv[11]);
 
 	cout << "Resistance = " << Resistance << endl;
@@ -165,8 +167,8 @@ int main(int nNumberofArgs,char *argv[])
 
 	//Time control parameters
 	//Time runs in yrs bp
-	double EndTime = 0.;
-	double Time = 8000.;
+	double EndTime = 100.;
+	double Time = -8000.;
 	double TimeInterval = 1.;
 
 	//Print Control
@@ -181,7 +183,7 @@ int main(int nNumberofArgs,char *argv[])
 
     // initialise sea level here and calculate MinElevation based on lowest sea level
 	// Initialise Sea level from datafile
-	string RelativeSeaLevelFile = "CB_RSL.data";
+	string RelativeSeaLevelFile = RSLFile;
 	SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
 	
 	// Get initial sea level
@@ -244,7 +246,7 @@ int main(int nNumberofArgs,char *argv[])
 	//if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
 
     //Loop through time
-	while (Time >= EndTime)
+	while (Time <= EndTime)
 	{
 		//Update Sea Level
 		InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
@@ -284,17 +286,17 @@ int main(int nNumberofArgs,char *argv[])
 		if (CRNFlag) PlatformCRN.UpdateCRNs();
         	
 		//print?
-		if (Time <= PrintTime)
+		if (Time >= PrintTime)
 		{
 			cout.flush();
 			cout << "RPM: Time " << setprecision(2) << fixed << Time << " years\r";
 			//PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
             //if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
-			PrintTime -= PrintInterval;
+			PrintTime += PrintInterval;
 		}
 
 		//update time
-		Time -= TimeInterval;
+		Time += TimeInterval;
 	}
     
     //declarations modelled results 
@@ -600,7 +602,7 @@ int main(int nNumberofArgs,char *argv[])
    //double RMSE_N;
    //double CRN_RMSE_N;
    long double Neg_Log_Likelihood = 1.L;
-   long double Neg_Log_LikelihoodCRN = 1.L;
+   //long double Neg_Log_LikelihoodCRN = 1.L;
    long double Neg_Log_Likelihood_N = 1.L;
    //long double Neg_Log_LikelihoodCRN_N = 1.L;
 
@@ -618,7 +620,7 @@ int main(int nNumberofArgs,char *argv[])
    //negative log likelihood
    //if normalised correct, take -ve log of normalised likelihood
    Neg_Log_Likelihood = -log(Likelihood);
-   Neg_Log_LikelihoodCRN = -log(LikelihoodCRN);
+   //Neg_Log_LikelihoodCRN = -log(LikelihoodCRN);
 
    //normalised negative log likelihood 
    Neg_Log_Likelihood_N = Neg_Log_Likelihood/TidalRange;
