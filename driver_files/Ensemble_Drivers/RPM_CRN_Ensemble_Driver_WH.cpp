@@ -100,7 +100,7 @@ int main(int nNumberofArgs,char *argv[])
 	cout << endl;
 
 	//Test for correct input arguments
-	if (nNumberofArgs!=11)
+	if (nNumberofArgs!=12)
 	{
 		cout << "Error: This program requires 10 (YES TEN, one-zero) command line inputs: " << endl;
 		cout << " * First a path to the folder where the model will be run" << endl;
@@ -130,8 +130,8 @@ int main(int nNumberofArgs,char *argv[])
 	int CRNFlag = atoi(argv[3]);
 	double Gradient = atoi(argv[4]);
 	double TidalRange = atoi(argv[5]);
-        double SubtidalEfficacy = atoi(argv[6]);
-        double WaveHeight = atoi(argv[7]);
+        double SubtidalEfficacy = atof(argv[6]);
+        double WaveHeight = atof(argv[7]);
 	double Resistance = pow(10,(atof(argv[8])));
 
 	//calculate log resistance 
@@ -140,6 +140,8 @@ int main(int nNumberofArgs,char *argv[])
 	double WaveAttenuationConst = pow(10,(atof(argv[9])));
         //double WaveAttenuationConst = pow(10,(atof(argv[9])) * LogFR);
         double WeatheringRate = Resistance * pow(5,(atof(argv[10])));
+	double CliffFailureDepth = atof(argv[11]);
+	
 
 	//initialisation parameters
 	double dZ = 0.1;
@@ -171,18 +173,16 @@ int main(int nNumberofArgs,char *argv[])
 
 
     //setup the output file                  
-    string OutputMorphologyFileName = Folder+"A_"+tostr(WaveAttenuationConst)
-                                                +"_R_"+tostr(Resistance)
-                                                +"_W_"+tostr(WeatheringRate)+"_EnsembleShoreProfile.xz";
+    string OutputMorphologyFileName = Folder+"WH_"+tostr(WaveHeight)
+                                                +"_EnsembleShoreProfile.xz";
                                         
-    string OutputConcentrationFileName = Folder+"A_"+tostr(WaveAttenuationConst)
-                                                +"_R_"+tostr(Resistance)
-                                                +"_W_"+tostr(WeatheringRate)+"_EnsembleConcentration.xn";
+    string OutputConcentrationFileName = Folder+"WH_"+tostr(WaveHeight)
+                                                +"_EnsembleConcentration.xn";
         
 
 
 	// Initialise Sea level from datafile
-	string RelativeSeaLevelFile = Folder + "Data/SouthCoast_RSL.data";
+	string RelativeSeaLevelFile = Folder + "Data/SM_RSL.data";
 	SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
 	
 	// initialise sea level using rate of change
@@ -250,7 +250,7 @@ int main(int nNumberofArgs,char *argv[])
 	PlatformModel.Set_WaveCoefficients(StandingCoefficient, BreakingCoefficient, BrokenCoefficient, WaveAttenuationConst);
 
 	//reset the geology
-	double CliffFailureDepth = 0.1;
+	//double CliffFailureDepth = 0.1;
 	PlatformModel.InitialiseGeology(CliffElevation, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);	
 
 	// print initial condition to file
