@@ -72,8 +72,6 @@
 #include <cstdlib>
 #include <unistd.h>
 #include <algorithm>
-#include <stdio.h>
-#include <time.h>
 #include "../../RPM.hpp"
 #include "../../RoBoCoP_CRN/RockyCoastCRN.hpp"
 #include "../../SeaLevel.hpp"
@@ -91,13 +89,6 @@ template <typename T> string tostr(const T& t)
 
 int main(int nNumberofArgs,char *argv[])
 {
-
-	//clock 
-	time_t begin, end;
-	time(&begin);
-	
-	
-
 	cout << endl;
 	cout << "----------------------------------------------------------------------------------" << endl;
 	cout << "|  Rocky Profile Model (RPM)                                                     |" << endl;
@@ -111,20 +102,21 @@ int main(int nNumberofArgs,char *argv[])
 	cout << endl;
 
 	//Test for correct input arguments
-	if (nNumberofArgs!=12)
+	if (nNumberofArgs!=13)
 	{
-		cout << "Error: This program requires 10 (YES TEN, one-zero) command line inputs: " << endl;
+		cout << "Error: This program requires 12 (YES TWELVE) command line inputs: " << endl;
 		cout << " * First a path to the folder where the model will be run" << endl;
 		cout << " * The name of the project/model run" << endl;
         cout << " * The name of the topo profile data file" << endl;
         cout << " * The name of the CRN conc data file" << endl;
+		cout << " * The name of the Relative Sea Level data file" << endl;
 		cout << " * A Flag to run with CRNs (1 = True)" << endl;
         cout << " * The initial topographic gradient" << endl;
         cout << " * The tidal range (m)" << endl;
         cout << " * The subtidal weathering efficacy (multiplier)" << endl;
         cout << " * The wave attenuation constant" << endl;
-        cout << " * The rock resistance (kg/m2)" << endl;
-        cout << " * The Maximum weathering rate (kg/m2/yr)" << endl;
+        cout << " * Exponent of the rock resistance (kg/m2)" << endl;
+        cout << " * Exponent of the Maximum weathering rate (kg/m2/yr)" << endl;
         cout << " * " << endl;
 		cout << "-----------------------------------------------------------------------------" << endl;
 		cout << "Then the command line argument will be: " << endl;
@@ -138,26 +130,25 @@ int main(int nNumberofArgs,char *argv[])
     // read parameters from command line arguments
 	string Folder = argv[1];
 	char* DakotaFilename = argv[2];
-    	char* ProfileDatafile = argv[3];
-    	char* CRNDatafile = argv[4];
-	int CRNFlag = atoi(argv[5]);
-	double Gradient = atof(argv[6]);
-	double TidalRange = atof(argv[7]);
-    	double SubtidalEfficacy = atof(argv[8]);
+    char* ProfileDatafile = argv[3];
+    char* CRNDatafile = argv[4];
+	char* RSLFile = argv[5];
+	int CRNFlag = atoi(argv[6]);
+	double Gradient = atof(argv[7]);
+	double TidalRange = atof(argv[8]);
+    double SubtidalEfficacy = atof(argv[9]);
 
 	//Free parameters
-	//double WaveAttenuationConst = (atof(argv[9]));
-	double WaveAttenuationConst = pow(10,(atof(argv[9])));
 
-    	double Resistance = pow(10,(atof(argv[10])));          //dakota varies FR on log scale
+    //double WaveAttenuationConst = (atof(argv[9]));
+	double WaveAttenuationConst = pow(10,(atof(argv[10])));
+
+    double Resistance = pow(10,(atof(argv[11])));          //dakota varies FR on log scale
 	//double Resistance = atof(argv[10]);
 
-        double WeatheringRate = Resistance * pow(5,(atof(argv[11])));      //dakota varies K proportional to FR 0 - 0.5 range 
-	//double WeatheringRate = pow(10,(atof(argv[11]))); 
+    double WeatheringRate = Resistance * pow(5,(atof(argv[12])));      //dakota varies K proportional to FR 0 - 0.5 range 
+	//double WeatheringRate = pow(10,(atof(argv[12]))); 
 	//double WeatheringRate = atof(argv[11]);
-
-        //Added RSL file as arguement 
-	//char* RelativeSeaLevelFile = argv[12];   //"CB_RSL.data";
 
 	cout << "Resistance = " << Resistance << endl;
 	cout << "WeatheringRate = " << WeatheringRate << endl;
@@ -171,17 +162,17 @@ int main(int nNumberofArgs,char *argv[])
 	double dZ = 0.1;
 	double dX = 0.1;
 	double CliffElevation = 15.;
-        double MaxElevation = 15.;
+	double MaxElevation = 15.;
 	double MinElevation = -15.;
 
 	//Time control parameters
 	//Time runs in yrs bp
-	double EndTime = 0.;
-	double Time = 8000.;
+	double EndTime = 100.;
+	double Time = -8000.;
 	double TimeInterval = 1.;
 
 	//Print Control
-	double PrintInterval = 100;
+	double PrintInterval = 10;
 	double PrintTime = Time;
 
     //set up output file - used for visual when testing 
@@ -192,7 +183,7 @@ int main(int nNumberofArgs,char *argv[])
 
     // initialise sea level here and calculate MinElevation based on lowest sea level
 	// Initialise Sea level from datafile
-	string RelativeSeaLevelFile = "CB_RSL.data";
+	string RelativeSeaLevelFile = RSLFile;
 	SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
 	
 	// Get initial sea level
@@ -255,7 +246,7 @@ int main(int nNumberofArgs,char *argv[])
 	if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, TempTime);
 
     //Loop through time
-	while (Time >= EndTime)
+	while (Time <= EndTime)
 	{
 		//Update Sea Level
 		InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
@@ -295,17 +286,17 @@ int main(int nNumberofArgs,char *argv[])
 		if (CRNFlag) PlatformCRN.UpdateCRNs();
         	
 		//print?
-		if (Time <= PrintTime)
+		if (Time >= PrintTime)
 		{
 			cout.flush();
 			cout << "RPM: Time " << setprecision(2) << fixed << Time << " years\r";
 			PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
-            		if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
-			PrintTime -= PrintInterval;
+            if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
+			PrintTime += PrintInterval;
 		}
 
 		//update time
-		Time -= TimeInterval;
+		Time += TimeInterval;
 	}
     
     //declarations modelled results 
@@ -328,7 +319,7 @@ int main(int nNumberofArgs,char *argv[])
     //Vectors to hold extracted profile data
     int NProfileData;
     vector<double> ProfileXData;
-    vector<long double> ProfileZData;
+    vector<double> ProfileZData;
 
     //Vectors to hold CRN concentration data
     int NData;
@@ -384,6 +375,8 @@ int main(int nNumberofArgs,char *argv[])
    float TempXData, TempCRNConcData, TempCRNConcErrorData;
   
    //Generate input filestream and read data into vectors
+
+   
 	ifstream ReadCRNDataFile(CRNDatafile);
 	if (!ReadCRNDataFile)
 	{
@@ -418,7 +411,7 @@ int main(int nNumberofArgs,char *argv[])
 
    //declarations
    vector<double> XPos(NProfileData);
-   vector<long double> TopoData(NProfileData);
+   vector<double> TopoData(NProfileData);
    double DiffX;
    double RMSE;
    double Scale;
@@ -451,36 +444,61 @@ int main(int nNumberofArgs,char *argv[])
    }
 
    //Calculate Residuals and likelihood
-   //Fail flag for inf numbers (topo profile) 
-   double TotalResiduals = 0;
-   vector<double> Residuals(NProfileData);
-   //vector<long double> LResiduals(NProfileData);
-   //long double Likelihood = 1.L;
-   //double ZStd = 8;
-   
-   //likelihood calculations - commented out, used to test
-   //for (int i=0; i<NProfileData; ++i)
-   //{
-    ////Residuals calc for Likelihood
-    //LResiduals[i] = (ProfileZData[i]-TopoData[i])*(ProfileZData[i]-TopoData[i]);
-    //Likelihood *= fastexp(-(fabs(LResiduals[i]))/(ZStd*ZStd)); 
-   //}
-	//return Likelihood;
+   //Fail flag for inf numbers (topo profile)
+   //Calculating max and min Residual for topo data 
+   //Declarations for normalised residuals 
 
-   //calculate topo residuals
+   
+   double TotalResiduals = 0;
+   double TotalNResiduals = 0;
+   vector<double> Residuals(NProfileData); 
+   vector<double> NResiduals(NProfileData);
+   vector<double> LResiduals(NProfileData);
+   long double Likelihood = 1.L;
+   double ZStd = 2;
+   //double MaxTopo = Residuals[0];
+   //double MinTopo = Residuals[0];
+   
+
+   //standardise topo residuals
    for (int i=0; i<NProfileData; ++i)
    {
        Residuals[i] = fabs(ProfileZData[i]-TopoData[i]);
-       TotalResiduals += pow(ProfileZData[i]-TopoData[i],2);
+	   TotalResiduals += pow(ProfileZData[i]-TopoData[i],2);
 	   
 	   //Fail Flag
 	   if (isinf(TotalResiduals))
 	   {
 		   FailFlag = true;
 		   break;
-	   }   
+	   }
+	   //MinTopo = *min_element(begin(Residuals), end(Residuals));
+	   //MaxTopo = *max_element(begin(Residuals), end(Residuals));  
     }
 	
+	for (int i=0; i<NProfileData; ++i)
+	{
+		//Residuals calc for Likelihood
+	   LResiduals[i] = (ProfileZData[i]-TopoData[i])*(ProfileZData[i]-TopoData[i]);
+	   Likelihood *= fastexp(-(fabs(LResiduals[i]))/(ZStd*ZStd)); 
+	}
+	//return Likelihood;
+
+	for (int i=0; i<NProfileData; ++i)
+	{
+	   //Feature scaling - min-max normalisation (distribution between 0 and 1)
+	   //NResiduals[i] = (Residuals[i]-MinTopo)/(MaxTopo-MinTopo);
+
+	   //normalise topo to tidalrange 
+	   NResiduals[i] = (Residuals[i]/TidalRange);	   
+	   TotalNResiduals += pow(NResiduals[i],2);
+	}
+
+   
+   cout << " Total residuals Topo = " << TotalResiduals << endl;
+   //cout << " TotalNResiduals = " << TotalNResiduals << endl;
+   cout << " Likelihood = " << scientific << Likelihood << endl;
+   
 
    ///////////////////////////////////////                                
    //                                   //
@@ -492,12 +510,8 @@ int main(int nNumberofArgs,char *argv[])
    vector<double> XPosCRN(NData);
    vector<double> NModel(NData);
    double ScaleCRN, DiffCRNX;
-   double CRN_RMSE;
-   //long double LikelihoodCRN = 1.L; 
-   vector<double> ResidualsCRN(NData); 
-   //vector<double> LResidualsCRN(NData);
-   //long double LikelihoodCRN = 1.L;
-   double TotalResidualsCRN = 0; 
+   //double CRN_RMSE;
+   //long double LikelihoodCRN = 1.L;  
 
 
    //Interpolate to sample locations
@@ -516,8 +530,21 @@ int main(int nNumberofArgs,char *argv[])
         NModel[i] = CRNConcModel[j]-ScaleCRN*(CRNConcModel[j]-CRNConcModel[j-1]);
 	}
 	
+	//Calculate likelihood
+    //double TotalResidualsCRN = 0;
+	vector<double> ResidualsCRN(NData); 
+	//double MaxCRN = ResidualsCRN[0];
+	//double MinCRN = ResidualsCRN[0];
+    //Declarations for normalised Residuals 
+    vector<double> NResidualsCRN(NData);
+	vector<double> LResidualsCRN(NData);
+	long double LikelihoodCRN = 1.L;
+    double TotalNResidualsCRN = 0;
+	double TotalResidualsCRN = 0;
+	double MaxCRNCB = 16162;
 
-	//calculate CRN residuals
+
+	//Standardise CRN residuals
 	for (int i=0; i<NData; ++i)
    {
        ResidualsCRN[i] = fabs(CRNConcData[i]-NModel[i]);
@@ -530,17 +557,34 @@ int main(int nNumberofArgs,char *argv[])
 		   break;
 	   }
 
-	   
+	   //MinCRN = *min_element(begin(ResidualsCRN), end(ResidualsCRN));
+	   //MaxCRN = *max_element(begin(ResidualsCRN), end(ResidualsCRN)); 
    }
 
-   //Calculate CRN Likelihood - commented out, used to test
-   //for (int i=0; i<NData; i++)
-   //{
-	   //LResidualsCRN[i] = (CRNConcData[i]-NModel[i])*(CRNConcData[i]-NModel[i]);
-	   //LikelihoodCRN *= fastexp(-(fabs(LResidualsCRN[i]))/((CRNConcErrorData[i]*CRNConcErrorData[i])*5));
+   //Calculate CRN Likelihood
+   for (int i=0; i<NData; i++)
+   {
+	   LResidualsCRN[i] = pow(CRNConcData[i]-NModel[i],2);
+	   LikelihoodCRN *= exp(-(fabs(ResidualsCRN[i]))/(CRNConcErrorData[i]*CRNConcErrorData[i]));
 
-   //}
+   }
+
+   for (int i=0; i<NData; ++i)
+   { 
+	   //Feature scaling - min-max normalisation (distribution between 0 and 1)
+	   //NResidualsCRN[i] = (ResidualsCRN[i]-MinCRN)/(MaxCRN-MinCRN);
+
+	   //Normalise CRN to max measured CRN conc
+	   NResidualsCRN[i] = (ResidualsCRN[i]/MaxCRNCB);
+	   TotalNResidualsCRN += pow(NResidualsCRN[i],2);    
+   }
 	
+    
+   //cout << " MaxCRN = " << setprecision(10) << MaxCRN << endl;
+   //cout << " MinCRN = " << setprecision(10) << MinCRN << endl;
+   cout << " Total Residuals CRN = " << TotalResidualsCRN << endl;
+   cout << " TotalNResidualsCRN = " << TotalNResidualsCRN << endl;
+
     ////////////////////////////////////
     //                                //
     //Write results to file for dakota//
@@ -551,17 +595,49 @@ int main(int nNumberofArgs,char *argv[])
    ofstream outfile;
    outfile.open(DakotaFilename);
 
+   //Weightings - eqaul to 1
+   //double TopoWeighting = 0.5;
+   //double CRNWeighting = 0.5;
+   //double WeightedRMSE;
+   //double RMSE_N;
+   //double CRN_RMSE_N;
+   long double Neg_Log_Likelihood = 1.L;
+   //long double Neg_Log_LikelihoodCRN = 1.L;
+   long double Neg_Log_Likelihood_N = 1.L;
+   //long double Neg_Log_LikelihoodCRN_N = 1.L;
+
    //RMSE calculations 
+
    RMSE = sqrt(TotalResiduals/NProfileData);
-   CRN_RMSE = sqrt(TotalResidualsCRN/NData);
+   //CRN_RMSE = sqrt(TotalResidualsCRN/NData);
+
+   //Normalise RMSE
+   //RMSE_N = RMSE/TidalRange;  // min-max rather than tidal range?
+   //CRN_RMSE_N = CRN_RMSE/MaxCRNCB;
+
+   //WeightedRMSE = (RMSE_N*TopoWeighting)+(CRN_RMSE_N*CRNWeighting);
+
+   //negative log likelihood
+   //if normalised correct, take -ve log of normalised likelihood
+   Neg_Log_Likelihood = -log(Likelihood);
+   //Neg_Log_LikelihoodCRN = -log(LikelihoodCRN);
+
+   //normalised negative log likelihood 
+   Neg_Log_Likelihood_N = Neg_Log_Likelihood/TidalRange;
+   //Neg_Log_LikelihoodCRN_N = Neg_Log_LikelihoodCRN/MaxCRNCB;
 
 
    cout << " RMSE = " << RMSE << endl;
-   cout << " CRN RMSE = " << CRN_RMSE << endl;
-   cout << " NDATA = " << NData << endl;
+   //cout << " CRN RMSE = " << CRN_RMSE << endl;
+   cout << " -ve log likelihood = " << scientific << Neg_Log_Likelihood << endl;
+   cout << " Normalised -log likelihood = " << scientific << Neg_Log_Likelihood_N << endl;
 
-
-   //Check dakota outfile is open
+   //if (isinf(Neg_Log_Likelihood))
+	 //  {
+		//   FailFlag = true;
+	   //}
+   
+   //Check outfile is open
 
 	if (outfile)
 	{
@@ -580,22 +656,15 @@ int main(int nNumberofArgs,char *argv[])
 	}
 	else if (!CRNFlag)
 	{
-		outfile << RMSE << endl;
+		outfile << Neg_Log_Likelihood_N << endl;
 	}
 	else
 	{
-	    outfile << RMSE << endl << CRN_RMSE << endl;
+	    outfile << Neg_Log_Likelihood_N << endl;
 	}
 
 
 	outfile.close();
-
-
-	//clock end 
-	time(&end);
-	time_t elapsed = end - begin;
-
-	printf("Time measured: %ld seconds.\n", elapsed);
 
 	cout << endl << "Done!" << endl << endl;
 

@@ -192,7 +192,7 @@ int main(int nNumberofArgs,char *argv[])
 
     // initialise sea level here and calculate MinElevation based on lowest sea level
 	// Initialise Sea level from datafile
-	string RelativeSeaLevelFile = "CB_RSL.data";
+	string RelativeSeaLevelFile = "../Data/CB_RSL.data";
 	SeaLevel RelativeSeaLevel = SeaLevel(RelativeSeaLevelFile);
 	
 	// Get initial sea level
