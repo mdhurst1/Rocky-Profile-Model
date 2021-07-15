@@ -4,6 +4,7 @@
 *.ipch
 *.o
 *.out
+*.exe
 *.xn
 *.xz
 *.xzn
