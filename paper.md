@@ -31,45 +31,35 @@ affiliations:
 date: 28th July 2021
 bibliography: paper.bib
 
-# Optional fields if submitting to a AAS journal too, see this blog post:
-# https://blog.joss.theoj.org/2018/12/a-new-collaboration-with-aas-publishing
-aas-doi: 10.3847/xxxxx <- update this with the DOI from AAS once you know it.
-aas-journal: Astrophysical Journal <- The name of the AAS journal.
 ---
 
 # Summary
 
-The forces on stars, galaxies, and dark matter under external gravitational
-fields lead to the dynamical evolution of structures in the universe. The orbits
-of these bodies are therefore key to understanding the formation, history, and
-future state of galaxies. The field of "galactic dynamics," which aims to model
-the gravitating components of galaxies to study their structure and evolution,
-is now well-established, commonly taught, and frequently used in astronomy.
-Aside from toy problems and demonstrations, the majority of problems require
-efficient numerical tools, many of which require the same base code (e.g., for
-performing numerical orbit integration).
+Rock coasts evolve relatively slowly and oftentimes episodically, and because they are erosive in nature there is little evidence of their former state. 
+These two factors compound to make it difficult to constrain the nature of processes that dictate their evolution, and associated rates of change across appropriately long timescales (centuries to millennia).
+Measuring how rapidly rock coasts have evolved in the past is important to understand how they will react to future environmental change.
+Recent developments in numerical modelling of rock coast weathering and erosion processes have shed new light on the fundamental controls on rock coast evolution at these timescales. 
+In parallel, measurement of the concentration of rare cosmogenic radionuclides (CRNs) that accumulate in rocks at the coast is providing a new empirical basis for understanding the development of rock coasts over similarly long timescales. 
+The accumulation of CRNs occurs most rapidly when rocks are near to the Earth surface, and thus the rates and processes by which rocks are unveiled at the coast is a first order control on the amount of CRNs that will be found in rock samples at the coast. 
+Thus, numerical models that account for the morphological development of the shore platform coupled with modelled CRN production are vital if measured CRN concentrations are to reveal the style and pace of rock coast morphodynamics. 
+Towards achieving this end, a coupled model of rock coast morphodynamics and CRN accumulation is presented here.
 
 # Statement of need
 
-`Gala` is an Astropy-affiliated Python package for galactic dynamics. Python
-enables wrapping low-level languages (e.g., C) for speed without losing
-flexibility or ease-of-use in the user-interface. The API for `Gala` was
-designed to provide a class-based and user-friendly interface to fast (C or
-Cython-optimized) implementations of common operations such as gravitational
-potential and force evaluation, orbit integration, dynamical transformations,
-and chaos indicators for nonlinear dynamics. `Gala` also relies heavily on and
-interfaces well with the implementations of physical units and astronomical
-coordinate systems in the `Astropy` package [@astropy] (`astropy.units` and
-`astropy.coordinates`).
+Rock coasts make up a substantial proportion of the global coastline. 
+Rock decay and wave-driven erosion combine to drive the landward retreat of bedrock, typically resulting in cliffed coasts fronted by shore platforms [@Kennedy2014].
+The products of erosion (regolith/debris/beach material) are gradually destroyed or removed in this erosion-limited environment. 
+Rates of erosion by cliff retreat and shore platform lowering are typically considered to be slow.
+A recent compilation of global cliff retreat rates identified that rates vary from a few mm yr\textsuperscript{-1} to 10s cm yr\textsuperscript{-1}, with the subtstrate lithology exerting a dominant control on retreat rates \citep{Premaillon2018}. 
+Shore platform erosion rates are typically on the order of mm yr\textsuperscript{-1}  \citep{Stephenson2012,Cullen2018,Swirad2019}. Measurement of cliff retreat and shore platform erosion at rock coasts is temporally limited to at most a few decades. 
+Therefore, reconstruction of the long-term (centennial-millennial) development, prior to observational records has until recently, been inferential at best, based on conceptual understanding of processes extrapolated using exploratory numerical models \citep{Trenhaile2000a, Ashton2011, Matsumoto2016a}.
 
-`Gala` was designed to be used by both astronomical researchers and by
-students in courses on gravitational dynamics or astronomy. It has already been
-used in a number of scientific publications [@Pearson:2017] and has also been
-used in graduate courses on Galactic dynamics to, e.g., provide interactive
-visualizations of textbook material [@Binney:2008]. The combination of speed,
-design, and support for Astropy functionality in `Gala` will enable exciting
-scientific explorations of forthcoming data releases from the *Gaia* mission
-[@gaia] by students and experts alike.
+Several recent studies have measured CRN concentrations in rock samples collected from shore platforms in order to estimate long-term rates of cliff retreat or to demonstrate the antiquity of shore platforms at the coast \citep{Regard2012, Choi2012, Rogers2012, Hurst2016, Raimbault2018, Swirad2020}.
+However, the distribution of CRN concentrations across shore platforms is dependent on the pace and style of morphological changes, and thus we require morphodynamic models that represent the myriad of processes influencing shore platform development coupled to predictions of CRN concentration distributions \citep{Hurst2017}. 
+
+Morphodynamic models of rock coast development can exhibit a range of behaviours depending on intrinsic and extrinsic conditions including tidal range, sea level change, lithological properties and wave energy delivery \citep{Trenhaile2014, Matsumoto2016a, Matsumoto2018}. However, it is not well known how these behaviours impact upon the expected distribution of CRNs stored in the coastal bedrock. \cite{Trenhaile2018} suggested that “while [CRN] has the potential to revolutionize our understanding of the evolution of rock coasts, the accuracy of the results is dependent on the validity of the conceptual and mathematical model assumptions that have to be made” \citep[p. 80][]{Trenhaile2018}. He goes on to highlight several key research challenges relating to processes that are poorly represented in morphodynamic models (such as weathering processes), or absent entirely (such as abrasion, block detatchment/quarrying and biological processes). This highlights a critical circular problem, that CRNs can reveal rates of rock coast development but requires a model of rock coast evolution that faithfully represents the dominant processes driving change, while measurements of CRNs has been suggested could improve our process understanding. Nevertheless, in order to progress efforts to quantify long-term rock coast development, a coupled modelling framework for the morphodynamic development of rock coasts and accumulation of cosmogenic radionuclides is required. 
+
+Following a brief review of previous efforts to study rock coast development using CRNs, this paper presents a new model that couples state-of-the-art models of shore platform development \citep{Matsumoto2016a} and CRN production at rock coast \citep{Hurst2017} in order to provide a framework for interpreting the history of coastal evolution from measured CRN concentrations and a test bed for improving our process understanding in numerical models of rock coasts.
 
 # Mathematics
 
