@@ -1,27 +1,34 @@
 ---
-title: 'Gala: A Python package for galactic dynamics'
+title: 'A coupled model for the accumulation of cosmogenic radionuclides during shore platform development'
 tags:
-  - Python
-  - astronomy
-  - dynamics
-  - galactic dynamics
-  - milky way
+  - Geomorphology
+  - Rock Coasts
+  - Cosmogenic Radionculdies
+  - C++
+
 authors:
-  - name: Adrian M. Price-Whelan^[co-first author] # note this makes a footnote saying 'co-first author'
-    orcid: 0000-0003-0872-7098
-    affiliation: "1, 2" # (Multiple affiliations must be quoted)
-  - name: Author Without ORCID^[co-first author] # note this makes a footnote saying 'co-first author'
+  - name: Martin D. Hurst^[co-first author] # note this makes a footnote saying 'co-first author'
+    orcid: 0000-0002-9822-076X
+    affiliation: 1 # (Multiple affiliations must be quoted)
+  - name: Hironori Matsumoto^[co-first author] # note this makes a footnote saying 'co-first author'
+    orcid: 0000-0002-4637-7781
     affiliation: 2
-  - name: Author with no affiliation^[corresponding author]
+  - name: Jennifer R. Shadrick^[corresponding author]
     affiliation: 3
+  - name: Mark E. Dickson
+    orcid: 0000-0002-6031-4170
+    affiliation: 4
+
 affiliations:
- - name: Lyman Spitzer, Jr. Fellow, Princeton University
+ - name: School of Geographical and Earth Sciences, University of Glasgow, Glasgow, Scotland, UK.
    index: 1
- - name: Institution Name
+ - name: Scripps Institution of Oceanography, University of California San Diego, La Jolla, CA, US.
    index: 2
- - name: Independent Researcher
+ - name: Earth Science and Engineering, Imperial College London, London, UK.
    index: 3
-date: 13 August 2017
+ - name: School of Environment, Univesity of Auckland, Auckland, NZ.
+   index: 4
+date: 28th July 2021
 bibliography: paper.bib
 
 # Optional fields if submitting to a AAS journal too, see this blog post:
