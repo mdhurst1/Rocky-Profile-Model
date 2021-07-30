@@ -25,6 +25,5 @@ This model combines the Rocky Profile Model (RPM) developed by Matsumoto et al (
 
 For a walkthrough to run the model with default parameter options, see [Getting Started](getting-started.md)
 
-The model is released under a GNU General Public Licence. 
-Please see the [project licence](licence.md) for further details.
+The model is released under a GNU General Public Licence. Please see the [project license](license.md) for further details.
 
