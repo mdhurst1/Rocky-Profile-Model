@@ -8,5 +8,6 @@ nav:
   - Home: 'index.md'
   - Getting Started: 'user-guide/getting-started.md'
   - Configuration Options: 'user-guide/getting-started.md'
-  - About: 'about.md'
   - Issues: 'https://github.com/mdhurst1/Rocky-Profile-Model/issues'
+  - Licence: 'licence.md'
+  - About: 'about.md'
