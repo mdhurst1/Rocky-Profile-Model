@@ -1,0 +1,4 @@
+site_name: RPM-CRN Documentation
+repo_urle: https://github.com/mdhurst1/Rocky-Profile-Model/tree/JOSS-Paper
+nav:
+  - Home: 'index.md'
