@@ -3,7 +3,7 @@ RPM-CRN
 
 **Rocky Profile Model with Cosmogenic Radionuclides (RPM-CRN)**
 
-RPM-CRN is an exploratory numerical model for the coevolution of rock coasts and the accumulation of cosmogenic radionuclides such as <sup>10<\sup>Be, <sup>26<\sup>Al and <sup>14<\sup>C in rock near the Earth surface.
+RPM-CRN is an exploratory numerical model for the coevolution of rock coasts and the accumulation of cosmogenic radionuclides such as <sup>10</sup>Be, <sup>26</sup>Al and <sup>14</sup>C in rock near the Earth surface.
 
 Motivation
 ===
