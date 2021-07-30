@@ -5,8 +5,8 @@ site_name: RPM-CRN Documentation
 repo_url: https://github.com/mdhurst1/Rocky-Profile-Model/tree/JOSS-Paper
 
 nav:
-  - Home: 'docs/index.md'
-  - Getting Started: 'docs/user-guide/getting-started.md'
-  - Configuration Options: 'docs/user-guide/getting-started.md'
-  - About: 'docs/about.md'
+  - Home: './docs/index.md'
+  - Getting Started: './docs/user-guide/getting-started.md'
+  - Configuration Options: './docs/user-guide/getting-started.md'
+  - About: './docs/about.md'
   - Issues: 'https://github.com/mdhurst1/Rocky-Profile-Model/issues'
