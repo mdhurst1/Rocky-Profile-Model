@@ -1,1 +1,3 @@
-A quick guide to running the model goes here.
+---
+title: 'Getting Started'
+---
