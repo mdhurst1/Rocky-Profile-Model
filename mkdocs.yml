@@ -1,4 +1,10 @@
+theme:
+  name: readthedocs
+
 site_name: RPM-CRN Documentation
-repo_urle: https://github.com/mdhurst1/Rocky-Profile-Model/tree/JOSS-Paper
+repo_url: https://github.com/mdhurst1/Rocky-Profile-Model/tree/JOSS-Paper
+
 nav:
-  - Home: 'index.md'
+  - Home: 'docs/index.md'
+  - About: 'docs/about.md'
+  - Issues: 'https://github.com/mdhurst1/Rocky-Profile-Model/issues'
