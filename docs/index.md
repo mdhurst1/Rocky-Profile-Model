@@ -21,7 +21,7 @@ The accumulation of CRNs occurs most rapidly when rocks are near to the Earth su
 
 Thus, numerical models that account for the morphological development of the shore platform coupled with modelled CRN production, such as this one, are vital if measured CRN concentrations are to reveal the style and pace of rock coast morphodynamics. 
 
-This model combines the Rocky Profile Model (RPM) developed by [@Matsumoto2016] and the CRN components of the **Ro**ck and **Bo**ttom **Co**astal **P**rofile (RoBoCoP) Model [@Hurst2016; @Hurst2017].
+This model combines the Rocky Profile Model (RPM) developed by Matsumoto et al (2016) and the CRN components of the **Ro**ck and **Bo**ttom **Co**astal **P**rofile (RoBoCoP) Model (Hurst et al., 2017).
 
 For a walkthrough to run the model with default parameter options, see [Getting Started](getting-started.md)
 
