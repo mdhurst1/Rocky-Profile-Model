@@ -1,5 +1,7 @@
-Rocky Profile Model with Cosmogenic Radionuclides (RPM-CRN)'
+RPM-CRN
 ===
+
+**Rocky Profile Model with Cosmogenic Radionuclides**
 
 Rock coasts evolve relatively slowly and oftentimes episodically, and because they are erosive in nature there is little evidence of their former state. 
 These two factors compound to make it difficult to constrain the nature of processes that dictate their evolution, and associated rates of change across appropriately long timescales (centuries to millennia).
