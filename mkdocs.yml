@@ -7,7 +7,8 @@ repo_url: https://github.com/mdhurst1/Rocky-Profile-Model/tree/JOSS-Paper
 nav:
   - Home: 'index.md'
   - Getting Started: 'user-guide/getting-started.md'
-  - Configuration Options: 'user-guide/getting-started.md'
+  - Configuration Options: 'user-guide/configuration-options.md'
+  - Model Output: 'user-guide/model-output.md'
   - Issues: 'https://github.com/mdhurst1/Rocky-Profile-Model/issues'
   - Licence: 'licence.md'
   - About: 'about.md'
