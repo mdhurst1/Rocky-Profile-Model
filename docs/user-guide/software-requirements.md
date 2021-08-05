@@ -27,12 +27,12 @@ This code has been developed both in Linux and Windows environments. When workin
 If you do not already work in Linux or UNIX, then the easiest way to get started would be to use some virtualisation software such as [VirtualBox](https://www.virtualbox.org/wiki/Downloads), and installing a Linux debian-based distribution such as [Ubuntu](https://ubuntu.com/) or [Linux Mint](https://linuxmint.com/) as a virtual machine in VBox. There is a nice video explaining how to do this [here](https://www.youtube.com/watch?v=x5MhydijWmc).
 
 ## Windows Subsystem for Linux
-Alternatively, you can use the Windows Subsystem for Linux (WSL) Instructions for installing Linux Subsystem for Windows can be found [https://docs.microsoft.com/en-us/windows/wsl/install-win10](here).
+Alternatively, you can use the Windows Subsystem for Linux (WSL) Instructions for installing Linux Subsystem for Windows can be found [here](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
 
 We find that WSL integrates really nicely within [Visual Studio Code](https://code.visualstudio.com/), our preferred integrated development environment (IDE).
 
 ## Code::Blocks
-Finally, if you prefer to continue using Windows and do not wish to dive into Linux, it is possible to get the model working using the [https://www.codeblocks.org/](Code::Blocks) IDE with MinGW (Minimalist GNU for Windows) compilers. The pair are available to install together here. We have not tested RPM-CRN extensively in this environment but the examples here will all compile and run correctly from Code::Blocks. 
+Finally, if you prefer to continue using Windows and do not wish to dive into Linux, it is possible to get the model working using the [Code::Blocks](https://www.codeblocks.org/) IDE with MinGW (Minimalist GNU for Windows) compilers. The pair are available to install together here. We have not tested RPM-CRN extensively in this environment but the examples here will all compile and run correctly from Code::Blocks. 
 
 # Linux/UNIX
 ![](img/terminal.png =100x)Once you have access to a Linux machine or Linux virtual machine (WSL or VBox as above), we will work in a terminal. 
