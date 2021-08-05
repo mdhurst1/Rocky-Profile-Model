@@ -3,7 +3,7 @@ title: 'Software Requirements'
 ---
 RPM-CRN is written in C++ for efficiency. The code has been written and tested extensively in a Linux/UNIX environment, has also been compiled and run on Windows using Code::Blocks and Linux Subsystem for Windows, *but has not been extensively tested on Mac*. 
 
-Running the model will require working at a unix-style command line interface.
+Running the model will require working at a unix/linux style command line interface.
 
 There are a number of software requirements to run the model and visualise the results:
  - A C++ compiler, preferably GCC: the GNU Compiler Collection
@@ -14,11 +14,9 @@ Optional for Multiobjective Optimisation:
  - Dakota 
  - QUESO
 
-# Docker
+# MAC
 
-Docker is software that allows you to run "containers" within your own operating system that have all of the required tools, libraries  and software needed to run RPM-CRN. The [Docker website](https://www.docker.com/resources/what-container) has the following definition: "A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and reliably from one computing environment to another."
-
-Download and install Docker for your OS platform from the [Docker website](https://www.docker.com/products/docker-desktop).
+Reconsider your life choices. Apparently you can install VirtualBox on a MAC. So there's that.
 
 # Windows
 This code has been developed both in Linux and Windows environments. When working in Windows, this usually involves setting up a Linux virtual environment, for which there are a couple of options.
@@ -58,6 +56,70 @@ HOME$ git clone https://github.com/mdhurst1/Rocky-Profile-Model.git
 
 If your using VSCode, the git integration is fantastic and you can clone the repository this way too by going to `View -> Comman Pallete` and typing `Git: Clone`. It will ask for the repository URL as above.
 
-# MAC
+# Dakota with QUESO
 
-Reconsider your life choices. Apparently you can install VirtualBox on a MAC. So there's that.
+The Dakota toolkit delivers flexible and extendable software for model optimisation and uncertainty quantification. The software package [QUESO](https://github.com/libqueso/queso) (Quantification of Uncertainty for Estimation, Simulation and Optimisation) for the solution of inverse statistical problems is wrapped within Dakota. RPM-CRN works with Dakota and QUESO to optimise model parameters to match observed shore platform topography and measured CRN concentrations, and quantify uncertainty, in order to derive a liely timeseries of rock coast development.
+
+The following [shell script](scripts/Dakota_Queso_Install.sh) contains the terminal commands to install Dakota, Queso and associated dependencies. Thanks to Geraldo Fiorini Neto for collating the shell script.
+
+To run the script, place it in your $home directory, then to make it executable, run:
+```
+HOME$ chmod +x Dakota_Queso_Install.sh
+```
+Run the script with:
+```
+HOME$ ./Dakota_Queso_Install.sh
+```
+
+```
+#!/bin/bash
+
+## Dakota 6.11.0 with QUESO 0.57.1
+
+# install lib dependencies
+apt-get install -y gcc g++ gfortran cmake libboost-all-dev libblas-dev liblapack-dev libopenmpi-dev openmpi-bin gsl-bin libgsl-dev python perl cmake-curses-gui libboost-dev openmpi-doc xorg-dev libmotif-dev build-essential gfortran autotools-dev curl unzip git vim openssh-client openssh-server libgsl0-dev python-pip doxygen texlive-latex-extra
+
+# Install python modules
+pip install numpy scipy pandas mpmath==1.0.0 sympy==1.2 pyyaml
+
+# Remove old version of Java and install newer
+apt-get remove default-jre && apt-get install openjdk-8-jre default-jdk
+
+
+# Download and compile Queso 0.57.1
+
+mkdir -p /root/queso && cd /root/queso
+wget https://github.com/libqueso/queso/releases/download/v0.57.1/queso-0.57.1.tar.gz
+tar -zxvf queso-0.57.1.tar.gz
+cd queso-0.57.1
+./configure --prefix=/opt/queso/0.57.1/
+make && make install 
+
+# Download and extract Dakota 6.11.0
+
+mkdir -p /root/dakota && cd /root/dakota
+wget https://dakota.sandia.gov/sites/default/files/distributions/public/dakota-6.11.0-release-public.src-UI.tar.gz
+tar -zxvf dakota-6.11.0-release-public.src-UI.tar.gz
+mkdir -p /root/dakota/build
+
+# Set environment variables and run
+
+set ENABLE_DAKOTA_DOCS:BOOL=TRUE
+
+echo "export PATH=\${PATH}:/opt/dakota/6.11.0/bin" >> /etc/profile.d/dakota.sh
+echo "export LD_LIBRARY_PATH=\${LD_LIBRARY_PATH}:/opt/dakota/6.11.0/lib" >> /etc/profile.d/dakota.sh
+. /etc/profile.d/dakota.sh
+
+echo "export PATH=\${PATH}:/opt/queso/0.57.1/bin" >> /etc/profile.d/queso.sh
+echo "export LD_LIBRARY_PATH=\${LD_LIBRARY_PATH}:/opt/queso/0.57.1/lib" >> /etc/profile.d/queso.sh
+. /etc/profile.d/queso.sh
+
+# Configure Dakota
+
+cd /root/dakota/build
+cmake  -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_Fortran_COMPILER=gfortran -DCMAKE_C_FLAGS:STRING="-O2" -DCMAKE_CXX_FLAGS:STRING="-O2" -DCMAKE_Fortran_FLAGS:STRING="-O2" -DDAKOTA_HAVE_MPI:BOOL=TRUE -DDAKOTA_HAVE_GSL:BOOL=TRUE -DHAVE_QUESO:BOOL=TRUE  -DBoost_NO_BOOST_CMAKE:BOOL=TRUE -DCMAKE_INSTALL_PREFIX=/opt/dakota/6.11.0/ -DENABLE_DAKOTA_DOCS:BOOL=TRUE  ../dakota-6.11.0-release-public.src-UI/
+
+# Compile and install Dakota
+
+make -j 4 && make install 
+```
