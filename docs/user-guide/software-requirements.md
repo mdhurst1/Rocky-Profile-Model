@@ -35,7 +35,7 @@ We find that WSL integrates really nicely within [Visual Studio Code](https://co
 Finally, if you prefer to continue using Windows and do not wish to dive into Linux, it is possible to get the model working using the [Code::Blocks](https://www.codeblocks.org/) IDE with MinGW (Minimalist GNU for Windows) compilers. The pair are available to install together here. We have not tested RPM-CRN extensively in this environment but the examples here will all compile and run correctly from Code::Blocks. 
 
 # Linux/UNIX
-![Terminal](img/terminal.png =100x)
+![Terminal](img/terminal.png)
 
 Once you have access to a Linux machine or Linux virtual machine (WSL or VBox as above), we will work in a terminal. 
 
