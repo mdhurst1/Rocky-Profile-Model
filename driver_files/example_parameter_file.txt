@@ -1,7 +1,7 @@
 # parameter file for RPM_CRN model
 
 # File Structure
-Folder: /home/mhurst/RPM_CRN/
+Folder: ./RPM_CRN/
 ProjectName: TestProject
 
 # Cosmogenic Isotopes
