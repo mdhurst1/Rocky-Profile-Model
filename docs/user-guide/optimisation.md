@@ -83,12 +83,14 @@ If `burn in samples` is specified (commented out in the example), this number of
 
 `Proposal covariance` is an optional function that tells Dakota what technique to use to generate the MCMC proposal covariance of the proposal distribution (also known as the jumping distribution). In the working example we have declared specific values to be given to each of the variables using a diagonal matrix format. The values we have provided correspond to the values along the diagonal of the matrix. Think of the matrix input set up like this: 
 
+
 | |	FR | K | Y |
+|--|--|--|--|
 | FR | 0.5 | 0 | 0 |
 | K | 0 | 0.5 | 0 |
 | Y | 0 | 0 | 0.5 |
 
-This technique was chosen as we found it gave the user the greatest control over tailoring the acceptance rates. The covariance of the proposal distribution dictates how far a jump the next sample will be in the accepted chain. As a result, the proposal distribution has a direct impact on acceptance rates of the chain. The proposal distribution values should be varied to achieve acceptance rates of ~23% which ensures optimal chain mixing [Sherlock & Roberts, 2009](https://doi.org/10.3150/08-BEJ176). Dakota calculates rejection rates (acceptance rates = 100% - rejection percentage) every 500 runs and this can be seen in the diagnostic outputs within the QuesoDiagnostic directory.
+This technique was chosen as we found it gave the user the greatest control over tailoring the acceptance rates. The covariance of the proposal distribution dictates how far a jump the next sample will be in the accepted chain. As a result, the proposal distribution has a direct impact on acceptance rates of the chain. The proposal distribution values should be varied to achieve acceptance rates of ~23% which ensures optimal chain mixing ([Sherlock & Roberts, 2009](https://doi.org/10.3150/08-BEJ176)). Dakota calculates rejection rates (acceptance rates = 100% - rejection percentage) every 500 runs and this can be seen in the diagnostic outputs within the QuesoDiagnostic directory.
 
 **Acceptance rates too low?** If acceptance rates are significantly less than 23% this often means that the proposal variance is set too high as it is jumping too far away from good, previously acceptance results, so rejection is more likely. Set a smaller proposal covariance to increase acceptance rates.
 
@@ -108,7 +110,7 @@ Specify name of output accepted chain file as `export_chain_points_file`. In our
 
 `uniform_uncertain`: This first term in the variables block specifies the prior distribution assigned to the chosen free parameters. As we have no prior knowledge and want to make no assumptions on the best fit parameter values, a uniform distribution was selected. Uniform_uncertain is one of many aleatory uncertain variable options within Dakota; with aleatory uncertainty meaning uncertainty that comes from a random process. Once we have a better understanding of the parameter space, further variable uncertainty distributions may be explored, such as normal_uncertain that uses a Gaussian distribution.
 
-`Lower_bounds/ Upper_bounds`: Lower and upper bounds on each free parameter have to be set. These have been carefully selected based on relevant literature, namely [Matsumoto et al., 2016](https://doi.org/10.1016/j.geomorph.2016.05.017) and [Matsumoto et al., 2018](https://doi.org/10.1002/esp.4422). 
+`Lower_bounds/ Upper_bounds`: Lower and upper bounds on each free parameter have to be set. These have been carefully selected based on relevant literature, namely [Matsumoto et al. (2016)](https://doi.org/10.1016/j.geomorph.2016.05.017) and [Matsumoto et al. (2018)](https://doi.org/10.1002/esp.4422). 
 
 `Descriptor`: Descriptors are the labels assigned to each of the variables. These need to correspond to the descriptors within the curly brackets used in the input template file
 
