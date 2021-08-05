@@ -25,16 +25,16 @@ Model parameters are set in a parameter file that is passed to the model as an a
 | BreakingWaveCoef | Coefficient for energy expenditure of a breaking wave | 10. |
 | BrokenWaveCoef | Coefficient for energy expenditure of a broken wave | 0.01 |
 | WaveAttenuationConst | Constant describing the rate of decay of wave height/energy with distance across the intertidal zone after wave breaking | 0.01 |
-| *Geology* | | |
+| **Geology** | | |
 | Resistance | Force required to erode an unweathered cell of rock (UNTIS!) | 10. |
 | WeatheringRate | Maximum rate at which resistance is reduced for exposed cells due to intertidal weathering (UNITS) | 1. |
 | SubtidalEfficacy | Constant rate of subtidal weathering for exposed submarine cells as a fraction of the maximum intertidal weathering rate `WeatheringRate` above | 0.001 |
 | CliffFailureDepth | Amount of undercutting required to prompt cliff failure (i.e. the removal of all overlying cells). Provides crude approach to implementing episodic cliff failure | 0.1 |
 | CliffElevation | Height of the cliff (in metres) Need some info about moving reference frame here | 30 |
-| *Spatial Domain* | | |
+| **Spatial Domain** | | |
 | MinElevation | Minimum elevation in the model's spatial domain (in metres) | -20. |
 | MaxElevation | Maximum elevation in the model's spatial domain (in metres) | 10 |
-| *Time Control* | | |
+| **Time Control** | | |
 | StartTime | Time to commence model simulation (in years) | 8000 |
 | EndTime | Time at which to stop the simulation (in years) | 0 |
 | TimeStep | Length of a single model timestep (in years) | -1 |
