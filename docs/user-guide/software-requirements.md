@@ -1,10 +1,7 @@
 ---
 title: 'Software Requirements'
 ---
-RPM-CRN is written in C++ for efficiency. The code has been written and tested extensively in a Linux/UNIX environment, has also been compiled and run on Windows using Code::Blocks and Linux Subsystem for Windows, *and has been tested on Mac?*. 
-
-Alternatively here is a docker environment???
-Alternatively here is another online portal e.g. MyBinder???
+RPM-CRN is written in C++ for efficiency. The code has been written and tested extensively in a Linux/UNIX environment, has also been compiled and run on Windows using Code::Blocks and Linux Subsystem for Windows, *but has not been extensively tested on Mac*. 
 
 Running the model will require working at a unix-style command line interface.
 
