@@ -41,20 +41,20 @@ Once you have access to a Linux machine or Linux virtual machine (WSL or VBox as
 
 ## Download code release
 In a terminal, to get the code, you can download a copy:
-`
-HOME$ wget ...
-`
+```
+HOME$ wget https://github.com/mdhurst1/Rocky-Profile-Model/archive/refs/heads/JOSS-Paper.zip
+```
 
 ## Clone the repository
 Alternatively, you can clone the repository using git (particularly if you wish to do any development work). To install git (if you do not already have it: )
 
-`
-HOME$ sudo apt install git-all`
-`
+```
+HOME$ sudo apt install git-all
+```
 The download a clone of the repository with:
-`
-HOME$ git clone ...
-`
+```
+HOME$ git clone https://github.com/mdhurst1/Rocky-Profile-Model.git
+```
 
 If your using VSCode, the git integration is fantastic and you can clone the repository this way too by going to `View -> Comman Pallete` and typing `Git: Clone`. It will ask for the repository URL as above.
 
