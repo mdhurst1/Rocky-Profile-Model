@@ -77,7 +77,7 @@ Run the script with:
 HOME$ ./Dakota_Queso_Install.sh
 ```
 
-```
+``` shell
 #!/bin/bash
 
 ## Dakota 6.11.0 with QUESO 0.57.1
