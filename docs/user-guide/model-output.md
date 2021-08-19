@@ -2,15 +2,16 @@ Topography
 ===
 Example topographic profile output file: example_ShoreProfile.xz
 
-Output of an across-shore topographic profile is periodically written to file (default is every 100 years controlled by the `PrintInterval` parameter in the parameter file). Shore platform evolution moves from the left to the right hand side of the array (so sea on the left, land on the right). The horizontal (`X`) dimension of the cell array is coded to grow dynamically aas the model simulation proceeds. The topographic profile is output as a vector of the horizontal position of cells at each elevation (`Z`) between the maximum and minimum elevations, spaced at the vertical resolution of the model domain `dZ`).
+Output of an across-shore topographic profile is periodically written to file (default is every 10 years controlled by the `PrintInterval` parameter in the parameter file). The coastal profile erodes from  the left to the right hand side of the array (so sea on the left, land on the right). The horizontal (`X`) dimension of the cell array is coded to grow dynamically aas the model simulation proceeds. The topographic profile is output as a vector of the horizontal position of cells at each elevation (`Z`) between the maximum and minimum elevations, spaced at the vertical resolution of the model domain `dZ` (default is 0.1 m).
 
 The first line of the output file contains the maximum elevation, minimum elevation, and resolution of cell size (in metres).
 
 Each row of shore profile output file contains: time (years), elevation (metres) of sea level at that time, followed by a delimited vector of X positions (in metres) of rock cells for every elevation from maximium to minimum, at the spacing specified in the header.
 
-```
-Example text file here
-```
+| Z<sub>max</sub> | Z<sub>min</sub> | Z<sub>res</sub> | |
+| T<sub>0</sub> | Z<sub>0</sub> | ... | Z<sub>n</sub> |
+| ... | Z<sub>0</sub> | ... | Z<sub>n</sub> |
+| T<sub>n</sub> | Z<sub>0</sub> | ... | Z<sub>n</sub> |
 
 CRN concentrations
 ===
