@@ -1,7 +1,7 @@
 # parameter file for RPM_CRN model
 
 # File Structure
-Folder: ./RPM_CRN/
+Folder: ./
 ProjectName: TestProject
 
 # Cosmogenic Isotopes
