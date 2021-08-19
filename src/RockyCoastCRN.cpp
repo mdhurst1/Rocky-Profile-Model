@@ -73,8 +73,8 @@
 #include <cstdlib>
 //#include <omp.h>
 #include "./RockyCoastCRN.hpp"
-#include "../RPM.hpp"
-#include "../FastExp.hpp"
+#include "./RPM.hpp"
+#include "./FastExp.hpp"
 
 using namespace std;
 
