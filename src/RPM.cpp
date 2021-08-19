@@ -173,7 +173,7 @@ void RPM::Initialise(double dZ_in, double dX_in, double Gradient, double CliffsE
 
 	if (MaxElevation < CliffElevation)
 	{
-		 printf("\n\tWarning: MaxElevation is less than the CliffElevation\n");
+		 printf("\tWarning: MaxElevation is less than the CliffElevation\n");
 	}
 
 	//Declare spatial stuff

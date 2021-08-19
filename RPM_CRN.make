@@ -12,8 +12,8 @@ LD=g++
 # -O3 is an optimisation flag, not good for debugging
 # -fopenmp is a flag for openmp directives
 # -ffast-math is a flag for optimisation of maths functions e.g. exp()
-CFLAGS= -g -c -Wall -Werror -Wextra -pedantic -fopenmp -ffast-math $(INCDIR)
-LDFLAGS= -g -Wall -fopenmp -ffast-math
+CFLAGS= -c -Wall -Werror -Wextra -pedantic -fopenmp -ffast-math -O3 $(INCDIR)
+LDFLAGS= -Wall -fopenmp -ffast-math -O3
 
 # SOURCE FILES MACROS IN DEPENDENCY ORDER? SHOULDNT MATTER THANKS TO HEADERS
 SOURCES = ./src/FastExp.cpp ./src/RockyCoastCRN.cpp ./src/SeaLevel.cpp ./src/RPM.cpp ./src/Parameters.cpp ./src/RPM_CRN_Driver.cpp

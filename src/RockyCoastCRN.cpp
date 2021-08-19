@@ -102,8 +102,6 @@ void RockyCoastCRN::Initialise(vector<int> WhichNuclides)
 
 	*/
 	
-	cout << "Warning: You have initialised an empty RockCoastCRN object." << endl;
-	
 	NDV = -9999;
 	RetreatRate1 = NDV;
 	RetreatRate2 = NDV;

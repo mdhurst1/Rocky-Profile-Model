@@ -177,6 +177,8 @@ int main(int nNumberofArgs,char *argv[])
 	PlatformModel.WriteProfile(Params.ProfileOutFilename, Params.StartTime);			
 	if (Params.CRN_Predictions) PlatformCRN.WriteCRNProfile(Params.ConcentrationsOutFilename, Params.StartTime);
 	
+	cout << "\nRunning simulation:" << endl;
+	
 	//Loop through time
 	while (Time >= Params.EndTime)
 	{
