@@ -41,22 +41,22 @@ Once you have access to a Linux machine or Linux virtual machine (WSL or VBox as
 
 ### - Download code release
 In a terminal, to get the code, you can download a copy:
-```
+``` shell
 HOME$ wget https://github.com/mdhurst1/Rocky-Profile-Model/archive/refs/heads/JOSS-Paper.zip
 ```
 Unzip the repository:
-```
+``` shell
 HOME$ unzip JOSS-Paper.zip
 ```
 
 ### - Clone the repository
 Alternatively, you can clone the repository using git (particularly if you wish to do any development work). To install git (if you do not already have it: )
 
-```
+``` shell
 HOME$ sudo apt install git-all
 ```
 The download a clone of the repository with:
-```
+``` shell
 HOME$ git clone https://github.com/mdhurst1/Rocky-Profile-Model.git
 ```
 
@@ -69,11 +69,11 @@ The Dakota toolkit delivers flexible and extendable software for model optimisat
 The following [shell script](scripts/Dakota_Queso_Install.sh) contains the terminal commands to install Dakota, Queso and associated dependencies. Thanks to Geraldo Fiorini Neto for collating the shell script.
 
 To run the script, place it in your $home directory, then to make it executable, run:
-```
+``` shell
 HOME$ chmod +x Dakota_Queso_Install.sh
 ```
 Run the script with:
-```
+``` shell
 HOME$ ./Dakota_Queso_Install.sh
 ```
 
