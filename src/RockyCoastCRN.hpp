@@ -11,18 +11,27 @@
 
 	Copyright (C) 2015, Martin Hurst
 
-  Developer can be contacted:
-  mhurst@bgs.ac.uk
+	Updates to allow compatibility with Hiro Matsumoto's shore platform model
+	which has been coded up and added to RoBoCoP as part of MASTS project
+	
+	Matsumoto, H., Dickson, M. E., & Kench, P. S. (2016)
+	An exploratory numerical model of rocky shore profile evolution. 
+	Geomorphology, 268, 98-109, http://dx.doi.org/10.1016/j.geomorph.2016.05.017
+	
+	March 2017
+	
+	Copyright (C) 2017, Martin Hurst
+	
+	Developer can be contacted
+	martin.hurst@glasgow.ac.uk
   
-  Martin D. Hurst
-  British Geological Survey,
-  Environmental Science Centre,
-  Nicker Hill,
-  Keyworth,
-  Nottingham,
-  UK,
-  NG12 5GG
-  	
+	Martin D. Hurst
+	School of Geographical and Earth Sciences
+	University of Glasgow
+	Glasgow
+	Scotland
+	G12 8QQ
+
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
