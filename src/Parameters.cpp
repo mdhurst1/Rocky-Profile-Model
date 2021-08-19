@@ -174,7 +174,7 @@ void Parameters::ParseValuesFromFile()
                 }
             }
 
-            else if (Character == "\r" || Character == "\n")
+            else if (Character == "\r" || Character == "\n" || i == (Line.length()-1))
             {
                 if (GotParameter) Value = Line.substr(ValuePosition, i-ValuePosition);
                 break;
