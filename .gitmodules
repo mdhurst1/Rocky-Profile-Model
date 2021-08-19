@@ -1,5 +1,0 @@
-[submodule "RoBoCoP_CRN"]
-	path = RoBoCoP_CRN
-	url = https://github.com/mdhurst1/RoBoCoP_CRN.git
-[submodule "/RoBoCoP_CRN/"]
-	branch = master

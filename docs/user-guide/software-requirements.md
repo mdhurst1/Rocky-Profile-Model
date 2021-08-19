@@ -44,6 +44,10 @@ In a terminal, to get the code, you can download a copy:
 ```
 HOME$ wget https://github.com/mdhurst1/Rocky-Profile-Model/archive/refs/heads/JOSS-Paper.zip
 ```
+Unzip the repository:
+```
+HOME$ unzip JOSS-Paper.zip
+```
 
 ### - Clone the repository
 Alternatively, you can clone the repository using git (particularly if you wish to do any development work). To install git (if you do not already have it: )
