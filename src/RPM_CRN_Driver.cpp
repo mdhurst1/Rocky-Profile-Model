@@ -70,10 +70,10 @@
 #include <map>
 //#include <omp.h>
 #include <unistd.h>
-#include "../RPM.hpp"
-#include "../Parameters.hpp"
-#include "../RoBoCoP_CRN/RockyCoastCRN.hpp"
-#include "../SeaLevel.hpp"
+#include "RPM.hpp"
+#include "Parameters.hpp"
+#include "RockyCoastCRN.hpp"
+#include "SeaLevel.hpp"
 
 using namespace std;
 
