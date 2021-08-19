@@ -86,9 +86,9 @@ If `burn in samples` is specified (commented out in the example), this number of
 
 | |	FR | K | Y |
 |--|--|--|--|
-| FR | 0.5 | 0 | 0 |
-| K | 0 | 0.5 | 0 |
-| Y | 0 | 0 | 0.5 |
+| **FR** | 0.5 | 0 | 0 |
+| **K** | 0 | 0.5 | 0 |
+| **Y** | 0 | 0 | 0.5 |
 
 This technique was chosen as we found it gave the user the greatest control over tailoring the acceptance rates. The covariance of the proposal distribution dictates how far a jump the next sample will be in the accepted chain. As a result, the proposal distribution has a direct impact on acceptance rates of the chain. The proposal distribution values should be varied to achieve acceptance rates of ~23% which ensures optimal chain mixing ([Sherlock & Roberts, 2009](https://doi.org/10.3150/08-BEJ176)). Dakota calculates rejection rates (acceptance rates = 100% - rejection percentage) every 500 runs and this can be seen in the diagnostic outputs within the QuesoDiagnostic directory.
 

@@ -1,12 +1,15 @@
 ---
 title: 'Software Requirements'
 ---
+<h1>Software Requirements</h1>
+
 RPM-CRN is written in C++ for efficiency. The code has been written and tested extensively in a Linux/UNIX environment, has also been compiled and run on Windows using Code::Blocks and Linux Subsystem for Windows, *but has not been extensively tested on Mac*. 
 
 Running the model will require working at a unix/linux style command line interface.
 
 There are a number of software requirements to run the model and visualise the results:
  - A C++ compiler, preferably GCC: the GNU Compiler Collection
+ - The **make** utility to compile the model with our **make files**
  - A text editor or integrated development environment (e.g. Notepad++, gedit, vims, VSCode)
  - A Python distribution with Scipy, Numpy and Matplotlib libraries
 
@@ -14,36 +17,37 @@ Optional for Multiobjective Optimisation:
  - Dakota 
  - QUESO
 
-# MAC
+ ADD LINKS ETC HERE FOR DAKOTA AND QUESO INSTRUCTIONS
 
+## MAC
 Reconsider your life choices. Apparently you can install VirtualBox on a MAC. So there's that.
 
-# Windows
+## Windows
 This code has been developed both in Linux and Windows environments. When working in Windows, this usually involves setting up a Linux virtual environment, for which there are a couple of options.
 
-## - Linux on a Virtual Machine
+### - Linux on a Virtual Machine
 If you do not already work in Linux or UNIX, then the easiest way to get started would be to use some virtualisation software such as [VirtualBox](https://www.virtualbox.org/wiki/Downloads), and installing a Linux debian-based distribution such as [Ubuntu](https://ubuntu.com/) or [Linux Mint](https://linuxmint.com/) as a virtual machine in VBox. There is a nice video explaining how to do this [here](https://www.youtube.com/watch?v=x5MhydijWmc).
 
-## - Windows Subsystem for Linux
+### - Windows Subsystem for Linux
 Alternatively, you can use the Windows Subsystem for Linux (WSL) Instructions for installing Linux Subsystem for Windows can be found [here](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
 
 We find that WSL integrates really nicely within [Visual Studio Code](https://code.visualstudio.com/), our preferred integrated development environment (IDE).
 
-## - Code::Blocks
+### - Code::Blocks
 Finally, if you prefer to continue using Windows and do not wish to dive into Linux, it is possible to get the model working using the [Code::Blocks](https://www.codeblocks.org/) IDE with MinGW (Minimalist GNU for Windows) compilers. The pair are available to install together here. We have not tested RPM-CRN extensively in this environment but the examples here will all compile and run correctly from Code::Blocks. 
 
-# Linux/UNIX
-![Terminal](img/terminal.png)
+## Linux/UNIX
+![Terminal](./img/terminal.png "Terminal")
 
 Once you have access to a Linux machine or Linux virtual machine (WSL or VBox as above), we will work in a terminal. 
 
-## - Download code release
+### - Download code release
 In a terminal, to get the code, you can download a copy:
 ```
 HOME$ wget https://github.com/mdhurst1/Rocky-Profile-Model/archive/refs/heads/JOSS-Paper.zip
 ```
 
-## - Clone the repository
+### - Clone the repository
 Alternatively, you can clone the repository using git (particularly if you wish to do any development work). To install git (if you do not already have it: )
 
 ```
@@ -56,7 +60,7 @@ HOME$ git clone https://github.com/mdhurst1/Rocky-Profile-Model.git
 
 If your using VSCode, the git integration is fantastic and you can clone the repository this way too by going to `View -> Comman Pallete` and typing `Git: Clone`. It will ask for the repository URL as above.
 
-# Dakota with QUESO
+## Dakota with QUESO
 
 The Dakota toolkit delivers flexible and extendable software for model optimisation and uncertainty quantification. The software package [QUESO](https://github.com/libqueso/queso) (Quantification of Uncertainty for Estimation, Simulation and Optimisation) for the solution of inverse statistical problems is wrapped within Dakota. RPM-CRN works with Dakota and QUESO to optimise model parameters to match observed shore platform topography and measured CRN concentrations, and quantify uncertainty, in order to derive a liely timeseries of rock coast development.
 
