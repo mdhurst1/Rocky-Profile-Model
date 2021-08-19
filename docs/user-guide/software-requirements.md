@@ -77,10 +77,10 @@ Run the script with:
 HOME$ ./Dakota_Queso_Install.sh
 ```
 
-``` shell
+``` sh
 #!/bin/bash
 
-## Dakota 6.11.0 with QUESO 0.57.1
+# Dakota 6.11.0 with QUESO 0.57.1
 
 # install lib dependencies
 apt-get install -y gcc g++ gfortran cmake libboost-all-dev libblas-dev liblapack-dev libopenmpi-dev openmpi-bin gsl-bin libgsl-dev python perl cmake-curses-gui libboost-dev openmpi-doc xorg-dev libmotif-dev build-essential gfortran autotools-dev curl unzip git vim openssh-client openssh-server libgsl0-dev python-pip doxygen texlive-latex-extra
