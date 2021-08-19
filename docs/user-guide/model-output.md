@@ -8,7 +8,7 @@ The first line of the output file contains the maximum elevation, minimum elevat
 
 Each row of shore profile output file contains: time (years), elevation (metres) of sea level at that time, followed by a delimited vector of X positions (in metres) of rock cells for every elevation from maximium to minimum, at the spacing specified in the header.
 
-| Z<sub>max</sub> | Z<sub>min</sub> | Z<sub>res</sub> | |
+| Z<sub>max</sub> | Z<sub>min</sub> | Z<sub>res</sub> | | |
 |---|---|---|---|
 | T<sub>0</sub> | SL<sub>0</sub> | Z<sub>0</sub> | ... | Z<sub>n</sub> |
 | ... | ... |Z<sub>0</sub> | ... | Z<sub>n</sub> |
