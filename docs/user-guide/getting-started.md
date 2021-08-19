@@ -37,6 +37,6 @@ The model output will be written to your project directory. There are two output
 
 For more information about the format of the output files, see [model output](model-output.md).
 
-Visualisation and further analysis of the model run is conducted in python (though you could write your own functions in a different language such as R or Matlab :face_vomiting: :vomiting_face:). A timeseries of the evolution of the model topography and snapshhot of the final CRN concentrations can be generated using `/plotting_functions/plot_model_output.py`.
+Visualisation and further analysis of the model run is conducted in python (though you could write your own functions in a different language such as R or Matlab). A timeseries of the evolution of the model topography and snapshhot of the final CRN concentrations can be generated using `/plotting_functions/plot_model_output.py`.
 
 IMAGE OF OUTPUT GOES HERE
