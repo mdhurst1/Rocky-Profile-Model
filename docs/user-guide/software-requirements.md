@@ -8,14 +8,14 @@ RPM-CRN is written in C++ for efficiency. The code has been written and tested e
 Running the model will require working at a unix/linux style command line interface.
 
 There are a number of software requirements to run the model and visualise the results:
- - A C++ compiler, preferably GCC: the GNU Compiler Collection
- - The **make** utility to compile the model with our **make files**
- - A text editor or integrated development environment (e.g. Notepad++, gedit, vims, VSCode)
- - A Python distribution with Scipy, Numpy and Matplotlib libraries
+    - A C++ compiler, preferably GCC: the GNU Compiler Collection
+    - The **make** utility to compile the model with our **make files**
+    - A text editor or integrated development environment (e.g. Notepad++, gedit, vims, VSCode)
+    - A Python distribution with Scipy, Numpy and Matplotlib libraries
 
 Optional for Multiobjective Optimisation:
- - Dakota 
- - QUESO
+    - Dakota 
+    - QUESO
 
 ## MAC
 Reconsider your life choices. Apparently you can install VirtualBox on a MAC. So there's that.
