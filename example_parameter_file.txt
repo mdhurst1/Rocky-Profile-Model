@@ -7,8 +7,8 @@ ProjectName: TestProject
 # Cosmogenic Isotopes
 CRN_Predictions: true
 Berylium: true
-Carbon: false
-Aluminium: false
+Carbon: true
+Aluminium: true
 
 # Hydrodynamics
 SeaLevelFilename: NULL
