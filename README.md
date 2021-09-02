@@ -11,10 +11,6 @@ This code is made available on a GNU General Public License (see LICENSE in repo
 
 JOSS PAPER REFERENCE GOES HERE
 
-Model description
-==
-
-
 Documentation
 ==
 
@@ -83,8 +79,6 @@ Matsumoto, H., Dickson, M. E. and Kench, P. S.: An exploratory numerical model o
 Matsumoto, H., Dickson, M. E. and Kench, P. S.: Modelling the Development of Varied Shore Profile Geometry on Rocky Coasts, J. Coast. Res., 75(sp1), 597–601, doi:[10.2112/SI75-120.1](https://doi.org/10.2112/SI75-120.1), 2016b.
 
 Matsumoto, H., Dickson, M. E. and Kench, P. S.: Modelling the relative dominance of wave erosion and weathering processes in shore platform development in micro- to mega-tidal settings, , 2653(June), 2642–2653, doi:[10.1002/esp.4422](https://doi.org/10.1002/esp.4422), 2018.
-
-
 
 Contributing and Collaborating
 ==

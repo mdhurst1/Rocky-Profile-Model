@@ -76,23 +76,6 @@ Nevertheless, in order to progress efforts to quantify long-term rock coast deve
 
 This paper contributes a coupled model combining rock coast and shore platform development [@Matsumoto2016a] and CRN production at rock coasts [@Hurst2017] in order to provide a framework for interpreting the history of coastal evolution from measured CRN concentrations. RPM-CRN is being used to intepret the topography and CRN concentrations at various rock coast settings globally through multi-objective optimisation to these field data [@Shadrick2021]. 
 
-# Mathematics
-
-Single dollars ($) are required for inline mathematics e.g. $f(x) = e^{\pi/x}$
-
-Double dollars make self-standing equations:
-
-$$\Theta(x) = \left\{\begin{array}{l}
-0\textrm{ if } x < 0\cr
-1\textrm{ else}
-\end{array}\right.$$
-
-You can also use plain \LaTeX for equations
-\begin{equation}\label{eq:fourier}
-\hat f(\omega) = \int_{-\infty}^{\infty} f(x) e^{i\omega x} dx
-\end{equation}
-and refer to \autoref{eq:fourier} from text.
-
 # Acknowledgements
 
 This modelling effort has benefitted from discussions with Michael A. Ellis, Wayne J Stephenson and Larissa A Naylor. We acknowledge financial support from the Marine Alliance for Science and Technology Scotland (MASTS).
