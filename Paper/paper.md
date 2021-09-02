@@ -7,15 +7,15 @@ tags:
   - C++
 
 authors:
-  - name: Martin D. Hurst^[co-first author] # note this makes a footnote saying 'co-first author'
+  - name: Martin D. Hurst^[co-first author]^[corresponding author] # note this makes a footnote saying 'co-first author'
     orcid: 0000-0002-9822-076X
     affiliation: 1 # (Multiple affiliations must be quoted)
   - name: Hironori Matsumoto^[co-first author] # note this makes a footnote saying 'co-first author'
     orcid: 0000-0002-4637-7781
     affiliation: 2
-  - name: Jennifer R. Shadrick^[corresponding author]
+  - name: Jennifer R. Shadrick^[co-first author]
     affiliation: 3
-  - name: Mark E. Dickson
+  - name: Mark E. Dickson^[co-first author]
     orcid: 0000-0002-6031-4170
     affiliation: 4
 
@@ -93,6 +93,6 @@ and refer to \autoref{eq:fourier} from text.
 
 # Acknowledgements
 
-We acknowledge contributions from ...
+We acknowledge contributions from the Marine Alliance for Science and Technology Scotland (MASTS) for funding.
 
 # References
