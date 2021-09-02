@@ -1,4 +1,5 @@
-= Rocky-Profile-Model (RPM)
+Rocky-Profile-Model (RPM)
+=
 
 This repository contains a C++ Implementation of Hiro Matsumoto's Rocky Profile Model for coupling with cosmogenic radionuclide accumulation components of RoBoCoP. 
 
@@ -10,23 +11,26 @@ This code is made available on a GNU General Public License (see LICENSE in repo
 
 JOSS PAPER REFERENCE GOES HERE
 
-== Model description
+Model description
+==
 
 
-
-== Documentation
+Documentation
+==
 
 The full documentation can be found https://rocky-profile-model.readthedocs.io/en/joss-paper/[here].
 
 Below is a brief summary to help you get started.
 
-== Installation
+Installation
+==
 
 Clone this repository and compile with your favourite C++ compiler. 
 Our preferred setup is Linux and the GNU compilers, and the repository contains make files for compiling the software. 
 There is more information about software requirements available on the https://rocky-profile-model.readthedocs.io/en/joss-paper/[documentation webpage].
 
-== Usage
+Usage
+==
 
 To compile the model on your local machine, use the `make` command and point it to the makefile in the repository:
 ```
@@ -56,18 +60,21 @@ Visualisation and further analysis of the model run is conducted in python (thou
 
 The first figure output shows a timeseries of the shore platform evolution over the duration of the model simulation, with topographic profiles plotted every thousand years of the simulation:
 
-![Evolution](img/Evolution.png "Evolution")
+![Evolution](docs/user-guide/img/Evolution.png "Evolution")
 
 The second figure output shows (a) the final topographic profile; and also shows (b) the concentrations of the chosen CRNs (<sup>10</sup>Be, <sup>14</sup>C or <sup>26</sup>Al) distributed across the final model topography, (c) the timeseries of cliff retreat rates, and (d) the timeseries of the maximum CRN concentration for each chosen nuclide:
 
-![Profile and Concentrations](img/ProfileConcentrations.png "Profile and Concentrations")
+![Profile and Concentrations](docs/user-guide/img/ProfileConcentrations.png "Profile and Concentrations")
 
-== Issues
+Issues
+==
 
 Please raise any issues https://github.com/mdhurst1/Rocky-Profile-Model/issues[here].
 
-== References
+References
+==
 
-== Contributing and Collaborating
+Contributing and Collaborating
+==
 
 These software are intended as a tool for the research community. If you are interested in developing the model further or wish to apply it, please feel free to get in touch and work with us. 
