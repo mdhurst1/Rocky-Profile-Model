@@ -74,7 +74,17 @@ Please raise any issues [here](https://github.com/mdhurst1/Rocky-Profile-Model/i
 References
 ==
 
-Matsumoto, Hurst etc.
+Hurst, M. D., Rood, D. H., Ellis, M. A., Anderson, R. S. and Dornbusch, U.: Recent acceleration in coastal cliff retreat rates on the south coast of Great Britain, Proc. Natl. Acad. Sci., 113, 13336–13341, doi:[10.1073/PNAS.1613044113](https://doi.org/10.1073/PNAS.1613044113), 2016.
+
+Hurst, M. D., Rood, D. H. and Ellis, M. A.: Controls on the distribution of cosmogenic 10Be across shore platforms, Earth Surf. Dyn., 5(1), doi:[10.5194/esurf-5-67-2017](https://doi.org/10.5194/esurf-5-67-2017), 2017.
+
+Matsumoto, H., Dickson, M. E. and Kench, P. S.: An exploratory numerical model of rocky shore profile evolution, Geomorphology, 268, 98–109, doi:[10.1016/j.geomorph.2016.05.017](https://doi.org/10.1016/j.geomorph.2016.05.017), 2016a.
+
+Matsumoto, H., Dickson, M. E. and Kench, P. S.: Modelling the Development of Varied Shore Profile Geometry on Rocky Coasts, J. Coast. Res., 75(sp1), 597–601, doi:[10.2112/SI75-120.1](https://doi.org/10.2112/SI75-120.1), 2016b.
+
+Matsumoto, H., Dickson, M. E. and Kench, P. S.: Modelling the relative dominance of wave erosion and weathering processes in shore platform development in micro- to mega-tidal settings, , 2653(June), 2642–2653, doi:[10.1002/esp.4422](https://doi.org/10.1002/esp.4422), 2018.
+
+
 
 Contributing and Collaborating
 ==
