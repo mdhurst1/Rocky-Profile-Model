@@ -3,9 +3,9 @@ Rocky-Profile-Model (RPM)
 
 This repository contains a C++ Implementation of Hiro Matsumoto's Rocky Profile Model for coupling with cosmogenic radionuclide accumulation components of RoBoCoP. 
 
-The RPM object is the exploratory morphodynamic model developed by https://doi.org/10.1016/j.geomorph.2016.05.017[Matsumoto et al. (2016a)] and http://www.bioone.org/doi/10.2112/SI75-120.1[Matsumoto et al. (2016b)].
+The RPM object is the exploratory morphodynamic model developed by [Matsumoto et al. (2016a)](https://doi.org/10.1016/j.geomorph.2016.05.017) and [Matsumoto et al. (2016b)](http://www.bioone.org/doi/10.2112/SI75-120.1)).
 
-This version was developed for coupling to predictions of cosmogenic isotope concentrations using the https://github.com/mdhurst1/RoBoCoP_CRN/[RoBoCoP_CRN] model developed by http://www.pnas.org/content/113/47/13336.abstract[Hurst et al. (2016)] and http://www.earth-surf-dynam.net/5/67/2017/[Hurst et al. (2017)].
+This version was developed for coupling to predictions of cosmogenic isotope concentrations using the [RoBoCoP_CRN](https://github.com/mdhurst1/RoBoCoP_CRN/) model developed by [Hurst et al. (2016)](http://www.pnas.org/content/113/47/13336.abstract) and [Hurst et al. (2017)](http://www.earth-surf-dynam.net/5/67/2017/).
 
 This code is made available on a GNU General Public License (see LICENSE in repository). Please cite the following papers when using or refering to this model:
 
@@ -18,7 +18,7 @@ Model description
 Documentation
 ==
 
-The full documentation can be found https://rocky-profile-model.readthedocs.io/en/joss-paper/[here].
+The full documentation can be found [here](https://rocky-profile-model.readthedocs.io/en/joss-paper/).
 
 Below is a brief summary to help you get started.
 
@@ -27,7 +27,7 @@ Installation
 
 Clone this repository and compile with your favourite C++ compiler. 
 Our preferred setup is Linux and the GNU compilers, and the repository contains make files for compiling the software. 
-There is more information about software requirements available on the https://rocky-profile-model.readthedocs.io/en/joss-paper/[documentation webpage].
+There is more information about software requirements available on the [documentation webpage]( https://rocky-profile-model.readthedocs.io/en/joss-paper/).
 
 Usage
 ==
@@ -50,11 +50,11 @@ Alternatively you could move the parameter file to a directory for your project 
 ```
 Rocky-Profile-Model$ RPM_CRN.out /home/mhurst/MyFirstRPMCRN/ modified_parameter_file.txt
 ```
-For a detailed description of the contents of a parameter file, see the documentation https://rocky-profile-model.readthedocs.io/en/joss-paper/[here].
+For a detailed description of the contents of a parameter file, see the documentation [here](https://rocky-profile-model.readthedocs.io/en/joss-paper/).
 
 The model output will be written to your project directory. There are two output files, one containing the timeseries of topographic evolution of the simulated rock coast, and once containing the corresponding timeseries of CRN concentrations at the surface of the topography.
 
-For more information about the format of the output files, see the documentation https://rocky-profile-model.readthedocs.io/en/joss-paper/[here].
+For more information about the format of the output files, see the documentation [here](https://rocky-profile-model.readthedocs.io/en/joss-paper/).
 
 Visualisation and further analysis of the model run is conducted in python (though you could write your own functions in a different language such as R or Matlab). A timeseries of the evolution of the model topography and snapshhot of the final CRN concentrations can be generated using `/plotting_functions/RPM_CRN_Figure.py`.
 
@@ -69,10 +69,12 @@ The second figure output shows (a) the final topographic profile; and also shows
 Issues
 ==
 
-Please raise any issues https://github.com/mdhurst1/Rocky-Profile-Model/issues[here].
+Please raise any issues [here](https://github.com/mdhurst1/Rocky-Profile-Model/issues).
 
 References
 ==
+
+Matsumoto, Hurst etc.
 
 Contributing and Collaborating
 ==
