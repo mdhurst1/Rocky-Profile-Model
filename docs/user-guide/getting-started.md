@@ -22,11 +22,11 @@ The program can then be launched at the command line, requiring two input argume
 
 The following command will launch the executable in its current directory with the default parameter values:
 ```
-Rocky-Profile-Model$ RPM_CRN.exe ./ example_parameter_file.txt
+Rocky-Profile-Model$ RPM_CRN.out ./ example_parameter_file.txt
 ```
 Alternatively you could move the parameter file to a directory for your project and customise it:
 ```
-Rocky-Profile-Model$ RPM_CRN.exe /home/mhurst/MyFirstRPMCRN/ modified_parameter_file.txt
+Rocky-Profile-Model$ RPM_CRN.out /home/mhurst/MyFirstRPMCRN/ modified_parameter_file.txt
 ```
 For a detailed description of the contents of a parameter file, see [configuration options](configuration-options.md).
 
