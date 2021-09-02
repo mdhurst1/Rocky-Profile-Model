@@ -72,6 +72,6 @@ The first figure output shows a timeseries of the shore platform evolution over 
 
 ![Evolution](img/Evolution.png "Evolution")
 
-The second figure output also shows the timeseries of cliff retreat rates, the concentrations of the chosen CRNs (<sup>10</sup>Be, <sup>14</sup>C or <sup>26</sup>Al) distributed across the final model topography, and the timeseries of the maximum CRN concentration for each chosen nuclide:
+The second figure output shows (a) the final topographic profile; and also shows (b) the concentrations of the chosen CRNs (<sup>10</sup>Be, <sup>14</sup>C or <sup>26</sup>Al) distributed across the final model topography, (c) the timeseries of cliff retreat rates, and (d) the timeseries of the maximum CRN concentration for each chosen nuclide:
 
 ![Profile and Concentrations](img/ProfileConcentrations.png "Profile and Concentrations")
