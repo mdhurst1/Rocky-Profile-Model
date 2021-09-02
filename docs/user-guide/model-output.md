@@ -1,6 +1,6 @@
 Topography
 ===
-Example topographic profile output file: example_ShoreProfile.xz
+Example topographic profile output file: *example_ShoreProfile.xz*
 
 Output of an across-shore topographic profile is periodically written to file (default is every 10 years controlled by the `PrintInterval` parameter in the parameter file). The coastal profile erodes from  the left to the right hand side of the array (so sea on the left, land on the right). The horizontal (`X`) dimension of the cell array is coded to grow dynamically aas the model simulation proceeds. The topographic profile is output as a vector of the horizontal position of cells at each elevation (`Z`) between the maximum and minimum elevations, spaced at the vertical resolution of the model domain `dZ` (default is 0.1 m).
 
@@ -17,7 +17,7 @@ Each row of shore profile output file contains: time (years), elevation (metres)
 CRN concentrations
 ===
 
-Example CRN concentration profile output file: example_Concentrations.xn
+Example CRN concentration profile output file: *example_Concentrations.xn*
 
 The CRN concentration output corresponds to the topographic profiles and are also periodically written to file at the same intervals as the topography file above (every 100 years by default, controlled by `PrintInterval` in the parameter file). The output differs from the topography output in that a horizontal array of cells is written to file; with each cell in the `X` dimension assigned a value corresponding to the CRN concentration at the rock surface. The horizontal vector of CRN concentrations is read from left to right, with the cliff position at the right side of the vector. 
 
