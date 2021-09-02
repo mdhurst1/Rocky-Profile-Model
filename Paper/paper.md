@@ -72,7 +72,9 @@ He goes on to highlight several key research challenges relating to processes th
 This highlights a critical circular problem, that CRNs can reveal rates of rock coast development but requires a model of rock coast evolution that faithfully represents the dominant processes driving change, while measurements of CRNs has been suggested could improve our process understanding. 
 Nevertheless, in order to progress efforts to quantify long-term rock coast development, a coupled modelling framework for the morphodynamic development of rock coasts and accumulation of cosmogenic radionuclides is required. 
 
-This paper contributes a coupled model combining rock coast and shore platform development [@Matsumoto2016a] and CRN production at rock coasts [@Hurst2017] in order to provide a framework for interpreting the history of coastal evolution from measured CRN concentrations.
+# RPM-CRN
+
+This paper contributes a coupled model combining rock coast and shore platform development [@Matsumoto2016a] and CRN production at rock coasts [@Hurst2017] in order to provide a framework for interpreting the history of coastal evolution from measured CRN concentrations. RPM-CRN is being used to intepret the topography and CRN concentrations at various rock coast settings globally through multi-objective optimisation to these field data [@Shadrick2021]. 
 
 # Mathematics
 
@@ -93,6 +95,6 @@ and refer to \autoref{eq:fourier} from text.
 
 # Acknowledgements
 
-We acknowledge contributions from the Marine Alliance for Science and Technology Scotland (MASTS) for funding.
+This modelling effort has benefitted from discussions with Michael A. Ellis, Wayne J Stephenson and Larissa A Naylor. We acknowledge financial support from the Marine Alliance for Science and Technology Scotland (MASTS).
 
 # References
