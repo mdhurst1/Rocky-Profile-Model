@@ -10,7 +10,7 @@ nav:
   - Getting Started: 'user-guide/getting-started.md'
   - Configuration Options: 'user-guide/configuration-options.md'
   - Model Output: 'user-guide/model-output.md'
-  - Optimisation: 'user-guide/optimisation.md'
+  # - Optimisation: 'user-guide/optimisation.md'
   - Issues: 'https://github.com/mdhurst1/Rocky-Profile-Model/issues'
   - License: 'license.md'
   - About: 'about.md'
