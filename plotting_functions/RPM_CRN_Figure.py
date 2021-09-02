@@ -277,16 +277,26 @@ class RPM_CRN_Figure:
         self.Figure.savefig(Outputfilename)
 
 if __name__ == "__main__":
+    
+    # set the workspace
     Folder = Path("../")
+    
+    # set the project name
     Project = "TestProject"
-    ProfileFile = Folder / (Project+"_ShoreProfile.xz")
-    ConcentrationsFile = Folder / (Project+"_Concentrations.xn")
+    
+    # set the location and name of the output figures
     FigureFile = Folder / "Evolution.png"
     FigureFile2 = Folder / "ProfileConcentrations.png"
     
+    # define model output files
+    ProfileFile = Folder / (Project+"_ShoreProfile.xz")
+    ConcentrationsFile = Folder / (Project+"_Concentrations.xn")
+    
+    # create and populate the figures then save
     EvolutionFigure = RPM_CRN_Figure()
     EvolutionFigure.PlotProfileEvolutionFigure(ProfileFile)
     EvolutionFigure.SaveFig(FigureFile)
+    
     MyFigure = RPM_CRN_Figure(FigWidth_Inches=11.)
     MyFigure.PlotProfileAndConcentrationFigure(ProfileFile, ConcentrationsFile, Label="test", Legend=True)
     MyFigure.SaveFig(FigureFile2)
