@@ -8,11 +8,11 @@ The first line of the output file contains the maximum elevation, minimum elevat
 
 Each row of shore profile output file contains: time (years), elevation (metres) of sea level at that time, followed by a delimited vector of X positions (in metres) of rock cells for every elevation from maximium to minimum, at the spacing specified in the header.
 
-| Z<sub>max</sub> | Z<sub>min</sub> | Z<sub>res</sub> | | |
-|---|---|---|---|
-| T<sub>0</sub> | SL<sub>0</sub> | Z<sub>0</sub> | ... | Z<sub>n</sub> |
-| ... | ... |Z<sub>0</sub> | ... | Z<sub>n</sub> |
-| T<sub>n</sub> | SL<sub>n</sub> | Z<sub>0</sub> | ... | Z<sub>n</sub> |
+| Z<sub>max</sub> | Z<sub>min</sub> | Z<sub>res</sub> | | | | |
+|---|---|---|---|---|---|---|
+| T<sub>0</sub> | SL<sub>0</sub> | Z<sub>0</sub> |  Z<sub>1</sub> |  Z<sub>2</sub> | ... | Z<sub>n</sub> |
+| ... | ... |Z<sub>0</sub> | Z<sub>1</sub> |  Z<sub>2</sub> | ... | Z<sub>n</sub> |
+| T<sub>n</sub> | SL<sub>n</sub> | Z<sub>0</sub> | Z<sub>1</sub> |  Z<sub>2</sub> | ... | Z<sub>n</sub> |
 
 CRN concentrations
 ===
@@ -25,12 +25,12 @@ The first line of the file contains a delimited list of the nuclides being track
 
 Each row of CRN concentration profile output file: time (years BP), the nuclide being tracked (10: <sup>10</sup>Be etc.), followed by a vector of CRN concentrations (`N`) of surface rock cells (atoms g<sup>-1</sup>) for every `X` position across shore platform, from left to right. 
 
-| 10 | 14 | 26 | | |
-|---|---|---|---|---|
-| T<sub>0</sub> | 10 | N<sub>0</sub> | ... | N<sub>n</sub> |
-| T<sub>0</sub> | 14 | N<sub>0</sub> | ... | N<sub>n</sub> |
-| T<sub>0</sub> | 26 | N<sub>0</sub> | ... | N<sub>n</sub> |
-| ... | ... | ... | ... | ... |
-| T<sub>n</sub> | 10 | N<sub>0</sub> | ... | N<sub>n</sub> |
-| T<sub>n</sub> | 14 | N<sub>0</sub> | ... | N<sub>n</sub> |
-| T<sub>n</sub> | 16 | N<sub>0</sub> | ... | N<sub>n</sub> |
+| 10 | 14 | 26 | | | | |
+|---|---|---|---|---|---|---|
+| T<sub>0</sub> | 10 | N<sub>0</sub> | N<sub>1</sub> | N<sub>2</sub> | ... | N<sub>n</sub> |
+| T<sub>0</sub> | 14 | N<sub>0</sub> | N<sub>1</sub> | N<sub>2</sub> | ... | N<sub>n</sub> |
+| T<sub>0</sub> | 26 | N<sub>0</sub> | N<sub>1</sub> | N<sub>2</sub> | ... | N<sub>n</sub> |
+| ... | ... | ... | ... | ... | ... | ... |
+| T<sub>n</sub> | 10 | N<sub>0</sub> | N<sub>1</sub> | N<sub>2</sub> | ... | N<sub>n</sub> |
+| T<sub>n</sub> | 14 | N<sub>0</sub> | N<sub>1</sub> | N<sub>2</sub> | ... | N<sub>n</sub> |
+| T<sub>n</sub> | 16 | N<sub>0</sub> | N<sub>1</sub> | N<sub>2</sub> | ... | N<sub>n</sub> |
