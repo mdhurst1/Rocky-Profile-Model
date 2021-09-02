@@ -111,7 +111,7 @@ class RPM_CRN_Figure:
             ax1 = self.Figure.add_subplot(GridSpec[1,0])
             #ax1.set_yscale("log")
             ax1.set_xlabel("Distance (m)")
-            ax1.set_ylabel("Concentration (at g${-1}$)")
+            ax1.set_ylabel("Concentration (at g$^{-1}$)")
             ax1.spines['right'].set_visible(False)
             ax1.spines['top'].set_visible(False)
 
@@ -125,16 +125,18 @@ class RPM_CRN_Figure:
             ax2.yaxis.set_label_position('right')
             ax2.set_ylabel("Cliff Retreat Rate (m yr$^{-1}$)")
             ax2.spines['bottom'].set_visible(False)
+            ax2.invert_xaxis()
             
             # ax3 for time series of maximum concentrations
             ax3 = self.Figure.add_subplot((GridSpec[1,1]))
-            ax3.set_yscale("log")
-            ax3.set_xlabel("Time (k yrs)")
+            #ax3.set_yscale("log")
+            ax3.set_xlabel("Time (k yrs BP)")
             ax3.set_ylabel("Max Intertidal Concentration (at g$^{-1}$)")
             ax3.spines['left'].set_visible(False)
             ax3.spines['top'].set_visible(False)
             ax3.yaxis.set_ticks_position('right')
             ax3.yaxis.set_label_position('right')
+            ax3.invert_xaxis()
             
 
             self.Axes = [ax0, ax1, ax2, ax3]
@@ -172,7 +174,6 @@ class RPM_CRN_Figure:
         for i, key in enumerate(Concentrations.keys()):
             
             N = Concentrations[key][-1]
-            print(len(N))
             XConc = np.arange(0,len(N))*dX
             CliffIndex = np.argmin(np.abs(XConc-CliffPositions[-1]))
             XConc -= XConc[CliffIndex]
@@ -195,7 +196,7 @@ class RPM_CRN_Figure:
             self.Axes[3].plot(Times/1000., MaxN, ls=LineStyles[i], color=Colour)
         
         # calculate cliff retreat rates
-        RetreatRates = np.diff(CliffPositions)/np.diff(Times)
+        RetreatRates = -np.diff(CliffPositions)/np.diff(Times)
         self.Axes[2].plot(Times[1:]/1000,RetreatRates,'-', color=Colour)
         
         # make sure axes line up
@@ -276,14 +277,16 @@ class RPM_CRN_Figure:
         self.Figure.savefig(Outputfilename)
 
 if __name__ == "__main__":
-    Folder = Path("../driver_files/")
+    Folder = Path("../")
     Project = "TestProject"
     ProfileFile = Folder / (Project+"_ShoreProfile.xz")
     ConcentrationsFile = Folder / (Project+"_Concentrations.xn")
-    FigureFile = Folder / "test.png"
-
+    FigureFile = Folder / "Evolution.png"
+    FigureFile2 = Folder / "ProfileConcentrations.png"
+    
     EvolutionFigure = RPM_CRN_Figure()
-    EvolutionFigure.PlotProfileEvolutionFigure(ProfileFile)    
+    EvolutionFigure.PlotProfileEvolutionFigure(ProfileFile)
+    EvolutionFigure.SaveFig(FigureFile)
     MyFigure = RPM_CRN_Figure(FigWidth_Inches=11.)
     MyFigure.PlotProfileAndConcentrationFigure(ProfileFile, ConcentrationsFile, Label="test", Legend=True)
-    MyFigure.SaveFig(FigureFile)
+    MyFigure.SaveFig(FigureFile2)
