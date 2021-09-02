@@ -12,7 +12,7 @@ Each row of shore profile output file contains: time (years), elevation (metres)
 |---|---|---|---|---|---|---|
 | T<sub>0</sub> | SL<sub>0</sub> | Z<sub>0</sub> |  Z<sub>1</sub> |  Z<sub>2</sub> | ... | Z<sub>n</sub> |
 | ... | ... |Z<sub>0</sub> | Z<sub>1</sub> |  Z<sub>2</sub> | ... | Z<sub>n</sub> |
-| T<sub>n</sub> | SL<sub>n</sub> | Z<sub>0</sub> | Z<sub>1</sub> |  Z<sub>2</sub> | ... | Z<sub>n</sub> |
+| T<sub>T</sub> | SL<sub>T</sub> | Z<sub>0</sub> | Z<sub>1</sub> |  Z<sub>2</sub> | ... | Z<sub>n</sub> |
 
 CRN concentrations
 ===
@@ -31,6 +31,6 @@ Each row of CRN concentration profile output file: time (years BP), the nuclide 
 | T<sub>0</sub> | 14 | N<sub>0</sub> | N<sub>1</sub> | N<sub>2</sub> | ... | N<sub>n</sub> |
 | T<sub>0</sub> | 26 | N<sub>0</sub> | N<sub>1</sub> | N<sub>2</sub> | ... | N<sub>n</sub> |
 | ... | ... | ... | ... | ... | ... | ... |
-| T<sub>n</sub> | 10 | N<sub>0</sub> | N<sub>1</sub> | N<sub>2</sub> | ... | N<sub>n</sub> |
-| T<sub>n</sub> | 14 | N<sub>0</sub> | N<sub>1</sub> | N<sub>2</sub> | ... | N<sub>n</sub> |
-| T<sub>n</sub> | 16 | N<sub>0</sub> | N<sub>1</sub> | N<sub>2</sub> | ... | N<sub>n</sub> |
+| T<sub>T</sub> | 10 | N<sub>0</sub> | N<sub>1</sub> | N<sub>2</sub> | ... | N<sub>n</sub> |
+| T<sub>T</sub> | 14 | N<sub>0</sub> | N<sub>1</sub> | N<sub>2</sub> | ... | N<sub>n</sub> |
+| T<sub>T</sub> | 16 | N<sub>0</sub> | N<sub>1</sub> | N<sub>2</sub> | ... | N<sub>n</sub> |
