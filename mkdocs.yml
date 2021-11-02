@@ -1,0 +1,16 @@
+theme:
+  name: readthedocs
+
+site_name: RPM-CRN Documentation
+repo_url: https://github.com/mdhurst1/Rocky-Profile-Model/tree/JOSS-Paper
+
+nav:
+  - Home: 'index.md'
+  - Software Requirements: 'user-guide/software-requirements.md'
+  - Getting Started: 'user-guide/getting-started.md'
+  - Configuration Options: 'user-guide/configuration-options.md'
+  - Model Output: 'user-guide/model-output.md'
+  # - Optimisation: 'user-guide/optimisation.md'
+  - Issues: 'https://github.com/mdhurst1/Rocky-Profile-Model/issues'
+  - License: 'license.md'
+  - About: 'about.md'
