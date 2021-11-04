@@ -7,7 +7,7 @@ The RPM object is the exploratory morphodynamic model developed by [Matsumoto et
 
 This version was developed for coupling to predictions of cosmogenic isotope concentrations using the [RoBoCoP_CRN](https://github.com/mdhurst1/RoBoCoP_CRN/) model developed by [Hurst et al. (2016)](http://www.pnas.org/content/113/47/13336.abstract) and [Hurst et al. (2017)](http://www.earth-surf-dynam.net/5/67/2017/).
 
-This code is made available on a GNU General Public License (see LICENSE in repository). Please cite the following papers when using or refering to this model:
+This code is made available on a GNU General Public License (see LICENSE in repository). Please cite [Matsumoto et al. (2016a)](https://doi.org/10.1016/j.geomorph.2016.05.017) and [Hurst et al. (2017)](http://www.earth-surf-dynam.net/5/67/2017/) and the code repository:
 
 [![DOI](https://zenodo.org/badge/92949754.svg)](https://zenodo.org/badge/latestdoi/92949754)
 
