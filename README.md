@@ -9,7 +9,7 @@ This version was developed for coupling to predictions of cosmogenic isotope con
 
 This code is made available on a GNU General Public License (see LICENSE in repository). Please cite the following papers when using or refering to this model:
 
-JOSS PAPER REFERENCE GOES HERE
+[![DOI](https://zenodo.org/badge/92949754.svg)](https://zenodo.org/badge/latestdoi/92949754)
 
 Documentation
 ==
