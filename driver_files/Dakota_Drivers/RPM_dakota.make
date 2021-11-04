@@ -2,6 +2,7 @@
 
 # COMPILER and LINKER MACROs
 CC=g++
+#CC=clang 
 LD=g++
 
 # COMPILER AND LINKER OPTION FLAGS MACRO
@@ -11,11 +12,10 @@ LD=g++
 # -pg is some sort of debugging option
 # -O3 is an optimisation flag, not good for debugging
 # -fopenmp is a flag for openmp directives
-CFLAGS= -g -c -Wall -Werror -Wextra -pedantic -O3 $(INCDIR) 
-LDFLAGS= -g -Wall -O3
-
+CFLAGS= -c -Wall -Werror -Wextra -pedantic -g -O3 -fopenmp $(INCDIR) 
+LDFLAGS= -Wall -g -O3 -fopenmp
 # SOURCE FILES MACROS IN DEPENDENCY ORDER? SHOULDNT MATTER THANKS TO HEADERS
-SOURCES = ../../FastExp.cpp ../../RoBoCoP_CRN/RockyCoastCRN.cpp ../../SeaLevel.cpp ../../RPM.cpp ./RPM_dakota_driver.cpp
+SOURCES = ../../src/FastExp.cpp ../../src/RockyCoastCRN.cpp ../../src/SeaLevel.cpp ../../src/RPM.cpp ./RPM_dakota_driver.cpp
 
 # LIBRARIES MACRO
 LIBS   = -lm -lstdc++ 
@@ -35,4 +35,4 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm -f ../../*.o ../../RoBoCoP_CRN/*.o ../*.o ../*.out *.o *.out *.xz *.xn *.exe
+	rm -f ../../*.o ../../RoBoCoP_CRN/*.o ../*.o ../*.out *.o *.out *.xz *.xn *.exe *.rst 
