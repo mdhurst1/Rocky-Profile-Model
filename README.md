@@ -14,7 +14,7 @@ This code is made available on a GNU General Public License (see LICENSE in repo
 Documentation
 ==
 
-The full documentation can be found [here](https://rocky-profile-model.readthedocs.io/en/joss-paper/).
+The full documentation can be found [here](https://rocky-profile-model.readthedocs.io/en/latest/).
 
 Below is a brief summary to help you get started.
 
@@ -23,7 +23,7 @@ Installation
 
 Clone this repository and compile with your favourite C++ compiler. 
 Our preferred setup is Linux and the GNU compilers, and the repository contains make files for compiling the software. 
-There is more information about software requirements available on the [documentation webpage]( https://rocky-profile-model.readthedocs.io/en/joss-paper/).
+There is more information about software requirements available on the [documentation webpage](https://rocky-profile-model.readthedocs.io/en/latest/).
 
 Usage
 ==
@@ -46,11 +46,11 @@ Alternatively you could move the parameter file to a directory for your project 
 ```
 Rocky-Profile-Model$ RPM_CRN.out /home/mhurst/MyFirstRPMCRN/ modified_parameter_file.txt
 ```
-For a detailed description of the contents of a parameter file, see the documentation [here](https://rocky-profile-model.readthedocs.io/en/joss-paper/).
+For a detailed description of the contents of a parameter file, see the documentation [here](https://rocky-profile-model.readthedocs.io/en/latest/).
 
 The model output will be written to your project directory. There are two output files, one containing the timeseries of topographic evolution of the simulated rock coast, and once containing the corresponding timeseries of CRN concentrations at the surface of the topography.
 
-For more information about the format of the output files, see the documentation [here](https://rocky-profile-model.readthedocs.io/en/joss-paper/).
+For more information about the format of the output files, see the documentation [here](https://rocky-profile-model.readthedocs.io/en/latest/).
 
 Visualisation and further analysis of the model run is conducted in python (though you could write your own functions in a different language such as R or Matlab). A timeseries of the evolution of the model topography and snapshhot of the final CRN concentrations can be generated using `/plotting_functions/RPM_CRN_Figure.py`.
 
