@@ -30,6 +30,19 @@ WeatheringRate: 1.
 SubtidalEfficacy: 0.001
 CliffFailureDepth: 0.1
 CliffElevation: 30
+UpliftMagnitude: 0
+UpliftFrequency: 0
+
+# MCMC parameters (if required)
+Resistance_Min: 1.
+Resistance_Max: 100.
+Resistance_Mean: 10.
+Resistance_Std: 5.
+
+WeatheringRate_Min: 0.1
+WeatheringRate_Max: 10.
+WeatheringRate_Mean: 1.
+WeatheringRate_Std: 2.
 
 # space domain
 MinElevation: -20
