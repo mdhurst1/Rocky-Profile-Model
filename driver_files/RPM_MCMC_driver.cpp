@@ -118,10 +118,101 @@ int main(int nNumberofArgs,char *argv[])
         // Initiate RPM object
         RPM PlatformModel = RPM(dZ, dX, Params.InitialGradient, Params.CliffElevation, Params.MaxElevation, Params.MinElevation);
 
+        //initialise RockyCoastCRN friend object
+        RockyCoastCRN PlatformCRN = RockyCoastCRN();
+
+        if (CRNFlag)
+        {
+            //Which Nuclides to track 10Be, 14C, 26Al, 36Cl?
+            vector<int> Nuclides;
+            Nuclides.push_back(10);
+            
+            //initialise RockyCoastCRN friend object
+            PlatformCRN = RockyCoastCRN(PlatformModel, Nuclides);
+        }
+        
+        //Initialise Tides
+        double TidalPeriod = 12.42;
+        PlatformModel.InitialiseTides(TidalRange);
+        if (CRNFlag) PlatformCRN.InitialiseTides(TidalRange/2.,TidalPeriod);
+            
+        //Initialise Waves
+        //Single Wave for now but could use the waveclimate object from COVE!?
+        double WaveHeight_Mean = 3.;
+        double WaveHeight_StD = 0.;
+        double WavePeriod_Mean = 6.;
+        double WavePeriod_StD = 0;
+        PlatformModel.InitialiseWaves(WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD);
+
+        // Wave coefficient constant
+        double StandingCoefficient = 0.1;
+        double BreakingCoefficient = 10.;
+        double BrokenCoefficient = 1.;
+        PlatformModel.Set_WaveCoefficients(StandingCoefficient, BreakingCoefficient, BrokenCoefficient, WaveAttenuationConst);
+
+        //reset the geology
+        double CliffFailureDepth = 0.1;
+        PlatformModel.InitialiseGeology(CliffElevation, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);
+        
         // Pass Metropolis Chain Parameters
 
-        // calculate resulting likelihoods
+        // Run the model
+        //Loop through time
+        while (Time >= EndTime)
+        {
+            //Update Sea Level
+            InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
+            PlatformModel.UpdateSeaLevel(InstantSeaLevel);
 
+            //Get the wave conditions
+            PlatformModel.GetWave();
+
+            //Calculate forces acting on the platform
+            PlatformModel.CalculateBackwearing();
+            PlatformModel.CalculateDownwearing();
+
+            //Do erosion
+            PlatformModel.ErodeBackwearing();
+            PlatformModel.ErodeDownwearing();
+
+            //Update the Morphology 
+            PlatformModel.UpdateMorphology();	
+            
+            //Implement Weathering
+            PlatformModel.IntertidalWeathering();
+            PlatformModel.SubtidalWeathering();
+            
+            //Update the Morphology 
+            PlatformModel.UpdateMorphology();
+
+            //Check for Mass Failure
+            PlatformModel.MassFailure();
+            
+            //Update the Morphology 
+            PlatformModel.UpdateMorphology();
+
+            //Update the morphology inside RockyCoastCRN
+            if (CRNFlag) PlatformCRN.UpdateMorphology(PlatformModel);
+
+            //Update the CRN concentrations
+            if (CRNFlag) PlatformCRN.UpdateCRNs();
+                
+            //print?
+            if (Time <= PrintTime)
+            {
+                cout.flush();
+                cout << "RPM: Time " << setprecision(2) << fixed << Time << " years\r";
+                //PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
+                        //if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
+                PrintTime -= PrintInterval;
+            }
+
+            //update time
+            Time -= TimeInterval;
+        }
+        // calculate resulting likelihoods
+        // calculate CRN likelihood
+        // calculate topo likelihood
         // accept or reject new parameters
 
         // save results

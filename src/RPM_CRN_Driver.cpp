@@ -1,6 +1,6 @@
 /*------------------------------------------------------------------------
 
-	RPM_CRN_Driver.cpp
+	RPM_CRN_MCMC_Driver.cpp
 	
 	Driver file for running the shore platform model of Matsumoto et al. (2016)
 	Updated following improvements by Matsumoto et al. (2018)
