@@ -112,13 +112,28 @@ void Parameters::SetDefaultValues()
 	float_Params["WeatheringRate"] = 0.1;
 	float_Params["SubtidalEfficacy"] = 0.1;
 	float_Params["CliffFailureDepth"] = 0.1;
+    
+    // Uplift control parameters (might get added to MCMC)
+    float_Params["UpliftMagnitude"] = 0;
+    float_Params["UpliftFrequency"] = 0;
+
+    // free parameters for MCMC
+    float_Params["Resistance_Max"] = 100.;
+    float_Params["Resistance_Min"] = 0.1;
+    float_Params["Resistance_Mean"] = 20.;
+    float_Params["Resistance_Std"] = 5.;
+
+    float_Params["WeatheringRate_Max"] = 100.;
+    float_Params["WeatheringRate_Min"] = 0.1;
+    float_Params["WeatheringRate_Mean"] = 20.;
+    float_Params["WeatheringRate_Std"] = 5.;
 
 	// time control
 	float_Params["StartTime"] = 8000.;
 	float_Params["EndTime"] = 0.;
 	float_Params["TimeStep"] = 1.;
 	float_Params["PrintInterval"] = 100.;
-
+    
 	// output files
     string_Params["Folder"] = Folder;
     string_Params["ProjectName"] = "RPM_CRN";
@@ -239,6 +254,21 @@ void Parameters::ParseValuesFromFile()
     WeatheringRate = float_Params["WeatheringRate"];
     SubtidalEfficacy = float_Params["SubtidalEfficacy"];
     CliffFailureDepth = float_Params["CliffFailureDepth"];
+
+    // Uplift control parameters (might get added to MCMC)
+    UpliftMagnitude = float_Params["UpliftMagnitude"];
+    UpliftFrequency = float_Params["UpliftFrequency"];
+
+    // free parameters for MCMC
+    Resistance_Max = float_Params["Resistance_Max"];
+    Resistance_Min = float_Params["Resistance_Min"];
+    Resistance_Mean = float_Params["Resistance_Mean"];
+    Resistance_Std = float_Params["Resistance_Std"];
+
+    WeatheringRate_Max = float_Params["WeatheringRate_Max"];
+    WeatheringRate_Min = float_Params["WeatheringRate_Min"];
+    WeatheringRate_Mean = float_Params["WeatheringRate_Mean"];
+    WeatheringRate_Std = float_Params["WeatheringRate_Std"];
 
     // time control
     StartTime = float_Params["StartTime"];

@@ -71,6 +71,13 @@ class Parameters
 		float InitialGradient, CliffElevation, MaxElevation, MinElevation, Resistance, 
 				WeatheringRate, SubtidalEfficacy, CliffFailureDepth;
 
+		// tectonics
+		float UpliftMagnitude, UpliftFrequency;
+
+		// variable parameters and their distribution metrics for MCMC
+		float Resistance_Mean, Resistance_Std, Resistance_Min, Resistance_Max;
+		float WeatheringRate_Mean, WeatheringRate_Std, WeatheringRate_Min, WeatheringRate_Max;
+
 		// time control
 		double StartTime, EndTime, TimeStep, PrintInterval;
 
