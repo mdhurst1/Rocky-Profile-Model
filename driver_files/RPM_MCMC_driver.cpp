@@ -160,6 +160,17 @@ int main(int nNumberofArgs,char *argv[])
         //Loop through time
         while (Time >= EndTime)
         {
+            //Do an earthquake?
+            if (Time < UpliftTime)
+            {
+                // perform uplift
+                PlatformModel.TectonicUplift(UpliftMagnitude);
+                UpliftTime -= UpliftFrequency;
+                
+                // Update the Morphology 
+                PlatformModel.UpdateMorphology();
+            }		
+
             //Update Sea Level
             InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
             PlatformModel.UpdateSeaLevel(InstantSeaLevel);
