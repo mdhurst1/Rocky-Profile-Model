@@ -25,7 +25,7 @@ TidalRange = 8
 SubtidalEfficacy = 0.005
 #WaveAttenuationConst = 0.01
 
-#set folder location 
+# set folder location 
 Folder = "/home/jrs17/Main_RPM/Rocky-Profile-Model/driver_files/"
 
 #########################################
