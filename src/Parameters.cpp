@@ -291,7 +291,7 @@ void Parameters::ParseValuesFromFile()
     cout << "Comparing strings..." << endl;
     cout << "String 1: " << SeaLevelFilename << endl;
     cout << "String 2: " << NULLString << endl;
-    cout << strcmp(SeaLevelFilename, NULLString) << endl;
+    cout << SeaLevelFilename.compare(NULLString) << endl;
     
     if (SeaLevelFilename == NULLString)
     {
