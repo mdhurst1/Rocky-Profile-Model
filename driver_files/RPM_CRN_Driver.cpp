@@ -190,10 +190,8 @@ int main(int nNumberofArgs,char *argv[])
 	PlatformModel.WriteProfile(Params.ProfileOutFilename, Params.StartTime);			
 	if (Params.CRN_Predictions) PlatformCRN.WriteCRNProfile(Params.ConcentrationsOutFilename, Params.StartTime);
 	
-	cout << "running model" << endl;
-
 	//Loop through time
-	while (Time <= Params.EndTime)
+	while (Time >= Params.EndTime)
 	{
 		//Do an earthquake?
 		//if (Time < UpliftTime)
@@ -211,7 +209,7 @@ int main(int nNumberofArgs,char *argv[])
 		//}		
 		
 		//Update Sea Level
-		InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(abs(Time));
+		InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
 		PlatformModel.UpdateSeaLevel(InstantSeaLevel);
 
 		//Get the wave conditions
@@ -243,16 +241,15 @@ int main(int nNumberofArgs,char *argv[])
 		}
         	
 		//print?
-		if (Time >= PrintTime)
+		if (Time <= PrintTime)
 		{
 			PlatformModel.WriteProfile(Params.ProfileOutFilename, Time);
 			if (Params.CRN_Predictions) PlatformCRN.WriteCRNProfile(Params.ConcentrationsOutFilename, Time);
-			PrintTime += Params.PrintInterval;
+			PrintTime -= Params.PrintInterval;
 		}
 		
 		//update time
-		cout << Time << endl;
-		Time += Params.TimeStep;
+		Time -= Params.TimeStep;
 		
 	}
 	

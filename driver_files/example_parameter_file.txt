@@ -49,7 +49,7 @@ MinElevation: -20
 MaxElevation: 10
 
 # time control
-StartTime: -8000
+StartTime: 8000
 EndTime: 0
 TimeStep: 1
 PrintInterval: 100
