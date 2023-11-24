@@ -144,14 +144,17 @@ void RockyCoastCRN::Initialise(vector<int> WhichNuclides)
 	PlatformElevation = EmptyXNDV;
 	PlatformElevationOld = EmptyXNDV;
 	SurfaceElevation = EmptyXNDV;
-	vector< vector <double> > EmptySurfaceNs(NoNuclides,EmptyX);
-	SurfaceN = EmptySurfaceNs;
 	
-	//Setup CRN Arrays 	
-	vector< vector<double> > EmptyN(NXNodes,EmptyZ);
-	vector< vector< vector<double> > > EmptyNs(NoNuclides,EmptyN);
+	//Setup CRN Arrays
+	vector<double> EmptyNuclides(NoNuclides,0);
+	vector< vector<double> > EmptyNZ(NZNodes, EmptyNuclides);
+	vector< vector< vector<double> > > EmptyNs(NXNodes, EmptyNZ);
 	N = EmptyNs;
 
+	// and surface array for N
+	vector< vector <double> > EmptySurfaceNs(NXNodes,EmpytyNuclides);
+	SurfaceN = EmptySurfaceNs;
+		
 	for (int j=0; j<NZNodes; ++j) Z[j] = (((ZMax-ZMin)/2.)-j*((ZMax-ZMin)/(NZNodes-1)));	
 	 
 	//I Geomagnetic Scaling as constant
@@ -280,8 +283,6 @@ void RockyCoastCRN::Initialise(RPM RPMCoast, vector<int> WhichNuclides)
 	PlatformElevation = EmptyXNDV;
 	PlatformElevationOld = EmptyXNDV;
 	SurfaceElevation = EmptyXNDV;
-	vector< vector <double> > EmptySurfaceNs(NoNuclides,EmptyX);
-	SurfaceN = EmptySurfaceNs;
 	SamplingInterval = (int)dX/RPMCoast.dX;
 
 	// setup horizontal domain
@@ -292,10 +293,15 @@ void RockyCoastCRN::Initialise(RPM RPMCoast, vector<int> WhichNuclides)
 	}
 		
 	//Setup CRN Arrays 	
-	vector< vector<double> > EmptyN(NXNodes,EmptyZ);
-	vector< vector< vector<double> > > EmptyNs(NoNuclides,EmptyN);
+	vector<double> EmptyNuclides(NoNuclides,0);
+	vector< vector<double> > EmptyNZ(NZNodes, EmptyNuclides);
+	vector< vector< vector<double> > > EmptyNs(NXNodes, EmptyNZ);
 	N = EmptyNs;
-	
+
+	// and surface array for N
+	vector< vector <double> > EmptySurfaceNs(NXNodes,EmpytyNuclides);
+	SurfaceN = EmptySurfaceNs;
+
 	//Setup tides
 	TidalRange = RPMCoast.TidalRange;
 	
@@ -800,6 +806,7 @@ void RockyCoastCRN::UpdateCRNs()
 	Martin Hurst
 	February 2016
 	*/
+
 
 	//Temp parameters
 	vector<double> EmptyNVec(NXNodes,0);
