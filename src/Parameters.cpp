@@ -288,6 +288,7 @@ void Parameters::ParseValuesFromFile()
     
     // check if reading sea level from file
     if (SeaLevelFilename != "NULL" && SeaLevelFilename != "") ReadSeaLevelFromFile = true;
+    else ReadSeaLevelFromFile = false;
 
     WriteToFile();
     PrintToScreen();

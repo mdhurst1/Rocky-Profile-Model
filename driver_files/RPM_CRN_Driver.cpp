@@ -150,6 +150,9 @@ int main(int nNumberofArgs,char *argv[])
 	
 	// Initialise Sea level from datafile
 	SeaLevel RelativeSeaLevel;
+	
+	cout << endl << Params.ReadSeaLevelFromFile << endl;
+
 	if (Params.ReadSeaLevelFromFile) RelativeSeaLevel = SeaLevel(Params.SeaLevelFilename);
 	else RelativeSeaLevel = SeaLevel(Params.SeaLevelRise, Params.StartTime, Params.EndTime, Params.TimeStep);
 	
