@@ -191,7 +191,7 @@ int main(int nNumberofArgs,char *argv[])
 	if (Params.CRN_Predictions) PlatformCRN.WriteCRNProfile(Params.ConcentrationsOutFilename, Params.StartTime);
 	
 	cout << "running model" << endl;
-	
+
 	//Loop through time
 	while (Time >= Params.EndTime)
 	{
@@ -213,6 +213,8 @@ int main(int nNumberofArgs,char *argv[])
 		//Update Sea Level
 		InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
 		PlatformModel.UpdateSeaLevel(InstantSeaLevel);
+
+		cout << "updated sea level" << endl;
 
 		//Get the wave conditions
 		PlatformModel.GetWave();
@@ -251,6 +253,7 @@ int main(int nNumberofArgs,char *argv[])
 		}
 		
 		//update time
+		cout << Time << endl;
 		Time -= Params.TimeStep;
 		
 	}
