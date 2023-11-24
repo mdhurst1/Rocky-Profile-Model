@@ -150,17 +150,18 @@ int main(int nNumberofArgs,char *argv[])
 	
 	// Initialise Sea level from datafile
 	SeaLevel RelativeSeaLevel;
-	
-	cout << endl << Params.ReadSeaLevelFromFile << endl;
 
 	if (Params.ReadSeaLevelFromFile) RelativeSeaLevel = SeaLevel(Params.SeaLevelFilename);
 	else RelativeSeaLevel = SeaLevel(Params.SeaLevelRise, Params.StartTime, Params.EndTime, Params.TimeStep);
 	
-	
+	cout << "Initialised Sea level" << endl;
+
 	// Get initial sea level
 	float InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
 	PlatformModel.UpdateSeaLevel(InstantSeaLevel);
 
+	cout << "got initial sea level" << endl;
+	
 	//Initialise Tides
 	PlatformModel.InitialiseTides(Params.TidalRange);
     if (Params.CRN_Predictions) PlatformCRN.InitialiseTides(Params.TidalRange/2.,Params.TidalPeriod);
