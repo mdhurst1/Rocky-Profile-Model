@@ -289,10 +289,9 @@ void Parameters::ParseValuesFromFile()
     // check if reading sea level from file
     if (SeaLevelFilename == "NULL")
     {
-        cout << endl << "I am breaking here" << ReadSeaLevelFromFile << SeaLevelFilename << endl;
-        break;
+        cout << endl << "I am stuffed here" << ReadSeaLevelFromFile << SeaLevelFilename << endl;
     }
-    
+
     if (SeaLevelFilename != "NULL" && SeaLevelFilename != "") 
     {
         ReadSeaLevelFromFile = true;
