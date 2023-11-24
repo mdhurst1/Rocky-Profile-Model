@@ -287,8 +287,16 @@ void Parameters::ParseValuesFromFile()
     ParameterOutFilename = ProjectName + ".params";
     
     // check if reading sea level from file
-    if (SeaLevelFilename != "NULL" && SeaLevelFilename != "") ReadSeaLevelFromFile = true;
-    else ReadSeaLevelFromFile = false;
+    if (SeaLevelFilename != "NULL" && SeaLevelFilename != "") 
+    {
+        ReadSeaLevelFromFile = true;
+        cout << endl << "I am here" << ReadSeaLevelFromFile << SeaLevelFilename << endl;
+    }
+    else
+    {
+        ReadSeaLevelFromFile = false;
+        cout << endl << "Should be false << " << ReadSeaLevelFromFile << SeaLevelFilename << endl;
+    }
 
     WriteToFile();
     PrintToScreen();
