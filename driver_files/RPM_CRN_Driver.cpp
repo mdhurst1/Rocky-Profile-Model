@@ -161,14 +161,18 @@ int main(int nNumberofArgs,char *argv[])
 	PlatformModel.UpdateSeaLevel(InstantSeaLevel);
 
 	cout << "got initial sea level" << endl;
-	
+
 	//Initialise Tides
 	PlatformModel.InitialiseTides(Params.TidalRange);
     if (Params.CRN_Predictions) PlatformCRN.InitialiseTides(Params.TidalRange/2.,Params.TidalPeriod);
-		
+	
+	cout << "initialised tides" << endl;
+
 	//Initialise Waves
 	PlatformModel.InitialiseWaves(Params.WaveHeight_Mean, Params.WaveHeight_StD, Params.WavePeriod_Mean, Params.WavePeriod_StD);
 	
+	cout << "initialised waves" << endl;
+
 	//Tectonic Events
 	//double UpliftFrequency = 1000.;
 	//double UpliftTime = UpliftFrequency;
@@ -185,6 +189,8 @@ int main(int nNumberofArgs,char *argv[])
 	// print initial condition to file
 	PlatformModel.WriteProfile(Params.ProfileOutFilename, Params.StartTime);			
 	if (Params.CRN_Predictions) PlatformCRN.WriteCRNProfile(Params.ConcentrationsOutFilename, Params.StartTime);
+	
+	cout << "running model" << endl;
 	
 	//Loop through time
 	while (Time >= Params.EndTime)
