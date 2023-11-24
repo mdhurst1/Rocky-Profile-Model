@@ -68,6 +68,7 @@
 #include <sstream>
 #include <cstdlib>
 #include <map>
+#include <time.h>
 //#include <omp.h>
 #include <unistd.h>
 #include "../src/RPM.hpp"
@@ -79,6 +80,10 @@ using namespace std;
 
 int main(int nNumberofArgs,char *argv[])
 {
+	//clock 
+	time_t begin, end;
+	time(&begin);
+	
 	cout << endl;
 	cout << "--------------------------------------------------------------" << endl;
 	cout << "|  Rocky Profile Model with Cosmogenic RadioNuclides (RPM_CRN) |" << endl;
@@ -240,6 +245,12 @@ int main(int nNumberofArgs,char *argv[])
 		
 	}
 	
+	//clock end 
+	time(&end);
+	time_t elapsed = end - begin;
+
+	printf("Time measured: %ld seconds.\n", elapsed);
+
 	//a few blank lines to finish
 	cout << endl << "Done" << endl << endl;
 
