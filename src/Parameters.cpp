@@ -288,27 +288,11 @@ void Parameters::ParseValuesFromFile()
     
     // check if reading sea level from file
     string NULLString("NULL");
-    cout << "Comparing strings..." << endl;
-    cout << "String 1: " << SeaLevelFilename << endl;
-    cout << "String 2: " << NULLString << endl;
-    cout << SeaLevelFilename.compare(NULLString) << endl;
+    string BlankString("");
     
-    if (SeaLevelFilename == NULLString)
-    {
-        cout << endl << "I am stuffed here" << ReadSeaLevelFromFile << SeaLevelFilename << endl;
-    }
-
-    if (SeaLevelFilename != "NULL" && SeaLevelFilename != "") 
-    {
-        ReadSeaLevelFromFile = true;
-        cout << endl << "I am here" << ReadSeaLevelFromFile << SeaLevelFilename << endl;
-    }
-    else
-    {
-        ReadSeaLevelFromFile = false;
-        cout << endl << "Should be false << " << ReadSeaLevelFromFile << SeaLevelFilename << endl;
-    }
-
+    if ((SeaLevelFilename.compare(NULLString)) || (SeaLevelFilename.compare(BlankString))) ReadSeaLevelFromFile = false;
+    else ReadSeaLevelFromFile = true;
+    
     WriteToFile();
     PrintToScreen();
 }
