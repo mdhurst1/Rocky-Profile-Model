@@ -983,11 +983,9 @@ void RockyCoastCRN::UpdateMorphology(RPM RPMCoast)
 	// grow arrays if more nodes needed
 	while (OldXMax+dX < XMax)
 	{
-		for (int n=0; n<NoNuclides; ++n)
-		{
-			N[n].push_back(N[n][NXNodes-1]);
-			SurfaceN[n].push_back(SurfaceN[n][NXNodes-1]);
-		}
+		N.push_back(N[NXNodes-1]);
+		SurfaceN.push_back(SurfaceN[NXNodes-1]);
+
 		PlatformElevation.push_back(PlatformElevation[NXNodes-1]);
 		X.push_back(X[NXNodes-1]+dX);
 		SampleInd.push_back(SampleInd[NXNodes-1]+SamplingInterval);
@@ -1009,12 +1007,9 @@ void RockyCoastCRN::UpdateMorphology(RPM RPMCoast)
 	// why are these kept separate?
 	SurfaceElevation = PlatformElevation;
 	
-	for (int n=0; n<NoNuclides; ++n)
+	for (int j=0; j<NXNodes; ++j)
 	{
-		for (int j=0; j<NXNodes; ++j)
-		{
-			SurfaceN[n][j] = N[n][j][SurfaceInd[j]];
-		}
+		SurfaceN[j] = N[j][SurfaceInd[j];
 	}
 	
 	//Cliff is on the right, find it and update surface elevations to cliff elevation
@@ -1284,7 +1279,7 @@ void RockyCoastCRN::WriteCRNProfile(string OutputFileName, double Time)
 		{
 			WritePlatform << Time;
 			WritePlatform << " " << Nuclides[n];
-			for (int j=0; j<NXNodes; ++j) WritePlatform << setprecision(5) << " " << SurfaceN[n][j];
+			for (int j=0; j<NXNodes; ++j) WritePlatform << setprecision(5) << " " << SurfaceN[j][n];
 			WritePlatform << endl;
 		}
 	}
