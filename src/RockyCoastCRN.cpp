@@ -152,7 +152,7 @@ void RockyCoastCRN::Initialise(vector<int> WhichNuclides)
 	N = EmptyNs;
 
 	// and surface array for N
-	vector< vector <double> > EmptySurfaceNs(NXNodes,EmpytyNuclides);
+	vector< vector <double> > EmptySurfaceNs(NXNodes,EmptyNuclides);
 	SurfaceN = EmptySurfaceNs;
 		
 	for (int j=0; j<NZNodes; ++j) Z[j] = (((ZMax-ZMin)/2.)-j*((ZMax-ZMin)/(NZNodes-1)));	
@@ -299,7 +299,7 @@ void RockyCoastCRN::Initialise(RPM RPMCoast, vector<int> WhichNuclides)
 	N = EmptyNs;
 
 	// and surface array for N
-	vector< vector <double> > EmptySurfaceNs(NXNodes,EmpytyNuclides);
+	vector< vector <double> > EmptySurfaceNs(NXNodes,EmptyNuclides);
 	SurfaceN = EmptySurfaceNs;
 
 	//Setup tides
