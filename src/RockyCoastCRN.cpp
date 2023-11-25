@@ -1009,7 +1009,7 @@ void RockyCoastCRN::UpdateMorphology(RPM RPMCoast)
 	
 	for (int j=0; j<NXNodes; ++j)
 	{
-		SurfaceN[j] = N[j][SurfaceInd[j];
+		SurfaceN[j] = N[j][SurfaceInd[j]];
 	}
 	
 	//Cliff is on the right, find it and update surface elevations to cliff elevation
