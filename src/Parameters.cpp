@@ -287,8 +287,12 @@ void Parameters::ParseValuesFromFile()
     ParameterOutFilename = ProjectName + ".params";
     
     // check if reading sea level from file
-    if (SeaLevelFilename != "NULL" && SeaLevelFilename != "") ReadSeaLevelFromFile = true;
-
+    string NULLString("NULL");
+    string BlankString("");
+    
+    if ((SeaLevelFilename.compare(NULLString)) || (SeaLevelFilename.compare(BlankString))) ReadSeaLevelFromFile = false;
+    else ReadSeaLevelFromFile = true;
+    
     WriteToFile();
     PrintToScreen();
 }

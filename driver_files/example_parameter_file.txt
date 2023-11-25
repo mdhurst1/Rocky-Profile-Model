@@ -51,5 +51,5 @@ MaxElevation: 10
 # time control
 StartTime: 8000
 EndTime: 0
-TimeStep: -1
-PrintInterval: 10
+TimeStep: 1
+PrintInterval: 100
