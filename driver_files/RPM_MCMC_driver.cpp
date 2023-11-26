@@ -103,8 +103,7 @@ int main(int nNumberofArgs,char *argv[])
 		
 	// load parameter parser object
   	Parameters Params(Folder,InputParamFilename);
-    dZ = 0.1; dX = 0.1;
-
+    
     // initiate MCMC object
     // pass it concentrations and profile data
     MCMC_RPM My_MCMC_RPM = MCMC_RPM();

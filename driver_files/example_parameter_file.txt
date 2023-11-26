@@ -2,6 +2,7 @@
 
 # File Structure
 Folder: ./RPM_CRN/
+DataFolder: ./ExampleMCMCDir/
 ProjectName: TestProject
 
 # Cosmogenic Isotopes
@@ -9,6 +10,18 @@ CRN_Predictions: true
 Berylium: true
 Carbon: false
 Aluminium: false
+
+# space domain
+MinElevation: -20
+MaxElevation: 10
+dZ: 0.1
+dX: 0.1
+
+# time control
+StartTime: 8000
+EndTime: 0
+TimeStep: 1
+PrintInterval: 100
 
 # Hydrodynamics
 SeaLevelFilename: NULL
@@ -44,12 +57,10 @@ WeatheringRate_Max: 10.
 WeatheringRate_Mean: 1.
 WeatheringRate_Std: 2.
 
-# space domain
-MinElevation: -20
-MaxElevation: 10
+WaveAttenuation_Min: 0.001
+WaveAttenuation_Max: 0.1
+WaveAttenuation_Mean: 0.01
+WaveAttenuationStd: 0.02
 
-# time control
-StartTime: 8000
-EndTime: 0
-TimeStep: 1
-PrintInterval: 100
+CRNFilename: ExampleCRNData.in
+TopoFilename: ExampleTopoData.in
