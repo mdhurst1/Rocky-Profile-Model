@@ -105,8 +105,8 @@ int main(int nNumberofArgs,char *argv[])
   	Parameters Params(Folder,InputParamFilename);
     
     // initiate MCMC object
-    // pass it concentrations and profile data
-    MCMC_RPM My_MCMC_RPM = MCMC_RPM();
+    // pass it the parameters object
+    MCMC_RPM My_MCMC_RPM = MCMC_RPM(Params);
       
     // declare iteration counter
     while (i=0; i<My_MCMC_Coast.NIterations; ++i)

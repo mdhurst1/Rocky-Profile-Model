@@ -15,6 +15,7 @@ comments
 #include <cstdlib>
 #include "./RPM.hpp"
 #include "./SeaLevel.hpp"
+#include "./Parameters.hpp"
 
 using namespace std;
 
@@ -26,9 +27,8 @@ class MCMC_RPM
     private:
       //Initialise Function
       void Initialise();
-      void Initialise(char* ProfileDatafile);
-      //void Initialise(char* ProfileDatafile, char* PlatformXSectionDatafile);
-
+      void Initialise(Parameters Params);
+      
       //Vectors to hold extracted profile data
       int NProfileData;
       vector<double> ProfileXData;
@@ -68,13 +68,12 @@ class MCMC_RPM
       }
 
       /// @brief Initialisation function for MCMC_RPM objects
-      /// @param ProfileDatafile Data file containing extracted platform morphology
-      /// @param CRNDatafile containing observed CRN concentrations (not currently used).
-
-      MCMC_RPM(char* ProfileDatafile)
+      /// @param Params A parameters object read from an parameter file
+      
+      MCMC_RPM(Parameters Params)
       {
             
-             MCMC_RPM::Initialise(ProfileDatafile);
+             MCMC_RPM::Initialise(Params);
       }
 
       /// this runs the metropolis algorithm along a chain with NIterations it prints to the file 'OutFilename'
@@ -86,7 +85,6 @@ class MCMC_RPM
 	  ///   new parameters. The model sometimes accepts less likely results to allow exploration of the
 	  ///   parameter space. 
 	  /// @param NIterations Number of times to run the RockyCoastCRN model in the Markov Chain
-	  /// @param ParamFilename Filename of file containing parameters for the MCMC analysis (see example file)
 	  /// @param OutFilename File to write the results of each iteration of the chain to.
 	  
       void RunMetropolisChain(int NIterations, char* ParamFilename, char* OutFilename);
