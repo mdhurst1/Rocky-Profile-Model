@@ -29,10 +29,12 @@ class MCMC_RPM
       void Initialise();
       void Initialise(Parameters Params);
       
-      //Vectors to hold extracted profile data
-      int NProfileData;
+      //Vectors to hold extracted profile and CRN data
+      int NProfileData, NCRNData;
       vector<double> ProfileXData;
       vector<double> ProfileZData;
+      vector<double> CRNXData;
+      vector<double> CRNNData;
       double ZStd;
 
       //Vector to hold StartTime input from parameter file

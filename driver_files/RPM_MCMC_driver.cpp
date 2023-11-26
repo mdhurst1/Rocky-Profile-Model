@@ -108,11 +108,8 @@ int main(int nNumberofArgs,char *argv[])
     // pass it the parameters object
     MCMC_RPM My_MCMC_RPM = MCMC_RPM(Params);
       
-    // declare iteration counter
-    while (i=0; i<My_MCMC_Coast.NIterations; ++i)
-    {
-        //Sample next parameters from Metropolis Chain
-	    My_MCMC_Coast.SampleMetropolisChain();
+    //Sample next parameters from Metropolis Chain
+	My_MCMC_Coast.RunMetropolisChain();
 
         // Initiate RPM object
         RPM PlatformModel = RPM(dZ, dX, Params.InitialGradient, Params.CliffElevation, Params.MaxElevation, Params.MinElevation);

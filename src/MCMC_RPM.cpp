@@ -25,26 +25,31 @@ void MCMC_RPM::Initialise()
 {
     /* initialise an empty Markov Chain Monte Carlo object
         */
-   cout << "unable to initialise, TestObject is an empty object" << endl;
+   cout << "unable to initialise, MCMC_RPM is an empty object" << endl;
+   cout << "you need to specify a Parameters object when initialising the MCMC object" << endl;
    exit(EXIT_SUCCESS);
 }
 
-void MCMC_RPM::Initialise(char* ProfileDatafile, char* ConcentrationsDatafile)
+void MCMC_RPM::Initialise(Parameters Params)
 {
-    /*initialise a Markov Chain object with extracted platform profile
+    /*initialise a Markov Chain object with extracted platform profile and concentrations
     */
 
-   //Declare temp variables 
-   char Dummy[32];
-   float TempProfileXData, TempProfileZData;
 
-   //Generate input filestream and read data into vectors
-   ifstream READProfileDatafile(ProfileDatafile);
-   if (!READProfileDatafile)
-   { 
-       printf("MCMC_Coast::%s line %d: Input Profile data file \"%s\" doesn't exist\n\n", __func__, __LINE__, ProfileDatafile);
-       exit(EXIT_SUCCESS);
-   }
+    // file name params
+    string ProfileDatafile(Params.TopoFilename);
+    string ConcentrationDatafile(Params.CRNFilename);
+
+    // some dummy variables for reading from file
+    float TempXData, TempZData, TempNData;
+    
+    //Generate input filestream and read data into vectors
+    ifstream READProfileDatafile(ProfileDatafile);
+    if (!READProfileDatafile)
+    { 
+        printf("MCMC_Coast::%s line %d: Input Profile data file \"%s\" doesn't exist\n\n", __func__, __LINE__, ProfileDatafile);
+        exit(EXIT_SUCCESS);
+    }
 
     // ignore header lines by reading to Dummy
     // file format is...
@@ -53,17 +58,47 @@ void MCMC_RPM::Initialise(char* ProfileDatafile, char* ConcentrationsDatafile)
     //   X[1]   |   Z[1]
     //  X[...]  |  Z[...]
     //   X[n]   |   Z[n]
-   READProfileDatafile >> Dummy >>  Dummy;
-   while(READProfileDatafile >> TempProfileXData >> TempProfileZData)
-   {
-       ProfileXData.push_back(TempProfileXData);
-       ProfileZData.push_back(TempProfileZData);
-   }
-   // get size of the profile data vectors
-   NProfileData = ProfileXData.size();
+    READProfileDatafile >> Dummy >>  Dummy;
+    while(READProfileDatafile >> TempProfileXData >> TempProfileZData)
+    {
+        ProfileXData.push_back(TempProfileXData);
+        ProfileZData.push_back(TempProfileZData);
+    }
+
+    READProfileDatafile.close();
+
+    // get size of the profile data vectors
+    NProfileData = ProfileXData.size();
+
+    //Generate input filestream and read data into vectors
+    ifstream READCRNDatafile(CRNDatafile);
+    if (!READCRNDatafile)
+    { 
+        printf("MCMC_Coast::%s line %d: Input CRN data file \"%s\" doesn't exist\n\n", __func__, __LINE__, ProfileDatafile);
+        exit(EXIT_SUCCESS);
+    }
+
+    // ignore header lines by reading to Dummy
+    // file format is...
+    // X_header | N_header
+    //   X[0]   |   N[0]
+    //   X[1]   |   N[1]
+    //  X[...]  |  N[...]
+    //   X[n]   |   N[n]
+    READCRNDatafile >> Dummy >>  Dummy;
+    while(READCRNDatafile >> TempXData >> TempNData)
+    {
+        CRNXData.push_back(TempXData);
+        CRNNData.push_back(TempNData);
+    }
+
+    READCRNDatafile.close();
+
+    // get size of the profile data vectors
+    NCRNData = CRNXData.size();
 
     // initialise empty RPM object
-   MCMCPlatform = RPM();
+    MCMCPlatform = RPM();
 }
 
 long double MCMC_RPM::CalculateLikelihood()
@@ -119,7 +154,7 @@ long double MCMC_RPM::RunCoastIteration()
     /* runs a single instance of the RPM Model, then reported the likelihood of the parameters
     */
 
-     //Time control parameters
+    //Time control parameters
 	//Time runs in yrs bp
 	double EndTime = 0;
 	double Time = StartTime;
