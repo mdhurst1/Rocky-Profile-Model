@@ -1173,7 +1173,7 @@ void RPM::MassFailure()
 	}
 }
 
-void RPM::EvolveCoast()
+void RPM::RunModel(Parameters Params, RockyCoastCRN PlatformCRN)
 {
 	/*
 		Function to evolve the coastal profile through time following
@@ -1185,10 +1185,22 @@ void RPM::EvolveCoast()
 	*/
 
  	//Loop through time
-	while (Time <= EndTime)
+	//Loop through time
+	while (Time >= Params.EndTime)
 	{
+		//Do an earthquake?
+		if (Params.Earthquakes && Time < UpliftTime)
+		{
+			TectonicUplift(Params.UpliftMagnitude);
+			UpliftTime -= Params.UpliftFrequency;
+			
+			//Update the Morphology 
+			UpdateMorphology();
+		}		
+		
 		//Update Sea Level
-		UpdateSeaLevel();
+		InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
+		UpdateSeaLevel(InstantSeaLevel);
 
 		//Get the wave conditions
 		GetWave();
@@ -1201,30 +1213,33 @@ void RPM::EvolveCoast()
 		ErodeBackwearing();
 		ErodeDownwearing();
 
-		//Update the Morphology
-		UpdateMorphology();
-
 		//Implement Weathering
 		IntertidalWeathering();
-
-		//Update the Morphology
-		UpdateMorphology();
-
+		SubtidalWeathering();
+		
 		//Check for Mass Failure
 		MassFailure();
-
-		//Update the Morphology
+		
+		//Update the Morphology 
 		UpdateMorphology();
 
-		//print?
-		if (Time >= PrintTime)
+        //Update the morphology inside RockyCoastCRN
+		if (Params.CRN_Predictions) 
 		{
-			WriteProfile(OutputFileName, Time);
-			PrintTime += PrintInterval;
+			PlatformCRN.UpdateMorphology(PlatformModel);
+			PlatformCRN.UpdateCRNs();
 		}
-
+        	
+		//print?
+		if (Time <= PrintTime)
+		{
+			WriteProfile(Params.ProfileOutFilename, Time);
+			if (Params.CRN_Predictions) PlatformCRN.WriteCRNProfile(Params.ConcentrationsOutFilename, Time);
+			PrintTime -= Params.PrintInterval;
+		}
+		
 		//update time
-		Time += TimeInterval;
+		Time -= Params.TimeStep;
 	}
 }
 
