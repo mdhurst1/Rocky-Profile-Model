@@ -377,6 +377,9 @@ long double MCMC_RPM::RunCoastIteration()
 		//Get the wave conditions
 		MCMCPlatform.GetWave();
 
+        //Implement Weathering
+		MCMCPlatform.IntertidalWeathering();
+
 		//Calculate forces acting on the platform
 		MCMCPlatform.CalculateBackwearing();
 		MCMCPlatform.CalculateDownwearing();
@@ -384,22 +387,13 @@ long double MCMC_RPM::RunCoastIteration()
 		//Do erosion
 		MCMCPlatform.ErodeBackwearing();
 		MCMCPlatform.ErodeDownwearing();
-
-		//Update the Morphology 
-		MCMCPlatform.UpdateMorphology();	  
-		
-		//Implement Weathering
-		MCMCPlatform.IntertidalWeathering();
-		
-		//Update the Morphology 
-		MCMCPlatform.UpdateMorphology();
-
+	
 		//Check for Mass Failure
 		MCMCPlatform.MassFailure();
 		
 		//Update the Morphology 
 		MCMCPlatform.UpdateMorphology();
-				
+		
 		//update time
 		Time -= TimeInterval;
 	}
