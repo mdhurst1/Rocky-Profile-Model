@@ -216,6 +216,10 @@ int main(int nNumberofArgs,char *argv[])
 		//Get the wave conditions
 		PlatformModel.GetWave();
 
+		//Implement Weathering
+		PlatformModel.IntertidalWeathering();
+		PlatformModel.SubtidalWeathering();
+
 		//Calculate forces acting on the platform
 		PlatformModel.CalculateBackwearing();
 		PlatformModel.CalculateDownwearing();
@@ -224,10 +228,6 @@ int main(int nNumberofArgs,char *argv[])
 		PlatformModel.ErodeBackwearing();
 		PlatformModel.ErodeDownwearing();
 
-		//Implement Weathering
-		PlatformModel.IntertidalWeathering();
-		PlatformModel.SubtidalWeathering();
-		
 		//Check for Mass Failure
 		PlatformModel.MassFailure();
 		
