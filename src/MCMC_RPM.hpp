@@ -45,11 +45,14 @@ class MCMC_RPM
       vector<double> TopoXData;
       vector<double> TopoZData;
 
-      //Declare RPM object ??
-      RPM MCMCPlatform;
+      //Declare RPM object
+      RPM MCMC_RPM;
+
+      //declare RockyCoastCRN object
+      RockyCoastCRN MCMC_RockyCoastCRN;
 
       //Declare a SeaLevel Object
-      SeaLevel MCMCSeaLevel;
+      SeaLevel MCMC_Sealevel;
 
       //calculates the likelihood using measured and modelled data
       long double CalculateLikelihood();

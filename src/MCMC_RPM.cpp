@@ -97,8 +97,39 @@ void MCMC_RPM::Initialise(Parameters Params)
     // get size of the profile data vectors
     NCRNData = CRNXData.size();
 
-    // initialise empty RPM object
-    MCMCPlatform = RPM();
+    // initialise RPM object with default morphology
+    RPM MCMC_RPM = RPM(Params.dZ, Params.dX, Params.InitialGradient, Params.CliffElevation, Params.MaxElevation, Params.MinElevation);
+
+    //initialise RockyCoastCRN friend object
+	RockyCoastCRN MCMC_RockyCoastCRN;
+
+	// THIS SHOULD BE IN PARAMETER FILE
+	if (Params.CRN_Predictions)
+	{
+		//Which Nuclides to track 10Be, 14C, 26Al, 36Cl?
+		vector<int> Nuclides;
+        if (Params.Berylium) Nuclides.push_back(10);
+        if (Params.Carbon) Nuclides.push_back(14);
+        if (Params.Aluminium) Nuclides.push_back(26);
+		
+		//initialise RockyCoastCRN friend object
+		MCMC_RockyCoastCRN = RockyCoastCRN(PlatformModel, Nuclides);
+	}
+
+    // initialise sea level object
+    if (Params.ReadSeaLevelFromFile) MCMC_Sealevel = SeaLevel(Params.SeaLevelFilename);
+	else MCMC_Sealevel = SeaLevel(Params.SeaLevelRise, Params.StartTime, Params.EndTime, Params.TimeStep);
+
+    // Get initial sea level
+	float InstantSeaLevel = MCMC_SeaLevel.get_SeaLevel(Params.StartTime);
+	MCMC_RPM.UpdateSeaLevel(InstantSeaLevel);
+
+	//Initialise Tides
+	MCMC_RPM.InitialiseTides(Params.TidalRange);
+    if (Params.CRN_Predictions) MCMC_RockyCoastCRN.InitialiseTides(Params.TidalRange/2.,Params.TidalPeriod);
+	
+	//Initialise Waves
+	MCMC_RPM.InitialiseWaves(Params.WaveHeight_Mean, Params.WaveHeight_StD, Params.WavePeriod_Mean, Params.WavePeriod_StD);
 }
 
 long double MCMC_RPM::CalculateLikelihood()
