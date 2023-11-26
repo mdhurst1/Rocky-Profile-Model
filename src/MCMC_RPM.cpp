@@ -132,126 +132,6 @@ void MCMC_RPM::Initialise(Parameters Params)
 	MCMC_RPM.InitialiseWaves(Params.WaveHeight_Mean, Params.WaveHeight_StD, Params.WavePeriod_Mean, Params.WavePeriod_StD);
 }
 
-long double MCMC_RPM::CalculateLikelihood()
-{
-    /* Function to calculate the likelihood by comparing measured and modelled data (dsm extracted and modelled)
-    */
-
-   //declarations
-   double Scale;
-   long double Likelihood = 1.L;
-   vector<double> XModel, ZModel;
-
-     //Work out the modelled morphology
-   XModel = MCMCPlatform.get_X(); 
-   ZModel = MCMCPlatform.get_Elevations();
-   int XSize = XModel.size();
-   double CliffPositionX = XModel[XSize-1];
-   
-   vector<double> XPos(NProfileData);
-   vector<double> TopoData(NProfileData);
-   vector<double> Residuals(NProfileData);
-   vector<double> DiffX(NProfileData);
-
-   //Interpolate to extracted morphology X positions
-   for (int i=0; i<NProfileData; ++i)
-   {
-       
-       //Normalising profile data to modelled cliff position - using Swath profile data where cliff position = 0
-       XPos[i] = CliffPositionX - ProfileXData[i];
-
-
-       //Take X value of extracted morph position and interpolate to get model results at this point
-       int j=0;
-       while ((XModel[j]- XPos[i]) <0) ++j;
-       DiffX[i] = XModel[j] - XPos[i];
-         Scale = DiffX[i]/(XModel[j]-XModel[j-1]);
-        
-        //Get Interpolated Z value
-        TopoData[i] = ZModel[j]-Scale*(ZModel[j]-ZModel[j-1]);
-   }
-   
-   //Calculate likelihood
-   for (int i=0; i<NProfileData; ++i)
-   {
-       Residuals[i] = (ProfileZData[i]-TopoData[i])*(ProfileZData[i]-TopoData[i]);
-       Likelihood *= exp(-(fabs(Residuals[i]))/(ZStd*ZStd));    //ZStd read in from parameter file?
-   }
-   return Likelihood;
-}
-
-long double MCMC_RPM::RunCoastIteration()  
-{
-    /* runs a single instance of the RPM Model, then reported the likelihood of the parameters
-    */
-
-    //Time control parameters
-	//Time runs in yrs bp
-	double EndTime = 0;
-	double Time = StartTime;
-	double TimeInterval = 1;
-    double InstantSeaLevel;
-    
-    double PrintTime = StartTime;
-    double PrintInterval = 100;
-
-    //reset the model domain
-	//MCMCPlatform.ResetModel();
-
-    //Loop through time
-	while (Time >= EndTime)
-	{
-		// print time to screen
-        if (Time < PrintTime)
-        {
-            printf("Time %4.f\n",Time);
-            PrintTime -= PrintInterval;
-        }
-
-        //set up if statement to only print every 100/1000 years? 
-        
-
-        //Update Sea Level
-		InstantSeaLevel = MCMCSeaLevel.get_SeaLevel(Time);
-		MCMCPlatform.UpdateSeaLevel(InstantSeaLevel);
-
-		//Get the wave conditions
-		MCMCPlatform.GetWave();
-
-		//Calculate forces acting on the platform
-		MCMCPlatform.CalculateBackwearing();
-		MCMCPlatform.CalculateDownwearing();
-
-		//Do erosion
-		MCMCPlatform.ErodeBackwearing();
-		MCMCPlatform.ErodeDownwearing();
-
-		//Update the Morphology 
-		MCMCPlatform.UpdateMorphology();	  
-		
-		//Implement Weathering
-		MCMCPlatform.IntertidalWeathering();
-		
-		//Update the Morphology 
-		MCMCPlatform.UpdateMorphology();
-
-		//Check for Mass Failure
-		MCMCPlatform.MassFailure();
-		
-		//Update the Morphology 
-		MCMCPlatform.UpdateMorphology();
-				
-		//update time
-		Time -= TimeInterval;
-	}
-       
-    //Calculate likelihood
-    return CalculateLikelihood();    
-}
-
-
-
-
 void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char* OutFilename)
 {
     /* Run the metropolis algorithm along a chain with NIterations
@@ -457,7 +337,126 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
     
 	ChainFileOut.close();
     }
-	
+
+
+long double MCMC_RPM::RunCoastIteration()  
+{
+    /* runs a single instance of the RPM Model, then reported the likelihood of the parameters
+    */
+
+    //Time control parameters
+	//Time runs in yrs bp
+	double EndTime = 0;
+	double Time = StartTime;
+	double TimeInterval = 1;
+    double InstantSeaLevel;
+    
+    double PrintTime = StartTime;
+    double PrintInterval = 100;
+
+    //reset the model domain
+	//MCMCPlatform.ResetModel();
+
+    //Loop through time
+	while (Time >= EndTime)
+	{
+		// print time to screen
+        if (Time < PrintTime)
+        {
+            printf("Time %4.f\n",Time);
+            PrintTime -= PrintInterval;
+        }
+
+        //set up if statement to only print every 100/1000 years? 
+        
+
+        //Update Sea Level
+		InstantSeaLevel = MCMCSeaLevel.get_SeaLevel(Time);
+		MCMCPlatform.UpdateSeaLevel(InstantSeaLevel);
+
+		//Get the wave conditions
+		MCMCPlatform.GetWave();
+
+		//Calculate forces acting on the platform
+		MCMCPlatform.CalculateBackwearing();
+		MCMCPlatform.CalculateDownwearing();
+
+		//Do erosion
+		MCMCPlatform.ErodeBackwearing();
+		MCMCPlatform.ErodeDownwearing();
+
+		//Update the Morphology 
+		MCMCPlatform.UpdateMorphology();	  
+		
+		//Implement Weathering
+		MCMCPlatform.IntertidalWeathering();
+		
+		//Update the Morphology 
+		MCMCPlatform.UpdateMorphology();
+
+		//Check for Mass Failure
+		MCMCPlatform.MassFailure();
+		
+		//Update the Morphology 
+		MCMCPlatform.UpdateMorphology();
+				
+		//update time
+		Time -= TimeInterval;
+	}
+       
+    //Calculate likelihood
+    return CalculateLikelihood();    
+}
+
+long double MCMC_RPM::CalculateLikelihood()
+{
+    /* Function to calculate the likelihood by comparing measured and modelled data (dsm extracted and modelled)
+    */
+
+   //declarations
+   double Scale;
+   long double Likelihood = 1.L;
+   vector<double> XModel, ZModel;
+
+     //Work out the modelled morphology
+   XModel = MCMCPlatform.get_X(); 
+   ZModel = MCMCPlatform.get_Elevations();
+   int XSize = XModel.size();
+   double CliffPositionX = XModel[XSize-1];
+   
+   vector<double> XPos(NProfileData);
+   vector<double> TopoData(NProfileData);
+   vector<double> Residuals(NProfileData);
+   vector<double> DiffX(NProfileData);
+
+   //Interpolate to extracted morphology X positions
+   for (int i=0; i<NProfileData; ++i)
+   {
+       
+       //Normalising profile data to modelled cliff position - using Swath profile data where cliff position = 0
+       XPos[i] = CliffPositionX - ProfileXData[i];
+
+
+       //Take X value of extracted morph position and interpolate to get model results at this point
+       int j=0;
+       while ((XModel[j]- XPos[i]) <0) ++j;
+       DiffX[i] = XModel[j] - XPos[i];
+         Scale = DiffX[i]/(XModel[j]-XModel[j-1]);
+        
+        //Get Interpolated Z value
+        TopoData[i] = ZModel[j]-Scale*(ZModel[j]-ZModel[j-1]);
+   }
+   
+   //Calculate likelihood
+   for (int i=0; i<NProfileData; ++i)
+   {
+       Residuals[i] = (ProfileZData[i]-TopoData[i])*(ProfileZData[i]-TopoData[i]);
+       Likelihood *= exp(-(fabs(Residuals[i]))/(ZStd*ZStd));    //ZStd read in from parameter file?
+   }
+   return Likelihood;
+}
+
+
 #endif
 
 
