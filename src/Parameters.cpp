@@ -128,6 +128,11 @@ void Parameters::SetDefaultValues()
     float_Params["WeatheringRate_Mean"] = 20.;
     float_Params["WeatheringRate_Std"] = 5.;
 
+    float_Params["WaveAttenuation_Max"] = 0.1;
+    float_Params["WaveAttenuation_Min"] = 0.001;
+    float_Params["WaveAttenuation_Mean"] = 0.01;
+    float_Params["WaveAttenuation_Std"] = 0.01;
+
 	// time control
 	float_Params["StartTime"] = 8000.;
 	float_Params["EndTime"] = 0.;

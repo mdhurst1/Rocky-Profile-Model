@@ -77,7 +77,8 @@ class Parameters
 		// variable parameters and their distribution metrics for MCMC
 		float Resistance_Mean, Resistance_Std, Resistance_Min, Resistance_Max;
 		float WeatheringRate_Mean, WeatheringRate_Std, WeatheringRate_Min, WeatheringRate_Max;
-
+		float WaveAttenuation_Mean, WaveAttenuation_Std, WaveAttenuation_Min, WaveAttenuation_Max;
+		
 		// time control
 		double StartTime, EndTime, TimeStep, PrintInterval;
 
