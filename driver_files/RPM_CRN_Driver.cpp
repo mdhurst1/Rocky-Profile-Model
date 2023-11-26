@@ -121,8 +121,8 @@ int main(int nNumberofArgs,char *argv[])
   	Parameters Params(Folder,InputParamFilename);
 
 	//initialisation parameters, these are currently not in parameters object
-	double dZ = 0.1;
-	double dX = 0.1;
+	double dZ =Params.dZ;
+	double dX = Params.dX;
 	
 	//Time control parameters
 	//Time runs in yrs bp
@@ -154,25 +154,17 @@ int main(int nNumberofArgs,char *argv[])
 	if (Params.ReadSeaLevelFromFile) RelativeSeaLevel = SeaLevel(Params.SeaLevelFilename);
 	else RelativeSeaLevel = SeaLevel(Params.SeaLevelRise, Params.StartTime, Params.EndTime, Params.TimeStep);
 	
-	cout << "Initialised Sea level" << endl;
-
 	// Get initial sea level
 	float InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
 	PlatformModel.UpdateSeaLevel(InstantSeaLevel);
-
-	cout << "got initial sea level" << endl;
 
 	//Initialise Tides
 	PlatformModel.InitialiseTides(Params.TidalRange);
     if (Params.CRN_Predictions) PlatformCRN.InitialiseTides(Params.TidalRange/2.,Params.TidalPeriod);
 	
-	cout << "initialised tides" << endl;
-
 	//Initialise Waves
 	PlatformModel.InitialiseWaves(Params.WaveHeight_Mean, Params.WaveHeight_StD, Params.WavePeriod_Mean, Params.WavePeriod_StD);
 	
-	cout << "initialised waves" << endl;
-
 	//Tectonic Events
 	//double UpliftFrequency = 1000.;
 	//double UpliftTime = UpliftFrequency;
@@ -194,19 +186,14 @@ int main(int nNumberofArgs,char *argv[])
 	while (Time >= Params.EndTime)
 	{
 		//Do an earthquake?
-		//if (Time < UpliftTime)
-		//{
-			//string ArrayFile1 = "MorphArray1.data";
-			//string ArrayFile2 = "MorphArray2.data";
-
-			//PlatformModel.WriteMorphologyArray(ArrayFile1, Time);
-			//PlatformModel.TectonicUplift(UpliftMagnitude);
-			//UpliftTime -= UpliftFrequency;
-			//PlatformModel.WriteMorphologyArray(ArrayFile2, Time);
-
+		if (Params.Earthquakes && Time < UpliftTime)
+		{
+			PlatformModel.TectonicUplift(Params.UpliftMagnitude);
+			UpliftTime -= Params.UpliftFrequency;
+			
 			//Update the Morphology 
-			//PlatformModel.UpdateMorphology();
-		//}		
+			PlatformModel.UpdateMorphology();
+		}		
 		
 		//Update Sea Level
 		InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);

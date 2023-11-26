@@ -62,7 +62,7 @@ class Parameters
 
 		// actual parameter holders
 		// Cosmogenic Isotopes
-		bool CRN_Predictions, Berylium, Carbon, Aluminium, ReadSeaLevelFromFile;
+		bool CRN_Predictions, Berylium, Carbon, Aluminium, ReadSeaLevelFromFile, Earthquakes;
 		
 		// Hydrodynamics
 		float SeaLevelRise, TidalRange, TidalPeriod, WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD, StandingWaveCoef, BreakingWaveCoef, BrokenWaveCoef, WaveAttenuationConst;
