@@ -31,19 +31,23 @@ class MCMC_RPM
       
       //Vectors to hold extracted profile and CRN data
       int NProfileData, NCRNData;
-      vector<double> ProfileXData;
-      vector<double> ProfileZData;
-      vector<double> CRNXData;
-      vector<double> CRNNData;
-      double ZStd;
+      vector<double> ProfileXData, ProfileZData, ProfileZStd;
+      vector<double> CRNXData, CRNNData, CRNNErrorData;
+      
 
       //Vector to hold StartTime input from parameter file
       double StartTime;
 
-      //Vectors to hold Topographic Model results
-      int NTopoData;
-      vector<double> TopoXData;
-      vector<double> TopoZData;
+      //Vectors to hold Model results for comparison to data
+      vector<double> XModel, ZModel, CRNModel;
+      vector<double> ZModelData;
+      vector<double> CRNModelData;
+      vector<double> BlankTopoDataVec, BlankCRNDataVec;
+
+      //other useful stuff
+      int NXModel;
+      double CliffPositionX, XPos, InterpScale;
+      
 
       //Declare RPM object
       RPM MCMC_RPM;
@@ -55,7 +59,9 @@ class MCMC_RPM
       SeaLevel MCMC_Sealevel;
 
       //calculates the likelihood using measured and modelled data
-      long double CalculateLikelihood();
+      long double TopoLikelihood, CRNLikelihood;
+      long double CalculateTopoLikelihood();
+      long double CalculateCRNLikelihood();
 
       //runs a single iteration of the RPM model, then reports the likelihood of the parameters - this read in from driver?
       long double RunCoastIteration();

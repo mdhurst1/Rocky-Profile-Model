@@ -69,6 +69,8 @@ void MCMC_RPM::Initialise(Parameters Params)
 
     // get size of the profile data vectors
     NProfileData = ProfileXData.size();
+    vector<double> Blank(NProfileData);
+    BlankTopoDataVec = Blank;
 
     //Generate input filestream and read data into vectors
     ifstream READCRNDatafile(CRNDatafile);
@@ -96,6 +98,8 @@ void MCMC_RPM::Initialise(Parameters Params)
 
     // get size of the profile data vectors
     NCRNData = CRNXData.size();
+    vector<double> Blank(NCRNData);
+    BlankCRNDataVec = Blank;
 
     // initialise RPM object with default morphology
     RPM MCMC_RPM = RPM(Params.dZ, Params.dX, Params.InitialGradient, Params.CliffElevation, Params.MaxElevation, Params.MinElevation);
@@ -418,77 +422,66 @@ long double MCMC_RPM::RunCoastIteration(Parameters Params)
     return CalculateLikelihood();    
 }
 
-long double MCMC_RPM::CalculateLikelihood()
+long double MCMC_RPM::CalculateTopoLikelihood()
 {
     /* Function to calculate the likelihood by comparing measured and modelled data (dsm extracted and modelled)
     */
 
+    // reset likelihood
+    TopoLikelihood = 1.L;
+    
     //declarations
-    double Scale;
-    long double TopoLikelihood = 1.L;
-    vector<double> XModel, ZModel;
-
-        //Work out the modelled morphology
     XModel = MCMC_RPM.get_X(); 
     ZModel = MCMC_RPM.get_Elevations();
-    int XSize = XModel.size();
-    double CliffPositionX = XModel[XSize-1];
-    
-    // could these be declared outside the chain for efficiency? Add to the object?
-    vector<double> XPos(NProfileData);
-    vector<double> TopoData(NProfileData);
-    vector<double> Residuals(NProfileData);
-    double DiffX;
-    double RMSE;
-    double Scale;
-    bool FailFlag = false;
-   
+    ZModelData = BlankTopoDataVector;
+    NXModel = XModel.size();
+    CliffPositionX = XModel[XSize-1];
+           
     //Interpolate to extracted morphology X positions
     for (int i=0; i<NProfileData; ++i)
     {
         //Normalising profile data to modelled cliff position (using Swath profile data where cliff position of measured data = 0)
-        XPos[i] = CliffPositionX - ProfileXData[i];
-
-        //if statement XPos [i] < 0 fail flag?
-        if (XPos[i]<0)
-        {
-            FailFlag = true;
-            break;
-        }
-        //set up as 2 seperate loops
-
+        XPos = CliffPositionX - ProfileXData[i];
+        
         //Take X value of extracted morph position and interpolate to get model results at this point
         int j=0;
-        while ((XModel[j]- XPos[i]) <0) ++j; //XPos starts at point nearest cliff and works offshore - starts at 40m from cliff so will never =0
-        DiffX = XModel[j] - XPos[i];
-        Scale = DiffX/(XModel[j]-XModel[j-1]);
+        while ((XModel[j]- XPos) <0) ++j; //XPos starts at point nearest cliff and works offshore - starts at 40m from cliff so will never =0
+        InterpScale = (XModel[j] - XPos[i])/(XModel[j]-XModel[j-1]);
 
         //Get Interpolated Z value
-        TopoData[i] = ZModel[j]-Scale*(ZModel[j]-ZModel[j-1]);
+        ZModelData[i] = ZModel[j]-Scale*(ZModel[j]-ZModel[j-1]);
         
     }
 
-    //Calculate Residuals and likelihood
-    //Fail flag for inf numbers (topo profile) 
-    double TotalResiduals = 0;
-
-    //calculate topo residuals
+    //calculate likelihood from topo residuals
     for (int i=0; i<NProfileData; ++i)
     {
         //this was Jen's calcs for Dakota, which read RMSE
         //Residuals[i] = fabs(ProfileZData[i]-TopoData[i]);
         //TotalResiduals += pow(ProfileZData[i]-TopoData[i],2);
-        
-        Residuals[i] = (ProfileZData[i]-TopoData[i])*(ProfileZData[i]-TopoData[i]);
-        TopoLikelihood *= exp(-(fabs(Residuals[i]))/(ZStd*ZStd));    //ZStd read in from parameter file?
+        TopoLikelihood *= exp(-(fabs((ProfileZData[i]-ZModelData[i])*(ProfileZData[i]-ZModelData[i])))/(ZStd[i]*ZStd[i]));    //ZStd read in from parameter file?
     }
-	
+    return TopoLikelihood;
+}
 
+long double MCMC_RPM::CalculateCRNLikelihood()
+{
     ///////////////////////////////////////                                
     //                                   //
     //Calculations for CRN concentrations//
     //                                   //
     ///////////////////////////////////////
+
+    // reset likelihood
+    CRNLikelihood = 1.L;
+    
+    //declarations
+    XModel = MCMC_RockyCoast.get_X();  // does this exist!?
+    CRNModel = MCMC_RockyCoast.get_Concentrations(); // does this exist?!
+    
+    CRNModelData = BlankCRNDataVector;
+    NXModel = XModel.size();
+    CliffPositionX = XModel[XSize-1];
 
     //declarations CRN
     vector<double> XPosCRN(NData);
@@ -500,28 +493,31 @@ long double MCMC_RPM::CalculateLikelihood()
 
 
     //Interpolate to sample locations
-    for (int i=0; i<NData; ++i)
+    for (int i=0; i<NCRNData; ++i)
     {
         //Normalising CRN data to modelled cliff position (CRN data file: cliff position = 0)
-        XPosCRN[i] = CliffPositionX - XData[i];   //testing with CliffX not CliffPositionCRNX
+        XPos = CliffPositionX - CRNXData[i];   //testing with CliffX not CliffPositionCRNX
         
         //Take X value of sample and interpolate to get model results at this point
         int j=0;
-        while ((XDataModel[j]-XPosCRN[i]) < 0) ++j;
-        DiffCRNX = XDataModel[j]-XPosCRN[i];
-        ScaleCRN = DiffCRNX/(XDataModel[j]-XDataModel[j-1]);
+        while ((XModel[j]-XPos) < 0) ++j;
+        DiffCRNX = XModel[j]-XPos;
+        ScaleCRN = (XModel[j]-XPos)/(XModel[j]-XModel[j-1]);
 
         //Get Interpolated N value
-        NModel[i] = CRNConcModel[j]-ScaleCRN*(CRNConcModel[j]-CRNConcModel[j-1]);
+        CRNModel[i] = CRNModelData[j]-ScaleCRN*(CRNModelData[j]-CRNModelData[j-1]);
     }
 
 
-    //calculate CRN residuals
+    //calculate CRN likelihood
     for (int i=0; i<NData; ++i)
     {
-        ResidualsCRN[i] = (CRNConcData[i]-NModel[i])*(CRNConcData[i]-NModel[i]);
-        CRNLikelihood *= exp(-(fabs(ResidualsCRN[i]))/(CRNErrorData[i]*CRNErrorData[i]));
+        CRNLikelihood *= exp(-(fabs((CRNNData[i]-CRNModel[i])*(CRNNData[i]-CRNModel[i])))/(CRNErrorData[i]*CRNErrorData[i]));
     }
+
+    //need a return statement.
+    //separate functions for CRN And Topo likelihoods?
+    return CRNLikelihood;
 }
 
 #endif
