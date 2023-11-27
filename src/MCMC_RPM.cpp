@@ -149,11 +149,6 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 {
     /* Run the metropolis algorithm along a chain with NIterations
 
-      ParameterFilename is the name of the parameter file containing 
-      Retreat Type, Minimum, Maximum, Standard Deviation (for Metropolis search) and 
-      Initial Values for each parameter, the Platform Gradient, 
-      Cliff Height and Tidal Amplitude (see example)
-     
       Prints to the chain results to file 'OutFilename'
      
       Martin Hurst, January 2015 */
@@ -162,7 +157,7 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 	long double LastLikelihood = 0.L;			//Last accepted likelihood
 	long double NewLikelihood = 0.L;			//New likelihood
 	long double LikelihoodRatio = 0.L;			//Ratio between last and new likelihoods
-	double AcceptanceProbability; //New iteration is accepted if likelihood ratio exceeds
+	double AcceptanceProbability;               //New iteration is accepted if likelihood ratio exceeds
 
 	int NAccepted = 0;      //count accepted parameters
 	int NRejected = 0;      //count rejected parameters
@@ -172,19 +167,14 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
     //Holders to define parameter space	
 	double  Resistance_New, Resistance_Old, Resistance_Min, Resistance_Max, Resistance_Std, Resistance_Init,
             WeatheringRate_New, WeatheringRate_Old, WeatheringRate_Min, WeatheringRate_Max, WeatheringRate_Std, WeatheringRate_Init,
+            WaveAttenuation_New, WaveAttenuation_Old, WaveAttenuation_Min, WaveAttenuation_Max, WaveAttenuation_Std, WaveAttenuation_Init,
             SubmarineDecayConst;
            
-	        //Parameters included in driver BermHeight, BeachSteepness, JunctionElevation, PlatformGradient, CliffHeight, CliffGradient, TidalAmplitude, SLR;
+	//Parameters included in driver BermHeight, BeachSteepness, JunctionElevation, PlatformGradient, CliffHeight, CliffGradient, TidalAmplitude, SLR;
     double TidalRange;
     double dFR, dK; //change in parameter values for Resistance (FR) and WeatheringRate (K)
     double MeanChange = 0.; //Change in parameter values centred on zero allow changes in both directions(pos and neg)
-  
-    // morphology parameters
-    double dZ, dX, Gradient, CliffHeight, CliffFailureDepth, MinElevation;
-    
-    char Dummy[32];
-    string RSLFilename, ScalingFilename;
-    
+     
     //Initialise seed for random number generation
     int RandomSeed = 1;
     srand(RandomSeed);
@@ -192,72 +182,25 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
     //Create datafile out and write ParameterFilename
 	ofstream ChainFileOut(OutFilename);
 	ChainFileOut << "ParameterFile: " << ParameterFilename << endl;
-	ChainFileOut  << "i Resistance_New WeatheingRate_New NewLikelihood LastLikelihood NAccepted NRejected" << endl;
+	ChainFileOut  << "i Resistance_New WeatheingRate_New WaveAttenuation_New TopoLikelihood CRNLikelihood NewLikelihood LastLikelihood NAccepted NRejected" << endl;
 
-    //Read in parameters for monte carlo run from parameter file
-	//Min and max values for paramters from param file
-	ifstream ParamFileIn(ParameterFilename);
-	if (!ParameterFilename)
-	{
-	  printf("MCMC_Coast::%s: line %d Input parameter data file \"%s\" doesn't exist\n\n", __func__, __LINE__, ParameterFilename);
-	  exit(EXIT_SUCCESS);
-	}
-
-    ParamFileIn >> Dummy >> Resistance_Min >> Dummy >> Resistance_Max >> Dummy >> Resistance_Std >> Dummy >> Resistance_Init
-	            >> Dummy >> WeatheringRate_Min >> Dummy >> WeatheringRate_Max >> Dummy >> WeatheringRate_Std >> Dummy >> WeatheringRate_Init
-	            >> Dummy >> TidalRange >> Dummy >> dZ >> Dummy >> dX >> Dummy >> Gradient >> Dummy >> CliffHeight >> Dummy >> MinElevation
-                >> Dummy >> SubmarineDecayConst >> Dummy >> RSLFilename >> Dummy >> StartTime >> Dummy >> ZStd;
-
-    ParamFileIn.close();
-
-    //cout << "Resistance_Min: " << Resistance_Min << endl;
-
-
-    //Initialise RPM object
-	MCMC_RPM = RPM(dZ, dX, Gradient, CliffHeight, MinElevation);
-
-    //Initialise Sea Level history
-    MCMCSeaLevel = SeaLevel(RSLFilename);
-    
-    //
-    double InitialSeaLevel = MCMCSeaLevel.get_SeaLevel(StartTime);
-
-    //
-    MCMC_RPM.UpdateSeaLevel(InitialSeaLevel);
-
-    //Initialise Tides
-	MCMC_RPM.InitialiseTides(TidalRange);
-
-    //Initialise Waves
-	//Single Wave for now but could use the waveclimate object from COVE!?
-	double WaveHeight_Mean = 3.;
-	double WaveHeight_StD = 0.;
-	double WavePeriod_Mean = 6.;
-	double WavePeriod_StD = 0;
-	MCMC_RPM.InitialiseWaves(WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD);
-
-    // Wave coefficient constant
-	double StandingCoefficient = 0.1;
-	double BreakingCoefficient = 10.;
-	double BrokenCoefficient = 1.;
-	double WaveAttenuationConst = 0.01;
-	MCMC_RPM.Set_WaveCoefficients(StandingCoefficient, BreakingCoefficient, BrokenCoefficient, WaveAttenuationConst);
-
-    //initialise the geology
-	MCMC_RPM.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance_Init, WeatheringRate_Init, MinElevation);
-
-    /*  start the chain with a guess this guess is a very coarse approximation of what the 'real' values 
+    /*  start the chain with a random guess this guess is a very coarse approximation of what the 'real' values 
 	    might be. The Metropolis algorithm will sample around this */
-	Resistance_New = Resistance_Init;
-    WeatheringRate_New = WeatheringRate_Init;
+	Resistance_New = Resistance_Min + ((double)rand()/RAND_MAX)*(Resistance_Max - Resistance_Min);
+    WeatheringRate_New = WeatheringRate_Min + ((double)rand()/RAND_MAX)*(WeatheringRate_Max - WeatheringRate_Min);
+    WaveAttenuation_New = WaveAttenation_Min + ((double)rand()/RAND_MAX)*(WaveAttenuation_Max - WaveAttenuation_Min);
 
-    //Run a single coastal iteration to get the initial Likelihood for the initial parameters
-	LastLikelihood = RunCoastIteration();
-	LastLikelihood = CalculateLikelihood();
+    //Run a single coastal iteration to get the initial Likelihoods for the initial parameters
+	RunCoastIteration();
+	CalculateTopoLikelihood();
+    CalculateCRNLikelihood();
+    CombinedLikelihood = TopoWeighting*TopoLikelihood + CRNWeighting*CRNLikelihood;
+    LastLikelihood = CombinedLikelihood;
 
     //set old parameters for comparison and updating
 	Resistance_Old = Resistance_New;
 	WeatheringRate_Old = WeatheringRate_New;
+    WaveAttenuation_Old = WaveAttenuation_New;
 
     int Accept = 0;
 
@@ -269,13 +212,12 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 		
 		//Update the variables following a normal distribution
 
-	  //First Update Resistance
+	    //First Update Resistance
 		Accept = 0;
 		while (Accept == 0)
 		{	
 			Rand1 = (double)rand()/RAND_MAX; Rand2 = (double)rand()/RAND_MAX;
-			dFR = MeanChange + Resistance_Std*sqrt(-2.*log(Rand1))*cos(2.*M_PI*(Rand2));
-			Resistance_New = Resistance_Old + dFR;
+			Resistance_New = Resistance_Old + Resistance_Std*sqrt(-2.*log(Rand1))*cos(2.*M_PI*(Rand2));
 			if ((Resistance_New < Resistance_Min) || (Resistance_New > Resistance_Max)) continue;
 	  		else Accept = 1;
 		}
@@ -285,44 +227,35 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 		while (Accept == 0)
         {	
 			Rand1 = (double)rand()/RAND_MAX; Rand2 = (double)rand()/RAND_MAX;
-	  		dK = MeanChange + WeatheringRate_Std*sqrt(-2.*log(Rand1))*cos(2.*M_PI*(Rand2));
-	  		WeatheringRate_New = WeatheringRate_Old + dK;
+	  		WeatheringRate_New = WeatheringRate_Old + WeatheringRate_Std*sqrt(-2.*log(Rand1))*cos(2.*M_PI*(Rand2));;
 			if ((WeatheringRate_New < WeatheringRate_Min) || (WeatheringRate_New > WeatheringRate_Max)) continue;
 			else Accept = 1;
 	  	}
         
+        // Update WaveAttenuation
+	 	Accept = 0;
+		while (Accept == 0)
+        {	
+			Rand1 = (double)rand()/RAND_MAX; Rand2 = (double)rand()/RAND_MAX;
+	  		WaveAttenuation_New = WaveAttenuation_Old + WaveAttenuation_Std*sqrt(-2.*log(Rand1))*cos(2.*M_PI*(Rand2));;
+			if ((WaveAttenuation_New < WaveAttenuation_Min) || (WaveAttenuation_New > WaveAttenuation_Max)) continue;
+			else Accept = 1;
+	  	}
+
+        // add here tectonics if free parameters?!
+
         //Reset parameters to be read from input file
         //reset model
         MCMC_RPM.ResetModel();
-        //reset morphology (input parameters)
-        //MCMC_RPM.ResetMorphology(dZ, dX, Gradient, CliffHeight, CliffFailureDepth, MinElevation);
-        //reset sea level
-        MCMC_RPM.UpdateSeaLevel(InitialSeaLevel);
-        //reset tides
-        MCMC_RPM.InitialiseTides(TidalRange);
-        // initialise waves
-        double WaveHeight_Mean = 3.;
-	    double WaveHeight_StD = 0.;
-	    double WavePeriod_Mean = 6.;
-	    double WavePeriod_StD = 0;
-	    MCMC_RPM.InitialiseWaves(WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD);
 
-        // Wave coefficient constant
-	    double StandingCoefficient = 0.1;
-	    double BreakingCoefficient = 10.;
-	    double BrokenCoefficient = 1.;
-	    double WaveAttenuationConst = 0.01;
-	    MCMC_RPM.Set_WaveCoefficients(StandingCoefficient, BreakingCoefficient, BrokenCoefficient, WaveAttenuationConst);
-
-        // reset model parameters with new values
-        MCMC_RPM.InitialiseGeology(CliffHeight, CliffFailureDepth, 
-                                        Resistance_New,  WeatheringRate_New, SubmarineDecayConst);
-
-        //Run a model iteration with new parameters
-		NewLikelihood = RunCoastIteration();
-
+        //Run a single coastal iteration to get the initial Likelihoods for the initial parameters
+        RunCoastIteration();
+        CalculateTopoLikelihood();
+        CalculateCRNLikelihood();
+        CombinedLikelihood = TopoWeighting*TopoLikelihood + CRNWeighting*CRNLikelihood;
+        
         //Get the likelihood ratio
-		LikelihoodRatio = NewLikelihood/LastLikelihood;
+		LikelihoodRatio = CombinedLikelihood/LastLikelihood;
 
         //Get acceptance probability (from uniform distribution between 0 and 1)
 		//This allows some false results to be accepted in order to explore the parameter space.
@@ -337,13 +270,14 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 			//Last variables become equal to new variables
 			Resistance_Old = Resistance_New;
 			WeatheringRate_Old = WeatheringRate_New;
+            WaveAttenuation_Old = WaveAttenuation_New;
 		}
 		else ++NRejected;
 
         //write the result to the output file
 		ChainFileOut  << j << " " 
-		              << Resistance_New << " " << WeatheringRate_New << " " 
-		              << NewLikelihood << " " << LastLikelihood << " " 
+		              << Resistance_New << " " << WeatheringRate_New << " " << WaveAttenuation_New << " " 
+		              << TopoLikelihood << " " << CRNLikelihood << " " << CombinedLikelihood << " " << LastLikelihood << " " 
 		              << NAccepted << " " << NRejected << endl;
         }
     

@@ -47,6 +47,10 @@ Earthquakes: false
 UpliftMagnitude: 0
 UpliftFrequency: 0
 
+# output filenames
+CRNFilename: ExampleCRNData.in
+TopoFilename: ExampleTopoData.in
+
 # MCMC parameters (if required)
 NIterations: 10000
 # free param
@@ -54,6 +58,7 @@ Resistance_Min: 1.
 Resistance_Max: 100.
 Resistance_Mean: 10.
 Resistance_Std: 5.
+
 # free param
 WeatheringRate_Min: 0.1
 WeatheringRate_Max: 10.
@@ -64,6 +69,6 @@ WaveAttenuation_Min: 0.001
 WaveAttenuation_Max: 0.1
 WaveAttenuation_Mean: 0.01
 WaveAttenuationStd: 0.02
+MCMCFilename: MCMCChainfile.out
 
-CRNFilename: ExampleCRNData.in
-TopoFilename: ExampleTopoData.in
+
