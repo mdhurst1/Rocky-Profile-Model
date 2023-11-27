@@ -120,17 +120,13 @@ int main(int nNumberofArgs,char *argv[])
 	// load parameter parser object
   	Parameters Params(Folder,InputParamFilename);
 
-	//initialisation parameters, these are currently not in parameters object
-	double dZ =Params.dZ;
-	double dX = Params.dX;
-	
 	//Time control parameters
 	//Time runs in yrs bp
 	int Time = Params.StartTime;
 	int PrintTime = Time-Params.PrintInterval;
 	
 	//initialise RPM Model
-	RPM PlatformModel = RPM(dZ, dX, Params.InitialGradient, Params.CliffElevation, Params.MaxElevation, Params.MinElevation);
+	RPM PlatformModel = RPM(Parms.dZ, Params.dX, Params.InitialGradient, Params.CliffElevation, Params.MaxElevation, Params.MinElevation);
 	
 	//initialise RockyCoastCRN friend object
 	RockyCoastCRN PlatformCRN;

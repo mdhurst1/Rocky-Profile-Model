@@ -134,6 +134,15 @@ void MCMC_RPM::Initialise(Parameters Params)
 	
 	//Initialise Waves
 	MCMC_RPM.InitialiseWaves(Params.WaveHeight_Mean, Params.WaveHeight_StD, Params.WavePeriod_Mean, Params.WavePeriod_StD);
+
+    // Wave coefficient constant
+	MCMC_RPM.Set_WaveCoefficients(Params.StandingWaveCoef, Params.BreakingWaveCoef, 
+										Params.BrokenWaveCoef, Params.WaveAttenuationConst);
+
+	//reset the geology
+	MCMC_RPM.InitialiseGeology(Params.CliffElevation, Params.CliffFailureDepth, Params.Resistance, 
+									Params.WeatheringRate, Params.SubtidalEfficacy);	
+
 }
 
 void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char* OutFilename)
@@ -420,6 +429,34 @@ long double MCMC_RPM::RunCoastIteration(Parameters Params)
        
     //Calculate likelihood
     return CalculateLikelihood();    
+}
+
+void MCMC_RPM::Reset_Model()
+{
+    // reinitialise RPM object with default morphology
+    MCMC_RPM = RPM(Params.dZ, Params.dX, Params.InitialGradient, Params.CliffElevation, Params.MaxElevation, Params.MinElevation);
+
+    //reinitialise RockyCoastCRN friend object
+	MCMC_RockyCoastCRN = RockyCoastCRN(MCMC_RPM, Nuclides);
+
+    // Get initial sea level
+	float InstantSeaLevel = MCMC_SeaLevel.get_SeaLevel(Params.StartTime);
+	MCMC_RPM.UpdateSeaLevel(InstantSeaLevel);
+
+	//Initialise Tides
+	MCMC_RPM.InitialiseTides(Params.TidalRange);
+    if (Params.CRN_Predictions) MCMC_RockyCoastCRN.InitialiseTides(Params.TidalRange/2.,Params.TidalPeriod);
+	
+	//Initialise Waves
+	MCMC_RPM.InitialiseWaves(Params.WaveHeight_Mean, Params.WaveHeight_StD, Params.WavePeriod_Mean, Params.WavePeriod_StD);
+
+    // Wave coefficient constant
+	MCMC_RPM.Set_WaveCoefficients(Params.StandingWaveCoef, Params.BreakingWaveCoef, 
+										Params.BrokenWaveCoef, Params.WaveAttenuationConst);
+
+	//reset the geology
+	MCMC_RPM.InitialiseGeology(Params.CliffElevation, Params.CliffFailureDepth, Params.Resistance, 
+									Params.WeatheringRate, Params.SubtidalEfficacy);
 }
 
 long double MCMC_RPM::CalculateTopoLikelihood()
