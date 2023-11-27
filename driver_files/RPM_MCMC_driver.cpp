@@ -75,27 +75,45 @@
 #include <stdio.h>
 #include <time.h>
 #include "../../src/RPM.hpp"
+#include "../../src/RPM_MCMC/hpp"
 #include "../../src/RockyCoastCRN.hpp"
 #include "../../src/SeaLevel.hpp"
 #include "../../src/FastExp.hpp"
 
 using namespace std;
 
-template <typename T> string tostr(const T& t)
-{ 
-   ostringstream os; 
-   os<<t; 
-   return os.str(); 
-}
-
-
 int main(int nNumberofArgs,char *argv[])
 {
+	cout << endl;
+	cout << "--------------------------------------------------------------" << endl;
+	cout << "|  MCMC RPM CRN                                                |" << endl;
+	cout << "|  This program peformas a Metropolis-Hastings Markov Chain    |" << endl;
+    cout << "|  to find the best parameter combinations that fit the        |" << endl;
+    cout << "|  topography and CRN concentrations measured at a field site. |" << endl;
+    cout << "|                                                              |" << endl;
+    cout << "|  The model simulates the development of shore platforms      |" << endl;
+	cout << "|  following model developed by Matsumoto et al. (2016), and   |" << endl;
+	cout << "|  the accumulation of cosmogenic isotopes following Hurst     |" << endl;
+	cout << "|  et al. (2016; 2017).                                        |" << endl;
+	cout << "|                                                              |" << endl;
+	cout << "|  Implemented in C++ by Martin Hurst, University of Glasgow   |" << endl;
+	cout << "----------------------------------------------------------------" << endl;
+	cout << endl;
 
-	//clock 
-	time_t begin, end;
-	time(&begin);
-
+	//Test for correct input arguments
+	if (nNumberofArgs!=3)
+	{
+		cout << "Error: This program requires two inputs: " << endl;
+		cout << " * First a path to the folder where the model will be run" << endl;
+		cout << " * The name of the input parameter file (must be in the above folder)" << endl;
+		cout << "------------------------------------------------------" << endl;
+		cout << "Then the command line argument will be: " << endl;
+		cout << "In linux:" << endl;
+		cout << "  ./RPM_CRN_MCMC.out /ProjectFolder/ MyInputParameterFile.in" << endl;
+		cout << "------------------------------------------------------" << endl;
+		exit(EXIT_SUCCESS);
+	}
+    
     // retrieve prameter file and workspace from arguments
     string Folder = argv[1];
 	string TempParamFilename = argv[2];
@@ -110,120 +128,5 @@ int main(int nNumberofArgs,char *argv[])
       
     //Sample next parameters from Metropolis Chain
 	My_MCMC_Coast.RunMetropolisChain();
-
-        // Initiate RPM object
-        RPM PlatformModel = RPM(dZ, dX, Params.InitialGradient, Params.CliffElevation, Params.MaxElevation, Params.MinElevation);
-
-        //initialise RockyCoastCRN friend object
-        RockyCoastCRN PlatformCRN = RockyCoastCRN();
-
-        if (CRNFlag)
-        {
-            //Which Nuclides to track 10Be, 14C, 26Al, 36Cl?
-            vector<int> Nuclides;
-            Nuclides.push_back(10);
-            
-            //initialise RockyCoastCRN friend object
-            PlatformCRN = RockyCoastCRN(PlatformModel, Nuclides);
-        }
-        
-        //Initialise Tides
-        double TidalPeriod = 12.42;
-        PlatformModel.InitialiseTides(TidalRange);
-        if (CRNFlag) PlatformCRN.InitialiseTides(TidalRange/2.,TidalPeriod);
-            
-        //Initialise Waves
-        //Single Wave for now but could use the waveclimate object from COVE!?
-        double WaveHeight_Mean = 3.;
-        double WaveHeight_StD = 0.;
-        double WavePeriod_Mean = 6.;
-        double WavePeriod_StD = 0;
-        PlatformModel.InitialiseWaves(WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD);
-
-        // Wave coefficient constant
-        double StandingCoefficient = 0.1;
-        double BreakingCoefficient = 10.;
-        double BrokenCoefficient = 1.;
-        PlatformModel.Set_WaveCoefficients(StandingCoefficient, BreakingCoefficient, BrokenCoefficient, WaveAttenuationConst);
-
-        //reset the geology
-        double CliffFailureDepth = 0.1;
-        PlatformModel.InitialiseGeology(CliffElevation, CliffFailureDepth, Resistance, WeatheringRate, SubtidalEfficacy);
-        
-        // Pass Metropolis Chain Parameters
-
-        // Run the model
-        //Loop through time
-        while (Time >= EndTime)
-        {
-            //Do an earthquake?
-            if (Time < UpliftTime)
-            {
-                // perform uplift
-                PlatformModel.TectonicUplift(UpliftMagnitude);
-                UpliftTime -= UpliftFrequency;
-                
-                // Update the Morphology 
-                PlatformModel.UpdateMorphology();
-            }		
-
-            //Update Sea Level
-            InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
-            PlatformModel.UpdateSeaLevel(InstantSeaLevel);
-
-            //Get the wave conditions
-            PlatformModel.GetWave();
-
-            //Calculate forces acting on the platform
-            PlatformModel.CalculateBackwearing();
-            PlatformModel.CalculateDownwearing();
-
-            //Do erosion
-            PlatformModel.ErodeBackwearing();
-            PlatformModel.ErodeDownwearing();
-
-            //Update the Morphology 
-            PlatformModel.UpdateMorphology();	
-            
-            //Implement Weathering
-            PlatformModel.IntertidalWeathering();
-            PlatformModel.SubtidalWeathering();
-            
-            //Update the Morphology 
-            PlatformModel.UpdateMorphology();
-
-            //Check for Mass Failure
-            PlatformModel.MassFailure();
-            
-            //Update the Morphology 
-            PlatformModel.UpdateMorphology();
-
-            //Update the morphology inside RockyCoastCRN
-            if (CRNFlag) PlatformCRN.UpdateMorphology(PlatformModel);
-
-            //Update the CRN concentrations
-            if (CRNFlag) PlatformCRN.UpdateCRNs();
-                
-            //print?
-            if (Time <= PrintTime)
-            {
-                cout.flush();
-                cout << "RPM: Time " << setprecision(2) << fixed << Time << " years\r";
-                //PlatformModel.WriteProfile(OutputFileName, Time);  //This is for testing - need to remove
-                        //if (CRNFlag) PlatformCRN.WriteCRNProfile(OutputConcentrationFileName, Time);
-                PrintTime -= PrintInterval;
-            }
-
-            //update time
-            Time -= TimeInterval;
-        }
-        // calculate resulting likelihoods
-        // calculate CRN likelihood
-        // calculate topo likelihood
-        // accept or reject new parameters
-
-        // save results
-
-    }
- 
 }
+ 
