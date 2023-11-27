@@ -138,6 +138,7 @@ void RPM::Initialise(double dZ_in, double dX_in)
 	//default print conditions to print every timestep
 	PrintTime = 0;
 	PrintInterval = TimeInterval;
+	UpliftTime = 0;
 
 	//Set sea level to zero to begin with, and the ind, this will get updated later
 	SeaLevelRise = 0;
@@ -1174,19 +1175,19 @@ void RPM::MassFailure()
 	}
 }
 
+/*
 void RPM::RunModel(Parameters Params, RockyCoastCRN PlatformCRN)
 {
-	/*
+	"""
 		Function to evolve the coastal profile through time following
 		Matsumoto et al. 2016
 
 		This is the main model loop. Can be executed here or from a driver file
 
 		Martin Hurst 30/3/2017
-	*/
+	"""
 
  	//Loop through time
-	//Loop through time
 	while (Time >= Params.EndTime)
 	{
 		//Do an earthquake?
@@ -1243,17 +1244,19 @@ void RPM::RunModel(Parameters Params, RockyCoastCRN PlatformCRN)
 		Time -= Params.TimeStep;
 	}
 }
+*/
 
+/*
 void RPM::RunModel(Parameters Params)
 {
-	/*
+	"""
 		Function to evolve the coastal profile through time following
 		Matsumoto et al. 2016
 
 		This is the main model loop. Can be executed here or from a driver file
 
 		Martin Hurst 30/3/2017
-	*/
+	"""
 
  	//Loop through time
 	//Loop through time
@@ -1305,6 +1308,7 @@ void RPM::RunModel(Parameters Params)
 		Time -= Params.TimeStep;
 	}
 }
+*/
 
 void RPM::WriteProfile(string OutputFileName, double Time, bool Print2Screen)
 {

@@ -169,6 +169,7 @@ class RPM
 		//TIME CONTROL PARAMETERS
 		double Time, EndTime, TimeInterval;
 		double PrintTime, PrintInterval;
+		double UpliftTime;
 
 		//PHYSICAL CONSTANTS
 		double rho_w;
@@ -278,13 +279,13 @@ class RPM
 		/// @details This function evolves a rocky coastal platform through time.
 		///	@author Martin D. Hurst
 		/// @date 27/11/2023
-		void RunModel(Parameters Params, RockyCoastCRN PlatformCRN);
+		//void RunModel(Parameters Params, RockyCoastCRN PlatformCRN);
 		
 		/// @brief Launch the main program loop to evolve RPM coast without RockyCoastCRN
 		/// @details This function evolves a rocky coastal platform through time.
 		///	@author Martin D. Hurst
 		/// @date 27/11/2023
-		void RunModel(Parameters Params);
+		//void RunModel(Parameters Params);
 
 		/// @brief Calculate the amount of backwearing in a timestep
 		/// @details Calculates the amount of backwearing based on transformation
