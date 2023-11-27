@@ -78,11 +78,13 @@ using namespace std;
 
 //Dummy class for RockyCoastCRN
 class RockyCoastCRN;
+class Parameters;
 
 ///@brief Main coastal platform object.
 class RPM
 {
   friend class RockyCoastCRN;
+  friend class Parameters;
 
 	private:
 
@@ -272,11 +274,17 @@ class RPM
         void InitialiseWavePressure_Rectangle(double WaveHeight);
         void InitialiseWavePressure_Triangle(double WaveHeight);
 
-		/// @brief Launch the main program loop to evolve RPM coast
+		/// @brief Launch the main program loop to evolve RPM coast with RockyCoastCRN object too
 		/// @details This function evolves a rocky coastal platform through time.
 		///	@author Martin D. Hurst
-		/// @date 27/02/2017
-		void EvolveCoast();
+		/// @date 27/11/2023
+		void RunModel(Parameters Params, RockyCoastCRN PlatformCRN);
+		
+		/// @brief Launch the main program loop to evolve RPM coast without RockyCoastCRN
+		/// @details This function evolves a rocky coastal platform through time.
+		///	@author Martin D. Hurst
+		/// @date 27/11/2023
+		void RunModel(Parameters Params);
 
 		/// @brief Calculate the amount of backwearing in a timestep
 		/// @details Calculates the amount of backwearing based on transformation

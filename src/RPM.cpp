@@ -1244,6 +1244,68 @@ void RPM::RunModel(Parameters Params, RockyCoastCRN PlatformCRN)
 	}
 }
 
+void RPM::RunModel(Parameters Params)
+{
+	/*
+		Function to evolve the coastal profile through time following
+		Matsumoto et al. 2016
+
+		This is the main model loop. Can be executed here or from a driver file
+
+		Martin Hurst 30/3/2017
+	*/
+
+ 	//Loop through time
+	//Loop through time
+	while (Time >= Params.EndTime)
+	{
+		//Do an earthquake?
+		if (Params.Earthquakes && Time < UpliftTime)
+		{
+			TectonicUplift(Params.UpliftMagnitude);
+			UpliftTime -= Params.UpliftFrequency;
+			
+			//Update the Morphology 
+			UpdateMorphology();
+		}		
+		
+		//Update Sea Level
+		InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
+		UpdateSeaLevel(InstantSeaLevel);
+
+		//Get the wave conditions
+		GetWave();
+
+		//Calculate forces acting on the platform
+		CalculateBackwearing();
+		CalculateDownwearing();
+
+		//Do erosion
+		ErodeBackwearing();
+		ErodeDownwearing();
+
+		//Implement Weathering
+		IntertidalWeathering();
+		SubtidalWeathering();
+		
+		//Check for Mass Failure
+		MassFailure();
+		
+		//Update the Morphology 
+		UpdateMorphology();
+
+        //print?
+		if (Time <= PrintTime)
+		{
+			WriteProfile(Params.ProfileOutFilename, Time);
+			PrintTime -= Params.PrintInterval;
+		}
+		
+		//update time
+		Time -= Params.TimeStep;
+	}
+}
+
 void RPM::WriteProfile(string OutputFileName, double Time, bool Print2Screen)
 {
   /* Writes a RPM object X coordinates to file, each value spans dZ in elevation
