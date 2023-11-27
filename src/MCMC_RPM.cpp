@@ -201,7 +201,7 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 
 
     //Initialise RPM object
-	MCMCPlatform = RPM(dZ, dX, Gradient, CliffHeight, MinElevation);
+	MCMC_RPM = RPM(dZ, dX, Gradient, CliffHeight, MinElevation);
 
     //Initialise Sea Level history
     MCMCSeaLevel = SeaLevel(RSLFilename);
@@ -210,10 +210,10 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
     double InitialSeaLevel = MCMCSeaLevel.get_SeaLevel(StartTime);
 
     //
-    MCMCPlatform.UpdateSeaLevel(InitialSeaLevel);
+    MCMC_RPM.UpdateSeaLevel(InitialSeaLevel);
 
     //Initialise Tides
-	MCMCPlatform.InitialiseTides(TidalRange);
+	MCMC_RPM.InitialiseTides(TidalRange);
 
     //Initialise Waves
 	//Single Wave for now but could use the waveclimate object from COVE!?
@@ -221,17 +221,17 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 	double WaveHeight_StD = 0.;
 	double WavePeriod_Mean = 6.;
 	double WavePeriod_StD = 0;
-	MCMCPlatform.InitialiseWaves(WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD);
+	MCMC_RPM.InitialiseWaves(WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD);
 
     // Wave coefficient constant
 	double StandingCoefficient = 0.1;
 	double BreakingCoefficient = 10.;
 	double BrokenCoefficient = 1.;
 	double WaveAttenuationConst = 0.01;
-	MCMCPlatform.Set_WaveCoefficients(StandingCoefficient, BreakingCoefficient, BrokenCoefficient, WaveAttenuationConst);
+	MCMC_RPM.Set_WaveCoefficients(StandingCoefficient, BreakingCoefficient, BrokenCoefficient, WaveAttenuationConst);
 
     //initialise the geology
-	MCMCPlatform.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance_Init, WeatheringRate_Init, MinElevation);
+	MCMC_RPM.InitialiseGeology(CliffHeight, CliffFailureDepth, Resistance_Init, WeatheringRate_Init, MinElevation);
 
     /*  start the chain with a guess this guess is a very coarse approximation of what the 'real' values 
 	    might be. The Metropolis algorithm will sample around this */
@@ -280,29 +280,29 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
         
         //Reset parameters to be read from input file
         //reset model
-        MCMCPlatform.ResetModel();
+        MCMC_RPM.ResetModel();
         //reset morphology (input parameters)
-        //MCMCPlatform.ResetMorphology(dZ, dX, Gradient, CliffHeight, CliffFailureDepth, MinElevation);
+        //MCMC_RPM.ResetMorphology(dZ, dX, Gradient, CliffHeight, CliffFailureDepth, MinElevation);
         //reset sea level
-        MCMCPlatform.UpdateSeaLevel(InitialSeaLevel);
+        MCMC_RPM.UpdateSeaLevel(InitialSeaLevel);
         //reset tides
-        MCMCPlatform.InitialiseTides(TidalRange);
+        MCMC_RPM.InitialiseTides(TidalRange);
         // initialise waves
         double WaveHeight_Mean = 3.;
 	    double WaveHeight_StD = 0.;
 	    double WavePeriod_Mean = 6.;
 	    double WavePeriod_StD = 0;
-	    MCMCPlatform.InitialiseWaves(WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD);
+	    MCMC_RPM.InitialiseWaves(WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD);
 
         // Wave coefficient constant
 	    double StandingCoefficient = 0.1;
 	    double BreakingCoefficient = 10.;
 	    double BrokenCoefficient = 1.;
 	    double WaveAttenuationConst = 0.01;
-	    MCMCPlatform.Set_WaveCoefficients(StandingCoefficient, BreakingCoefficient, BrokenCoefficient, WaveAttenuationConst);
+	    MCMC_RPM.Set_WaveCoefficients(StandingCoefficient, BreakingCoefficient, BrokenCoefficient, WaveAttenuationConst);
 
         // reset model parameters with new values
-        MCMCPlatform.InitialiseGeology(CliffHeight, CliffFailureDepth, 
+        MCMC_RPM.InitialiseGeology(CliffHeight, CliffFailureDepth, 
                                         Resistance_New,  WeatheringRate_New, SubmarineDecayConst);
 
         //Run a model iteration with new parameters
@@ -339,61 +339,77 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
     }
 
 
-long double MCMC_RPM::RunCoastIteration()  
+long double MCMC_RPM::RunCoastIteration(Parameters Params)  
 {
     /* runs a single instance of the RPM Model, then reported the likelihood of the parameters
     */
 
     //Time control parameters
 	//Time runs in yrs bp
-	double EndTime = 0;
-	double Time = StartTime;
-	double TimeInterval = 1;
+	double EndTime = Params.EndTime;
+	double Time = Params.StartTime;
+	double TimeInterval = Params.TimeStep;
     double InstantSeaLevel;
-    
-    double PrintTime = StartTime;
-    double PrintInterval = 100;
+    double UpliftTime = Time - Params.UpliftFrequency;
+    double PrintInterval = Params.PrintInterval;
+    double PrintTime = Time;
 
     //reset the model domain
-	//MCMCPlatform.ResetModel();
+	//MCMC_RPM.ResetModel();
 
     //Loop through time
 	while (Time >= EndTime)
 	{
-		// print time to screen
-        if (Time < PrintTime)
-        {
-            printf("Time %4.f\n",Time);
-            PrintTime -= PrintInterval;
-        }
-
-        //set up if statement to only print every 100/1000 years? 
-        
+		//set up if statement to only print every 100/1000 years? 
+        //Do an earthquake?
+		if (Params.Earthquakes && Time < UpliftTime)
+		{
+			MCMC_RPM.TectonicUplift(Params.UpliftMagnitude);
+			UpliftTime -= Params.UpliftFrequency;
+			
+			//Update the Morphology 
+			MCMC_RPM.UpdateMorphology();
+		}		
 
         //Update Sea Level
 		InstantSeaLevel = MCMCSeaLevel.get_SeaLevel(Time);
-		MCMCPlatform.UpdateSeaLevel(InstantSeaLevel);
+		MCMC_RPM.UpdateSeaLevel(InstantSeaLevel);
 
 		//Get the wave conditions
-		MCMCPlatform.GetWave();
+		MCMC_RPM.GetWave();
 
         //Implement Weathering
-		MCMCPlatform.IntertidalWeathering();
+		MCMC_RPM.IntertidalWeathering();
 
 		//Calculate forces acting on the platform
-		MCMCPlatform.CalculateBackwearing();
-		MCMCPlatform.CalculateDownwearing();
+		MCMC_RPM.CalculateBackwearing();
+		MCMC_RPM.CalculateDownwearing();
 
 		//Do erosion
-		MCMCPlatform.ErodeBackwearing();
-		MCMCPlatform.ErodeDownwearing();
+		MCMC_RPM.ErodeBackwearing();
+		MCMC_RPM.ErodeDownwearing();
 	
 		//Check for Mass Failure
-		MCMCPlatform.MassFailure();
+		MCMC_RPM.MassFailure();
 		
 		//Update the Morphology 
-		MCMCPlatform.UpdateMorphology();
+		MCMC_RPM.UpdateMorphology();
+
+        //Update the morphology and CRNs inside RockyCoastCRN
+		if (Params.CRN_Predictions) 
+		{
+			MCMC_RockyCoastCRN.UpdateMorphology(PlatformModel);
+			MCMC_RockyCoastCRN.UpdateCRNs();
+		}
 		
+        //print?
+		if (Time <= PrintTime)
+		{
+			MCMC_RPM.WriteProfile(Params.ProfileOutFilename, Time);
+			if (Params.CRN_Predictions) MCMC_RockyCoastCRN.WriteCRNProfile(Params.ConcentrationsOutFilename, Time);
+			PrintTime -= Params.PrintInterval;
+		}
+
 		//update time
 		Time -= TimeInterval;
 	}
@@ -413,8 +429,8 @@ long double MCMC_RPM::CalculateLikelihood()
    vector<double> XModel, ZModel;
 
      //Work out the modelled morphology
-   XModel = MCMCPlatform.get_X(); 
-   ZModel = MCMCPlatform.get_Elevations();
+   XModel = MCMC_RPM.get_X(); 
+   ZModel = MCMC_RPM.get_Elevations();
    int XSize = XModel.size();
    double CliffPositionX = XModel[XSize-1];
    

@@ -64,6 +64,7 @@
 #include "RPM.hpp"
 #include "SeaLevel.hpp"
 #include "FastExp.hpp"
+#include "RockyCoastCRN.hpp"
 
 using namespace std;
 
