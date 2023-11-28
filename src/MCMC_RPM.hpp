@@ -28,7 +28,7 @@ class MCMC_RPM
     private:
       //Initialise Function
       void Initialise();
-      void Initialise(Parameters Params);
+      void Initialise(Parameters InitialParams);
       
       //Vectors to hold extracted profile and CRN data
       int NProfileData, NCRNData;
@@ -50,6 +50,8 @@ class MCMC_RPM
       int NXModel;
       double CliffPositionX, XPos, InterpScale;
       
+      //Declare parameters object
+      Parameters Params;
 
       //Declare RPM object
       RPM MCMC_RPM;
@@ -84,10 +86,10 @@ class MCMC_RPM
       /// @brief Initialisation function for MCMC_RPM objects
       /// @param Params A parameters object read from an parameter file
       
-      MCMC_RPM(Parameters Params)
+      MCMC_RPM(Parameters InitialParams)
       {
             
-             MCMC_RPM::Initialise(Params);
+             MCMC_RPM::Initialise(InitialParams);
       }
 
       /// this runs the metropolis algorithm along a chain with NIterations it prints to the file 'OutFilename'

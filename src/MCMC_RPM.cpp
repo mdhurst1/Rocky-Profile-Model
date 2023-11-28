@@ -30,11 +30,11 @@ void MCMC_RPM::Initialise()
    exit(EXIT_SUCCESS);
 }
 
-void MCMC_RPM::Initialise(Parameters Params)
+void MCMC_RPM::Initialise(Parameters InitialParams)
 {
     /*initialise a Markov Chain object with extracted platform profile and concentrations
     */
-
+    Params = InitialParams;
 
     // file name params
     string ProfileDatafile(Params.TopoFilename);
@@ -373,7 +373,7 @@ void MCMC_RPM::ResetModel()
     MCMC_RPM.Initialise(Params.dZ, Params.dX, Params.InitialGradient, Params.CliffElevation, Params.MaxElevation, Params.MinElevation);
 
     //reinitialise RockyCoastCRN friend object
-	MCMC_RockyCoastCRN = RockyCoastCRN(MCMC_RPM, Nuclides);
+	MCMC_RockyCoastCRN = RockyCoastCRN(MCMC_RPM, Params.Nuclides);
 
     // Get initial sea level
 	float InstantSeaLevel = MCMC_Sealevel.get_SeaLevel(Params.StartTime);
