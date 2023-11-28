@@ -40,6 +40,7 @@ class MCMC_RPM
       double StartTime;
 
       //Vectors to hold Model results for comparison to data
+      vector <vector<double>> CRNModelArray;
       vector<double> XModel, ZModel, CRNModel;
       vector<double> ZModelData;
       vector<double> CRNModelData;

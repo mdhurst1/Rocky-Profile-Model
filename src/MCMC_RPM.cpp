@@ -433,7 +433,7 @@ long double MCMC_RPM::CalculateTopoLikelihood()
         //this was Jen's calcs for Dakota, which read RMSE
         //Residuals[i] = fabs(ProfileZData[i]-TopoData[i]);
         //TotalResiduals += pow(ProfileZData[i]-TopoData[i],2);
-        TopoLikelihood *= exp(-(fabs((ProfileZData[i]-ZModelData[i])*(ProfileZData[i]-ZModelData[i])))/(ZStdData[i]*ZStdData[i]));    //ZStd read in from parameter file?
+        TopoLikelihood *= exp(-(fabs((ProfileZData[i]-ZModelData[i])*(ProfileZData[i]-ZModelData[i])))/(ProfileZStdData[i]*ProfileZStdData[i]));    //ZStd read in from parameter file?
     }
     return TopoLikelihood;
 }
@@ -456,8 +456,9 @@ long double MCMC_RPM::CalculateCRNLikelihood()
     // get CRN model array and just sample first element (i.e. only 1 nuclide)
     // this will need to be revamped if we are ever to work with multiple nuclides
     CRNModelArray = MCMC_RockyCoastCRN.get_SurfaceN(); // does this exist?!
-    vector<double> CRNModelVec(NXModel);
-    for (int j=0; j<NXModel; ++j) CRNModelVec.push_back(CRNModelArray[j][0]);
+    vector<double> BlankCRNModel(NXModel);
+    CRNModel = BlankCRNModel;
+    for (int j=0; j<NXModel; ++j) CRNModel.push_back(CRNModelArray[j][0]);
     
     CRNModelData = BlankCRNDataVec;
     CliffPositionX = XModel[NXModel-1];
