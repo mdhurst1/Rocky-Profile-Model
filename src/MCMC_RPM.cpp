@@ -159,7 +159,8 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 	long double LastLikelihood = 0.L;			//Last accepted likelihood
 	long double NewLikelihood = 0.L;			//New likelihood
 	long double LikelihoodRatio = 0.L;			//Ratio between last and new likelihoods
-	double AcceptanceProbability;               //New iteration is accepted if likelihood ratio exceeds
+	long double CombinedLikelihood = 0.L;
+    double AcceptanceProbability;               //New iteration is accepted if likelihood ratio exceeds
 
 	int NAccepted = 0;      //count accepted parameters
 	int NRejected = 0;      //count rejected parameters
@@ -190,7 +191,7 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 	RunCoastIteration();
 	CalculateTopoLikelihood();
     CalculateCRNLikelihood();
-    CombinedLikelihood = TopoWeighting*TopoLikelihood + CRNWeighting*CRNLikelihood;
+    CombinedLikelihood = Params.TopoWeighting*TopoLikelihood + Params.CRNWeighting*CRNLikelihood;
     LastLikelihood = CombinedLikelihood;
 
     //set old parameters for comparison and updating
@@ -294,7 +295,6 @@ long double MCMC_RPM::RunCoastIteration()
 	double TimeInterval = Params.TimeStep;
     double InstantSeaLevel;
     double UpliftTime = Time - Params.UpliftFrequency;
-    double PrintInterval = Params.PrintInterval;
     double PrintTime = Time;
 
     //reset the model domain
@@ -315,7 +315,7 @@ long double MCMC_RPM::RunCoastIteration()
 		}		
 
         //Update Sea Level
-		InstantSeaLevel = MCMCSeaLevel.get_SeaLevel(Time);
+		InstantSeaLevel = MCMCSealevel.get_SeaLevel(Time);
 		MCMC_RPM.UpdateSeaLevel(InstantSeaLevel);
 
 		//Get the wave conditions
@@ -341,7 +341,7 @@ long double MCMC_RPM::RunCoastIteration()
         //Update the morphology and CRNs inside RockyCoastCRN
 		if (Params.CRN_Predictions) 
 		{
-			MCMC_RockyCoastCRN.UpdateMorphology(PlatformModel);
+			MCMC_RockyCoastCRN.UpdateMorphology(MCMC_RPM);
 			MCMC_RockyCoastCRN.UpdateCRNs();
 		}
 		
@@ -360,7 +360,7 @@ long double MCMC_RPM::RunCoastIteration()
     //Calculate likelihood
     CalculateTopoLikelihood();    
     CalculateCRNLikelihood();
-    CombinedLikelihood = TopoWeighting*TopoLikelihood + CRNWeighting*CRNLikelihood;
+    CombinedLikelihood = Params.TopoWeighting*TopoLikelihood + Params.CRNWeighting*CRNLikelihood;
 
     return CombinedLikelihood;
 }
@@ -370,7 +370,7 @@ void MCMC_RPM::ResetModel()
     // will need to think about how to use new parameters during reset.
     
     // reinitialise RPM object with default morphology
-    MCMC_RPM.Initialise(Params.dZ, Params.dX, Params.InitialGradient, Params.CliffElevation, Params.MaxElevation, Params.MinElevation);
+    MCMC_RPM = RPM(Params.dZ, Params.dX, Params.InitialGradient, Params.CliffElevation, Params.MaxElevation, Params.MinElevation);
 
     //reinitialise RockyCoastCRN friend object
 	MCMC_RockyCoastCRN = RockyCoastCRN(MCMC_RPM, Params.Nuclides);
