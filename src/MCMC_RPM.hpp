@@ -66,6 +66,7 @@ class MCMC_RPM
 
       //runs a single iteration of the RPM model, then reports the likelihood of the parameters - this read in from driver?
       long double RunCoastIteration();
+      void ResetModel();
 
     public:
 
@@ -103,10 +104,7 @@ class MCMC_RPM
 
   
       
-//void ResetModel() - where to place reset model & update geology?
-		//{
-			//Initialise(dZ,dX, InitialGradient, CliffHeight, MinimumElevation);
-		//}
+      
 
 };
 
