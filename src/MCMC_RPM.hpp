@@ -32,7 +32,7 @@ class MCMC_RPM
       
       //Vectors to hold extracted profile and CRN data
       int NProfileData, NCRNData;
-      vector<double> ProfileXData, ProfileZData, ProfileZStd;
+      vector<double> ProfileXData, ProfileZData, ProfileZStdData;
       vector<double> CRNXData, CRNNData, CRNNErrorData;
       
 

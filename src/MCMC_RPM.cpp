@@ -53,16 +53,18 @@ void MCMC_RPM::Initialise(Parameters Params)
 
     // ignore header lines by reading to Dummy
     // file format is...
-    // X_header | Z_header
-    //   X[0]   |   Z[0]
-    //   X[1]   |   Z[1]
-    //  X[...]  |  Z[...]
-    //   X[n]   |   Z[n]
-    READProfileDatafile >> Dummy >>  Dummy;
-    while(READProfileDatafile >> TempProfileXData >> TempProfileZData)
+    // X_header | Z_header | Zstd_header
+    //   X[0]   |   Z[0]   |  Zstd[0]
+    //   X[1]   |   Z[1]   |  Zstd[1]
+    //  X[...]  |  Z[...]  | Zstd[...]
+    //   X[n]   |   Z[n]   |  Zstd[n]
+
+    READProfileDatafile >> Dummy >>  Dummy >> Dummy;
+    while(READProfileDatafile >> TempProfileXData >> TempProfileZData >> TempProfileZStdData)
     {
         ProfileXData.push_back(TempProfileXData);
         ProfileZData.push_back(TempProfileZData);
+        ProfileZStdData.push_back(TempProfileZStdData);
     }
 
     READProfileDatafile.close();
@@ -82,16 +84,17 @@ void MCMC_RPM::Initialise(Parameters Params)
 
     // ignore header lines by reading to Dummy
     // file format is...
-    // X_header | N_header
-    //   X[0]   |   N[0]
-    //   X[1]   |   N[1]
-    //  X[...]  |  N[...]
-    //   X[n]   |   N[n]
-    READCRNDatafile >> Dummy >>  Dummy;
-    while(READCRNDatafile >> TempXData >> TempNData)
+    // X_header | N_header |   N_Error
+    //   X[0]   |   N[0]   |  N_Err[0]
+    //   X[1]   |   N[1]   |  N_Err[1]
+    //  X[...]  |  N[...]  | N_Err[...]
+    //   X[n]   |   N[n]   |  N_Err[n]
+    READCRNDatafile >> Dummy >>  Dummy >> Dummy;
+    while(READCRNDatafile >> TempXData >> TempNData >> TempNErrorData)
     {
         CRNXData.push_back(TempXData);
         CRNNData.push_back(TempNData);
+        CRNNErrorData.push_back(TempNErrorData);
     }
 
     READCRNDatafile.close();
@@ -406,9 +409,9 @@ long double MCMC_RPM::CalculateTopoLikelihood()
     //declarations
     XModel = MCMC_RPM.get_X(); 
     ZModel = MCMC_RPM.get_Elevations();
-    ZModelData = BlankTopoDataVector;
+    ZModelData = BlankTopoDataVec;
     NXModel = XModel.size();
-    CliffPositionX = XModel[XSize-1];
+    CliffPositionX = XModel[NXModel-1];
            
     //Interpolate to extracted morphology X positions
     for (int i=0; i<NProfileData; ++i)
@@ -419,10 +422,10 @@ long double MCMC_RPM::CalculateTopoLikelihood()
         //Take X value of extracted morph position and interpolate to get model results at this point
         int j=0;
         while ((XModel[j]- XPos) <0) ++j; //XPos starts at point nearest cliff and works offshore - starts at 40m from cliff so will never =0
-        InterpScale = (XModel[j] - XPos[i])/(XModel[j]-XModel[j-1]);
+        InterpScale = (XModel[j] - XPos)/(XModel[j]-XModel[j-1]);
 
         //Get Interpolated Z value
-        ZModelData[i] = ZModel[j]-Scale*(ZModel[j]-ZModel[j-1]);
+        ZModelData[i] = ZModel[j]-InterpScale*(ZModel[j]-ZModel[j-1]);
         
     }
 
