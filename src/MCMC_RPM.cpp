@@ -170,15 +170,9 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
     //Holders to define parameter space	
 	double  Resistance_New, Resistance_Old, Resistance_Min, Resistance_Max, Resistance_Std, Resistance_Init,
             WeatheringRate_New, WeatheringRate_Old, WeatheringRate_Min, WeatheringRate_Max, WeatheringRate_Std, WeatheringRate_Init,
-            WaveAttenuation_New, WaveAttenuation_Old, WaveAttenuation_Min, WaveAttenuation_Max, WaveAttenuation_Std, WaveAttenuation_Init,
-            SubmarineDecayConst;
+            WaveAttenuation_New, WaveAttenuation_Old, WaveAttenuation_Min, WaveAttenuation_Max, WaveAttenuation_Std, WaveAttenuation_Init;
            
-	//Parameters included in driver BermHeight, BeachSteepness, JunctionElevation, PlatformGradient, CliffHeight, CliffGradient, TidalAmplitude, SLR;
-    double TidalRange;
-    double dFR, dK; //change in parameter values for Resistance (FR) and WeatheringRate (K)
-    double MeanChange = 0.; //Change in parameter values centred on zero allow changes in both directions(pos and neg)
-     
-    //Initialise seed for random number generation
+	//Initialise seed for random number generation
     int RandomSeed = 1;
     srand(RandomSeed);
 
@@ -365,10 +359,14 @@ long double MCMC_RPM::RunCoastIteration(Parameters Params)
 	}
        
     //Calculate likelihood
-    return CalculateLikelihood();    
+    CalculateTopoLikelihood();    
+    CalculateCRNLikelihood();
+    CombinedLikelihood = TopoWeighting*TopoLikelihood + CRNWeighting*CRNLikelihood;
+
+    return CombinedLikelihood;
 }
 
-void MCMC_RPM::Reset_Model()
+void MCMC_RPM::ResetModel()
 {
     // will need to think about how to use new parameters during reset.
     
@@ -435,7 +433,7 @@ long double MCMC_RPM::CalculateTopoLikelihood()
         //this was Jen's calcs for Dakota, which read RMSE
         //Residuals[i] = fabs(ProfileZData[i]-TopoData[i]);
         //TotalResiduals += pow(ProfileZData[i]-TopoData[i],2);
-        TopoLikelihood *= exp(-(fabs((ProfileZData[i]-ZModelData[i])*(ProfileZData[i]-ZModelData[i])))/(ZStd[i]*ZStd[i]));    //ZStd read in from parameter file?
+        TopoLikelihood *= exp(-(fabs((ProfileZData[i]-ZModelData[i])*(ProfileZData[i]-ZModelData[i])))/(ZStdData[i]*ZStdData[i]));    //ZStd read in from parameter file?
     }
     return TopoLikelihood;
 }
@@ -485,7 +483,7 @@ long double MCMC_RPM::CalculateCRNLikelihood()
 
 
     //calculate CRN likelihood
-    for (int i=0; i<NData; ++i)
+    for (int i=0; i<NCRNData; ++i)
     {
         CRNLikelihood *= exp(-(fabs((CRNNData[i]-CRNModel[i])*(CRNNData[i]-CRNModel[i])))/(CRNNErrorData[i]*CRNNErrorData[i]));
     }
