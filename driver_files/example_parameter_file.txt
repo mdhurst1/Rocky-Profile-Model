@@ -1,4 +1,6 @@
+##################################
 # parameter file for RPM_CRN model
+##################################
 
 # File Structure
 Folder: ./RPM_CRN/
@@ -51,24 +53,33 @@ UpliftFrequency: 0
 CRNFilename: ExampleCRNData.in
 TopoFilename: ExampleTopoData.in
 
+###############################
 # MCMC parameters (if required)
+###############################
+
 NIterations: 10000
-# free param
+CRNWeighting: 0.5
+TopoWeighting: 0.5
+
+### free param 1
 Resistance_Min: 1.
 Resistance_Max: 100.
 Resistance_Mean: 10.
 Resistance_Std: 5.
 
-# free param
+### free param 2
 WeatheringRate_Min: 0.1
 WeatheringRate_Max: 10.
 WeatheringRate_Mean: 1.
 WeatheringRate_Std: 2.
-# free param
+
+### free param 3
 WaveAttenuation_Min: 0.001
 WaveAttenuation_Max: 0.1
 WaveAttenuation_Mean: 0.01
 WaveAttenuationStd: 0.02
+
+### output files for MCMC
 MCMCFilename: MCMCChainfile.out
 
 

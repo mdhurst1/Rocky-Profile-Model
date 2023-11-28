@@ -60,11 +60,13 @@ class Parameters
 	
 	public:
 
-		// actual parameter holders
+		// resolution params
+		float dX, dZ;
+
 		// Cosmogenic Isotopes
 		bool CRN_Predictions, Berylium, Carbon, Aluminium, ReadSeaLevelFromFile, Earthquakes;
 		vector<int> Nuclides;
-		
+
 		// Hydrodynamics
 		float SeaLevelRise, TidalRange, TidalPeriod, WaveHeight_Mean, WaveHeight_StD, WavePeriod_Mean, WavePeriod_StD, StandingWaveCoef, BreakingWaveCoef, BrokenWaveCoef, WaveAttenuationConst;
 
@@ -75,14 +77,17 @@ class Parameters
 		// tectonics
 		float UpliftMagnitude, UpliftFrequency;
 
+		// time control
+		double StartTime, EndTime, TimeStep, PrintInterval;
+
+		// MCMC Params
 		// variable parameters and their distribution metrics for MCMC
 		float Resistance_Mean, Resistance_Std, Resistance_Min, Resistance_Max;
 		float WeatheringRate_Mean, WeatheringRate_Std, WeatheringRate_Min, WeatheringRate_Max;
 		float WaveAttenuation_Mean, WaveAttenuation_Std, WaveAttenuation_Min, WaveAttenuation_Max;
+		// weightings
+		float TopoWeighting, CRNWeighting;
 		
-		// time control
-		double StartTime, EndTime, TimeStep, PrintInterval;
-
 		// input files
 		string TopoFilename, CRNFilename;
 		string SeaLevelFilename;
