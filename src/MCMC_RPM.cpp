@@ -451,10 +451,15 @@ long double MCMC_RPM::CalculateCRNLikelihood()
     
     //declarations
     XModel = MCMC_RockyCoastCRN.get_X();  // does this exist!?
-    CRNModel = MCMC_RockyCoastCRN.get_Concentrations(); // does this exist?!
+    NXModel = XModel.size();
+    
+    // get CRN model array and just sample first element (i.e. only 1 nuclide)
+    // this will need to be revamped if we are ever to work with multiple nuclides
+    CRNModelArray = MCMC_RockyCoastCRN.get_SurfaceN(); // does this exist?!
+    vector<double> CRNModelVec(NXModel);
+    for (int j=0; j<NXModel; ++j) CRNModelVec.push_back(CRNModelArray[j][0]);
     
     CRNModelData = BlankCRNDataVec;
-    NXModel = XModel.size();
     CliffPositionX = XModel[NXModel-1];
 
     //declarations CRN
@@ -462,9 +467,7 @@ long double MCMC_RPM::CalculateCRNLikelihood()
     vector<double> NModel(NCRNData);
     double ScaleCRN, DiffCRNX;
     vector<double> ResidualsCRN(NCRNData); 
-     
-
-
+    
     //Interpolate to sample locations
     for (int i=0; i<NCRNData; ++i)
     {
