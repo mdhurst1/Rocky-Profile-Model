@@ -239,6 +239,15 @@ void Parameters::ParseValuesFromFile()
     Berylium = bool_Params["Berylium"];
     Carbon = bool_Params["Carbon"];
     Aluminium = bool_Params["Aluminium"];
+    
+    if (CRN_Predictions)
+	{
+		//Which Nuclides to track 10Be, 14C, 26Al, 36Cl?
+		if (Berylium) Nuclides.push_back(10);
+        if (Carbon) Nuclides.push_back(14);
+        if (Aluminium) Nuclides.push_back(26);
+	}
+
     ReadSeaLevelFromFile = bool_Params["ReadSeaLevelFromFile"];
 		
     // Hydrodynamics

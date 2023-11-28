@@ -114,8 +114,7 @@ void MCMC_RPM::Initialise(Parameters Params)
 	if (Params.CRN_Predictions)
 	{
 		//Which Nuclides to track 10Be, 14C, 26Al, 36Cl?
-		vector<int> Nuclides;
-        if (Params.Berylium) Nuclides.push_back(10);
+		if (Params.Berylium) Nuclides.push_back(10);
         if (Params.Carbon) Nuclides.push_back(14);
         if (Params.Aluminium) Nuclides.push_back(26);
 		
@@ -371,28 +370,28 @@ void MCMC_RPM::ResetModel()
     // will need to think about how to use new parameters during reset.
     
     // reinitialise RPM object with default morphology
-    Initialise(Params.dZ, Params.dX, Params.InitialGradient, Params.CliffElevation, Params.MaxElevation, Params.MinElevation);
+    MCMC_RPM.Initialise(Params.dZ, Params.dX, Params.InitialGradient, Params.CliffElevation, Params.MaxElevation, Params.MinElevation);
 
     //reinitialise RockyCoastCRN friend object
 	MCMC_RockyCoastCRN = RockyCoastCRN(MCMC_RPM, Nuclides);
 
     // Get initial sea level
-	float InstantSeaLevel = MCMC_SeaLevel.get_SeaLevel(Params.StartTime);
-	UpdateSeaLevel(InstantSeaLevel);
+	float InstantSeaLevel = MCMC_Sealevel.get_SeaLevel(Params.StartTime);
+	MCMC_RPM.UpdateSeaLevel(InstantSeaLevel);
 
 	//Initialise Tides
-	InitialiseTides(Params.TidalRange);
+	MCMC_RPM.InitialiseTides(Params.TidalRange);
     if (Params.CRN_Predictions) MCMC_RockyCoastCRN.InitialiseTides(Params.TidalRange/2.,Params.TidalPeriod);
 	
 	//Initialise Waves
-	InitialiseWaves(Params.WaveHeight_Mean, Params.WaveHeight_StD, Params.WavePeriod_Mean, Params.WavePeriod_StD);
+	MCMC_RPM.InitialiseWaves(Params.WaveHeight_Mean, Params.WaveHeight_StD, Params.WavePeriod_Mean, Params.WavePeriod_StD);
 
     // Wave coefficient constant
-	Set_WaveCoefficients(Params.StandingWaveCoef, Params.BreakingWaveCoef, 
+	MCMC_RPM.Set_WaveCoefficients(Params.StandingWaveCoef, Params.BreakingWaveCoef, 
 										Params.BrokenWaveCoef, Params.WaveAttenuationConst);
 
 	//reset the geology
-	InitialiseGeology(Params.CliffElevation, Params.CliffFailureDepth, Params.Resistance, 
+	MCMC_RPM.InitialiseGeology(Params.CliffElevation, Params.CliffFailureDepth, Params.Resistance, 
 									Params.WeatheringRate, Params.SubtidalEfficacy);
 }
 
