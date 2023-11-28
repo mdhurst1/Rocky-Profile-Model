@@ -139,11 +139,15 @@ void Parameters::SetDefaultValues()
 	float_Params["TimeStep"] = 1.;
 	float_Params["PrintInterval"] = 100.;
     
+    // input files
+    string_Params["TopoFilename"] = "NULL";
+    string_Params["CRNFilename"] = "NULL";
+    string_Params["SeaLevelFilename"] = "NULL";
+
 	// output files
     string_Params["Folder"] = Folder;
     string_Params["ProjectName"] = "RPM_CRN";
-    string_Params["SeaLevelFilename"] = "NULL";
-	string_Params["ProfileOutFilename"] = string_Params["ProjectName"] + "_ShoreProfile.xz";
+    string_Params["ProfileOutFilename"] = string_Params["ProjectName"] + "_ShoreProfile.xz";
 	string_Params["ConcentrationsOutFilename"] = string_Params["ProjectName"] + "_Concentrations.xn";
 }
 

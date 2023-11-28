@@ -77,8 +77,8 @@ using namespace std;
 /////////////////////////////////////////////////////////////////////////////////////////*/
 
 //Dummy class for RockyCoastCRN
-class RockyCoastCRN;
-class Parameters;
+//class RockyCoastCRN;
+//class Parameters;
 
 ///@brief Main coastal platform object.
 class RPM

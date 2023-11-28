@@ -16,6 +16,7 @@ comments
 #include "./RPM.hpp"
 #include "./SeaLevel.hpp"
 #include "./Parameters.hpp"
+#include "./RockyCoastCRN.hpp"
 
 using namespace std;
 

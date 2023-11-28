@@ -82,9 +82,12 @@ class Parameters
 		// time control
 		double StartTime, EndTime, TimeStep, PrintInterval;
 
+		// input files
+		string TopoFilename, CRNFilename;
+		string SeaLevelFilename;
+		
 		// output files
 		string Folder, Filename, ProjectName;
-		string SeaLevelFilename;
 		string ProfileOutFilename, ConcentrationsOutFilename;
 		string ParameterOutFilename;
 
