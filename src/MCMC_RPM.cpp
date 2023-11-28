@@ -452,20 +452,19 @@ long double MCMC_RPM::CalculateCRNLikelihood()
     CRNLikelihood = 1.L;
     
     //declarations
-    XModel = MCMC_RockyCoast.get_X();  // does this exist!?
-    CRNModel = MCMC_RockyCoast.get_Concentrations(); // does this exist?!
+    XModel = MCMC_RockyCoastCRN.get_X();  // does this exist!?
+    CRNModel = MCMC_RockyCoastCRN.get_Concentrations(); // does this exist?!
     
-    CRNModelData = BlankCRNDataVector;
+    CRNModelData = BlankCRNDataVec;
     NXModel = XModel.size();
-    CliffPositionX = XModel[XSize-1];
+    CliffPositionX = XModel[NXModel-1];
 
     //declarations CRN
-    vector<double> XPosCRN(NData);
-    vector<double> NModel(NData);
+    vector<double> XPosCRN(NCRNData);
+    vector<double> NModel(NCRNData);
     double ScaleCRN, DiffCRNX;
-    double CRN_RMSE;
-    vector<double> ResidualsCRN(NData); 
-    double TotalResidualsCRN = 0; 
+    vector<double> ResidualsCRN(NCRNData); 
+     
 
 
     //Interpolate to sample locations
@@ -488,7 +487,7 @@ long double MCMC_RPM::CalculateCRNLikelihood()
     //calculate CRN likelihood
     for (int i=0; i<NData; ++i)
     {
-        CRNLikelihood *= exp(-(fabs((CRNNData[i]-CRNModel[i])*(CRNNData[i]-CRNModel[i])))/(CRNErrorData[i]*CRNErrorData[i]));
+        CRNLikelihood *= exp(-(fabs((CRNNData[i]-CRNModel[i])*(CRNNData[i]-CRNModel[i])))/(CRNNErrorData[i]*CRNNErrorData[i]));
     }
 
     //need a return statement.
