@@ -1,7 +1,7 @@
 # parameter file for RPM_CRN model
 
 # File Structure
-Folder: ../../RPM_Uplift/
+Folder: ../../Uplift_RPM/
 ProjectName: Uplift
 
 # Cosmogenic Isotopes
