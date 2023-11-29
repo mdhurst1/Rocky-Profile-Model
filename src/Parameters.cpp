@@ -296,7 +296,7 @@ void Parameters::ParseValuesFromFile()
     // Weightings for multipobjective MCMC
     TopoWeighting = float_Params["TopoWeighting"];
     CRNWeighting = float_Params["CRNWeighting"];
-    
+
     // time control
     StartTime = float_Params["StartTime"];
     EndTime = float_Params["EndTime"];
@@ -312,6 +312,7 @@ void Parameters::ParseValuesFromFile()
     ProfileOutFilename = ProjectName + "_ShoreProfile.xz";
 	ConcentrationsOutFilename = ProjectName + "_Concentrations.xn";
     ParameterOutFilename = ProjectName + ".params";
+    MCMCFilename = ProjectName + "_MCMC.chain";
     
     // check if reading sea level from file
     string NULLString("NULL");

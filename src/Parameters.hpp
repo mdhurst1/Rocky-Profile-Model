@@ -96,6 +96,7 @@ class Parameters
 		string Folder, Filename, ProjectName;
 		string ProfileOutFilename, ConcentrationsOutFilename;
 		string ParameterOutFilename;
+		string MCMCFilename;
 
 		Parameters()
 		{

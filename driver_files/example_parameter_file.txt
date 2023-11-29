@@ -49,7 +49,7 @@ Earthquakes: false
 UpliftMagnitude: 0
 UpliftFrequency: 0
 
-# output filenames
+# input filenames
 CRNFilename: ExampleCRNData.in
 TopoFilename: ExampleTopoData.in
 
@@ -79,7 +79,6 @@ WaveAttenuation_Max: 0.1
 WaveAttenuation_Mean: 0.01
 WaveAttenuationStd: 0.02
 
-### output files for MCMC
-MCMCFilename: MCMCChainfile.out
+
 
 

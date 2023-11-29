@@ -170,7 +170,7 @@ void MCMC_RPM::RunMetropolisChain()
     srand(RandomSeed);
 
     //Create datafile out and write ParameterFilename
-	ofstream ChainFileOut(Params.OutFilename);
+	ofstream ChainFileOut(Params.MCMCFilename);
 	ChainFileOut << "ParameterFile: " << Params.OutFilename << endl;
 	ChainFileOut  << "i Resistance_New WeatheingRate_New WaveAttenuation_New TopoLikelihood CRNLikelihood NewLikelihood LastLikelihood NAccepted NRejected" << endl;
 
