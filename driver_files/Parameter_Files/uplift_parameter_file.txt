@@ -30,6 +30,9 @@ WeatheringRate: 1.
 SubtidalEfficacy: 0.001
 CliffFailureDepth: 0.1
 CliffElevation: 30
+
+# earthquakes
+Earthquakes: true
 UpliftMagnitude: 3
 UpliftFrequency: 1000
 

@@ -114,6 +114,7 @@ void Parameters::SetDefaultValues()
 	float_Params["CliffFailureDepth"] = 0.1;
     
     // Uplift control parameters (might get added to MCMC)
+    bool_Params["Earthquakes"] = false;
     float_Params["UpliftMagnitude"] = 0;
     float_Params["UpliftFrequency"] = 0;
 
@@ -155,18 +156,14 @@ void Parameters::ParseValuesFromFile()
     ifstream infile;
     infile.open(Filename.c_str());
 
-    if (infile.is_open())
-    {
-        cout << "Input file exists" << endl;
-    }
-    else
+    // check input file exists and throw error if not
+    if (infile.is_open() == false)
     {
         cout << "Input file has not been open/doesnt exist" << endl;
         cout << "Specified file name is " << Filename << endl;
-        cout << "Model will run with default parameter values" << endl;
         exit(0);
-
     }
+
     // now ingest parameters
     while (infile.good())
     {
@@ -268,6 +265,7 @@ void Parameters::ParseValuesFromFile()
     CliffFailureDepth = float_Params["CliffFailureDepth"];
 
     // Uplift control parameters (might get added to MCMC)
+    Earthquakes = bool_Params["Earthquakes"];
     UpliftMagnitude = float_Params["UpliftMagnitude"];
     UpliftFrequency = float_Params["UpliftFrequency"];
 

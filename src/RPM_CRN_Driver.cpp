@@ -161,9 +161,10 @@ int main(int nNumberofArgs,char *argv[])
 	PlatformModel.InitialiseWaves(Params.WaveHeight_Mean, Params.WaveHeight_StD, Params.WavePeriod_Mean, Params.WavePeriod_StD);
 	
 	//Tectonic Events
-	//double UpliftFrequency = 1000.;
-	//double UpliftTime = UpliftFrequency;
-	//double UpliftMagnitude = 6.5;
+	bool Earthquakes = Params.Earthquakes;
+	double UpliftFrequency = Params.UpliftFrequency;
+	double UpliftTime = Time - UpliftFrequency;
+	double UpliftMagnitude = Params.UpliftMagnitude;
 
 	// Wave coefficient constant
 	PlatformModel.Set_WaveCoefficients(Params.StandingWaveCoef, Params.BreakingWaveCoef, 
@@ -183,19 +184,14 @@ int main(int nNumberofArgs,char *argv[])
 	while (Time >= Params.EndTime)
 	{
 		//Do an earthquake?
-		//if (Time < UpliftTime)
-		//{
-			//string ArrayFile1 = "MorphArray1.data";
-			//string ArrayFile2 = "MorphArray2.data";
-
-			//PlatformModel.WriteMorphologyArray(ArrayFile1, Time);
-			//PlatformModel.TectonicUplift(UpliftMagnitude);
-			//UpliftTime -= UpliftFrequency;
-			//PlatformModel.WriteMorphologyArray(ArrayFile2, Time);
-
+		if (Earthquakes && (Time < UpliftTime))
+		{
+			PlatformModel.TectonicUplift(UpliftMagnitude);
+			UpliftTime -= UpliftFrequency;
+			
 			//Update the Morphology 
-			//PlatformModel.UpdateMorphology();
-		//}		
+			PlatformModel.UpdateMorphology();
+		}		
 		
 		//Update Sea Level
 		InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
