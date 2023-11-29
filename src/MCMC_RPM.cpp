@@ -41,13 +41,14 @@ void MCMC_RPM::Initialise(Parameters InitialParams)
     string ConcentrationDatafile(Params.CRNFilename);
 
     // some dummy variables for reading from file
-    float TempXData, TempZData, TempNData;
+    float TemProfileXData, TempProfileZData, TempPRofileZStdData;
+    float TempXData, TempNData, TempNErrorData;
     
     //Generate input filestream and read data into vectors
     ifstream READProfileDatafile(ProfileDatafile);
     if (!READProfileDatafile)
     { 
-        printf("MCMC_Coast::%s line %d: Input Profile data file \"%s\" doesn't exist\n\n", __func__, __LINE__, ProfileDatafile);
+        printf("MCMC_Coast::%s line %d: Input Profile data file \"%s\" doesn't exist\n\n", __func__, __LINE__, ProfileDatafile.c_str());
         exit(EXIT_SUCCESS);
     }
 
@@ -78,7 +79,7 @@ void MCMC_RPM::Initialise(Parameters InitialParams)
     ifstream READCRNDatafile(CRNDatafile);
     if (!READCRNDatafile)
     { 
-        printf("MCMC_Coast::%s line %d: Input CRN data file \"%s\" doesn't exist\n\n", __func__, __LINE__, ProfileDatafile);
+        printf("MCMC_Coast::%s line %d: Input CRN data file \"%s\" doesn't exist\n\n", __func__, __LINE__, ProfileDatafile.c_str());
         exit(EXIT_SUCCESS);
     }
 
@@ -180,7 +181,7 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 	    might be. The Metropolis algorithm will sample around this */
 	Resistance_New = Resistance_Min + ((double)rand()/RAND_MAX)*(Resistance_Max - Resistance_Min);
     WeatheringRate_New = WeatheringRate_Min + ((double)rand()/RAND_MAX)*(WeatheringRate_Max - WeatheringRate_Min);
-    WaveAttenuation_New = WaveAttenation_Min + ((double)rand()/RAND_MAX)*(WaveAttenuation_Max - WaveAttenuation_Min);
+    WaveAttenuation_New = WaveAttenuation_Min + ((double)rand()/RAND_MAX)*(WaveAttenuation_Max - WaveAttenuation_Min);
 
     //Run a single coastal iteration to get the initial Likelihoods for the initial parameters
 	RunCoastIteration();
@@ -310,7 +311,7 @@ void MCMC_RPM::RunCoastIteration()
 		}		
 
         //Update Sea Level
-		InstantSeaLevel = MCMCSealevel.get_SeaLevel(Time);
+		InstantSeaLevel = MCMC_Sealevel.get_SeaLevel(Time);
 		MCMC_RPM.UpdateSeaLevel(InstantSeaLevel);
 
 		//Get the wave conditions
