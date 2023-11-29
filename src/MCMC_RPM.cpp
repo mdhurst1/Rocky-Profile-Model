@@ -462,10 +462,10 @@ long double MCMC_RPM::CalculateCRNLikelihood()
         //Take X value of sample and interpolate to get model results at this point
         int j=0;
         while ((XModel[j]-XPos) < 0) ++j;
-       InterpScale = (XModel[j]-XPos)/(XModel[j]-XModel[j-1]);
+        InterpScale = (XModel[j]-XPos)/(XModel[j]-XModel[j-1]);
 
         //Get Interpolated N value
-        CRNModel[i] = CRNModelData[j]-ScaleCRN*(CRNModelData[j]-CRNModelData[j-1]);
+        CRNModel[i] = CRNModelData[j]-InterpScale*(CRNModelData[j]-CRNModelData[j-1]);
     }
 
 
