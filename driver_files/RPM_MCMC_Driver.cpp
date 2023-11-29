@@ -127,6 +127,6 @@ int main(int nNumberofArgs,char *argv[])
     MCMC_RPM My_MCMC_RPM = MCMC_RPM(Params);
       
     //Sample next parameters from Metropolis Chain
-	My_MCMC_Coast.RunMetropolisChain();
+	My_MCMC_RPM.RunMetropolisChain();
 }
  
