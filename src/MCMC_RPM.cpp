@@ -207,7 +207,7 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 		while (Accept == 0)
 		{	
 			Rand1 = (double)rand()/RAND_MAX; Rand2 = (double)rand()/RAND_MAX;
-			Resistance_New = Resistance_Old + Resistance_Std*sqrt(-2.*log(Rand1))*cos(2.*M_PI*(Rand2));
+			Resistance_New = Resistance_Old + Params.Resistance_Std*sqrt(-2.*log(Rand1))*cos(2.*M_PI*(Rand2));
 			if ((Resistance_New < Resistance_Min) || (Resistance_New > Resistance_Max)) continue;
 	  		else Accept = 1;
 		}
@@ -217,7 +217,7 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 		while (Accept == 0)
         {	
 			Rand1 = (double)rand()/RAND_MAX; Rand2 = (double)rand()/RAND_MAX;
-	  		WeatheringRate_New = WeatheringRate_Old + WeatheringRate_Std*sqrt(-2.*log(Rand1))*cos(2.*M_PI*(Rand2));;
+	  		WeatheringRate_New = WeatheringRate_Old + Params.WeatheringRate_Std*sqrt(-2.*log(Rand1))*cos(2.*M_PI*(Rand2));;
 			if ((WeatheringRate_New < WeatheringRate_Min) || (WeatheringRate_New > WeatheringRate_Max)) continue;
 			else Accept = 1;
 	  	}
@@ -227,7 +227,7 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 		while (Accept == 0)
         {	
 			Rand1 = (double)rand()/RAND_MAX; Rand2 = (double)rand()/RAND_MAX;
-	  		WaveAttenuation_New = WaveAttenuation_Old + WaveAttenuation_Std*sqrt(-2.*log(Rand1))*cos(2.*M_PI*(Rand2));;
+	  		WaveAttenuation_New = WaveAttenuation_Old + Params.WaveAttenuation_Std*sqrt(-2.*log(Rand1))*cos(2.*M_PI*(Rand2));;
 			if ((WaveAttenuation_New < WaveAttenuation_Min) || (WaveAttenuation_New > WaveAttenuation_Max)) continue;
 			else Accept = 1;
 	  	}
