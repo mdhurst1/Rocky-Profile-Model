@@ -176,9 +176,9 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 
     /*  start the chain with a random guess this guess is a very coarse approximation of what the 'real' values 
 	    might be. The Metropolis algorithm will sample around this */
-	Resistance_New = Resistance_Min + ((double)rand()/RAND_MAX)*(Resistance_Max - Resistance_Min);
-    WeatheringRate_New = WeatheringRate_Min + ((double)rand()/RAND_MAX)*(WeatheringRate_Max - WeatheringRate_Min);
-    WaveAttenuation_New = WaveAttenuation_Min + ((double)rand()/RAND_MAX)*(WaveAttenuation_Max - WaveAttenuation_Min);
+	Resistance_New = Params.Resistance_Min + ((double)rand()/RAND_MAX)*(Params.Resistance_Max - Params.Resistance_Min);
+    WeatheringRate_New = Params.WeatheringRate_Min + ((double)rand()/RAND_MAX)*(Params.WeatheringRate_Max - Params.WeatheringRate_Min);
+    WaveAttenuation_New = Params.WaveAttenuation_Min + ((double)rand()/RAND_MAX)*(Params.WaveAttenuation_Max - Params.WaveAttenuation_Min);
 
     //Run a single coastal iteration to get the initial Likelihoods for the initial parameters
 	RunCoastIteration();
@@ -451,7 +451,6 @@ long double MCMC_RPM::CalculateCRNLikelihood()
     //declarations CRN
     vector<double> XPosCRN(NCRNData);
     vector<double> NModel(NCRNData);
-    double ScaleCRN, DiffCRNX;
     vector<double> ResidualsCRN(NCRNData); 
     
     //Interpolate to sample locations
@@ -463,8 +462,7 @@ long double MCMC_RPM::CalculateCRNLikelihood()
         //Take X value of sample and interpolate to get model results at this point
         int j=0;
         while ((XModel[j]-XPos) < 0) ++j;
-        DiffCRNX = XModel[j]-XPos;
-        ScaleCRN = (XModel[j]-XPos)/(XModel[j]-XModel[j-1]);
+       InterpScale = (XModel[j]-XPos)/(XModel[j]-XModel[j-1]);
 
         //Get Interpolated N value
         CRNModel[i] = CRNModelData[j]-ScaleCRN*(CRNModelData[j]-CRNModelData[j-1]);
