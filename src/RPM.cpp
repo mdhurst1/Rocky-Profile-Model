@@ -1261,7 +1261,7 @@ void RPM::WriteProfile(string OutputFileName, double Time, bool Print2Screen)
 		else
 		{
 			cout << "Unable to create file " << WriteCoastFile << endl;
-			exit(0)
+			exit(0);
 		}
 	}
 	WriteCoastFile.close();
