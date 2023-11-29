@@ -155,7 +155,7 @@ void Parameters::ParseValuesFromFile()
     ifstream infile;
     infile.open(Filename.c_str());
 
-    if (infile.isopen())
+    if (infile.is_open())
     {
         cout << "Input file exists" << endl;
     }
