@@ -74,11 +74,11 @@
 #include <algorithm>
 #include <stdio.h>
 #include <time.h>
-#include "../../src/RPM.hpp"
-#include "../../src/RPM_MCMC.hpp"
-#include "../../src/RockyCoastCRN.hpp"
-#include "../../src/SeaLevel.hpp"
-#include "../../src/FastExp.hpp"
+#include "../src/RPM.hpp"
+#include "../src/RPM_MCMC.hpp"
+#include "../src/RockyCoastCRN.hpp"
+#include "../src/SeaLevel.hpp"
+#include "../src/FastExp.hpp"
 
 using namespace std;
 
