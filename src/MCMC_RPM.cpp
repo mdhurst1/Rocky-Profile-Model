@@ -161,9 +161,9 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
 	double Rand1, Rand2;    //For generating random numbers
 
     //Holders to define parameter space	
-	double  Resistance_New, Resistance_Old, Resistance_Min, Resistance_Max, Resistance_Std,
-            WeatheringRate_New, WeatheringRate_Old, WeatheringRate_Min, WeatheringRate_Max, WeatheringRate_Std,
-            WaveAttenuation_New, WaveAttenuation_Old, WaveAttenuation_Min, WaveAttenuation_Max, WaveAttenuation_Std;
+	double  Resistance_New, Resistance_Old,
+            WeatheringRate_New, WeatheringRate_Old,
+            WaveAttenuation_New, WaveAttenuation_Old;
            
 	//Initialise seed for random number generation
     int RandomSeed = 1;
