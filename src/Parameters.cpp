@@ -149,6 +149,7 @@ void Parameters::SetDefaultValues()
     string_Params["ProjectName"] = "RPM_CRN";
     string_Params["ProfileOutFilename"] = string_Params["ProjectName"] + "_ShoreProfile.xz";
 	string_Params["ConcentrationsOutFilename"] = string_Params["ProjectName"] + "_Concentrations.xn";
+    string_Params["MCMCFilename"] = string_Params["ProjectName"]+"_MCMC.chain";
 }
 
 void Parameters::ParseValuesFromFile()
@@ -294,6 +295,7 @@ void Parameters::ParseValuesFromFile()
     WaveAttenuation_Max = float_Params["WaveAttenuation_Max"];
 
     // Weightings for multipobjective MCMC
+    MCMC_NIterations = int_Params["MCMC_NIterations"];
     TopoWeighting = float_Params["TopoWeighting"];
     CRNWeighting = float_Params["CRNWeighting"];
 
