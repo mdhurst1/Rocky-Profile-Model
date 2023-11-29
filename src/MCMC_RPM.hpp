@@ -103,7 +103,7 @@ class MCMC_RPM
 	  /// @param NIterations Number of times to run the RockyCoastCRN model in the Markov Chain
 	  /// @param OutFilename File to write the results of each iteration of the chain to.
 	  
-      void RunMetropolisChain(int NIterations, char* ParamFilename, char* OutFilename);
+      void RunMetropolisChain();
 
   
       

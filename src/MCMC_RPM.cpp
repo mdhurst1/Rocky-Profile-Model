@@ -140,7 +140,7 @@ void MCMC_RPM::Initialise(Parameters InitialParams)
 
 }
 
-void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char* OutFilename)
+void MCMC_RPM::RunMetropolisChain()
 {
     /* Run the metropolis algorithm along a chain with NIterations
 
@@ -170,8 +170,8 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
     srand(RandomSeed);
 
     //Create datafile out and write ParameterFilename
-	ofstream ChainFileOut(OutFilename);
-	ChainFileOut << "ParameterFile: " << ParameterFilename << endl;
+	ofstream ChainFileOut(Params.OutFilename);
+	ChainFileOut << "ParameterFile: " << Params.OutFilename << endl;
 	ChainFileOut  << "i Resistance_New WeatheingRate_New WaveAttenuation_New TopoLikelihood CRNLikelihood NewLikelihood LastLikelihood NAccepted NRejected" << endl;
 
     /*  start the chain with a random guess this guess is a very coarse approximation of what the 'real' values 
@@ -195,7 +195,7 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
     int Accept = 0;
 
     //Do the metropolis algorithm
-	for (int j=0; j<NIterations; ++j)
+	for (int j=0; j<Params.NIterations; ++j)
 	{
 		//fflush(stdout);
  	  	printf("Iteration %d\n",j+1);  
