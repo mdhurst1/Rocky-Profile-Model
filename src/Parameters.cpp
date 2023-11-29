@@ -155,6 +155,15 @@ void Parameters::ParseValuesFromFile()
     ifstream infile;
     infile.open(Filename.c_str());
 
+    if (infile.isopen())
+    {
+        cout << "Input file exists" << endl;
+    }
+    else
+    {
+        cout << "Input file has not been open/doesnt exist" << endl;
+        cout << "Model will run with default parameter values" << endl;
+    }
     // now ingest parameters
     while (infile.good())
     {
