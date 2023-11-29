@@ -54,7 +54,7 @@ class MCMC_RPM
       Parameters Params;
 
       //Declare RPM object
-      RPM MCMC_RPM;
+      RPM MCMC_ProfileModel;
 
       //declare RockyCoastCRN object
       RockyCoastCRN MCMC_RockyCoastCRN;
