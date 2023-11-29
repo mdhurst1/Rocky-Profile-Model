@@ -71,8 +71,8 @@ void MCMC_RPM::Initialise(Parameters InitialParams)
 
     // get size of the profile data vectors
     NProfileData = ProfileXData.size();
-    vector<double> Blank(NProfileData);
-    BlankTopoDataVec = Blank;
+    vector<double> BlankTopo(NProfileData);
+    BlankTopoDataVec = BlankTopo;
 
     //Generate input filestream and read data into vectors
     ifstream READCRNDatafile(CRNDatafile);
@@ -101,8 +101,8 @@ void MCMC_RPM::Initialise(Parameters InitialParams)
 
     // get size of the profile data vectors
     NCRNData = CRNXData.size();
-    vector<double> Blank(NCRNData);
-    BlankCRNDataVec = Blank;
+    vector<double> BlankCRN(NCRNData);
+    BlankCRNDataVec = BlankCRN;
 
     // initialise RPM object with default morphology
     RPM MCMC_RPM = RPM(Params.dZ, Params.dX, Params.InitialGradient, Params.CliffElevation, Params.MaxElevation, Params.MinElevation);
@@ -113,13 +113,8 @@ void MCMC_RPM::Initialise(Parameters InitialParams)
 	// THIS SHOULD BE IN PARAMETER FILE
 	if (Params.CRN_Predictions)
 	{
-		//Which Nuclides to track 10Be, 14C, 26Al, 36Cl?
-		if (Params.Berylium) Nuclides.push_back(10);
-        if (Params.Carbon) Nuclides.push_back(14);
-        if (Params.Aluminium) Nuclides.push_back(26);
-		
 		//initialise RockyCoastCRN friend object
-		MCMC_RockyCoastCRN = RockyCoastCRN(PlatformModel, Nuclides);
+		MCMC_RockyCoastCRN = RockyCoastCRN(MCMC_RPM, Params.Nuclides);
 	}
 
     // initialise sea level object
@@ -249,7 +244,7 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
         RunCoastIteration();
         CalculateTopoLikelihood();
         CalculateCRNLikelihood();
-        CombinedLikelihood = TopoWeighting*TopoLikelihood + CRNWeighting*CRNLikelihood;
+        CombinedLikelihood = Params.TopoWeighting*TopoLikelihood + Params.CRNWeighting*CRNLikelihood;
         
         //Get the likelihood ratio
 		LikelihoodRatio = CombinedLikelihood/LastLikelihood;
@@ -283,7 +278,7 @@ void MCMC_RPM::RunMetropolisChain(int NIterations, char* ParameterFilename, char
     }
 
 
-long double MCMC_RPM::RunCoastIteration()  
+void MCMC_RPM::RunCoastIteration()  
 {
     /* runs a single instance of the RPM Model, then reported the likelihood of the parameters
     */
@@ -356,13 +351,6 @@ long double MCMC_RPM::RunCoastIteration()
 		//update time
 		Time -= TimeInterval;
 	}
-       
-    //Calculate likelihood
-    CalculateTopoLikelihood();    
-    CalculateCRNLikelihood();
-    CombinedLikelihood = Params.TopoWeighting*TopoLikelihood + Params.CRNWeighting*CRNLikelihood;
-
-    return CombinedLikelihood;
 }
 
 void MCMC_RPM::ResetModel()

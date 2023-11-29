@@ -68,7 +68,7 @@ class MCMC_RPM
       long double CalculateCRNLikelihood();
 
       //runs a single iteration of the RPM model, then reports the likelihood of the parameters - this read in from driver?
-      long double RunCoastIteration();
+      void RunCoastIteration();
       void ResetModel();
 
     public:
