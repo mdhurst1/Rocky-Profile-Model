@@ -1,7 +1,7 @@
 # parameter file for RPM_CRN model
 
 # File Structure
-Folder: ../../../RPM_Uplift/
+Folder: ../../RPM_Uplift/
 ProjectName: Uplift
 
 # Cosmogenic Isotopes
@@ -29,7 +29,7 @@ Resistance: 10.
 WeatheringRate: 1.
 SubtidalEfficacy: 0.001
 CliffFailureDepth: 0.1
-CliffElevation: 30
+CliffElevation: 10
 
 # earthquakes
 Earthquakes: true
@@ -48,8 +48,8 @@ WeatheringRate_Mean: 1.
 WeatheringRate_Std: 2.
 
 # space domain
-MinElevation: -20
-MaxElevation: 10
+MinElevation: -10
+MaxElevation: 40
 
 # time control
 StartTime: 10000

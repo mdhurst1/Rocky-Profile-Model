@@ -139,8 +139,8 @@ void Parameters::SetDefaultValues()
     string_Params["Folder"] = Folder;
     string_Params["ProjectName"] = "RPM_CRN";
     string_Params["SeaLevelFilename"] = "NULL";
-	string_Params["ProfileOutFilename"] = string_Params["ProjectName"] + "_ShoreProfile.xz";
-	string_Params["ConcentrationsOutFilename"] = string_Params["ProjectName"] + "_Concentrations.xn";
+	string_Params["ProfileOutFilename"] = Folder + string_Params["ProjectName"] + "_ShoreProfile.xz";
+	string_Params["ConcentrationsOutFilename"] = Folder + string_Params["ProjectName"] + "_Concentrations.xn";
 }
 
 void Parameters::ParseValuesFromFile()
