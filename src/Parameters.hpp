@@ -48,6 +48,7 @@ class Parameters
 		// maps for setting default parameters
  		// map<string,int> int_Params; there currently aren't any
  		map<string,float> float_Params;
+		map<string,int> int_Params;
   		map<string,bool> bool_Params;
   		map<string,string> string_Params;
 
@@ -85,7 +86,9 @@ class Parameters
 		float Resistance_Mean, Resistance_Std, Resistance_Min, Resistance_Max;
 		float WeatheringRate_Mean, WeatheringRate_Std, WeatheringRate_Min, WeatheringRate_Max;
 		float WaveAttenuation_Mean, WaveAttenuation_Std, WaveAttenuation_Min, WaveAttenuation_Max;
+		
 		// weightings
+		int MCMC_NIterations;
 		float TopoWeighting, CRNWeighting;
 		
 		// input files

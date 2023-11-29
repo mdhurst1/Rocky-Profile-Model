@@ -133,6 +133,8 @@ void Parameters::SetDefaultValues()
     float_Params["WaveAttenuation_Mean"] = 0.01;
     float_Params["WaveAttenuation_Std"] = 0.01;
 
+    //other MCMC
+    int_Params["MCMC_NIterations"] = 10000;
 	// time control
 	float_Params["StartTime"] = 8000.;
 	float_Params["EndTime"] = 0.;
@@ -222,10 +224,10 @@ void Parameters::ParseValuesFromFile()
             float_Params[Parameter] = stof(Value);
         }
         // currently no integer parameters
-        //else if (int_Params.find(Parameter) != int_Params.end()) 
-        //{
-        //    int_Params[Parameter] = stoi(Value);
-        //}
+        else if (int_Params.find(Parameter) != int_Params.end()) 
+        {
+            int_Params[Parameter] = stoi(Value);
+        }
         else if (string_Params.find(Parameter) != string_Params.end()) 
         {
             string_Params[Parameter] = Value;
@@ -345,7 +347,7 @@ void Parameters::WriteToFile()
 
     for (auto it: bool_Params) ParamsOut << "\t" << it.first << ": " << it.second << endl;
     
-    //for (auto it: int_Params) ParamsOut << "\t" << it.first << ": " << it.second << endl;
+    for (auto it: int_Params) ParamsOut << "\t" << it.first << ": " << it.second << endl;
     
     for (auto it: float_Params) ParamsOut << "\t" << it.first << ": " << it.second << endl;
 }
@@ -358,7 +360,7 @@ void Parameters::PrintToScreen()
 
     for (auto it: bool_Params) cout << "\t" << it.first << ": " << it.second << endl;
     
-    //for (auto it: int_Params) cout << "\t" << it.first << ": " << it.second << endl;
+    for (auto it: int_Params) cout << "\t" << it.first << ": " << it.second << endl;
     
     for (auto it: float_Params) cout << "\t" << it.first << ": " << it.second << endl;
 
