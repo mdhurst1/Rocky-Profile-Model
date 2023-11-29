@@ -40,12 +40,12 @@ void MCMC_RPM::Initialise(Parameters InitialParams)
     float TempProfileXData, TempProfileZData, TempProfileZStdData;
     float TempXData, TempNData, TempNErrorData;
     char Dummy[32];
-    
+
     //Generate input filestream and read data into vectors
     ifstream READProfileDatafile(Params.TopoFilename);
     if (!READProfileDatafile)
     { 
-        printf("MCMC_Coast::%s line %d: Input Profile data file \"%s\" doesn't exist\n\n", __func__, __LINE__, ProfileDatafile.c_str());
+        printf("MCMC_Coast::%s line %d: Input Profile data file \"%s\" doesn't exist\n\n", __func__, __LINE__, Params.TopoFilename.c_str());
         exit(EXIT_SUCCESS);
     }
 
@@ -76,7 +76,7 @@ void MCMC_RPM::Initialise(Parameters InitialParams)
     ifstream READCRNDatafile(Params.CRNFilename);
     if (!READCRNDatafile)
     { 
-        printf("MCMC_Coast::%s line %d: Input CRN data file \"%s\" doesn't exist\n\n", __func__, __LINE__, ProfileDatafile.c_str());
+        printf("MCMC_Coast::%s line %d: Input CRN data file \"%s\" doesn't exist\n\n", __func__, __LINE__, Params.CRNFilename.c_str());
         exit(EXIT_SUCCESS);
     }
 
