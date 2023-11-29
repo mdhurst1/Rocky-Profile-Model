@@ -164,7 +164,7 @@ void Parameters::ParseValuesFromFile()
         cout << "Input file has not been open/doesnt exist" << endl;
         cout << "Specified file name is " << Filename << endl;
         cout << "Model will run with default parameter values" << endl;
-        exit();
+        exit(0);
 
     }
     // now ingest parameters
