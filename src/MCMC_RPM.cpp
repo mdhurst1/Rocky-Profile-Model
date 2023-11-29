@@ -36,16 +36,13 @@ void MCMC_RPM::Initialise(Parameters InitialParams)
     */
     Params = InitialParams;
 
-    // file name params
-    string ProfileDatafile(Params.TopoFilename);
-    string ConcentrationDatafile(Params.CRNFilename);
-
     // some dummy variables for reading from file
-    float TemProfileXData, TempProfileZData, TempPRofileZStdData;
+    float TempProfileXData, TempProfileZData, TempProfileZStdData;
     float TempXData, TempNData, TempNErrorData;
+    char Dummy[32];
     
     //Generate input filestream and read data into vectors
-    ifstream READProfileDatafile(ProfileDatafile);
+    ifstream READProfileDatafile(Params.TopoFilename);
     if (!READProfileDatafile)
     { 
         printf("MCMC_Coast::%s line %d: Input Profile data file \"%s\" doesn't exist\n\n", __func__, __LINE__, ProfileDatafile.c_str());
@@ -76,7 +73,7 @@ void MCMC_RPM::Initialise(Parameters InitialParams)
     BlankTopoDataVec = BlankTopo;
 
     //Generate input filestream and read data into vectors
-    ifstream READCRNDatafile(CRNDatafile);
+    ifstream READCRNDatafile(Params.CRNFilename);
     if (!READCRNDatafile)
     { 
         printf("MCMC_Coast::%s line %d: Input CRN data file \"%s\" doesn't exist\n\n", __func__, __LINE__, ProfileDatafile.c_str());
@@ -123,7 +120,7 @@ void MCMC_RPM::Initialise(Parameters InitialParams)
 	else MCMC_Sealevel = SeaLevel(Params.SeaLevelRise, Params.StartTime, Params.EndTime, Params.TimeStep);
 
     // Get initial sea level
-	float InstantSeaLevel = MCMC_SeaLevel.get_SeaLevel(Params.StartTime);
+	float InstantSeaLevel = MCMC_Sealevel.get_SeaLevel(Params.StartTime);
 	MCMC_ProfileModel.UpdateSeaLevel(InstantSeaLevel);
 
 	//Initialise Tides
