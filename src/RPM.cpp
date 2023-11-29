@@ -1250,12 +1250,19 @@ void RPM::WriteProfile(string OutputFileName, double Time, bool Print2Screen)
 	if (oftest) FileExists = 1;
 	oftest.close();
 
+	cout << "File exists?" << FileExists << endl;
+
 	//open the output filestream and write headers
 	ofstream WriteCoastFile;
 	if (FileExists == 0)
 	{
 		WriteCoastFile.open(OutputFileName.c_str());
 		if (WriteCoastFile.is_open()) WriteCoastFile << MaxElevation << " " << MinElevation << " " << dZ << endl;
+		else
+		{
+			cout << "Unable to create file " << WriteCoastFile << endl;
+			exit(0)
+		}
 	}
 	WriteCoastFile.close();
 
