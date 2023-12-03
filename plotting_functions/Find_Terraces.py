@@ -39,16 +39,16 @@ def FindTerraces(Folder, RunID, MaxSlope=0.1, MinWidth=3.):
     if StartTime > EndTime:
         TimeInterval *= -1
     
-    fig1 = plt.figure(1,(16,9))
-    ax = fig1.add_subplot(111)
-    plt.plot(FinalX,Z,'-',c=[0.5,0.5,0.5])
+    # fig1 = plt.figure(1,(16,9))
+    # ax = fig1.add_subplot(111)
+    # plt.plot(FinalX,Z,'-',c=[0.5,0.5,0.5])
     
     # do some smoothing?
     # Apply Gaussian smoothing only to the masked part with a small standard deviation
     sigma = 1.5
     SmoothX = gaussian_filter1d(FinalX, sigma=sigma, mode='nearest')
 
-    plt.plot(SmoothX,Z,'k-')
+    # plt.plot(SmoothX,Z,'k-')
     
     ### FIND TERRACES ###
     #calculate inverse of slope (i.e. dx/dz so cliffs are zero)
@@ -59,20 +59,20 @@ def FindTerraces(Folder, RunID, MaxSlope=0.1, MinWidth=3.):
     # calculate curvature
     Curv = np.gradient(Slope)
     
-    # Find terraces
-    fig3 = plt.figure(3,(9,9))
+    # # Find terraces
+    # fig3 = plt.figure(3,(9,9))
     
-    ax3a = fig3.add_subplot(211)
-    ax3a.plot(Slope,Z,'b.')
-    ax3a.set_xscale("symlog",linthresh=0.01)
-    ax3a.set_xlabel("Slope (m/m)")
-    ax3a.set_ylabel("Elevation (m)")
+    # ax3a = fig3.add_subplot(211)
+    # ax3a.plot(Slope,Z,'b.')
+    # ax3a.set_xscale("symlog",linthresh=0.01)
+    # ax3a.set_xlabel("Slope (m/m)")
+    # ax3a.set_ylabel("Elevation (m)")
 
-    ax3b = fig3.add_subplot(212)
-    ax3b.plot(Curv,Z,'r.')
-    ax3b.set_xscale("symlog",linthresh=0.01)
-    ax3b.set_xlabel("Curvature (1/m)")
-    ax3b.set_ylabel("Elevation (m)")
+    # ax3b = fig3.add_subplot(212)
+    # ax3b.plot(Curv,Z,'r.')
+    # ax3b.set_xscale("symlog",linthresh=0.01)
+    # ax3b.set_xlabel("Curvature (1/m)")
+    # ax3b.set_ylabel("Elevation (m)")
     
     # get Z as a function of X
     #dZ = np.round(Z[1]-Z[0],1)
@@ -97,14 +97,14 @@ def FindTerraces(Folder, RunID, MaxSlope=0.1, MinWidth=3.):
     Mask = (np.abs(Slope) > MaxSlope)
     
     #Mask2 = ()
-    ax.plot(FinalX[Mask], Z[Mask],'ro')
-    ax.plot(FinalX[~Mask], Z[~Mask],'b.')
+    # ax.plot(FinalX[Mask], Z[Mask],'ro')
+    # ax.plot(FinalX[~Mask], Z[~Mask],'b.')
     #plt.show()
     
         
     # Find cliff indices
     SteepIndices = np.where(Mask == 1)[0]
-    GentleIndices = np.where(Mask == 0)[0]
+    # GentleIndices = np.where(Mask == 0)[0]
     
     #smooth the inbetween bits
     
@@ -155,9 +155,9 @@ def FindTerraces(Folder, RunID, MaxSlope=0.1, MinWidth=3.):
     # Merge patches iteratively
     SteepPatches = merge_patches(SteepPatches, FinalX, DistanceThreshold)
     
-    for i, Patch in enumerate(SteepPatches):
+    # for i, Patch in enumerate(SteepPatches):
         
-        ax.plot(FinalX[Patch], Z[Patch],'r-')
+    #     ax.plot(FinalX[Patch], Z[Patch],'r-')
     
     
     
@@ -176,13 +176,16 @@ def FindTerraces(Folder, RunID, MaxSlope=0.1, MinWidth=3.):
         return remaining_gaps
 
     # Find remaining gaps
-    GentlePatches = find_remaining_gaps(SteepPatches)
-    GentlePatches = merge_patches(GentlePatches,FinalX, MinWidth)
+    if len(SteepPatches) > 1:
+        GentlePatches = find_remaining_gaps(SteepPatches)
+        GentlePatches = merge_patches(GentlePatches, Z, 1.)
     
-    for i, Patch in enumerate(GentlePatches):
-        ax.plot(FinalX[Patch], Z[Patch],'b-')
+    else:
+        GentlePatches = []
+    # for i, Patch in enumerate(GentlePatches):
+    #     ax.plot(FinalX[Patch], Z[Patch],'b-')
         
-    sys.exit()
+    # sys.exit()
     
     # Smooth Gentle Patches
     # SmoothX = FinalX
@@ -190,20 +193,22 @@ def FindTerraces(Folder, RunID, MaxSlope=0.1, MinWidth=3.):
     #     print(Patch)
     #     SmoothX[Patch] = savgol_filter(FinalX[Patch],11,2)
         
-    for i, Patch in enumerate(SteepPatches):
-        plt.plot(FinalX[Patch],Z[Patch],'r-')
+    # for i, Patch in enumerate(SteepPatches):
+    #     plt.plot(FinalX[Patch],Z[Patch],'r-')
     
     # plt.plot(SmoothX,Z,'r.')
-    plt.show()
-    sys.exit()
+    # plt.show()
+    # sys.exit()
     
     # Save Terraces to a new DF
     Columns = ["TerraceID","StartIndex","EndIndex","Width","MeanElev","ElevChange","Slope"]
     TerracesDF = pd.DataFrame(columns=Columns)
     
-    for i, Terrace in enumerate(TerracePatches):
-        print(Terrace)
+    for i, Terrace in enumerate(GentlePatches):
         Width = FinalX[Terrace[0]]-FinalX[Terrace[-1]]
+        if Width < MinWidth:
+            continue
+        
         ElevChange = Z[Terrace[0]]-Z[Terrace[-1]]
         NewRow = [i,Terrace[0],Terrace[-1],Width,np.mean(Z[Terrace]),ElevChange,ElevChange/Width]
         TerracesDF = pd.concat([TerracesDF,pd.DataFrame([NewRow], columns=Columns)], ignore_index=True)
@@ -268,14 +273,10 @@ def PlotTerraces(Folder, RunID):
         Ind1 = Terrace.StartIndex.astype(int)
         Ind2 = Terrace.EndIndex.astype(int)
         ax1.plot(FinalX[Ind1:Ind2],Z[Ind1:Ind2],'r-', lw=2, zorder=9)
-
-    Slope = np.gradient(X[-1])
-    ax2 = ax1.twinx()
-    ax2.plot(FinalX,Slope,'bo')
     
     ax1.text(0.05,0.9,"No. Terraces: " + str(len(TerracesDF)), transform=ax1.transAxes)
     fig1.savefig(PlotsFolder+str(RunID)+"_ProfilePlot.png")
-    
+    fig1.clf()
 
 # # PLOT SEA LEVEL CURVE
 # SeaDF = pd.read_csv(ResultsFolder + str(RunID) + "_rsl.data", delimiter=" ", header=0)
@@ -303,19 +304,23 @@ if __name__ == "__main__":
     # locad the records and pick one
     RecordFile = "TerraceRuns.xlsx"
     RecordDF = pd.read_excel(Folder+RecordFile,sheet_name="Sheet1",header=0)
+    
+    # Minimum Width (default is 3m)
+    # Max Slope (default is 0.1 m/m)
+    # MinWidth=3.
 
     #Record =RecordDF[((RecordDF["SeaLevel"] == 1) & (RecordDF["UpliftFreq"] == 3) & (RecordDF["Clustering"] == 1) 
     #    & (RecordDF["UpliftMag"] == 3) & (RecordDF["Subsidence"] == 1) & (RecordDF["InitSlope"] == 3) & (RecordDF["Tide"] == 1) 
     #    & (RecordDF["Weathering"] == 1) & (RecordDF["Resistance"] == 1) & (RecordDF["Waves"] == 2))]
 
     # RunID = Record.RunID.values[0]
-    RunID = 2
-    FindTerraces(Folder, RunID)
-    PlotTerraces(Folder, RunID)    
+    #RunID = 6
+    #FindTerraces(Folder, RunID)
+    #PlotTerraces(Folder, RunID)    
     
-    #for i in tqdm(range(len(RecordDF.RunID)),desc="Processing Terraces",unit="%"):
+    for i in tqdm(range(len(RecordDF.RunID)),desc="Processing Terraces",unit="%"):
         
-        #RunID = RecordDF.RunID.iloc[i]
+          RunID = RecordDF.RunID.iloc[i]
         
-        #FindTerraces(Folder,RunID, MinWidth)
-        #PlotTerraces(Folder, RunID)
+          FindTerraces(Folder, RunID)
+          PlotTerraces(Folder, RunID)
