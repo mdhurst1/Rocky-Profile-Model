@@ -12,8 +12,8 @@ import sys, os
 from tqdm import tqdm
 
 # dont plot in spyder pls
-%matplotlib qt5
-#plt.switch_backend('Agg')
+#%matplotlib qt5
+plt.switch_backend('Agg')
 
 # figure properties
 # Set up fonts for plots
@@ -50,7 +50,7 @@ def FindTerraces(Folder, RunID, MaxSlope=0.1, MinWidth=3.):
     sigma = 2
     SmoothX = gaussian_filter1d(FinalX, sigma=sigma, mode='nearest')
 
-    plt.plot(SmoothX,Z,'k.-')
+    # plt.plot(SmoothX,Z,'k.-')
     
     ### FIND TERRACES ###
     #calculate inverse of slope (i.e. dx/dz so cliffs are zero)
@@ -219,6 +219,8 @@ def FindTerraces(Folder, RunID, MaxSlope=0.1, MinWidth=3.):
         TerracesDF = pd.concat([TerracesDF,pd.DataFrame([NewRow], columns=Columns)], ignore_index=True)
     
     TerracesDF.to_excel(ResultsFolder + str(RunID)+"_Terraces.xlsx")
+    
+    return TerracesDF
 
 def PlotTerraces(Folder, RunID):
     
@@ -238,7 +240,11 @@ def PlotTerraces(Folder, RunID):
         FindTerraces(Folder, RunID)
     
     TerracesDF = pd.read_excel(ResultsFolder+TerraceFile)
-            
+    
+    N_Terraces = len(TerracesDF)
+    
+    N_Uplift = len(pd.read_csv(ResultsFolder+str(RunID)+"_episodic_uplift.data", header=None))
+    
     # create figure and axes
     fig1 = plt.figure(1,figsize=(16,9))
     ax1 = fig1.add_subplot(111)
@@ -279,9 +285,10 @@ def PlotTerraces(Folder, RunID):
         Ind2 = Terrace.EndIndex.astype(int)
         ax1.plot(FinalX[Ind1:Ind2],Z[Ind1:Ind2],'r-', lw=2, zorder=9)
     
-    ax1.text(0.05,0.9,"No. Terraces: " + str(len(TerracesDF)), transform=ax1.transAxes)
+    ax1.text(0.05,0.9,"No. Terraces: " + str(len(TerracesDF))+"\n"
+             + "Kappa: " + str(np.round(N_Terraces/N_Uplift,2)), transform=ax1.transAxes)
     fig1.savefig(PlotsFolder+str(RunID)+"_ProfilePlot.png")
-    #fig1.clf()
+    fig1.clf()
 
 # # PLOT SEA LEVEL CURVE
 # SeaDF = pd.read_csv(ResultsFolder + str(RunID) + "_rsl.data", delimiter=" ", header=0)
