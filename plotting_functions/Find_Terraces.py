@@ -42,7 +42,7 @@ def FindTerraces(Folder, RunID, MaxSlope=0.1, MinWidth=3.):
         TimeInterval *= -1
     
     # load uplift history
-    UpliftDF = pd.read_csv(ResultsFolder+str(RunID)+"_uplift_RSL.data", header=None,columns=["Time","Mag","RSL"])
+    UpliftDF = pd.read_csv(ResultsFolder+str(RunID)+"_uplift_RSL.data", header=None, names=["Time","Mag","RSL"])
     
     
     # get RSL at time of uplift
