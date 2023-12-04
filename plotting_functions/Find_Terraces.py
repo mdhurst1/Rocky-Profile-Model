@@ -12,8 +12,8 @@ import sys, os
 from tqdm import tqdm
 
 # dont plot in spyder pls
-#%matplotlib qt5
-plt.switch_backend('Agg')
+%matplotlib qt5
+#plt.switch_backend('Agg')
 
 # figure properties
 # Set up fonts for plots
@@ -76,7 +76,7 @@ def FindUpliftTerraces(Folder, RunID, MinWidth=3.):
     
     # retrieve parameters
     RunRecord = GetRunRecord(RunID)
-    TidalRange = RunRecord["Tide"]
+    Tide = RunRecord["Tide"].values[0]
     
     # Save Terraces to a new DF
     Columns = ["TerraceID","StartIndex","EndIndex","Width","MeanElev","ElevChange","Slope"]
@@ -85,13 +85,10 @@ def FindUpliftTerraces(Folder, RunID, MinWidth=3.):
     # loop through uplift events
     for i, Earthquake in UpliftDF.iterrows():
         
-        # find RSL associated with EQ in profile
-        Index = (Earthquake['RSL'] - Z).abs().idxmin()
+        # find tides either side of RSL at time of EQ
+        LowTideInd = np.argmin(np.abs((Earthquake['RSL']- 0.5*Tide) - Z))
+        HighTideInd = np.argmin(np.abs((Earthquake['RSL'] + 0.5*Tide) - Z))
         
-        # find tides either side
-        LowTideInd = ((Earthquake['RSL']- 0.5*Tide) - Z).abs().idxmin()
-        HighTideInd = ((Earthquake['RSL'] + 0.5*Tide) - Z).abs().idxmin()
-                
         # record a terrace if wide enough
         Width = FinalX[HighTideInd]-FinalX[LowTideInd]
         if Width < MinWidth:
@@ -100,13 +97,13 @@ def FindUpliftTerraces(Folder, RunID, MinWidth=3.):
         ElevChange = Z[HighTideInd]-Z[LowTideInd]
         
         # create record and add to DF
-        NewRow = [i,HighTideInd,LowTideInd,Width,np.mean(ZHighTideInd:LowTideInd+1),ElevChange,ElevChange/Width]
-        TerracesDF = pd.concat([TerracesDF,pd.DataFrame([NewRow], columns=Columns)], ignore_index=True)
-    
-    # write to file
-    TerracesDF.to_excel(ResultsFolder + str(RunID)+"_EQ_Terraces.xlsx")
+        NewRow = [i,HighTideInd,LowTideInd,Width,np.mean(Z[HighTideInd:LowTideInd+1]),ElevChange,ElevChange/Width]
+        EQTerracesDF = pd.concat([EQTerracesDF,pd.DataFrame([NewRow], columns=Columns)], ignore_index=True)
         
-    return TerracesDF
+    # write to file
+    EQTerracesDF.to_excel(ResultsFolder + str(RunID)+"_EQ_Terraces.xlsx")
+        
+    return EQTerracesDF
     
     
 def FindTerraces(Folder, RunID, MaxSlope=0.1, MinWidth=3.):
@@ -313,7 +310,7 @@ def FindTerraces(Folder, RunID, MaxSlope=0.1, MinWidth=3.):
     
     return TerracesDF
 
-def PlotTerraces(Folder, RunID):
+def PlotTerraces(Folder, RunID, EQ_Only=False):
     
     ResultsFolder = Folder + "Results/"
     PlotsFolder = Folder + "Plots/"
@@ -324,11 +321,16 @@ def PlotTerraces(Folder, RunID):
     FinalX = X[-1]
     
     # load terraces 
-    TerraceFile = str(RunID) + "_Terraces.xlsx"
+    if EQ_Only:
+        TerraceFile = str(RunID) + "_EQ_Terraces.xlsx"
+    
+    else:
+        TerraceFile = str(RunID) + "_Terraces.xlsx"
     
     #check if file exists and run terrace finder if needed
     if not os.path.exists(ResultsFolder+TerraceFile):
-        FindTerraces(Folder, RunID)
+        print("No Terrace file, cannot plot")
+        sys.exit()
     
     TerracesDF = pd.read_excel(ResultsFolder+TerraceFile)
     
@@ -379,7 +381,7 @@ def PlotTerraces(Folder, RunID):
     ax1.text(0.05,0.9,"No. Terraces: " + str(len(TerracesDF))+"\n"
              + "Kappa: " + str(np.round(N_Terraces/N_Uplift,2)), transform=ax1.transAxes)
     fig1.savefig(PlotsFolder+str(RunID)+"_ProfilePlot.png")
-    fig1.clf()
+    #fig1.clf()
 
 # # PLOT SEA LEVEL CURVE
 # SeaDF = pd.read_csv(ResultsFolder + str(RunID) + "_rsl.data", delimiter=" ", header=0)
@@ -418,8 +420,9 @@ if __name__ == "__main__":
 
     # RunID = Record.RunID.values[0]
     RunID = 60
-    FindTerraces(Folder, RunID)
-    PlotTerraces(Folder, RunID)    
+    FindUpliftTerraces(Folder, RunID)
+    #FindTerraces(Folder, RunID)
+    PlotTerraces(Folder, RunID, EQ_Only=True)    
     
     # for i in tqdm(range(len(RecordDF.RunID)),desc="Processing Terraces",unit="%"):
         
