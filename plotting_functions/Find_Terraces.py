@@ -41,6 +41,20 @@ def FindTerraces(Folder, RunID, MaxSlope=0.1, MinWidth=3.):
     if StartTime > EndTime:
         TimeInterval *= -1
     
+    # load uplift history
+    UpliftDF = pd.read_csv(ResultsFolder+str(RunID)+"_uplift_RSL.data", header=None,columns=["Time","Mag","RSL"])
+    
+    
+    # get RSL at time of uplift
+    SeaDF = pd.read_csv(ResultsFolder + str(RunID) + "_rsl.data", delimiter=" ", header=0)
+    
+    NewCol = []
+    for Earthquake in UpliftDF:
+        # Find the index of the nearest value
+        Index = (SeaDF['Time'] - Earthquake["Time"]).abs().idxmin()
+        NewCol.append(SeaDF["RSL"].iloc[Index])
+    
+    UpliftDF["RSL"] = NewCol
     # fig1 = plt.figure(1,(16,9))
     # ax = fig1.add_subplot(111)
     # plt.plot(FinalX,Z,'-',c=[0.5,0.5,0.5])
