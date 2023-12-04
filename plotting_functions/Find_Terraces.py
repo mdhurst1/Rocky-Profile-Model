@@ -21,8 +21,38 @@ rcParams['font.family'] = 'sans-serif'
 rcParams['font.sans-serif'] = ['arial']
 rcParams['font.size'] = 16
 
-def FindTerraces(Folder, RunID, MaxSlope=0.1, MinWidth=3.):
-
+def GetRunRecord(RunID):
+    
+    """
+    
+    Retrieves a record of a model run based on a RunID
+    
+    MDH, Dec 2023
+    
+    """
+    
+    # locad the records and pick one
+    RecordFile = "TerraceRuns.xlsx"
+    RecordDF = pd.read_excel(Folder+RecordFile,sheet_name="Sheet1",header=0)
+    
+    Record = RecordDF[(RecordDF["RunID"] == RunID)]
+    
+    return Record
+    
+def FindUpliftTerraces(Folder, RunID, MinWidth=3.):
+    
+    """
+    Function that should replicate Hiro's approach to finding
+    terraces created during an uplift event.
+    
+    Finds the RSL at the time of uplift then looks for 
+    the topography within half a tide range of that elevation
+    in the final profile
+    
+    MDH, Dec 2023
+    
+    """
+    
     ResultsFolder = Folder + "Results/"
     PlotsFolder = Folder + "Plots/"
     
@@ -44,17 +74,64 @@ def FindTerraces(Folder, RunID, MaxSlope=0.1, MinWidth=3.):
     # load uplift history
     UpliftDF = pd.read_csv(ResultsFolder+str(RunID)+"_uplift_RSL.data", header=None, names=["Time","Mag","RSL"])
     
+    # retrieve parameters
+    RunRecord = GetRunRecord(RunID)
+    TidalRange = RunRecord["Tide"]
     
-    # get RSL at time of uplift
-    SeaDF = pd.read_csv(ResultsFolder + str(RunID) + "_rsl.data", delimiter=" ", header=0)
+    # Save Terraces to a new DF
+    Columns = ["TerraceID","StartIndex","EndIndex","Width","MeanElev","ElevChange","Slope"]
+    EQTerracesDF = pd.DataFrame(columns=Columns)
     
-    NewCol = []
-    for Earthquake in UpliftDF:
-        # Find the index of the nearest value
-        Index = (SeaDF['Time'] - Earthquake["Time"]).abs().idxmin()
-        NewCol.append(SeaDF["RSL"].iloc[Index])
+    # loop through uplift events
+    for i, Earthquake in UpliftDF.iterrows():
+        
+        # find RSL associated with EQ in profile
+        Index = (Earthquake['RSL'] - Z).abs().idxmin()
+        
+        # find tides either side
+        LowTideInd = ((Earthquake['RSL']- 0.5*Tide) - Z).abs().idxmin()
+        HighTideInd = ((Earthquake['RSL'] + 0.5*Tide) - Z).abs().idxmin()
+                
+        # record a terrace if wide enough
+        Width = FinalX[HighTideInd]-FinalX[LowTideInd]
+        if Width < MinWidth:
+            continue
+            
+        ElevChange = Z[HighTideInd]-Z[LowTideInd]
+        
+        # create record and add to DF
+        NewRow = [i,HighTideInd,LowTideInd,Width,np.mean(ZHighTideInd:LowTideInd+1),ElevChange,ElevChange/Width]
+        TerracesDF = pd.concat([TerracesDF,pd.DataFrame([NewRow], columns=Columns)], ignore_index=True)
     
-    UpliftDF["RSL"] = NewCol
+    # write to file
+    TerracesDF.to_excel(ResultsFolder + str(RunID)+"_EQ_Terraces.xlsx")
+        
+    return TerracesDF
+    
+    
+def FindTerraces(Folder, RunID, MaxSlope=0.1, MinWidth=3.):
+
+    ResultsFolder = Folder + "Results/"
+    PlotsFolder = Folder + "Plots/"
+    
+    # load the profile data
+    ProfileFileName = str(RunID) + "_ShoreProfile.xz"
+    Times, SeaLevels, Z, X = ReadShoreProfile(ResultsFolder+ProfileFileName)
+    FinalX = X[-1]
+    dZ = np.round(Z[1]-Z[0],1)
+
+    StartTime = Times[0]
+    EndTime = Times[-1]
+    Time = StartTime
+    TimeInterval = 1000
+    OldIndex = -9999
+
+    if StartTime > EndTime:
+        TimeInterval *= -1
+    
+    # load uplift history
+    # UpliftDF = pd.read_csv(ResultsFolder+str(RunID)+"_uplift_RSL.data", header=None, names=["Time","Mag","RSL"])
+    
     # fig1 = plt.figure(1,(16,9))
     # ax = fig1.add_subplot(111)
     # plt.plot(FinalX,Z,'-',c=[0.5,0.5,0.5])
