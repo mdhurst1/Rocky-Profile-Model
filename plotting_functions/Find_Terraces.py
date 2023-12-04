@@ -2,14 +2,12 @@
 from RPM_CRN_Analysis_Functions import *
 import matplotlib.pyplot as plt
 from matplotlib import rcParams, cm
-from scipy.spatial.distance import pdist
-from scipy.interpolate import interp1d
-from scipy.signal import savgol_filter
 from scipy.ndimage import gaussian_filter1d
 import pandas as pd
 import numpy as np
 import sys, os
 from tqdm import tqdm
+import pdb
 
 # dont plot in spyder pls
 %matplotlib qt5
@@ -21,7 +19,7 @@ rcParams['font.family'] = 'sans-serif'
 rcParams['font.sans-serif'] = ['arial']
 rcParams['font.size'] = 16
 
-def GetRunRecord(RunID):
+def GetRunRecord(Folder, RunID):
     
     """
     
@@ -39,7 +37,7 @@ def GetRunRecord(RunID):
     
     return Record
     
-def FindUpliftTerraces(Folder, RunID, MinWidth=3.):
+def FindUpliftTerraces(Folder, RunID, MinWidth=3., MaxWaveHeight=2.):
     
     """
     Function that should replicate Hiro's approach to finding
@@ -75,29 +73,40 @@ def FindUpliftTerraces(Folder, RunID, MinWidth=3.):
     UpliftDF = pd.read_csv(ResultsFolder+str(RunID)+"_uplift_RSL.data", header=None, names=["Time","Mag","RSL"])
     
     # retrieve parameters
-    RunRecord = GetRunRecord(RunID)
+    RunRecord = GetRunRecord(Folder, RunID)
     Tide = RunRecord["Tide"].values[0]
     
     # Save Terraces to a new DF
     Columns = ["TerraceID","StartIndex","EndIndex","Width","MeanElev","ElevChange","Slope"]
     EQTerracesDF = pd.DataFrame(columns=Columns)
-    
+        
     # loop through uplift events
     for i, Earthquake in UpliftDF.iterrows():
         
         # find tides either side of RSL at time of EQ
-        LowTideInd = np.argmin(np.abs((Earthquake['RSL']- 0.5*Tide) - Z))
+        # also subtract breaking wave water depth from low tide limit
+        LowTideInd = np.argmin(np.abs((Earthquake['RSL']- 0.5*Tide - (MaxWaveHeight/0.78)) - Z))
         HighTideInd = np.argmin(np.abs((Earthquake['RSL'] + 0.5*Tide) - Z))
         
+        # check min and max
+        MinInd = LowTideInd
+        # check for notches
+        MaxInd = np.argmax(FinalX[HighTideInd:LowTideInd])
+        
+        # get the last value so as not to include the cliff
+        if HighTideInd == MaxInd:
+            MaxInd = FinalX[LowTideInd:HighTideInd].index(FinalX[MaxInd])
+        
         # record a terrace if wide enough
-        Width = FinalX[HighTideInd]-FinalX[LowTideInd]
+        Width = FinalX[MaxInd]-FinalX[MinInd]
+        
         if Width < MinWidth:
             continue
             
-        ElevChange = Z[HighTideInd]-Z[LowTideInd]
+        ElevChange = Z[MaxInd]-Z[MinInd]
         
         # create record and add to DF
-        NewRow = [i,HighTideInd,LowTideInd,Width,np.mean(Z[HighTideInd:LowTideInd+1]),ElevChange,ElevChange/Width]
+        NewRow = [i,MaxInd,MinInd,Width,np.mean(Z[MaxInd:MinInd+1]),ElevChange,ElevChange/Width]
         EQTerracesDF = pd.concat([EQTerracesDF,pd.DataFrame([NewRow], columns=Columns)], ignore_index=True)
         
     # write to file
@@ -381,6 +390,7 @@ def PlotTerraces(Folder, RunID, EQ_Only=False):
     ax1.text(0.05,0.9,"No. Terraces: " + str(len(TerracesDF))+"\n"
              + "Kappa: " + str(np.round(N_Terraces/N_Uplift,2)), transform=ax1.transAxes)
     fig1.savefig(PlotsFolder+str(RunID)+"_ProfilePlot.png")
+    plt.show()
     #fig1.clf()
 
 # # PLOT SEA LEVEL CURVE
@@ -419,10 +429,10 @@ if __name__ == "__main__":
     #    & (RecordDF["Weathering"] == 1) & (RecordDF["Resistance"] == 1) & (RecordDF["Waves"] == 2))]
 
     # RunID = Record.RunID.values[0]
-    RunID = 60
-    FindUpliftTerraces(Folder, RunID)
+    RunID = 250
     #FindTerraces(Folder, RunID)
     PlotTerraces(Folder, RunID, EQ_Only=True)    
+    FindUpliftTerraces(Folder, RunID)
     
     # for i in tqdm(range(len(RecordDF.RunID)),desc="Processing Terraces",unit="%"):
         
