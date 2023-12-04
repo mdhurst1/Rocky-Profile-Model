@@ -1338,6 +1338,11 @@ void RPM::WriteProfile(string OutputFileName, double Time, bool Print2Screen)
 	{
 		WriteCoastFile.open(OutputFileName.c_str());
 		if (WriteCoastFile.is_open()) WriteCoastFile << MaxElevation << " " << MinElevation << " " << dZ << endl;
+		else
+		{
+			cout << endl << "Unable to create file " << OutputFileName << endl;
+			exit(0);
+		}
 	}
 	WriteCoastFile.close();
 

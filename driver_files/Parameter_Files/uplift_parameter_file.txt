@@ -1,0 +1,58 @@
+# parameter file for RPM_CRN model
+
+# File Structure
+Folder: ../../Uplift_RPM/
+ProjectName: Uplift
+
+# Cosmogenic Isotopes
+CRN_Predictions: true
+Berylium: true
+Carbon: false
+Aluminium: false
+
+# Hydrodynamics
+SeaLevelFilename: NULL
+SeaLevelRise: 0.001
+TidalRange: 1.5
+TidalPeriod: 12.25
+WaveHeight_Mean: 1.
+WaveHeight_StD: 0.
+WavePeriod_Mean: 6. 
+WavePeriod_StD: 0.
+StandingWaveCoef: 0.1
+BreakingWaveCoef: 10.
+BrokenWaveCoef: 0.01
+WaveAttenuationConst: 0.01
+
+# geology
+Resistance: 10.
+WeatheringRate: 1.
+SubtidalEfficacy: 0.001
+CliffFailureDepth: 0.1
+CliffElevation: 10
+
+# earthquakes
+Earthquakes: true
+UpliftMagnitude: 3
+UpliftFrequency: 1000
+
+# MCMC parameters (if required)
+Resistance_Min: 1.
+Resistance_Max: 100.
+Resistance_Mean: 10.
+Resistance_Std: 5.
+
+WeatheringRate_Min: 0.1
+WeatheringRate_Max: 10.
+WeatheringRate_Mean: 1.
+WeatheringRate_Std: 2.
+
+# space domain
+MinElevation: -10
+MaxElevation: 40
+
+# time control
+StartTime: 10000
+EndTime: 0
+TimeStep: 1
+PrintInterval: 100

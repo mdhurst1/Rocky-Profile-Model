@@ -162,9 +162,10 @@ int main(int nNumberofArgs,char *argv[])
 	PlatformModel.InitialiseWaves(Params.WaveHeight_Mean, Params.WaveHeight_StD, Params.WavePeriod_Mean, Params.WavePeriod_StD);
 	
 	//Tectonic Events
-	//double UpliftFrequency = 1000.;
-	//double UpliftTime = UpliftFrequency;
-	//double UpliftMagnitude = 6.5;
+	bool Earthquakes = Params.Earthquakes;
+	double UpliftFrequency = Params.UpliftFrequency;
+	double UpliftTime = Time - UpliftFrequency;
+	double UpliftMagnitude = Params.UpliftMagnitude;
 
 	// Wave coefficient constant
 	PlatformModel.Set_WaveCoefficients(Params.StandingWaveCoef, Params.BreakingWaveCoef, 
@@ -182,7 +183,7 @@ int main(int nNumberofArgs,char *argv[])
 	while (Time >= Params.EndTime)
 	{
 		//Do an earthquake?
-		if (Params.Earthquakes && Time < UpliftTime)
+		if (Params.Earthquakes && (Time < UpliftTime))
 		{
 			PlatformModel.TectonicUplift(Params.UpliftMagnitude);
 			UpliftTime -= Params.UpliftFrequency;
