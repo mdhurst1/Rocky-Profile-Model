@@ -10,8 +10,8 @@ from tqdm import tqdm
 import pdb
 
 # dont plot in spyder pls
-%matplotlib qt5
-#plt.switch_backend('Agg')
+#%matplotlib qt5
+plt.switch_backend('Agg')
 
 # figure properties
 # Set up fonts for plots
@@ -88,19 +88,27 @@ def FindUpliftTerraces(Folder, RunID, MinWidth=3., MaxWaveHeight=2.):
         LowTideInd = np.argmin(np.abs((Earthquake['RSL']- 0.5*Tide - (MaxWaveHeight/0.78)) - Z))
         HighTideInd = np.argmin(np.abs((Earthquake['RSL'] + 0.5*Tide) - Z))
         
+        # if there is no terrace, there's no terrace
+        if LowTideInd == HighTideInd:
+            continue
+        
         # check min and max
         MinInd = LowTideInd
+        
         # check for notches
-        MaxInd = np.argmax(FinalX[HighTideInd:LowTideInd])
+        MaxInd = HighTideInd+np.argmax(FinalX[HighTideInd:LowTideInd])
+        
         
         # get the last value so as not to include the cliff
         if HighTideInd == MaxInd:
-            MaxInd = FinalX[LowTideInd:HighTideInd].index(FinalX[MaxInd])
-        
+            Indices = np.where(FinalX[HighTideInd:LowTideInd] == FinalX[MaxInd])[0]
+            MaxInd += np.max(Indices)
+            
         # record a terrace if wide enough
         Width = FinalX[MaxInd]-FinalX[MinInd]
         
         if Width < MinWidth:
+            #print("Width is ", Width)
             continue
             
         ElevChange = Z[MaxInd]-Z[MinInd]
@@ -390,8 +398,8 @@ def PlotTerraces(Folder, RunID, EQ_Only=False):
     ax1.text(0.05,0.9,"No. Terraces: " + str(len(TerracesDF))+"\n"
              + "Kappa: " + str(np.round(N_Terraces/N_Uplift,2)), transform=ax1.transAxes)
     fig1.savefig(PlotsFolder+str(RunID)+"_ProfilePlot.png")
-    plt.show()
-    #fig1.clf()
+    #plt.show()
+    fig1.clf()
 
 # # PLOT SEA LEVEL CURVE
 # SeaDF = pd.read_csv(ResultsFolder + str(RunID) + "_rsl.data", delimiter=" ", header=0)
