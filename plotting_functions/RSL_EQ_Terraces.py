@@ -32,9 +32,22 @@ RecordDF = pd.read_excel(Folder+RecordFile,sheet_name="Sheet1",header=0)
 Columns = ["Uplift", "RSL-1", "RSL-2", "RSL-3"]
 NTerracesDF = pd.DataFrame(columns=Columns)
 KappaDF = pd.DataFrame(columns=Columns)
+RunDF = pd.DataFrame(columns=Columns)
 
 # parameter to extract
 # Param = "Width"
+
+# Define base scenario
+BaseDict = { "SeaLevel": 1,
+             "UpliftFreq": 3,   # medium (every 1ky)
+             "UpliftMag": 2,    # medium (2m)
+             "Clustering": 1,   # no clustering
+             "Subsidence": 1,   # no subsidence
+             "InitSlope": 2,    # 35 degrees
+             "Tide": 2,         # medium (2 m range)
+             "Weathering": 1,   # low efficacy (0.001*Resistance)
+             "Resistance": 1,   # low resistance (10 kg/m2/s)
+             "Waves": 2 }       # high efficacy, low gamma 0.01
     
 # loop across uplift magitude whilst keeping all else const
 for i, UpliftFreq in enumerate(UpliftFreqs):
@@ -42,12 +55,27 @@ for i, UpliftFreq in enumerate(UpliftFreqs):
     # create a blank record
     NTRow = ["UpFreq_" + str(i)]
     KappaRow = ["UpFreq_" + str(i)]
+    RunRow = ["UpFreq_" + str(i)]
     
     for SeaLevel in SeaLevels:
         
-        Record = RecordDF[((RecordDF["SeaLevel"] == SeaLevel) & (RecordDF["UpliftFreq"] == UpliftFreq) & (RecordDF["Clustering"] == 1) 
-                          & (RecordDF["UpliftMag"] == 3) & (RecordDF["Subsidence"] == 1) & (RecordDF["InitSlope"] == 3) & (RecordDF["Tide"] == 1) 
-                          & (RecordDF["Weathering"] == 1) & (RecordDF["Resistance"] == 1) & (RecordDF["Waves"] == 2))]
+        # get record
+        SearchDict = BaseDict.copy()
+        SearchDict["SeaLevel"] = SeaLevel
+        SearchDict["UpliftFreq"] = UpliftFreq
+        
+        # Find the record
+        Record = RecordDF[((RecordDF["SeaLevel"] == SearchDict["SeaLevel"]) 
+                           & (RecordDF["UpliftFreq"] == SearchDict["UpliftFreq"])
+                           & (RecordDF["UpliftMag"] == SearchDict["UpliftMag"])
+                           & (RecordDF["Clustering"] == SearchDict["Clustering"])
+                           & (RecordDF["Subsidence"] == SearchDict["Subsidence"])
+                           & (RecordDF["InitSlope"] == SearchDict["InitSlope"]) 
+                           & (RecordDF["Tide"] == SearchDict["Tide"]) 
+                           & (RecordDF["Weathering"] == SearchDict["Weathering"]) 
+                           & (RecordDF["Resistance"] == SearchDict["Resistance"]) 
+                           & (RecordDF["Waves"] == SearchDict["Waves"]))]
+        
         RunID = Record.RunID.values[0]
         TerracesDF = FindTerraces(Folder, RunID)
         PlotTerraces(Folder, RunID)
@@ -56,12 +84,14 @@ for i, UpliftFreq in enumerate(UpliftFreqs):
         N_Uplift = len(pd.read_csv(Folder+"Results/"+str(RunID)+"_episodic_uplift.data", header=None))
         
         NTRow.append(N_Terraces)
-        Kappa = np.round(N_Terraces/N_Uplift,2)
+        Kappa = np.round((N_Terraces-1)/N_Uplift,2)
         print(RunID,N_Terraces,N_Uplift,Kappa)
         KappaRow.append(Kappa)
+        RunRow.append(RunID)
         
     NTerracesDF = pd.concat([NTerracesDF,pd.DataFrame([NTRow], columns=Columns)], ignore_index=True)
     KappaDF = pd.concat([KappaDF,pd.DataFrame([KappaRow], columns=Columns)], ignore_index=True)
+    RunDF = pd.concat([RunDF,pd.DataFrame([RunRow], columns=Columns)], ignore_index=True)
         
 # loop across uplift freq
 for i, UpliftMag in enumerate(UpliftMags):
@@ -69,12 +99,27 @@ for i, UpliftMag in enumerate(UpliftMags):
     # create a blank record
     NTRow = ["UpMag_" + str(i)]
     KappaRow = ["UpMag_" + str(i)]
+    RunRow = ["UpMag_" + str(i)]
     
     for i, SeaLevel in enumerate(SeaLevels):
         
-        Record =RecordDF[((RecordDF["SeaLevel"] == SeaLevel) & (RecordDF["UpliftFreq"] == 3) & (RecordDF["Clustering"] == 1) 
-                      & (RecordDF["UpliftMag"] == UpliftMag) & (RecordDF["Subsidence"] == 1) & (RecordDF["InitSlope"] == 3) & (RecordDF["Tide"] == 1) 
-                      & (RecordDF["Weathering"] == 1) & (RecordDF["Resistance"] == 1) & (RecordDF["Waves"] == 2))]
+        # get record
+        SearchDict = BaseDict.copy()
+        SearchDict["SeaLevel"] = SeaLevel
+        SearchDict["UpliftMag"] = UpliftMag
+        
+        # Find the record
+        Record = RecordDF[((RecordDF["SeaLevel"] == SearchDict["SeaLevel"]) 
+                           & (RecordDF["UpliftFreq"] == SearchDict["UpliftFreq"])
+                           & (RecordDF["UpliftMag"] == SearchDict["UpliftMag"])
+                           & (RecordDF["Clustering"] == SearchDict["Clustering"])
+                           & (RecordDF["Subsidence"] == SearchDict["Subsidence"])
+                           & (RecordDF["InitSlope"] == SearchDict["InitSlope"]) 
+                           & (RecordDF["Tide"] == SearchDict["Tide"]) 
+                           & (RecordDF["Weathering"] == SearchDict["Weathering"]) 
+                           & (RecordDF["Resistance"] == SearchDict["Resistance"]) 
+                           & (RecordDF["Waves"] == SearchDict["Waves"]))]
+        
         RunID = Record.RunID.values[0]
         TerracesDF = FindTerraces(Folder, RunID)
         PlotTerraces(Folder, RunID)
@@ -83,26 +128,41 @@ for i, UpliftMag in enumerate(UpliftMags):
         N_Uplift = len(pd.read_csv(Folder+"Results/"+str(RunID)+"_episodic_uplift.data", header=None))
         
         NTRow.append(N_Terraces)
-        Kappa = np.round(N_Terraces/N_Uplift,2)
+        Kappa = np.round((N_Terraces-1)/N_Uplift,2)
         print(RunID,N_Terraces,N_Uplift,Kappa)
         KappaRow.append(Kappa)
+        RunRow.append(RunID)
     
     NTerracesDF = pd.concat([NTerracesDF,pd.DataFrame([NTRow], columns=Columns)], ignore_index=True)
     KappaDF = pd.concat([KappaDF,pd.DataFrame([KappaRow], columns=Columns)], ignore_index=True)
-
+    RunDF = pd.concat([RunDF,pd.DataFrame([RunRow], columns=Columns)], ignore_index=True)
+    
 # loop across clustering
 for i, Clustering in enumerate(Clusterings):
     
     # create a blank record
     NTRow = ["Cluster_" + str(i)]
     KappaRow = ["Cluster_" + str(i)]
+    RunRow = ["Cluster_" + str(i)]
     
     for i, SeaLevel in enumerate(SeaLevels):
         
-        Record =RecordDF[((RecordDF["SeaLevel"] == SeaLevel) & (RecordDF["UpliftFreq"] == 3) 
-                      & (RecordDF["Clustering"] == Clustering) & (RecordDF["UpliftMag"] == 3) 
-                      & (RecordDF["Subsidence"] == 1) & (RecordDF["InitSlope"] == 3) & (RecordDF["Tide"] == 1) 
-                      & (RecordDF["Weathering"] == 1) & (RecordDF["Resistance"] == 1) & (RecordDF["Waves"] == 2))]
+        # get record
+        SearchDict = BaseDict.copy()
+        SearchDict["SeaLevel"] = SeaLevel
+        SearchDict["Clustering"] = Clustering
+        
+        # Find the record
+        Record = RecordDF[((RecordDF["SeaLevel"] == SearchDict["SeaLevel"]) 
+                           & (RecordDF["UpliftFreq"] == SearchDict["UpliftFreq"])
+                           & (RecordDF["UpliftMag"] == SearchDict["UpliftMag"])
+                           & (RecordDF["Clustering"] == SearchDict["Clustering"])
+                           & (RecordDF["Subsidence"] == SearchDict["Subsidence"])
+                           & (RecordDF["InitSlope"] == SearchDict["InitSlope"]) 
+                           & (RecordDF["Tide"] == SearchDict["Tide"]) 
+                           & (RecordDF["Weathering"] == SearchDict["Weathering"]) 
+                           & (RecordDF["Resistance"] == SearchDict["Resistance"]) 
+                           & (RecordDF["Waves"] == SearchDict["Waves"]))]
     
         RunID = Record.RunID.values[0]
         TerracesDF = FindTerraces(Folder,RunID)
@@ -112,15 +172,18 @@ for i, Clustering in enumerate(Clusterings):
         N_Uplift = len(pd.read_csv(Folder+"Results/"+str(RunID)+"_episodic_uplift.data", header=None))
         
         NTRow.append(N_Terraces)
-        Kappa = np.round(N_Terraces/N_Uplift,2)
+        Kappa = np.round((N_Terraces-1)/N_Uplift,2)
         print(RunID,N_Terraces,N_Uplift,Kappa)
         KappaRow.append(Kappa)
+        RunRow.append(RunID)
                 
     NTerracesDF = pd.concat([NTerracesDF,pd.DataFrame([NTRow], columns=Columns)], ignore_index=True)
     KappaDF = pd.concat([KappaDF,pd.DataFrame([KappaRow], columns=Columns)], ignore_index=True)
-
+    RunDF = pd.concat([RunDF,pd.DataFrame([RunRow], columns=Columns)], ignore_index=True)
+    
 NTerracesDF.to_excel(Folder+"RSL_Uplift_NTerraces.xlsx")
 KappaDF.to_excel(Folder+"RSL_Uplift_Kappa.xlsx")
+RunDF.to_excel(Folder+"RSL_Uplift_Run.xlsx")
 
 # Create a figure and axis
 #fig, ax = plt.subplots(figsize=(6, 9))
