@@ -29,6 +29,7 @@ ParamsList.remove("SeaLevel")
 ParamsList.remove("RunID")
 
 # build a table of delta kappa as a function of RSL
+KappaDF = pd.DataFrame(columns=["Scenario","SL1","SL2","SL3"])
 DeltaKappaDF = pd.DataFrame(columns=ParamsList)
 
 # Define base scenario
@@ -48,7 +49,7 @@ for SeaLevel in UniqueValuesDF["SeaLevel"]:
     
     print("Sea Level Scenario:", SeaLevel)
     NewRecord = []
-    
+        
     # loop through each parameter in turn
     for Param in ParamsList:
         
@@ -92,13 +93,13 @@ for SeaLevel in UniqueValuesDF["SeaLevel"]:
                 sys.exit()
                 
             # get EQ terraces
-            TerracesDF = FindUpliftTerraces(Folder, RunID)
-            PlotTerraces(Folder, RunID, EQ_Only = True)
+            TerracesDF = FindTerraces(Folder, RunID)
+            PlotTerraces(Folder, RunID) #, EQ_Only = True)
             
             # calculate kappa
             N_Terraces = len(TerracesDF)
             N_Uplift = len(pd.read_csv(Folder+"Results/"+str(RunID)+"_episodic_uplift.data", header=None))
-            Kappa = np.round(N_Terraces/N_Uplift,2)
+            Kappa = np.round((N_Terraces-1)/N_Uplift,2)
             Kappas.append(Kappa)
         
         # calculate delta kappa
