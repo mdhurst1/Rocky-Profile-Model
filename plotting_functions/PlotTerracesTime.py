@@ -104,32 +104,13 @@ def AnimateTerraceTimeseries(Folder, RunID, MinWidth=3.):
     # Save the animated plot as a GIF
     animation.save(PlotsFolder+'animated_plot.gif', writer='pillow', fps=5)
     
-    plt.show()
-    
-    # Function to update the plot in each animation frame
-
-
-
-
-    # loop through time
-    #for i, Time in Times:
-    
-        # find terraces at every timestep
-        
-        
-        # unpack each terrace
-        
-        # somehow correlate terraces that are the same as the last one
-        
-        # initiate if new terrace
-        
-        # plot terraces through time to check
-    
+    plt.show()       
     
 if __name__ == "__main__":
     
     # setup workspace
-    Folder = "C:/Users/mh322u/OneDrive - University of Glasgow/NZ_2023/Modelling_Holcene_Terraces/Results/"
+    #Folder = "C:/Users/mh322u/OneDrive - University of Glasgow/NZ_2023/Modelling_Holcene_Terraces/Results/"
+    Folder = "C:/Users/mh322u/OneDrive/OneDrive - University of Glasgow/NZ_2023/Modelling_Holcene_Terraces/Results/"
     
     # RunID = Record.RunID.values[0]
     RunID = 2198
