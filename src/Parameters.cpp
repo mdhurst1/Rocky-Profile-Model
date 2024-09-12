@@ -268,7 +268,11 @@ void Parameters::ParseValuesFromFile()
 	}
 
     ReadSeaLevelFromFile = bool_Params["ReadSeaLevelFromFile"];
-		
+	
+    // Space Domain
+    dX = float_Params["dX"];
+    dZ = float_Params["dZ"];
+
     // Hydrodynamics
     SeaLevelRise = float_Params["SeaLevelRise"];
     TidalRange = float_Params["TidalRange"];

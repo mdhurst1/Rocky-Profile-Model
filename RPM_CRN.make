@@ -36,4 +36,4 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm -f ./src/*.o *.o *.out *.exe *.xz *.xn 
+	rm -f ./src/*.o ./driver_files/*.o *.o *.out *.exe *.xz *.xn 
