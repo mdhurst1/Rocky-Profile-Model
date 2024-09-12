@@ -84,6 +84,12 @@ void Parameters::Initialise(string Folder, string ParameterFilename)
 
 void Parameters::SetDefaultValues()
 {
+    // Space domain
+    float_Params["dZ"] = 0.1;
+    float_Params["dX"] = 0.1;
+    float_Params["MinElevation"] = -20.;
+    float_Params["MaxElevation"] = 10.;
+
     // Cosmogenic Isotopes
 	bool_Params["CRN_Predictions"] = true;
 	bool_Params["Berylium"] = true;
@@ -136,6 +142,7 @@ void Parameters::SetDefaultValues()
 
     //other MCMC
     int_Params["MCMC_NIterations"] = 10000;
+
 	// time control
 	float_Params["StartTime"] = 8000.;
 	float_Params["EndTime"] = 0.;
