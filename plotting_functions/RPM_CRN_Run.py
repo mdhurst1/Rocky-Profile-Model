@@ -70,7 +70,7 @@ class RPM_CRN_Run:
         self.EndTime = float(Lines[-1].strip().split(" ")[0])
 
         # Get info on vertical from header
-        Header = np.array(Lines[0].strip().split(" "),dtype=np.float)
+        Header = np.array(Lines[0].strip().split(" "),dtype=float)
         self.MaxZ = Header[0]
         self.MinZ = Header[1]
         self.dz = Header[2]
@@ -212,6 +212,7 @@ class RPM_CRN_Run:
         plt.ylabel("Elevation (m)")
         plt.xlim(np.min(self.X[-1]),np.max(self.X[-1]))
         plt.ylim(self.MinZ,self.MaxZ)
+        print(self.MinZ,self.MaxZ)
         #plt.ylim(-30,30)
 
         #add the colourbar
@@ -219,7 +220,7 @@ class RPM_CRN_Run:
         #cbar.set_label('Time (years)')
 
         # add the legend
-        plt.tight_layout()
+        #plt.tight_layout()
         
         plt.savefig('RPM_CRN_plotting_test.png',dpi=300)
 
@@ -231,7 +232,7 @@ class RPM_CRN_Run:
         """
 
         #create blank figure
-        fig2 = plt.figure(1,figsize=(6.6,3.3))
+        fig2 = plt.figure(2,figsize=(6.6,3.3))
         ax = fig2.add_subplot(111)
         
         print(self.dX)

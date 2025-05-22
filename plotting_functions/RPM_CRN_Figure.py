@@ -7,7 +7,7 @@ from matplotlib import rcParams, cm, gridspec
 from matplotlib.lines import Line2D
 from cycler import cycler
 import matplotlib.pyplot as plt
-from RPM_CRN_Plotting_Functions import *
+from PlottingTools import *
 
 class RPM_CRN_Figure:
 
@@ -295,6 +295,9 @@ if __name__ == "__main__":
     # define model output files
     ProfileFile = Folder / (Project+"_ShoreProfile.xz")
     ConcentrationsFile = Folder / (Project+"_Concentrations.xn")
+    
+    print(ProfileFile)
+    print(ConcentrationsFile)
     
     # create and populate the figures then save
     EvolutionFigure = RPM_CRN_Figure()

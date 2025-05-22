@@ -312,9 +312,9 @@ void Parameters::ParseValuesFromFile()
     WeatheringRate_Mean = float_Params["WeatheringRate_Mean"];
     WeatheringRate_Std = float_Params["WeatheringRate_Std"];
 
-    WaveAttenuation_Mean = float_Params["WaveAttenuation_Max"];
-    WaveAttenuation_Std = float_Params["WaveAttenuation_Max"];
-    WaveAttenuation_Min = float_Params["WaveAttenuation_Max"];
+    WaveAttenuation_Mean = float_Params["WaveAttenuation_Mean"];
+    WaveAttenuation_Std = float_Params["WaveAttenuation_Std"];
+    WaveAttenuation_Min = float_Params["WaveAttenuation_Min"];
     WaveAttenuation_Max = float_Params["WaveAttenuation_Max"];
 
     // Weightings for multipobjective MCMC
