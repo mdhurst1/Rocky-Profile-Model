@@ -126,7 +126,7 @@ int main(int nNumberofArgs,char *argv[])
 	int PrintTime = Time-Params.PrintInterval;
 	
 	//initialise RPM Model
-	RPM PlatformModel = RPM(Parms.dZ, Params.dX, Params.InitialGradient, Params.CliffElevation, Params.MaxElevation, Params.MinElevation);
+	RPM PlatformModel = RPM(Params.dZ, Params.dX, Params.InitialGradient, Params.CliffElevation, Params.MaxElevation, Params.MinElevation);
 	
 	//initialise RockyCoastCRN friend object
 	RockyCoastCRN PlatformCRN;
@@ -162,10 +162,10 @@ int main(int nNumberofArgs,char *argv[])
 	PlatformModel.InitialiseWaves(Params.WaveHeight_Mean, Params.WaveHeight_StD, Params.WavePeriod_Mean, Params.WavePeriod_StD);
 	
 	//Tectonic Events
-	bool Earthquakes = Params.Earthquakes;
-	double UpliftFrequency = Params.UpliftFrequency;
-	double UpliftTime = Time - UpliftFrequency;
-	double UpliftMagnitude = Params.UpliftMagnitude;
+	//bool Earthquakes = Params.Earthquakes;
+	//double UpliftFrequency = Params.UpliftFrequency;
+	double UpliftTime = Time - Params.UpliftFrequency;
+	//double UpliftMagnitude = Params.UpliftMagnitude;
 
 	// Wave coefficient constant
 	PlatformModel.Set_WaveCoefficients(Params.StandingWaveCoef, Params.BreakingWaveCoef, 

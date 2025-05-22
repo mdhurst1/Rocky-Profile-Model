@@ -32,8 +32,6 @@ CliffFailureDepth: 0.1
 CliffElevation: 10
 
 # space domain
-dZ: 0.1
-dX: 0.1
 MinElevation: -20
 MaxElevation: 10
 
