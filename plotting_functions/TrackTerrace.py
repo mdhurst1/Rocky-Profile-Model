@@ -66,20 +66,20 @@ for i, Time in enumerate(Times):
     
     print(Time)
     
-    if Time == 4900:
+    # if Time == 4100:
         
-        ThisX = X[i]
-        plt.plot(ThisX,Z,'k-')
+    #     ThisX = X[i]
+    #     plt.plot(ThisX,Z,'k-')
         
-        for i, Terrace in TerracesDF.iterrows():
-            # make sure indices are ints
-            Ind1 = Terrace.StartIndex
-            Ind2 = Terrace.EndIndex
-            plt.plot(ThisX[Ind1:Ind2],Z[Ind1:Ind2],'r-', lw=2, zorder=9)
+    #     for i, Terrace in TerracesDF.iterrows():
+    #         # make sure indices are ints
+    #         Ind1 = Terrace.StartIndex
+    #         Ind2 = Terrace.EndIndex
+    #         plt.plot(ThisX[Ind1:Ind2],Z[Ind1:Ind2],'r-', lw=2, zorder=9)
         
-        plt.show()
+    #     plt.show()
         
-        pdb.set_trace()
+    #     pdb.set_trace()
         
     if (len(TerracesDF) == 0):
         continue
@@ -102,6 +102,7 @@ for i, Time in enumerate(Times):
         
         continue
     
+    NewIDList = []
     # otherwise loop through the terraces (if any)
     for i, Terrace in TerracesDF.iterrows():
         
@@ -114,6 +115,8 @@ for i, Time in enumerate(Times):
         else:
            # print("New Terrace found, setting ID to list length")
             Terrace["TerraceID"] = len(TerracesTSList)
+        
+        NewIDList.append(Terrace["TerraceID"])
         
         # set time
         Terrace["Time"] = Time
@@ -128,7 +131,9 @@ for i, Time in enumerate(Times):
         TerracesTSList[Terrace["TerraceID"]] = pd.concat([TerracesTSList[Terrace["TerraceID"]], Terrace.to_frame().T], ignore_index=True)
     
     # assign old terraces DF for later comparison and skip out
+    # OldTerracesDF needs updated IDs
     OldTerracesDF = TerracesDF
+    OldTerracesDF["TerraceID"] = NewIDList
     
 # loop through terracesDF list and save a spreadsheet for each terrace through time
 Filename = AnalysisFolder + str(RunID) + "_Terraces.xlsx"
