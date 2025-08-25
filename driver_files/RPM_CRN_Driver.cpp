@@ -190,7 +190,16 @@ int main(int nNumberofArgs,char *argv[])
 			
 			//Update the Morphology 
 			PlatformModel.UpdateMorphology();
-		}		
+		}
+		// Do interseismic uplift?
+		if (Params.Interseismic)
+		{
+			//Do interseismic uplift or subsidence (positive or negative)
+			PlatformModel.InterseismicUplift(Params.InterseismicMagnitude);
+
+			// Update the morphology
+			PlatformModel.UpdateMorphology();
+		}
 		
 		//Update Sea Level
 		InstantSeaLevel = RelativeSeaLevel.get_SeaLevel(Time);
