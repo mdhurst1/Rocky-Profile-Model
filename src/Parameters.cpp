@@ -123,6 +123,7 @@ void Parameters::SetDefaultValues()
     bool_Params["Earthquakes"] = false;
     float_Params["UpliftMagnitude"] = 0;
     float_Params["UpliftFrequency"] = 0;
+    bool_Params["Interseismic"] = false;
     float_Params["InterseismicRate"] = 0;
 
     // free parameters for MCMC
@@ -301,6 +302,7 @@ void Parameters::ParseValuesFromFile()
     Earthquakes = bool_Params["Earthquakes"];
     UpliftMagnitude = float_Params["UpliftMagnitude"];
     UpliftFrequency = float_Params["UpliftFrequency"];
+    Interseismic = bool_Params["Interseismic"];
     InterseismicRate = float_Params["InterseismicRate"];
 
     // free parameters for MCMC
