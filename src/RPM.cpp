@@ -593,7 +593,7 @@ void RPM::TectonicUplift(double UpliftAmplitude)
 void RPM::InterseismicUplift(double InterseismicRate)
 {
     // modify Z according to the prescribed rate
-	for (i=0; i<NZNodes; ++i)
+	for (int i=0; i<NZNodes; ++i)
 	{
 		Z[i] += InterseismicRate*TimeInterval;
 	}
