@@ -48,6 +48,8 @@ CliffElevation: 30
 Earthquakes: false
 UpliftMagnitude: 0
 UpliftFrequency: 0
+Interseismic: false
+InterseismicRate: 0
 
 # input filenames
 CRNFilename: ExampleCRNData.in

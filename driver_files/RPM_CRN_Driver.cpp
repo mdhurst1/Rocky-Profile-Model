@@ -195,7 +195,7 @@ int main(int nNumberofArgs,char *argv[])
 		if (Params.Interseismic)
 		{
 			//Do interseismic uplift or subsidence (positive or negative)
-			PlatformModel.InterseismicUplift(Params.InterseismicMagnitude);
+			PlatformModel.InterseismicUplift(Params.InterseismicRate);
 
 			// Update the morphology
 			PlatformModel.UpdateMorphology();
