@@ -77,6 +77,7 @@ class Parameters
 
 		// tectonics
 		float UpliftMagnitude, UpliftFrequency;
+		float InterseismicRate;
 
 		// time control
 		double StartTime, EndTime, TimeStep, PrintInterval;
