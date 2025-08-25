@@ -140,8 +140,7 @@ class RPM
 		// TECTONIC UPLIFT
         int TT;
         double UpliftAmplitude;
-
-
+		
 		// TIDES DECLARATIONS
 		double TidalRange;              		//Tidal Range in metres
 //		double TidalPeriod;                 //Tidal Period
@@ -262,6 +261,9 @@ class RPM
 		//Tectonic uplift
 		void TectonicUplift(double UpliftAmplitude);
 
+		//Interseismic uplift/subsidence
+		void InterseismicUplift(double InterseismicRate);
+		
 		//Sample a wave
 		void GetWave();
 

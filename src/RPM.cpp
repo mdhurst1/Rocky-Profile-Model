@@ -590,6 +590,17 @@ void RPM::TectonicUplift(double UpliftAmplitude)
 	UpdateMorphology();
 }
 
+void RPM::InterseismicUplift(double InterseismicRate)
+{
+    // modify Z according to the prescribed rate
+	for (i=0; i<NZNodes; ++i)
+	{
+		Z[i] += InterseismicRate*TimeInterval;
+	}
+
+	UpdateMorphology();
+}
+
 void RPM::CalculateBackwearing()
 {
 	//Declare temporary variables
