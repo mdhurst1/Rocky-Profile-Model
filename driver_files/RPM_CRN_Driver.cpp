@@ -188,6 +188,10 @@ int main(int nNumberofArgs,char *argv[])
 		if (Params.Earthquakes && (Time < UpliftTime))
 		{
 			PlatformModel.TectonicUplift(Params.UpliftMagnitude);
+			
+			//need to add some logic here for CRNs ??
+			//if (Params.CRN_Predictions)
+
 			UpliftTime -= Params.UpliftFrequency;
 
 			PlatformModel.UpdateMorphology(true);
