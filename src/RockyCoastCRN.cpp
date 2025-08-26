@@ -1014,7 +1014,7 @@ void RockyCoastCRN::UpdateMorphology(RPM RPMCoast)
 	}
 	
 	// Update Z vector if elevations have changed due to interseismic uplift/subsidence
-	for (int i=0; i<NZNodes; ++j) Z[j] = RPMCoast.Z[j];	
+	for (int i=0; i<NZNodes; ++i) Z[i] = RPMCoast.Z[i];	
 
 	// loop through morphology array here and resample elevations
 	PlatformElevationOld = PlatformElevation;

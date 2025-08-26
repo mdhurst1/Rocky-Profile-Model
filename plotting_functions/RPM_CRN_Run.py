@@ -169,7 +169,7 @@ class RPM_CRN_Run:
 
         """
 
-    def PlotProfiles(self,TimeInterval,StartTime=8000, EndTime=0):
+    def PlotProfiles(self,TimeInterval=1000,StartTime=8000, EndTime=0):
         """
         Function to plot profile lines at specific time intervals
         

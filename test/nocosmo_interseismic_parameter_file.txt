@@ -40,7 +40,7 @@ BrokenWaveCoef: 0.01
 WaveAttenuationConst: 0.01
 
 # geology
-Resistance: 10.
+Resistance: 100.
 WeatheringRate: 1.
 SubtidalEfficacy: 0.001
 CliffFailureDepth: 0.1
@@ -49,7 +49,7 @@ Earthquakes: false
 UpliftMagnitude: 0
 UpliftFrequency: 0
 Interseismic: true
-InterseismicRate: 0.001
+InterseismicRate: -0.001
 
 # input filenames
 CRNFilename: ExampleCRNData.in
