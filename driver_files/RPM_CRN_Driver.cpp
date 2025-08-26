@@ -187,14 +187,12 @@ int main(int nNumberofArgs,char *argv[])
 		//Do an earthquake?
 		if (Params.Earthquakes && (Time < UpliftTime))
 		{
-			PlatformModel.WriteProfile(Folder + "_temp_" + Params.ProfileOutFilename, Time);
 			PlatformModel.TectonicUplift(Params.UpliftMagnitude);
 			UpliftTime -= Params.UpliftFrequency;
-			
-			PlatformModel.WriteProfile(Folder + "_temp_" + Params.ProfileOutFilename, Time);
-			
-			debug = true;
+
+			PlatformModel.UpdateMorphology(true);
 		}
+
 		// Do interseismic uplift?
 		if (Params.Interseismic)
 		{
@@ -220,14 +218,12 @@ int main(int nNumberofArgs,char *argv[])
 		PlatformModel.ErodeBackwearing();
 		PlatformModel.ErodeDownwearing();
 		PlatformModel.UpdateMorphology();
-		if (debug) PlatformModel.WriteProfile(Folder + "_temp_" + Params.ProfileOutFilename, Time);
-
+		
 		//Implement Weathering
 		PlatformModel.IntertidalWeathering();
 		PlatformModel.SubtidalWeathering();
 		PlatformModel.UpdateMorphology();
-		if (debug) PlatformModel.WriteProfile(Folder + "_temp_" + Params.ProfileOutFilename, Time);
-
+		
 		//Check for Mass Failure
 		PlatformModel.MassFailure();
 		PlatformModel.UpdateMorphology();

@@ -597,9 +597,13 @@ void RPM::InterseismicUplift(double InterseismicRate)
     // modify Z according to the prescribed rate
 	for (int i=0; i<NZNodes; ++i)
 	{
+		// update the elevations
 		Z[i] += InterseismicRate*TimeInterval;
+
+		// update the min and max elevations
 	}
 
+	// update morphology array
 	UpdateMorphology();
 }
 
@@ -1388,6 +1392,61 @@ void RPM::WriteProfile(string OutputFileName, double Time, bool Print2Screen)
 	WriteCoastFile.close();
 }
 
+void RPM::NewWriteProfile(string OutputFileName, double Time, bool Print2Screen)
+{
+  /* Writes a RPM object X and Z coordinates to file, 
+		File format is
+
+		Time | SeaLevel | X[0] | X[1] | X[2] =====> X[NoNodes] */
+		Time | SeaLevel | Z[0] | Z[1] | Z[2] =====> Z[NoNodes] */
+
+	//Print to screen ?
+	if (Print2Screen)
+	{
+		cout.flush();
+		cout << "RPM.NewWriteCoast: Writing output at Time " << setprecision(2) << fixed << Time << " years\r";
+	}
+
+	//test if output file already exists
+	int FileExists = 0;
+	ifstream oftest(OutputFileName.c_str());
+	if (oftest) FileExists = 1;
+	oftest.close();
+
+	//open the output filestream and write headers
+	ofstream WriteCoastFile;
+	if (FileExists == 0)
+	{
+		WriteCoastFile.open(OutputFileName.c_str());
+		if (WriteCoastFile.is_open()) WriteCoastFile << MaxElevation << " " << MinElevation << " " << dZ << endl;
+		else
+		{
+			cout << endl << "Unable to create file " << OutputFileName << endl;
+			exit(0);
+		}
+	}
+	WriteCoastFile.close();
+
+	//open output filestream again to  coastline data
+	WriteCoastFile.open(OutputFileName.c_str(), fstream::app|fstream::out);
+
+	//Check if file exists if not open a new one and write headers
+	if (WriteCoastFile.is_open())
+	{
+		//write X
+		WriteCoastFile << setprecision(4) << Time << " " << setprecision(4) << SeaLevel;
+		for (int i=0; i<NZNodes; ++i) WriteCoastFile << setprecision(10) << " " << Xz[i];
+		for (int i=0; i<NZNodes; ++i) WriteCoastFile << setprecision(10) << " " << Z[i];
+		WriteCoastFile << endl;
+	}
+	else
+	{
+		//report errors
+		cout << "RPM.NewWriteCoast: Error, the file " << OutputFileName << " is not open or cannot be read." << endl;
+		exit(EXIT_FAILURE);
+	}
+	WriteCoastFile.close();
+}
 void  RPM::WriteResistanceArray(string OutputFileName, double Time)
 {
   /* Writes a RPM object Resistance matrix coordinates to file

@@ -15,7 +15,7 @@ Aluminium: false
 
 # space domain
 MinElevation: -20
-MaxElevation: 20
+MaxElevation: 10
 dZ: 0.1
 dX: 0.1
 
@@ -47,7 +47,7 @@ CliffFailureDepth: 0.1
 CliffElevation: 30
 Earthquakes: true
 UpliftMagnitude: 5.
-UpliftFrequency: 6000
+UpliftFrequency: 500
 Interseismic: false
 InterseismicRate: 0
 
