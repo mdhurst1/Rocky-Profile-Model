@@ -1397,7 +1397,7 @@ void RPM::NewWriteProfile(string OutputFileName, double Time, bool Print2Screen)
   /* Writes a RPM object X and Z coordinates to file, 
 		File format is
 
-		Time | SeaLevel | X[0] | X[1] | X[2] =====> X[NoNodes] */
+		Time | SeaLevel | X[0] | X[1] | X[2] =====> X[NoNodes]
 		Time | SeaLevel | Z[0] | Z[1] | Z[2] =====> Z[NoNodes] */
 
 	//Print to screen ?
