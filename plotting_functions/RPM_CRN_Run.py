@@ -4,11 +4,11 @@ import numpy as np
 from matplotlib import cm, rc
 
 # Customise figure style #
-rc('font',**{'family':'sans-serif','sans-serif':['Arial']})
-rc('font',size=8)
-rc('ytick.major',pad=1)
-rc('xtick.major',pad=1)
-padding = 1
+# rc('font',**{'family':'sans-serif','sans-serif':['Arial']})
+# rc('font',size=8)
+# rc('ytick.major',pad=1)
+# rc('xtick.major',pad=1)
+# padding = 1
 
 class RPM_CRN_Run:
 
@@ -49,7 +49,7 @@ class RPM_CRN_Run:
 
 
         self.ReadShoreProfile()
-        self.ReadConcentrationData()
+        #self.ReadConcentrationData()
 
 
     def ReadShoreProfile(self):
@@ -169,18 +169,23 @@ class RPM_CRN_Run:
 
         """
 
-    def PlotProfiles(self,TimeInterval):
+    def PlotProfiles(self,TimeInterval,StartTime=8000, EndTime=0):
         """
         Function to plot profile lines at specific time intervals
         
         MDH, Feb 2020
         
         """
-
+        
+        if StartTime != 8000:
+            self.StartTime = StartTime
+        if EndTime != 0:
+            self.EndTime = EndTime
+            
         #create blank figure
         fig = plt.figure(1,figsize=(6.6,3.3))
         ax1 = plt.subplot(111)
-        plt.axis('equal')
+        #plt.axis('equal')
 
         # Only plot every so many years
         PlotTime = self.StartTime
@@ -198,7 +203,7 @@ class RPM_CRN_Run:
                 ax1.plot(self.X[Index], self.Z, 'k--', lw=1., zorder=10, label="Initial Profile")
                 
             elif PlotTime == self.EndTime:
-                ax1.plot(self.X[-1], self.Z, 'k-',lw=1., zorder=10, label="Final Profile")
+                ax1.plot(self.X[-1], self.Z, 'r-',lw=2., zorder=10, label="Final Profile")
                 break
             
             else:
@@ -220,9 +225,9 @@ class RPM_CRN_Run:
         #cbar.set_label('Time (years)')
 
         # add the legend
-        #plt.tight_layout()
+        plt.tight_layout()
         
-        plt.savefig('RPM_CRN_plotting_test.png',dpi=300)
+        plt.savefig(self.Folder+'RPM_CRN_plotting_test.png',dpi=300)
 
     def PlotCRNConcentrations(self):
 
