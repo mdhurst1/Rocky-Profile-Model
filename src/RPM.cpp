@@ -580,13 +580,26 @@ void RPM::TectonicUplift(double UpliftAmplitude)
 
 	double Uplifted=0; 
 
-	Uplifted=0;
 	while (Uplifted < UpliftAmplitude+0.00001)
 	{
 		MorphologyArray.push_back(MorphologyArray[NZNodes-1]);
+		ResistanceArray.push_back(ResistanceArray[NZNodes-1]);
 		MorphologyArray.erase(MorphologyArray.begin());
+		ResistanceArray.erase(ResistanceArray.begin());
+		
 		Uplifted += dZ;
 	}
+	UpdateMorphology(true);
+}
+
+void RPM::InterseismicUplift(double InterseismicRate)
+{
+    // modify Z according to the prescribed rate
+	for (int i=0; i<NZNodes; ++i)
+	{
+		Z[i] += InterseismicRate*TimeInterval;
+	}
+
 	UpdateMorphology();
 }
 
@@ -998,16 +1011,12 @@ void RPM::DestroyOffshore()
 	Dw_Erosion = ZZeros;
 	Weathering = ZZeros;
 	
-	//Indices trackers
-	XInd = vector<int>(NZNodes,0);
-	ZInd = vector<int>(NXNodes,0);
-	
 	// rebuild other vectors as appropriate
-	UpdateMorphology();
+	UpdateMorphology(true);
 	
 }
 
-void RPM::UpdateMorphology()
+void RPM::UpdateMorphology(bool ReIndex)
 {
 	/*
 	Retrieves the morphology of the shore platform and cliff from the resistance and
@@ -1015,6 +1024,8 @@ void RPM::UpdateMorphology()
 	Vectors and arrays can optionally be shrunk dynamically at the offshore boundary. 
 	This is useful for model simulations with continuous RSLR where the offshore domain
 	becomes inactive.
+
+	add a default argument to override shortcuts?
 
 	MDH
 
@@ -1058,11 +1069,22 @@ void RPM::UpdateMorphology()
 		if ((HighTideFlag == 1) && (LowTideFlag == 1)) break;
 	}
 
+	// reindex XInd to find rock positions from scratch
+	if (ReIndex)
+	{
+		XInd = vector<int>(NZNodes,0);
+		ZInd = vector<int>(NXNodes,0);
+	}
+
 	//Populate vector of X values in Z
 	MaxXXInd = 0;
 	MaxXZInd = 0;
 	for (int i=0; i<NZNodes; ++i)
 	{
+		// think the issue is here, unable to look backwards!
+		// reset XInd?
+		// this must have been a speed up tactic
+		// Easiest fix is set j=0, but will slow model down substantially
 		for (int j=XInd[i]; j<NXNodes; ++j)
 		{
 			if (MorphologyArray[i][j] == 1)

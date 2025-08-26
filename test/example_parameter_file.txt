@@ -1,14 +1,29 @@
+##################################
 # parameter file for RPM_CRN model
+##################################
 
 # File Structure
 Folder: ./RPM_CRN/
+DataFolder: ./ExampleMCMCDir/
 ProjectName: TestProject
 
 # Cosmogenic Isotopes
 CRN_Predictions: true
 Berylium: true
-Carbon: true
-Aluminium: true
+Carbon: false
+Aluminium: false
+
+# space domain
+MinElevation: -20
+MaxElevation: 10
+dZ: 0.1
+dX: 0.1
+
+# time control
+StartTime: 8000
+EndTime: 0
+TimeStep: 1
+PrintInterval: 100
 
 # Hydrodynamics
 SeaLevelFilename: NULL
@@ -29,14 +44,43 @@ Resistance: 10.
 WeatheringRate: 1.
 SubtidalEfficacy: 0.001
 CliffFailureDepth: 0.1
-CliffElevation: 10
+CliffElevation: 30
+Earthquakes: false
+UpliftMagnitude: 0
+UpliftFrequency: 0
+Interseismic: false
+InterseismicRate: 0
 
-# space domain
-MinElevation: -20
-MaxElevation: 10
+# input filenames
+CRNFilename: ExampleCRNData.in
+TopoFilename: ExampleTopoData.in
 
-# time control
-StartTime: 8000
-EndTime: 0
-TimeStep: 1
-PrintInterval: 10
+###############################
+# MCMC parameters (if required)
+###############################
+
+NIterations: 10000
+CRNWeighting: 0.5
+TopoWeighting: 0.5
+
+### free param 1
+Resistance_Min: 1.
+Resistance_Max: 100.
+Resistance_Mean: 10.
+Resistance_Std: 5.
+
+### free param 2
+WeatheringRate_Min: 0.1
+WeatheringRate_Max: 10.
+WeatheringRate_Mean: 1.
+WeatheringRate_Std: 2.
+
+### free param 3
+WaveAttenuation_Min: 0.001
+WaveAttenuation_Max: 0.1
+WaveAttenuation_Mean: 0.01
+WaveAttenuationStd: 0.02
+
+
+
+

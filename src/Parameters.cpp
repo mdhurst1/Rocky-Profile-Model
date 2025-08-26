@@ -123,6 +123,8 @@ void Parameters::SetDefaultValues()
     bool_Params["Earthquakes"] = false;
     float_Params["UpliftMagnitude"] = 0;
     float_Params["UpliftFrequency"] = 0;
+    bool_Params["Interseismic"] = false;
+    float_Params["InterseismicRate"] = 0;
 
     // free parameters for MCMC
     float_Params["Resistance_Max"] = 100.;
@@ -296,10 +298,12 @@ void Parameters::ParseValuesFromFile()
     SubtidalEfficacy = float_Params["SubtidalEfficacy"];
     CliffFailureDepth = float_Params["CliffFailureDepth"];
 
-    // Uplift control parameters (might get added to MCMC)
+    // Uplift control parameters
     Earthquakes = bool_Params["Earthquakes"];
     UpliftMagnitude = float_Params["UpliftMagnitude"];
     UpliftFrequency = float_Params["UpliftFrequency"];
+    Interseismic = bool_Params["Interseismic"];
+    InterseismicRate = float_Params["InterseismicRate"];
 
     // free parameters for MCMC
     Resistance_Max = float_Params["Resistance_Max"];

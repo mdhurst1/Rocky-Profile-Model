@@ -140,8 +140,7 @@ class RPM
 		// TECTONIC UPLIFT
         int TT;
         double UpliftAmplitude;
-
-
+		
 		// TIDES DECLARATIONS
 		double TidalRange;              		//Tidal Range in metres
 //		double TidalPeriod;                 //Tidal Period
@@ -262,6 +261,9 @@ class RPM
 		//Tectonic uplift
 		void TectonicUplift(double UpliftAmplitude);
 
+		//Interseismic uplift/subsidence
+		void InterseismicUplift(double InterseismicRate);
+		
 		//Sample a wave
 		void GetWave();
 
@@ -309,7 +311,12 @@ class RPM
 		void SubtidalWeathering();
 
 		void DestroyOffshore();
-		void UpdateMorphology();
+
+		/// @brief Updates the morphological vectors and arrays after changes have occurred
+		/// @details Finds vectors for the location of rock both in the vertical and horizontal dimension
+		///	@author Martin D. Hurst
+		/// @date 25/08/2025
+		void UpdateMorphology(bool ReIndex = true);
 
 		// File name holder
 		string OutputFileName;

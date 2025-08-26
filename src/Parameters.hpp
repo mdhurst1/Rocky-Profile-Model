@@ -65,7 +65,7 @@ class Parameters
 		float dX, dZ;
 
 		// Cosmogenic Isotopes
-		bool CRN_Predictions, Berylium, Carbon, Aluminium, ReadSeaLevelFromFile, Earthquakes;
+		bool CRN_Predictions, Berylium, Carbon, Aluminium, ReadSeaLevelFromFile, Earthquakes, Interseismic;
 		vector<int> Nuclides;
 
 		// Hydrodynamics
@@ -77,6 +77,7 @@ class Parameters
 
 		// tectonics
 		float UpliftMagnitude, UpliftFrequency;
+		float InterseismicRate;
 
 		// time control
 		double StartTime, EndTime, TimeStep, PrintInterval;
