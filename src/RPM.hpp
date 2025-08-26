@@ -311,18 +311,30 @@ class RPM
 		void SubtidalWeathering();
 
 		void DestroyOffshore();
-		void UpdateMorphology();
+
+		/// @brief Updates the morphological vectors and arrays after changes have occurred
+		/// @details Finds vectors for the location of rock both in the vertical and horizontal dimension
+		///	@author Martin D. Hurst
+		/// @date 25/08/2025
+		void UpdateMorphology(bool ReIndex = true);
 
 		// File name holder
 		string OutputFileName;
 		string OutputConcentrationFileName;
 
 		/// @brief Writes the platform morphology to file
-		/// @details This function writes the elevations of the platform surface at the current time to
+		/// @details This function writes the distance of the platform surface at the current time to
 		///   a file. If the file exists, this is appended.
 		///	@author Martin D. Hurst
 		/// @date 27/02/2017
 		void WriteProfile(string OutputFileName, double Time, bool Print2Screen = true);
+
+		/// @brief Writes the platform morphology to file
+		/// @details This function writes the distances and elevations of the platform surface at the current time to
+		///   a file. If the file exists, this is appended.
+		///	@author Martin D. Hurst
+		/// @date 26/08/2025
+		void NewWriteProfile(string OutputFileName, double Time, bool Print2Screen = true);
 
 		/// @brief Writes the ResistanceArray to file
 		/// @details This function writes the rock Resistance at the current time to

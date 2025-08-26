@@ -8,7 +8,7 @@ DataFolder: ./ExampleMCMCDir/
 ProjectName: TestProject
 
 # Cosmogenic Isotopes
-CRN_Predictions: true
+CRN_Predictions: false
 Berylium: true
 Carbon: false
 Aluminium: false

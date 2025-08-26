@@ -221,7 +221,7 @@ void Parameters::ParseValuesFromFile()
 
             else if (Character == "\r" || Character == "\n" || i == (Line.length()-1))
             {
-                if (GotParameter) Value = Line.substr(ValuePosition, i+1-ValuePosition);
+                if (GotParameter) Value = Line.substr(ValuePosition, i-ValuePosition);
                 break;
             }
             else if (GotParameter && !GotValue) GotValue = true;
@@ -334,7 +334,7 @@ void Parameters::ParseValuesFromFile()
 
     // output files
     Folder = string_Params["Folder"];
-    Filename = string_Params["Filename"];
+    Filename = Filename;
     ProjectName = string_Params["ProjectName"];
     SeaLevelFilename = string_Params["SeaLevelFilename"];
 
