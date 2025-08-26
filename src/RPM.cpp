@@ -578,6 +578,8 @@ void RPM::TectonicUplift(double UpliftAmplitude)
     printf("\nUplift Event\n");
 	printf("Elevations changed by %1.1f\n",UpliftAmplitude);
 
+	// it is currently unclear whether this will work with CRNs turned on!
+
 	double Uplifted=0; 
 
 	Uplifted=0;
@@ -593,6 +595,7 @@ void RPM::TectonicUplift(double UpliftAmplitude)
 void RPM::InterseismicUplift(double InterseismicRate)
 {
     // modify Z according to the prescribed rate
+	// this should be compatible with CRNs but Z will also need modified in the CRN production
 	for (int i=0; i<NZNodes; ++i)
 	{
 		Z[i] += InterseismicRate*TimeInterval;
@@ -960,6 +963,9 @@ void RPM::DestroyOffshore()
 	// Function to turn on flag to destroy offshore cells in arrays and vectors
 	// MDH, Jan 2020
 
+	// I'm not convinced this will work correctly with CRNs!
+	// MDH, August 2025
+
 	// find lowest point to maintain in simulation.
 	double MaxWaterDepth = 0.5*TidalRange+3.*MeanWaveHeight;
 
@@ -1092,6 +1098,7 @@ void RPM::UpdateMorphology()
 	}
 
 	//Grow the X direction arrays dynamically shoreward as required
+	// This should work fine with CRNs
 	if (MaxXXInd > NXNodes-10)
 	{
 		//Grow them
