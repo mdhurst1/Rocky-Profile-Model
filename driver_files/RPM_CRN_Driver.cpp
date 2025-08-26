@@ -176,7 +176,7 @@ int main(int nNumberofArgs,char *argv[])
 									Params.WeatheringRate, Params.SubtidalEfficacy);	
 
 	// print initial condition to file
-	PlatformModel.WriteProfile(Folder+Params.ProfileOutFilename, Params.StartTime);			
+	PlatformModel.NewWriteProfile(Folder+Params.ProfileOutFilename, Params.StartTime);			
 	if (Params.CRN_Predictions) PlatformCRN.WriteCRNProfile(Folder+Params.ConcentrationsOutFilename, Params.StartTime);
 	
 	bool debug = false;
@@ -241,7 +241,7 @@ int main(int nNumberofArgs,char *argv[])
 		//print?
 		if (Time <= PrintTime)
 		{
-			PlatformModel.WriteProfile(Folder+Params.ProfileOutFilename, Time);
+			PlatformModel.NewWriteProfile(Folder+Params.ProfileOutFilename, Time);
 			if (Params.CRN_Predictions) PlatformCRN.WriteCRNProfile(Folder+Params.ConcentrationsOutFilename, Time);
 			PrintTime -= Params.PrintInterval;
 		}

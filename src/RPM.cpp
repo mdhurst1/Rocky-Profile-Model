@@ -1418,7 +1418,7 @@ void RPM::NewWriteProfile(string OutputFileName, double Time, bool Print2Screen)
 	if (FileExists == 0)
 	{
 		WriteCoastFile.open(OutputFileName.c_str());
-		if (WriteCoastFile.is_open()) WriteCoastFile << MaxElevation << " " << MinElevation << " " << dZ << endl;
+		if (WriteCoastFile.is_open()) WriteCoastFile << dZ << endl;
 		else
 		{
 			cout << endl << "Unable to create file " << OutputFileName << endl;
@@ -1434,8 +1434,10 @@ void RPM::NewWriteProfile(string OutputFileName, double Time, bool Print2Screen)
 	if (WriteCoastFile.is_open())
 	{
 		//write X
-		WriteCoastFile << setprecision(4) << Time << " " << setprecision(4) << SeaLevel;
+		WriteCoastFile << "X " << setprecision(4) << Time << " " << setprecision(4) << SeaLevel;
 		for (int i=0; i<NZNodes; ++i) WriteCoastFile << setprecision(10) << " " << Xz[i];
+		WriteCoastFile << endl;
+		WriteCoastFile << "Z " << setprecision(4) << Time << " " << setprecision(4) << SeaLevel;
 		for (int i=0; i<NZNodes; ++i) WriteCoastFile << setprecision(10) << " " << Z[i];
 		WriteCoastFile << endl;
 	}
