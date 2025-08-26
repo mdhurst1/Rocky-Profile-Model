@@ -176,20 +176,24 @@ int main(int nNumberofArgs,char *argv[])
 									Params.WeatheringRate, Params.SubtidalEfficacy);	
 
 	// print initial condition to file
-	PlatformModel.WriteProfile(Params.ProfileOutFilename, Params.StartTime);			
-	if (Params.CRN_Predictions) PlatformCRN.WriteCRNProfile(Params.ConcentrationsOutFilename, Params.StartTime);
+	PlatformModel.WriteProfile(Folder+Params.ProfileOutFilename, Params.StartTime);			
+	if (Params.CRN_Predictions) PlatformCRN.WriteCRNProfile(Folder+Params.ConcentrationsOutFilename, Params.StartTime);
 	
+	bool debug = false;
+
 	//Loop through time
 	while (Time >= Params.EndTime)
 	{
 		//Do an earthquake?
 		if (Params.Earthquakes && (Time < UpliftTime))
 		{
+			PlatformModel.WriteProfile(Folder + "_temp_" + Params.ProfileOutFilename, Time);
 			PlatformModel.TectonicUplift(Params.UpliftMagnitude);
 			UpliftTime -= Params.UpliftFrequency;
 			
-			//Update the Morphology 
-			PlatformModel.UpdateMorphology();
+			PlatformModel.WriteProfile(Folder + "_temp_" + Params.ProfileOutFilename, Time);
+			
+			debug = true;
 		}
 		// Do interseismic uplift?
 		if (Params.Interseismic)
@@ -211,20 +215,25 @@ int main(int nNumberofArgs,char *argv[])
 		//Calculate forces acting on the platform
 		PlatformModel.CalculateBackwearing();
 		PlatformModel.CalculateDownwearing();
-
+		
 		//Do erosion
 		PlatformModel.ErodeBackwearing();
 		PlatformModel.ErodeDownwearing();
+		PlatformModel.UpdateMorphology();
+		if (debug) PlatformModel.WriteProfile(Folder + "_temp_" + Params.ProfileOutFilename, Time);
 
 		//Implement Weathering
 		PlatformModel.IntertidalWeathering();
 		PlatformModel.SubtidalWeathering();
-		
+		PlatformModel.UpdateMorphology();
+		if (debug) PlatformModel.WriteProfile(Folder + "_temp_" + Params.ProfileOutFilename, Time);
+
 		//Check for Mass Failure
 		PlatformModel.MassFailure();
-		
-		//Update the Morphology 
 		PlatformModel.UpdateMorphology();
+
+		if (debug) PlatformModel.WriteProfile(Folder + "_temp_" + Params.ProfileOutFilename, Time);
+		debug = false;
 
         //Update the morphology inside RockyCoastCRN
 		if (Params.CRN_Predictions) 
@@ -236,8 +245,8 @@ int main(int nNumberofArgs,char *argv[])
 		//print?
 		if (Time <= PrintTime)
 		{
-			PlatformModel.WriteProfile(Params.ProfileOutFilename, Time);
-			if (Params.CRN_Predictions) PlatformCRN.WriteCRNProfile(Params.ConcentrationsOutFilename, Time);
+			PlatformModel.WriteProfile(Folder+Params.ProfileOutFilename, Time);
+			if (Params.CRN_Predictions) PlatformCRN.WriteCRNProfile(Folder+Params.ConcentrationsOutFilename, Time);
 			PrintTime -= Params.PrintInterval;
 		}
 		
