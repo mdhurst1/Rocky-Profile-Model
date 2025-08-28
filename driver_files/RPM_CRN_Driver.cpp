@@ -187,7 +187,7 @@ int main(int nNumberofArgs,char *argv[])
 		//Do an earthquake?
 		if (Params.Earthquakes && (Time < UpliftTime))
 		{
-			PlatformModel.TectonicUplift(Params.UpliftMagnitude);
+			PlatformModel.NewUplift(Params.UpliftMagnitude);
 			
 			//need to add some logic here for CRNs ??
 			//if (Params.CRN_Predictions)
