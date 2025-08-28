@@ -594,6 +594,22 @@ void RPM::TectonicUplift(double UpliftAmplitude)
 	UpdateMorphology(true);
 }
 
+void RPM::NewUplift(double UpliftAmplitude)
+{
+    // modify Z according to the prescribed rate
+	// this should be compatible with CRNs but Z will also need modified in the CRN production
+	for (int i=0; i<NZNodes; ++i)
+	{
+		// update the elevations
+		Z[i] += UpliftAmplitude;
+
+		// update the min and max elevations and grow arrays if needed
+	}
+
+	// update morphology array
+	UpdateMorphology();
+}
+
 void RPM::InterseismicUplift(double InterseismicRate)
 {
     // modify Z according to the prescribed rate
@@ -603,7 +619,7 @@ void RPM::InterseismicUplift(double InterseismicRate)
 		// update the elevations
 		Z[i] += InterseismicRate*TimeInterval;
 
-		// update the min and max elevations
+		// update the min and max elevations and grow arrays if needed
 	}
 
 	// update morphology array
