@@ -260,7 +260,7 @@ class RPM
 
 		//Tectonic uplift
 		void TectonicUplift(double UpliftAmplitude);
-		void NewUplift(double UpliftAmplitude);
+		void NewUplift(double UpliftAmplitude);n
 
 		//Interseismic uplift/subsidence
 		void InterseismicUplift(double InterseismicRate);

@@ -34,7 +34,7 @@ def ReadShoreProfile(Folder, Filename):
     Times = []
     
     # loop through lines and append X and Z data to array of vectors
-    for i in range(1,len(Lines)-2, 2):
+    for i in range(1,len(Lines), 2):
         print(i)
         XLine = Lines[i]
         ZLine = Lines[i+1]
@@ -77,18 +77,21 @@ def PlotShoreProfile(Folder, Filename, PlotInterval=1000.):
     StartTime = Times[0]
     EndTime = Times[-1]
     
+    print(EndTime)
+    
     #Colourmap
     ColourMap = cm.bone_r
     
     #Loop through times and plot at time interval
     while PlotTime >= EndTime:
         
+        print(PlotTime)
+        
         # get index
         Index = np.argmin(np.abs(Times-PlotTime))
                     
         if (PlotTime == StartTime):
             ax1.plot(X[Index], Z[Index], 'k--', lw=1., zorder=10, label="Initial Profile")
-            plt.show()
             
         elif PlotTime == EndTime:
             ax1.plot(X[-1], Z[-1], 'r-',lw=2., zorder=10, label="Final Profile")
@@ -117,6 +120,8 @@ def PlotShoreProfile(Folder, Filename, PlotInterval=1000.):
     plt.savefig(Folder+Filename.rstrip("xz")+"png",dpi=300)
     
 if __name__ == "__main__":
-    Folder = '../test/'
-    Filename = 'TestProject_ShoreProfile.xz'
-    PlotShoreProfile(Folder,Filename)
+    #Folder = '../test/'
+    Filename = 'Multi_ShoreProfile.xz'
+    Folder = '../EQ_interseismic_test/'
+    #Filename = "EQ_Inter.params"
+    PlotShoreProfile(Folder,Filename,100)
