@@ -596,7 +596,11 @@ void RPM::TectonicUplift(double UpliftAmplitude)
 
 void RPM::NewUplift(double UpliftAmplitude)
 {
-    // modify Z according to the prescribed rate
+ 	// pritn to screen
+	printf("\nUplift Event\n");
+	printf("Elevations changed by %1.1f\n",UpliftAmplitude);
+
+	// modify Z according to the prescribed rate
 	// this should be compatible with CRNs but Z will also need modified in the CRN production
 	for (int i=0; i<NZNodes; ++i)
 	{
@@ -607,7 +611,7 @@ void RPM::NewUplift(double UpliftAmplitude)
 	}
 
 	// update morphology array
-	UpdateMorphology();
+	UpdateMorphology(true);
 }
 
 void RPM::InterseismicUplift(double InterseismicRate)
@@ -623,7 +627,7 @@ void RPM::InterseismicUplift(double InterseismicRate)
 	}
 
 	// update morphology array
-	UpdateMorphology();
+	UpdateMorphology(true);
 }
 
 void RPM::CalculateBackwearing()
@@ -1060,18 +1064,15 @@ void RPM::UpdateMorphology(bool ReIndex)
 	// Find Sea Level in vertical
 	// Only need to do this once if sea level isnt changing
 	// But need to do it if tectonics are in play
-	if ((SeaLevelInd == 0) || (SeaLevelRise != 0))
+	for (int i=0; i<NZNodes; ++i)
 	{
-		for (int i=0; i<NZNodes; ++i)
+		if (Z[i] < SeaLevel)
 		{
-			if (Z[i] < SeaLevel)
-			{
-				SeaLevelInd = i-1;
-				break;
-			}
-		}		
-	}
-
+			SeaLevelInd = i-1;
+			break;
+		}
+	}		
+	
 	//Loop across all intertidal elevations
 	MinTideZInd = (int)round(SeaLevelInd+0.5*TidalRange/dZ);
 	MaxTideZInd = (int)round(SeaLevelInd-0.5*TidalRange/dZ);
