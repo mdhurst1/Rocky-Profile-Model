@@ -5,7 +5,7 @@
 # File Structure
 Folder: ./RPM_CRN/
 DataFolder: ./ExampleMCMCDir/
-ProjectName: TestProject
+ProjectName: EQ2
 
 # Cosmogenic Isotopes
 CRN_Predictions: true
@@ -14,8 +14,8 @@ Carbon: false
 Aluminium: false
 
 # space domain
-MinElevation: -20
-MaxElevation: 10
+MinElevation: -30
+MaxElevation: 30
 dZ: 0.1
 dX: 0.1
 
@@ -27,7 +27,7 @@ PrintInterval: 100
 
 # Hydrodynamics
 SeaLevelFilename: NULL
-SeaLevelRise: 0.001
+SeaLevelRise: -0.001
 TidalRange: 1.5
 TidalPeriod: 12.25
 WaveHeight_Mean: 1.
@@ -40,16 +40,16 @@ BrokenWaveCoef: 0.01
 WaveAttenuationConst: 0.01
 
 # geology
-Resistance: 10.
+Resistance: 100.
 WeatheringRate: 1.
 SubtidalEfficacy: 0.001
 CliffFailureDepth: 0.1
 CliffElevation: 30
-Earthquakes: false
-UpliftMagnitude: 0
-UpliftFrequency: 0
-Interseismic: false
-InterseismicRate: 0
+Earthquakes: true
+UpliftMagnitude: 5
+UpliftFrequency: 7000
+Interseismic: true
+InterseismicRate: -0.002
 
 # input filenames
 CRNFilename: ExampleCRNData.in

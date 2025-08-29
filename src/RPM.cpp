@@ -481,7 +481,7 @@ void RPM::GetWave()
 	
 	// test the initialise wave pressure functions
 	InitialiseWavePressure_Rectangle(WaveHeight);
-	InitialiseWavePressure_Triangle(WaveHeight);
+	//InitialiseWavePressure_Triangle(WaveHeight);
 }
 
 void RPM::InitialiseSeaLevel(double SLR)
@@ -552,8 +552,8 @@ void RPM::UpdateSeaLevel(double InputSeaLevel)
 		{
 			if (InputSeaLevel > Z[i])
 			{
-				SeaLevel = Z[i-1];
-				SeaLevelInd = i-1;
+				SeaLevel = Z[i];
+				SeaLevelInd = i;
 				break;
 			}
 		}
@@ -564,8 +564,8 @@ void RPM::UpdateSeaLevel(double InputSeaLevel)
 		{
 			if (Z[i] < InputSeaLevel)
 			{
-				SeaLevel = Z[i-1];
-				SeaLevelInd = i-1;
+				SeaLevel = Z[i];
+				SeaLevelInd = i;
 				break;
 			}
 		}

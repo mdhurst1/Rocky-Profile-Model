@@ -55,6 +55,62 @@ def ReadShoreProfile(Folder, Filename):
     Times = np.array(Times)
     return Times, X, Z
 
+def ReadConcentrationData(Folder, Filename):
+    
+    """
+    Function to read CRN concentration data from file
+    
+    MDH, Aug 2025
+    
+    """
+
+    # load the profile file
+    f = open(Folder+Filename,'r')
+    Lines = f.readlines()
+    f.close()
+
+    # get which nuclides
+    Nuclides = Lines[0].strip().split(" ")
+    NNuclides = len(Nuclides)
+    
+    dX = float(Lines[1].strip().split(" ")[0])
+    StartTime = float(Lines[2].strip().split(" ")[0])
+    EndTime = float(Lines[-1].strip().split(" ")[0])
+   
+        
+    # Placeholders for Concentrations
+    N10 = np.zeros(0)
+    Times = []
+    
+    
+    # loop through lines and append N data to arrays of vectors
+    Lines = Lines[2:]
+
+    for i in range(0, len(Lines), NNuclides):
+        
+        # get chunk of lines for nuclides
+        NuclideLines = Lines[i:i+NNuclides]
+        NuclidesBool = False*NNuclides
+
+        # loop through each nuclide line 
+        for Line in NuclideLines:
+            
+            SplitLine = Line.strip().split(" ")
+            Nuclide = SplitLine[1]
+            
+            if Nuclide == "10":
+                Times.append(float(SplitLine[0]))
+                if i == 0:
+                    N10 = [np.array(SplitLine[2:],dtype="float64"),]
+                else:
+                    N10.append(np.array(SplitLine[2:],dtype="float64"))
+            
+            else:
+                sys.exit("Nuclide " + Nuclide + " not recognised!")
+    
+    Times = np.array(Times)
+    return Times, N10
+
 def PlotShoreProfile(Folder, Filename, PlotInterval=1000.):
     
     """
@@ -66,7 +122,6 @@ def PlotShoreProfile(Folder, Filename, PlotInterval=1000.):
     
     # read the data from file
     Times, X, Z = ReadShoreProfile(Folder, Filename)
-    
     
     #create blank figure
     fig = plt.figure(1,figsize=(12.,6.))
@@ -118,10 +173,71 @@ def PlotShoreProfile(Folder, Filename, PlotInterval=1000.):
     
     # save fig
     plt.savefig(Folder+Filename.rstrip("xz")+"png",dpi=300)
+    fig.clf()
+    
+def PlotCRNConcentrations(Folder, Filename, PlotInterval=1000.):
+
+    """
+    Function to plot final concentrations
+
+    """
+
+    Times, N10 = ReadConcentrationData(Folder, Filename)
+        
+    #create blank figure
+    fig2 = plt.figure(2,figsize=(12,6))
+    ax2 = fig2.add_subplot(111)
+    
+    #Colourmap
+    ColourMap = cm.bone_r
+    
+    # Only plot every so many years
+    PlotTime = Times[0]
+    StartTime = Times[0]
+    EndTime = Times[-1]
+    
+    #Loop through times and plot at time interval
+    while PlotTime >= EndTime:
+        
+        # get index
+        Index = np.argmin(np.abs(Times-PlotTime))
+        
+        # get X values
+        TempX = np.arange(0,len(N10[Index]))
+        
+        if (PlotTime == StartTime):
+            ax2.plot(TempX, N10[Index], 'k--', lw=1., zorder=10, label="Initial Profile")
+            
+        elif PlotTime == EndTime:
+            ax2.plot(TempX, N10[-1], 'r-',lw=2., zorder=10, label="Final Profile")
+            break
+        
+        else:
+            colour = (PlotTime-StartTime)/(EndTime-StartTime)
+            ax2.plot(TempX, N10[Index], '-', lw=1., color=ColourMap(colour))
+    
+        PlotTime -= PlotInterval
+        
+        print(PlotTime)
+        
+    
+    # tweak the plot
+    plt.xlabel("Distance (m)")
+    plt.ylabel(r"Concentration (atoms g$^{-1}$)")
+    plt.xlim(np.min(TempX[0]),np.max(TempX[-1]))
+    
+    
+    # add the legend
+    ax2.legend(loc='upper right')
+
+    plt.tight_layout()
+    
+    plt.savefig(Folder+Filename.rstrip("xn")+"png",dpi=300)
+    fig2.clf()
     
 if __name__ == "__main__":
-    #Folder = '../test/'
-    Filename = 'Multi_ShoreProfile.xz'
-    Folder = '../EQ_interseismic_test/'
-    #Filename = "EQ_Inter.params"
-    PlotShoreProfile(Folder,Filename,100)
+    Folder = '../test/'
+    Filename = 'EQ2_ShoreProfile.xz'
+    ConcFilename = 'EQ2_Concentrations.xn'
+    PlotShoreProfile(Folder,Filename)
+    PlotCRNConcentrations(Folder, ConcFilename)
