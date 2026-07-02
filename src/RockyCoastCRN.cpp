@@ -282,7 +282,7 @@ void RockyCoastCRN::Initialise(RPM RPMCoast, vector<int> WhichNuclides)
 	SurfaceElevation = EmptyXNDV;
 	vector< vector <double> > EmptySurfaceNs(NoNuclides,EmptyX);
 	SurfaceN = EmptySurfaceNs;
-	SamplingInterval = (int)dX/RPMCoast.dX;
+	SamplingInterval = (int)(round(dX/RPMCoast.dX));
 
 	// setup horizontal domain
 	for (int i=0; i<NXNodes; ++i) 
@@ -926,6 +926,13 @@ void RockyCoastCRN::UpdateCRNs()
 			}
 		}
 	}
+	// adding something to debug at the end
+	if (true)
+	{
+		int debughere;
+		debughere = 1;
+		if (debughere) {}
+	}
 }
 
 void RockyCoastCRN::UpdateEquillibriumMorphology()
@@ -1027,6 +1034,7 @@ void RockyCoastCRN::UpdateMorphology(RPM RPMCoast)
 	}
 	
 	// why are these kept separate?
+	// legacy from time when surface could include beach cover
 	SurfaceElevation = PlatformElevation;
 	
 	for (int n=0; n<NoNuclides; ++n)
@@ -1045,6 +1053,7 @@ void RockyCoastCRN::UpdateMorphology(RPM RPMCoast)
 	{
 		SurfaceElevation[j] = RPMCoast.CliffElevation;
 		
+		// CHECK HERE THIS IS WHERE CLIFF ISSUE SEEMS TO BE
 		if (PlatformElevation[j] < PlatformElevation[NXNodes-1])
 		{
 			CliffPositionX = X[j];

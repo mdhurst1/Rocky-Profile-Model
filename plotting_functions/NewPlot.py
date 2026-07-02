@@ -174,6 +174,7 @@ def PlotShoreProfile(Folder, Filename, PlotInterval=1000.):
     # save fig
     plt.savefig(Folder+Filename.rstrip("xz")+"png",dpi=300)
     fig.clf()
+    plt.close()
     
 def PlotCRNConcentrations(Folder, Filename, PlotInterval=1000.):
 
@@ -234,10 +235,13 @@ def PlotCRNConcentrations(Folder, Filename, PlotInterval=1000.):
     
     plt.savefig(Folder+Filename.rstrip("xn")+"png",dpi=300)
     fig2.clf()
+    plt.close()
     
 if __name__ == "__main__":
-    Folder = '../test/'
-    Filename = 'EQ2_ShoreProfile.xz'
-    ConcFilename = 'EQ2_Concentrations.xn'
+    Folder = '../'
+    ProjectName = 'Test4'
+    Filename = ProjectName+'_ShoreProfile.xz'
+    ConcFilename = ProjectName+'_Concentrations.xn'
     PlotShoreProfile(Folder,Filename)
     PlotCRNConcentrations(Folder, ConcFilename)
+    
