@@ -130,7 +130,8 @@ void SeaLevel::Initialise(double SLR, double StartTime, double EndTime, double T
 	SeaLevelRise = SLR;
 	
 	// initialise an empty vector
-	NTimes = fabs((int)((EndTime-StartTime)/TimeStep));
+	// +1 so the series actually reaches EndTime rather than stopping one TimeStep short
+	NTimes = fabs((int)((EndTime-StartTime)/TimeStep))+1;
 	vector<double> Empty(NTimes,0);
 	Times = Empty;
 	MeanSeaLevels = Empty;
