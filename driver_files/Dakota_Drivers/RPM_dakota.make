@@ -35,4 +35,4 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm -f ../../*.o ../../RoBoCoP_CRN/*.o ../*.o ../*.out *.o *.out *.xz *.xn *.exe *.rst 
+	rm -f ../../src/*.o ../../*.o ../../RoBoCoP_CRN/*.o ../*.o ../*.out *.o *.out *.xz *.xn *.exe *.rst 
